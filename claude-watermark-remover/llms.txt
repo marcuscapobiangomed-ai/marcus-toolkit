@@ -1,0 +1,38 @@
+# claude-watermark-remover
+
+> Local Python tool that removes AI provenance marks from text, images and
+> documents: invisible Unicode characters (zero-width spaces, soft hyphens,
+> bidi controls) left in AI chat output, C2PA Content Credentials and EXIF/XMP
+> metadata in AI-generated images, and generator tags in Markdown, HTML, PDF,
+> DOCX and ODT files. Standard library only; no API key, no upload. Works as a
+> CLI, a Claude Code / Cursor agent skill, or a local HTTP service.
+
+Detects marks from 30+ AI tools (ChatGPT, Claude, Gemini/SynthID, Copilot,
+Cursor, Midjourney, DALL-E, Stable Diffusion, and others) using two-tier
+matching that keeps ordinary words like "cursor" or "llama" from triggering
+false positives. It does NOT erase visible watermarks or logos from images
+(that is inpainting, a different task), and it cannot remove statistical
+token-sampling watermarks; for those it provides a best-effort rewrite
+workflow and says so honestly.
+
+## Docs
+
+- [README](https://github.com/haidrrrry/claude-watermark-remover/blob/main/README.md): overview, quick start, coverage matrix
+- [Installation](https://github.com/haidrrrry/claude-watermark-remover/blob/main/docs/installation.md): CLI, Claude Code skill, Cursor skill, Docker, optional tools
+- [Vendor coverage](https://github.com/haidrrrry/claude-watermark-remover/blob/main/docs/vendor-coverage.md): which AI tools are detected and how matching avoids false positives
+- [FAQ](https://github.com/haidrrrry/claude-watermark-remover/blob/main/docs/faq.md): what AI watermarks are, what removal can and cannot do
+- [Changelog](https://github.com/haidrrrry/claude-watermark-remover/blob/main/CHANGELOG.md): release history
+
+## Usage
+
+- Inspect: `python3 service/scripts/inspect_file.py draft.md` (exits non-zero on findings)
+- Clean: `python3 service/scripts/clean_file.py draft.md -o draft.cleaned.md`
+- Claude Code skill: `make install-claude-skill`, then `/remove-claude-marks`
+
+## Scope and ethics
+
+Intended for content you own or are authorized to process (privacy, engineering
+hygiene, research). A removed mark does not mean content was never AI-assisted,
+and the project does not claim to make text undetectable.
+MIT licensed; fork of guillaumemeyer/watermarks-remover. Not affiliated with
+Anthropic, OpenAI, Google, or any vendor it detects.

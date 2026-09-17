@@ -1,0 +1,14 @@
+{
+  "name": "claude-watermark-remover",
+  "description": "Strip AI provenance marks from text and files: invisible Unicode, C2PA/Content Credentials, EXIF/XMP and document metadata across 30+ AI tools including ChatGPT, Claude, Gemini, Cursor, Copilot, Midjourney and Stable Diffusion. Runs locally with no service and no dependencies.",
+  "version": "0.6.0",
+  "author": {
+    "name": "claude-watermark-remover contributors"
+  },
+  "homepage": "https://github.com/haidrrrry/claude-watermark-remover",
+  "license": "MIT",
+  "keywords": [
+    "watermark", "provenance", "c2pa", "metadata", "privacy", "unicode", "exif"
+  ],
+  "skills": ["./skills/remove-claude-marks"]
+}
