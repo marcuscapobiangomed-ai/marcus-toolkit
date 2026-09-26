@@ -16,7 +16,7 @@ import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
@@ -40,6 +40,9 @@ class Registro:
     resumo: str = ""
     tipos: list[str] = field(default_factory=list)
     idioma: str = ""
+    issn: str = ""
+    url: str = ""
+    acesso: str = ""  # data de acesso ao URL, como texto ("12 set 2026")
 
     @property
     def chave_dedup(self) -> str:
@@ -54,7 +57,9 @@ class Registro:
 
     @classmethod
     def de_dict(cls, dados: dict) -> "Registro":
-        return cls(**dados)
+        # estado.json antigo não tem issn/url/acesso; chave desconhecida (versão futura) é ignorada
+        conhecidos = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in dados.items() if k in conhecidos})
 
 
 @dataclass
@@ -86,6 +91,31 @@ def _texto(elemento) -> str:
     return re.sub(r"\s+", " ", "".join(elemento.itertext())).strip()
 
 
+def normalizar_issn(valor: str) -> str:
+    """Extrai o primeiro ISSN do texto e devolve no formato 0102-311X ("" se não houver)."""
+    m = re.search(r"\b(\d{4})-?(\d{3}[\dXx])\b", valor or "")
+    return f"{m.group(1)}-{m.group(2).upper()}" if m else ""
+
+
+def doi_de_url(valor: str) -> str:
+    """'https://doi.org/10.1590/X' -> '10.1590/X'; qualquer outro texto -> ''."""
+    m = re.match(r"^\s*(?:https?://)?(?:dx\.)?doi\.org/(10\.\S+?)[\s.]*$", valor or "", re.I)
+    return m.group(1) if m else ""
+
+
+# ISSN -> abreviatura NLM (MedlineTA); vale para o processo inteiro, o catálogo quase não muda
+_CACHE_NLM: dict[str, str] = {}
+
+# Etiquetas de campo MeSH aceitas pelo PubMed ("X"[MeSH Terms], X[mh], "X"[majr:noexp]...)
+_ETIQUETA_MESH = r"(?i:mesh\s+major\s+topic|mesh\s+terms|mesh|mh|majr)(?:\s*:\s*(?i:noexp))?"
+_OPERADOR = r"(?i:AND|OR|NOT)\b"
+PADRAO_MESH = re.compile(
+    r'(?:"(?P<citado>[^"]+)"'
+    r"|(?<![\w\-/])(?!" + _OPERADOR + r")(?P<livre>[^\s()\"\[\]]+(?:\s+(?!" + _OPERADOR
+    + r")[^\s()\"\[\]]+)*))"
+    r"\s*\[\s*(?P<etiqueta>" + _ETIQUETA_MESH + r")\s*\]")
+
+
 # --------------------------------------------------------------------------- PubMed
 
 class PubMed:
@@ -93,6 +123,7 @@ class PubMed:
         self.api_key = api_key
         self.email = email
         self._ultimo = 0.0
+        self._cache_mesh: dict[str, str] = {}  # termo em minúsculas -> descritor oficial ("" = inexistente)
 
     def _params(self, **extra) -> str:
         params = {"tool": "artigos-v2", **extra}
@@ -136,6 +167,103 @@ class PubMed:
             registros.extend(self._parse(artigo) for artigo in raiz.findall("PubmedArticle"))
         return registros
 
+    # ------------------------------------------------------------- NLM Catalog
+
+    def abreviatura_nlm(self, issn: str) -> str:
+        """Abreviatura oficial (MedlineTA) da revista pelo ISSN no NLM Catalog.
+
+        Devolve "" quando a revista não está no catálogo ou não tem abreviatura
+        (comum em revistas só do SciELO/LILACS). Erro de rede sobe para quem chamou
+        e não entra no cache.
+        """
+        issn = normalizar_issn(issn)
+        if not issn:
+            return ""
+        if issn in _CACHE_NLM:
+            return _CACHE_NLM[issn]
+        self._respeitar_limite()
+        busca = json.loads(_get(f"{EUTILS}/esearch.fcgi?" + self._params(
+            db="nlmcatalog", term=f'"{issn}"[ISSN]', retmode="json")))
+        ids = busca["esearchresult"].get("idlist", [])[:10]
+        abreviatura = ""
+        if ids:
+            self._respeitar_limite()
+            resumo = json.loads(_get(f"{EUTILS}/esummary.fcgi?" + self._params(
+                db="nlmcatalog", id=",".join(ids), retmode="json")))["result"]
+            candidatos = [resumo[i] for i in ids if isinstance(resumo.get(i), dict)]
+            # indexada no MEDLINE hoje primeiro; depois qualquer uma com abreviatura
+            candidatos.sort(key=lambda c: c.get("currentindexingstatus") != "Y")
+            for c in candidatos:
+                abreviatura = (c.get("medlineta") or c.get("isoabbreviation") or "").strip()
+                if abreviatura:
+                    break
+        _CACHE_NLM[issn] = abreviatura
+        return abreviatura
+
+    # --------------------------------------------------------------------- MeSH
+
+    def descritor_mesh(self, termo: str) -> str:
+        """Nome oficial do descritor MeSH para o termo ("" se não existe).
+
+        Aceita o próprio descritor ou um termo de entrada ("Heart Attack" ->
+        "Myocardial Infarction"). Qualificadores e conceitos suplementares não contam.
+        """
+        chave = re.sub(r"\s+", " ", termo).strip().lower()
+        if chave in self._cache_mesh:
+            return self._cache_mesh[chave]
+        self._respeitar_limite()
+        busca = json.loads(_get(f"{EUTILS}/esearch.fcgi?" + self._params(
+            db="mesh", term=f'"{chave}"[MH]', retmode="json")))
+        ids = [i for i in busca["esearchresult"].get("idlist", []) if i.startswith("68")][:10]
+        oficial = ""
+        if ids:
+            self._respeitar_limite()
+            resumo = json.loads(_get(f"{EUTILS}/esummary.fcgi?" + self._params(
+                db="mesh", id=",".join(ids), retmode="json")))["result"]
+            for i in ids:
+                termos = (resumo.get(i) or {}).get("ds_meshterms") or []
+                if any(t.lower() == chave for t in termos):
+                    oficial = termos[0]
+                    break
+        self._cache_mesh[chave] = oficial
+        return oficial
+
+    def validar_descritores_mesh(self, consulta: str) -> tuple[str, list[str]]:
+        """Confere cada descritor marcado como MeSH na estratégia.
+
+        Descritor inexistente vira texto livre ("X"[tiab]) e entra na lista de
+        inválidos; termo de entrada é trocado pelo descritor oficial, mantendo a
+        etiqueta. Sem rede, devolve a consulta intacta e lista vazia.
+        """
+        achados = list(PADRAO_MESH.finditer(consulta or ""))
+        if not achados:
+            return consulta, []
+        oficiais = {}
+        try:
+            for m in achados:
+                termo = (m.group("citado") or m.group("livre")).split("/")[0].strip()
+                if termo.lower() not in oficiais:
+                    oficiais[termo.lower()] = self.descritor_mesh(termo)
+        except Exception:  # rede, cota, JSON inesperado: melhor a consulta original que nenhuma
+            return consulta, []
+
+        invalidos = []
+
+        def trocar(m):
+            bruto = (m.group("citado") or m.group("livre")).strip()
+            termo, _, qualificador = bruto.partition("/")
+            termo = termo.strip()
+            oficial = oficiais.get(termo.lower(), "")
+            if not oficial:
+                if termo.lower() not in (i.lower() for i in invalidos):
+                    invalidos.append(termo)
+                return f'"{termo}"[tiab]'
+            if oficial.lower() == termo.lower():
+                return m.group(0)
+            return f'"{oficial}{"/" + qualificador if qualificador else ""}"[{m.group("etiqueta")}]'
+
+        return PADRAO_MESH.sub(trocar, consulta), invalidos
+
     @staticmethod
     def _parse(artigo) -> Registro:
         citacao = artigo.find("MedlineCitation")
@@ -173,6 +301,10 @@ class PubMed:
         abreviatura = _texto(citacao.find("MedlineJournalInfo/MedlineTA")) or (
             _texto(revista.find("ISOAbbreviation")) if revista is not None else "")
 
+        issns = {} if revista is None else {i.get("IssnType", ""): _texto(i) for i in revista.findall("ISSN")}
+        issn = normalizar_issn(issns.get("Print") or issns.get("Electronic") or next(iter(issns.values()), "")
+                               or _texto(citacao.find("MedlineJournalInfo/ISSNLinking")))
+
         return Registro(
             base="PubMed",
             id_base=_texto(citacao.find("PMID")),
@@ -189,6 +321,7 @@ class PubMed:
             resumo=" ".join(partes_resumo),
             tipos=[_texto(t) for t in art.findall("PublicationTypeList/PublicationType")],
             idioma=_texto(art.find("Language")),
+            issn=issn,
         )
 
 
@@ -242,6 +375,7 @@ class EuropePMC:
             resumo=re.sub(r"\s+", " ", resumo).strip(),
             tipos=(r.get("pubTypeList") or {}).get("pubType", []),
             idioma=r.get("language", "") or "",
+            issn=normalizar_issn((jornal.get("journal") or {}).get("issn") or (jornal.get("journal") or {}).get("essn") or ""),
         )
 
 
@@ -273,15 +407,15 @@ def _registro_ris(campos: dict, base: str, n: int) -> Registro:
                 return campos[t][0]
         return ""
 
-    autores = []
-    for nome in campos.get("AU", []) + campos.get("A1", []):
-        if "," in nome:
-            sobrenome, prenomes = [p.strip() for p in nome.split(",", 1)]
-            iniciais = "".join(p[0].upper() for p in re.split(r"[\s.\-]+", prenomes) if p)
-            autores.append(f"{sobrenome} {iniciais}".strip())
-        else:
-            autores.append(nome)
+    autores = [_autor_ris(nome) for nome in campos.get("AU", []) + campos.get("A1", []) if nome.strip()]
     inicio, fim = um("SP"), um("EP")
+    doi = doi_de_url(um("DO")) or um("DO")
+    url = ""
+    for endereco in campos.get("UR", []):
+        if doi_de_url(endereco):  # link do doi.org é o DOI, não um URL de acesso
+            doi = doi or doi_de_url(endereco)
+        elif not url and re.match(r"^https?://", endereco.strip(), re.I):
+            url = endereco.strip()
     return Registro(
         base=base,
         id_base=um("ID", "AN") or f"{base}-{n}",
@@ -292,11 +426,35 @@ def _registro_ris(campos: dict, base: str, n: int) -> Registro:
         volume=um("VL"),
         numero=um("IS"),
         paginas=f"{inicio}-{fim}" if inicio and fim else inicio,
-        doi=re.sub(r"^https?://(dx\.)?doi\.org/", "", um("DO")),
+        doi=doi,
         resumo=" ".join(campos.get("AB", []) + campos.get("N2", [])),
         tipos=campos.get("M3", []) + campos.get("TY", []),
         idioma=um("LA"),
+        issn=normalizar_issn(" ".join(campos.get("SN", []))),
+        url=url,
     )
+
+
+# partículas de prenome que não viram inicial — só em minúsculas: "E" maiúsculo é inicial (Altamirano, E)
+_PARTICULAS = {"de", "da", "do", "dos", "das", "e", "del", "della", "di", "du", "van", "von", "der", "y"}
+
+
+def _autor_ris(nome: str) -> str:
+    """'Silva, Maria de Fátima' -> 'Silva MF'; 'Altamirano, E.' -> 'Altamirano E'."""
+    nome = re.sub(r"\s+", " ", nome).strip()
+    if "," not in nome:
+        return nome
+    sobrenome, prenomes = [p.strip() for p in nome.split(",", 1)]
+    pedacos = [p for p in re.split(r"[\s.\-]+", prenomes) if p and p[0].isalpha()]
+    iniciais = ""
+    for p in pedacos:
+        if p in _PARTICULAS:
+            continue
+        # "Silva, MF" já vem em iniciais; "SILVA, ANA BEATRIZ" é prenome em caixa alta
+        ja_iniciais = (p.isupper() and p.isalpha() and len(pedacos) == 1
+                       and (len(p) <= 2 or (len(p) == 3 and sum(c in "AEIOU" for c in p) <= 1)))
+        iniciais += p if ja_iniciais else p[0].upper()
+    return f"{sobrenome} {iniciais}".strip()
 
 
 def deduplicar(resultados: list[ResultadoBusca]) -> tuple[list[Registro], int]:
@@ -311,7 +469,7 @@ def deduplicar(resultados: list[ResultadoBusca]) -> tuple[list[Registro], int]:
                 duplicados += 1
                 existente = next(vistos[c] for c in chaves if c in vistos)
                 # completa metadados faltantes do registro mantido
-                for campo in ("doi", "pmid", "resumo", "volume", "numero", "paginas"):
+                for campo in ("doi", "pmid", "resumo", "volume", "numero", "paginas", "issn", "url"):
                     if not getattr(existente, campo) and getattr(r, campo):
                         setattr(existente, campo, getattr(r, campo))
                 continue
