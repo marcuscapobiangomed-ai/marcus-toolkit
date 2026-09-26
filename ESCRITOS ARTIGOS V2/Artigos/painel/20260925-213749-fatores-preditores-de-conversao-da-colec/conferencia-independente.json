@@ -1,0 +1,312 @@
+{
+ "extracao": {
+  "aplicados": 60,
+  "numeros_removidos": []
+ },
+ "correcoes": [
+  {
+   "secao": "introducao",
+   "frase": "No entanto, a conversão para cirurgia aberta permanece um evento relevante, com taxas que variam entre as séries publicadas, situando-se em 2,2% em centro de referência [1], 4,54% em hospital terciário no México [2], 9,6% em coorte retrospectiva [3], 2,62% em grande série saudita [4], 4,2% em procedimentos eletivos [5] e 16,89% em colecistectomias para colecistite aguda [6].",
+   "tipo": "delineamento/descritor incorreto",
+   "justificativa": "Não consegui refutar. O resumo da [3] define o estudo como \"observational, retrospective, single-center cross-sectional analytical study\", não como coorte. O resumo da [1] diz apenas que foram estudados 317 casos consecutivos na 1ª Cátedra de Clínica Quirúrgica do Hospital de Clínicas; em nenhum momento o chama de \"centro de referência\". As demais taxas e atribuições conferem: [2] 4,54% em Guadalajara (MEX), [4] 2,62% em 2.632 pacientes em Jidá (SAU), [5] 4,2% em cirurgias eletivas e [6] 16,89% em colecistite aguda.",
+   "correcao": "No entanto, a conversão para cirurgia aberta permanece um evento relevante, com taxas que variam entre as séries publicadas, situando-se em 2,2% em série institucional de 317 pacientes [1], 4,54% em hospital terciário no México [2], 9,6% em estudo transversal retrospectivo [3], 2,62% em grande série saudita [4], 4,2% em procedimentos eletivos [5] e 16,89% em colecistectomias para colecistite aguda [6].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "A conversão para cirurgia aberta associa-se a maior necessidade de transfusão (AOR 3,27), complicações respiratórias (AOR 1,36), aumento de custos (β +$719) e prolongamento da internação (β +2,20 dias) em pacientes com colecistite aguda [7].",
+   "tipo": "população generalizada indevidamente",
+   "justificativa": "O problema é real. O resumo da [7] restringe a amostra: \"Adult acute cholecystitis patients with obesity undergoing non-elective LC\". Todos os pacientes têm IMC ≥ 30. Os AOR 3,27 e 1,36 e os β de +$719 e +2,20 dias foram obtidos só nessa população. A frase os estende a toda a população com colecistite aguda. Os números estão corretos.",
+   "correcao": "Em pacientes obesos com colecistite aguda submetidos a colecistectomia laparoscópica não eletiva, a conversão para cirurgia aberta associou-se a maior necessidade de transfusão (AOR 3,27), complicações respiratórias (AOR 1,36), aumento de custos (β +US$ 719) e prolongamento da internação (β +2,20 dias) [7].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "A obesidade grau III é fator de risco independente para conversão (AOR 1,45) [7].",
+   "tipo": "comparador e população omitidos",
+   "justificativa": "Em parte o original se sustenta: a conclusão da [7] diz \"Class 3 obesity is a significant risk factor for CTO\". Mas o AOR 1,45 foi calculado com \"ref.: class 1-2\" e apenas em obesos com colecistite aguda. Sem o grupo de referência, o leitor entende que o risco é em relação a não obesos, comparação que o estudo não fez. A correção sugerida começava com \"Nessa mesma população\", o que só funciona se a frase anterior for corrigida. Por isso a reescrevi para que se sustente sozinha.",
+   "correcao": "Entre pacientes obesos com colecistite aguda, a obesidade grau III associou-se independentemente à conversão em comparação com a obesidade graus I–II (AOR 1,45) [7].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "Estudos de coorte e casos-controle demonstram que o sexo masculino [5,8-10] e a idade avançada (com cortes variados: >60 anos em [9], contínua em [10] e >65 anos em [5]) figuram entre os preditores pré-operatórios mais consistentes.",
+   "tipo": "desfecho e delineamento incorretos; força da conclusão",
+   "justificativa": "O problema é real em três pontos. 1) Na [8], o sexo masculino previu colecistectomia laparoscópica difícil (CLD) (\"male sex and previous surgery were associated with higher risk of DLC\"), não conversão. 2) Nenhum dos estudos citados é caso-controle: [5] e [10] são retrospectivos, [8] se descreve como \"prospective cross-sectional cohort\" e [9] usa banco prospectivo. O caso-controle que sustenta sexo masculino e idade avançada como preditores de conversão é a [55] (\"retrospective case-control... older age, male sex... associated with conversion\" na análise multivariada), que não foi citada. 3) \"Mais consistentes\" ignora evidência contrária da própria lista: a [3] aponta \"female sex\" como fator de risco e a [12] diz que \"age, gender... were comparable between the two groups\". Os cortes de idade conferem: >60 anos em [9], >65 anos em [5] e variável contínua (OR 1,063) em [10].",
+   "correcao": "Estudos observacionais, incluindo um estudo caso-controle [55], apontam o sexo masculino [5,9,10,55] e a idade avançada [5,9,10,55] (com cortes variados: >60 anos em [9], >65 anos em [5] e variável contínua em [10]) entre os preditores pré-operatórios de conversão mais frequentemente relatados, e o sexo masculino também se associou à colecistectomia laparoscópica difícil [8]; contudo, um estudo identificou o sexo feminino como fator de risco [3] e outro não encontrou diferença de idade e sexo entre casos convertidos e não convertidos [12].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "Comorbidades como diabetes mellitus tipo 2 [10] e obesidade grau III [7] emergem como fatores de risco independentes, com a obesidade mórbida associada a razão de chances ajustada de 1,45 para conversão [7].",
+   "tipo": "comparador omitido",
+   "justificativa": "O problema é real. \"Obesidade mórbida\" equivale à classe 3 (IMC ≥ 40), e isso está certo. O erro é apresentar o AOR 1,45 sem o comparador (\"ref.: class 1-2\") e sem a população (obesos com colecistite aguda). O dado sobre diabetes está correto: na [10], OR 4,045 (p = 0,018) na análise multivariada. A frase também repete o AOR 1,45 já dado na introdução; a versão corrigida mantém o valor, agora com o grupo de referência.",
+   "correcao": "Comorbidades como diabetes mellitus tipo 2 [10] e obesidade grau III [7] emergem como fatores de risco independentes para conversão, esta última com razão de chances ajustada de 1,45 em relação à obesidade graus I–II entre pacientes com colecistite aguda [7].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "O histórico cirúrgico abdominal prévio, especialmente cirurgias superiores [5,8,11], e antecedentes de colangiopancreatografia retrógrada endoscópica (CPRE) com esfinterotomia [5,12] elevam significativamente a probabilidade de conversão.",
+   "tipo": "desfecho incorreto e detalhe não sustentado",
+   "justificativa": "O problema é real e maior do que o auditor apontou. 1) Na [8], cirurgias prévias associaram-se à CLD, não à conversão. 2) A [11] fala só em \"previous abdominal surgery\" (P = 0,047). Quem sustenta a ênfase no abdome superior são a [5] (18,8% contra 4,8%) e a [9] (\"previous upper abdominal surgery\" como fator forte); a [9] não estava citada. 3) A [5] trata de CPRE prévia sem mencionar esfinterotomia; só a [12] avalia CPRE com esfinterotomia. 4) Há evidência contrária omitida: a [56] conclui \"Previous upper abdominal surgery does not affect the conversion rates\" (p = 0,761), e na [12] \"previous abdominal surgeries were comparable between the two groups\". Assim, \"elevam significativamente\" não se aplica sem ressalva à cirurgia abdominal prévia.",
+   "correcao": "O histórico de cirurgia abdominal prévia associou-se à conversão em algumas séries [5,11], sobretudo após cirurgias do abdome superior [5,9], e à colecistectomia laparoscópica difícil [8], embora outros estudos não tenham observado diferença na taxa de conversão [12,56]; antecedentes de colangiopancreatografia retrógrada endoscópica (CPRE) [5], inclusive com esfinterotomia [12], também elevaram significativamente a taxa de conversão.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "A cirurgia tardia (>7 dias) apresentou conversão em 1,96% dos casos em uma série [15].",
+   "tipo": "número mal interpretado",
+   "justificativa": "O problema é real. A série da [15] tem 102 casos e 2/102 = 1,96%. O resumo diz \"Conversion to open surgery was 2 cases (1.96%) in the GT\": o percentual é sobre o total da série, com as duas conversões no grupo tardio. O tamanho do grupo tardio não é informado, então a taxa própria desse grupo é desconhecida e necessariamente maior que 1,96%. A frase original a apresenta como taxa do grupo tardio.",
+   "correcao": "Em série de 102 pacientes com colecistite aguda, as duas conversões registradas (1,96% do total) ocorreram no grupo operado após o sétimo dia do início dos sintomas [15].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "O espessamento da parede vesicular, frequentemente com pontos de corte entre 3 mm e 5,75 mm, a presença de líquido perivesicular, hidropsia e edema perivesicular apresentam associação estatisticamente significativa com a conversão e a dificuldade operatória [8,16-22].",
+   "tipo": "impreciso (faixa de corte e desfecho)",
+   "justificativa": "O problema é real, mas em parte. O \"frequentemente\" suaviza a faixa de corte: >3 mm em [17] (ROC) e [22] e ≥5,75 mm em [20] ficam dentro dela. Mesmo assim, as fontes citadas vão de >2 mm ([17], AOR 2,41 para conversão) a >7 mm ([18], p < 0,001 para conversão), então a faixa de 3 a 5,75 mm não as representa. O ponto mais grave: hidropsia e edema perivesicular só aparecem na [8], e apenas como fatores de CLD na análise univariada, não de conversão. O líquido perivesicular associado à conversão vem da [20].",
+   "correcao": "O espessamento da parede vesicular associa-se significativamente à conversão [16-22], com pontos de corte que variam de >2 mm a >7 mm entre os estudos que os definiram [17,18,20,22], assim como a presença de líquido perivesicular [20]; hidropsia e edema perivesicular, por sua vez, associaram-se à colecistectomia laparoscópica difícil [8].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "Marcadores inflamatórios sistêmicos, como proteína C-reativa (PCR) elevada, razão neutrófilo-linfócito (RNL), razão PCR-albumina e índice de carga inflamatória, demonstram capacidade discriminatória para prever conversão e complicações em alguns estudos [13,22-26], com a PCR apresentando área sob a curva ROC de 0,964 em colecistite aguda em um estudo específico [25].",
+   "tipo": "desfecho incorreto",
+   "justificativa": "O problema é real. O índice de carga inflamatória só aparece na [24], que avaliou pacientes eletivos. Ali, o índice, a RNL e a razão PCR-albumina previram \"higher PGS scores\", ou seja, dificuldade operatória, com AUC de 0,792, 0,766 e 0,764. A [24] não os avaliou como preditores de conversão ou complicações. O restante confere: razão PCR-albumina ≥5,54 como preditor independente na [13]; RNL maior no grupo convertido na [22]; PCR associada à conversão na [23]; AUC de 0,964 para conversão em colecistite aguda na [25]; RNL associada à conversão e a complicações na [26].",
+   "correcao": "Marcadores inflamatórios sistêmicos, como proteína C-reativa (PCR) elevada, razão neutrófilo-linfócito (RNL) e razão PCR-albumina, associaram-se à conversão e a complicações em alguns estudos [13,22,23,25,26], com a PCR apresentando área sob a curva ROC de 0,964 para conversão em colecistite aguda em um estudo específico [25]; o índice de carga inflamatória, a RNL e a razão PCR-albumina, por sua vez, previram maior dificuldade operatória pela escala de Parkland [24].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "No entanto, outros estudos não confirmam valor preditivo independente em regressão logística [27].",
+   "tipo": "generalização (plural com uma única fonte)",
+   "justificativa": "O problema é real. A frase usa o plural (\"outros estudos\"), mas cita só a [27]. Procurei nas 60 referências e não há outro estudo que negue valor preditivo independente de marcadores inflamatórios; a [43], ao contrário, encontrou a PCR como preditor independente de cirurgia de resgate (bailout). A [27] avaliou apenas o hemograma e razões derivadas: \"hematological parameters and ratios were not found to have a statistically significant relationship in predicting the conversion\".",
+   "correcao": "No entanto, outro estudo não confirmou valor preditivo independente dos parâmetros hematológicos e razões derivadas em regressão logística [27].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "introducao",
+   "frase": "Intraoperatoriamente, a incapacidade de obter a visão crítica de segurança [11], aderências densas no triângulo de Calot [2,11,29], lesão de via biliar [3], fístula cistoentérica [11] e a inexperiência do cirurgião [3,14,16,30] configuram determinantes da decisão de converter.",
+   "tipo": "achado atribuído incorretamente; omissão de evidência contrária",
+   "justificativa": "O problema é real. 1) A [2] relata \"Calot triangle edema\" só na análise bivariada, e na multivariada apenas a duração da cirurgia foi significativa; não fala em aderências densas. 2) A [29] gradua aderências da vesícula de 0 a 4, sem restringir ao triângulo de Calot. 3) A [11] fala em \"dense pericholecystic adhesions\" e em má visualização do triângulo de Calot, não em aderências no triângulo. Quem sustenta aderências no triângulo de Calot são a [1] (\"adherencias firmes a este nivel\") e a [28] (\"adhesions in the Calot's triangle\"). 4) A inexperiência do cirurgião tem apoio nas [3], [14] e [16], mas a [5] a contradiz: \"More surgical experience and high surgery volume were not associated with a lower CR\". A visão crítica de segurança [11], a lesão de via biliar [3] e a fístula cistoentérica [11] conferem.",
+   "correcao": "Intraoperatoriamente, a incapacidade de obter a visão crítica de segurança [11], a má visualização do triângulo de Calot [11], aderências firmes no triângulo de Calot [1,28], aderências pericolecísticas densas [11], maior grau de aderências vesiculares [29], lesão de via biliar [3] e fístula cistoentérica [11] figuram entre as causas ou fatores intraoperatórios associados à conversão; a menor experiência do cirurgião também foi associada à conversão [3,14,16,30], embora não tenha sido confirmada em série de 4.013 colecistectomias eletivas [5].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Estudos observacionais de diferentes regiões indicam consistentemente que o sexo masculino e a idade avançada configuram fatores demográficos associados a maiores taxas de conversão [3,5,8-10,28,33,34,36].",
+   "tipo": "citação contraditória / generalização indevida",
+   "justificativa": "Não consegui refutar. O resumo de [3] (SciELO México, Cirujano General) lista como preditores \"Age > 65 years, female sex, overweight...\", o que contradiz o \"consistentemente\" para o sexo masculino. [8] e [34] têm como desfecho a colecistectomia laparoscópica difícil, não a conversão. [8] não cita a idade (\"male sex and previous surgery were associated with higher risk of DLC\"). [36] relata idade > 50 anos (33,3% de conversão), mas não o sexo. Sustentam sexo masculino e idade para conversão: [5] (male e >65), [9] (males, >60), [10] (male gender, older age), [28] (\"Male sex and older age\") e [33] (homens p=0,006, idade >50). A correção sugerida atribui a idade também a [8], o que é inexato, por isso foi ajustada.",
+   "correcao": "Estudos observacionais de diferentes regiões associaram o sexo masculino e a idade avançada a maiores taxas de conversão [5,9,10,28,33] e à colecistectomia difícil [34]. O sexo masculino também foi preditor independente de colecistectomia difícil em coorte argentina [8], e a idade avançada associou-se à conversão em estudos indiano e mexicano [3,36]. Contudo, o estudo mexicano identificou o sexo feminino, e não o masculino, como preditor de conversão [3].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Em uma coorte argentina prospectiva, o sexo masculino apresentou razão de chances de 4,50 para colecistectomia difícil, enquanto cirurgias abdominais prévias elevaram esse risco para 11,70 em análise multivariada [8].",
+   "tipo": "número impreciso / mistura de análises",
+   "justificativa": "O problema é real. No resumo de [8], o OR de 4,50 para o sexo masculino é da análise univariada. Na multivariada: \"male sex and previous surgery were associated with higher risk of DLC (OR, 6.63...; and OR, 11.70...)\". A frase mistura escalas, e \"elevaram esse risco para 11,70\" sugere um aumento a partir de 4,50, o que é falso. A objeção sobre \"abdominais\" é fraca, porque a variável nos métodos é \"history of upper abdomen surgery\". Ainda assim, nos resultados o termo é \"previous surgery\". A origem argentina se confirma (SciELO Argentina), assim como o delineamento \"prospective cross-sectional cohort\".",
+   "correcao": "Em uma coorte prospectiva argentina, o sexo masculino (OR 6,63; IC95% 1,75-25,08) e a cirurgia prévia (OR 11,70; IC95% 1,48-92,37) associaram-se de forma independente à colecistectomia laparoscópica difícil na análise multivariada. Esse desfecho incluiu todos os casos convertidos (taxa de conversão de 11,25%) [8].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Dados de base populacional sueca corroboraram que pacientes com colecistite recorrente, tipicamente mais idosos e com maior escore ASA, apresentaram risco 1,76 vezes maior de cirurgia aberta [48].",
+   "tipo": "interpretação indevida da medida de efeito",
+   "justificativa": "É real, embora de menor gravidade. Os fatos isolados constam de [48]: \"patients with recurrent cholecystitis were older and had a higher ASA grade\" e \"open surgery (OR 1.76; 95% c.i. 1.64 to 1.92)\". Porém, 1,76 é uma razão de chances e não um \"risco 1,76 vezes maior\". Além disso, o OR foi obtido \"adjusting for age, sex, American Society of Anesthesiologists (ASA) grade, and time from admission to surgery\". Por isso, usar o dado para \"corroborar\" o papel da idade, logo após a frase sobre fatores demográficos, é uma leitura inadequada: o efeito é da recorrência, independente da idade e do ASA.",
+   "correcao": "Em estudo de base populacional sueco, a colecistite recorrente associou-se a maior chance de cirurgia aberta que o primeiro episódio (OR 1,76; IC95% 1,64-1,92), após ajuste para idade, sexo, escore ASA e tempo até a cirurgia [48].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "A obesidade, particularmente a classe 3 (IMC ≥ 40), mostrou-se preditor independente em grande banco de dados norte-americano, com razão de chances ajustada de 1,45 [7], embora estudos latino-americanos tenham relatado associação significativa já para IMC > 30 [16,36,44].",
+   "tipo": "atribuição geográfica incorreta",
+   "justificativa": "Confirmado pelas afiliações. [16] é colombiano (\"OHL Central Clinic in Montería, Colombia\"). [36] é indiano (\"Sree Balaji Medical College and Hospital, Chennai, IND\"). [44] é paquistanês (\"Shalamar Hospital, Lahore, Pakistan\"). Só [16] é latino-americano. Além disso, [7] incluiu apenas pacientes obesos com colecistite aguda e comparou a classe 3 com as classes 1-2 (\"AOR 1.45... ref.: class 1-2\"). O limiar IMC > 30 aparece apenas em [36]; [16] e [44] falam só em \"obesity\". Por isso, retirei \"(IMC > 30)\" da correção sugerida.",
+   "correcao": "A obesidade classe 3 (IMC ≥ 40) associou-se de forma independente à conversão, em comparação com as classes 1-2, em grande banco de dados norte-americano de pacientes com colecistite aguda (razão de chances ajustada de 1,45) [7]. Estudos da Colômbia, da Índia e do Paquistão também relataram associação entre obesidade e conversão [16,36,44].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Índices inflamatórios derivados do hemograma, como razão neutrófilo/linfócito (RNL), razão monócito/linfócito (RML) e índice de carga inflamatória, associaram-se a escores de Parkland mais elevados e à conversão em amostras turca e polonesa [24,26].",
+   "tipo": "atribuição ambígua de desfecho",
+   "justificativa": "Não consegui refutar. Em [24] (Turquia), \"CAR, NLR, and IBI were identified as independent predictors of higher PGS scores\"; a RML não foi avaliada, e os índices não foram testados diretamente contra a conversão. O resumo informa apenas que a conversão aumentou com o PGS. Em [26] (Polônia), \"As the NLR, MLR and PLR values increase... the risk of converting... (p<0.05)\", e o índice de carga inflamatória não foi avaliado. Sem \"respectivamente\", a frase atribui os dois desfechos e os três índices às duas amostras.",
+   "correcao": "Índices inflamatórios como a RNL, a razão PCR/albumina e o índice de carga inflamatória foram preditores independentes de escores de Parkland mais elevados em amostra turca, na qual a conversão também aumentou com o escore de Parkland [24]. Em amostra polonesa, valores crescentes de RNL, RML e razão plaqueta/linfócito associaram-se a maior risco de conversão [26].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Quanto à imagem, o espessamento da parede vesicular (> 3 a 5 mm, a depender do estudo) correlacionou-se linearmente com taxas de conversão que variaram de 3,6% (≤ 2 mm) a 20% (> 6 mm) [17,21], apresentando AUC de 0,907 para ponto de corte ≥ 5,75 mm em colecistite aguda [20].",
+   "tipo": "exagero / dado não sustentado",
+   "justificativa": "É real. Nenhum resumo fala em correlação \"linear\": [17] relata associação crescente (\"3.6% vs. 20.0%, P = 0.045\") e [21] \"a positive correlation\". Os percentuais vêm só de [17]; [21] não fornece valores. A faixa \"> 3 a 5 mm\" é incoerente com o corte de 5,75 mm de [20], citado na mesma frase. Em [17] e [22], o corte ótimo foi > 3 mm. A correção sugerida trata [17] e [21] como um único \"estudo prospectivo indiano\", mas são dois estudos (Patna e Jodhpur); por isso foi ajustada.",
+   "correcao": "Quanto à imagem, a maior espessura da parede vesicular correlacionou-se positivamente com a conversão em dois estudos prospectivos indianos [17,21]. Em um deles, as taxas foram de 3,6% no grupo de menor espessura (≤ 2 mm) e de 20,0% no de maior espessura (> 6 mm) [17]. Na colecistite aguda, o ponto de corte ≥ 5,75 mm apresentou AUC de 0,907 [20], e os pontos de corte variaram de > 3 mm a ≥ 5,75 mm entre os estudos [17,20,22].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "A presença de líquido perivesicular, vesícula contraída, litíase impactada e dilatação de coledoco completaram o painel de imagem preditivo [8,16,18,19,22,34,35,37,39,40,51,53,55,59,60].",
+   "tipo": "citações que não sustentam a afirmação",
+   "justificativa": "É real. [16], [18], [22], [59] e [60] não relatam nenhum dos quatro achados. [60] apenas descreve a frequência de dilatação do colédoco, sem associação. [8] relata edema e hidropsia, mas não líquido perivesicular, vesícula contraída, cálculo impactado nem dilatação do colédoco. Em [55], o líquido perivesicular perdeu significância na análise multivariada. [34], [35], [39] e [53] têm como desfecho a colecistectomia difícil. Sustentam conversão: [19] (diâmetro do colédoco na análise univariada), [20] e [36] (líquido perivesicular), e [37], [40] e [51] (vesícula contraída). A correção sugerida mantinha [8] indevidamente e omitia [36].",
+   "correcao": "Líquido perivesicular, vesícula contraída, cálculo impactado e dilatação do colédoco associaram-se à conversão [19,20,36,37,40,51] ou à colecistectomia difícil [34,35,39,53]. No entanto, o líquido perivesicular perdeu significância na análise multivariada de um estudo mexicano [55].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "No intraoperatório, a dificuldade de dissecação do triângulo de Calot por aderências densas ou anatomia distorcida constituiu a principal causa técnica de conversão, relatada em 79,7% dos casos convertidos em grande série saudita [4] e como fator independente em estudos prospectivos [11,59].",
+   "tipo": "número atribuído incorretamente / delineamento e desfecho errados",
+   "justificativa": "Não consegui refutar. Em [4], \"adhesions in 55 cases (79.71%) and distorted anatomy in 31 cases (44.92%)\": os 79,7% referem-se só a aderências, sem menção ao triângulo de Calot nem a aderências \"densas\". [59] é \"A retrospective cross-sectional review\" (Nepal), e a aderência no triângulo de Calot foi preditor independente de colecistectomia difícil, não de conversão. [11] é prospectivo, mas relata apenas associação forte (P<0,001), sem análise multivariada declarada.",
+   "correcao": "No intraoperatório, as aderências e a anatomia distorcida foram as principais causas de conversão em grande série saudita, presentes em 79,7% e 44,9% dos casos convertidos, respectivamente [4]. Aderências pericolecísticas densas e a não visualização do triângulo de Calot associaram-se fortemente à conversão em estudo prospectivo indiano [11]. Já a aderência no triângulo de Calot foi preditor independente de colecistectomia difícil em estudo retrospectivo nepalês [59].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "A falha em obter a visão crítica de segurança (VCS) associou-se fortemente à conversão [11,49], enquanto o uso de colangiografia fluorescente reduziu a taxa de conversão de 15,9% para 1,4% em colecistectomia tardia [46].",
+   "tipo": "citação que não sustenta a afirmação",
+   "justificativa": "É real. [49] analisou fatores de falha na identificação da VCS, sem comparar falha da VCS com conversão. Entre os 19 casos de falha (107 − 88), \"5... top-down, 6... subtotal fenestrating, 6... subtotal reconstituting, and 2 converted\". Só [11] sustenta a associação (\"failure to attain CVS (P < 0.001)\"). Quanto a [46], a frase \"reduziu... de 15,9% para 1,4%\" sugere um antes e depois causal, mas trata-se de uma comparação retrospectiva entre grupos com e sem a colangiografia fluorescente.",
+   "correcao": "A falha em obter a visão crítica de segurança (VCS) associou-se fortemente à conversão em estudo prospectivo indiano [11]. Em série indonésia, porém, a maioria dos casos com falha na VCS foi resolvida por procedimentos de resgate, com apenas 2 conversões em 19 pacientes [49]. Já o uso de colangiografia fluorescente associou-se a menor taxa de conversão (1,4% contra 15,9%) na colecistectomia tardia, em estudo retrospectivo japonês [46].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_41",
+   "frase": "Escores intraoperatórios, como a classificação de Parkland e o escore de vesícula intraoperatório, demonstraram validade discriminativa para conversão e complicações [24,29,32,47].",
+   "tipo": "exagero / citações que não sustentam",
+   "justificativa": "É real. Nenhum resumo apresenta medida de discriminação (AUC) dos escores intraoperatórios para conversão ou complicações. [24] mostra que a conversão \"increased significantly with increasing PGS scores\", sem complicações. [29] mostra associação do escore com drenagem, complicações e conversão (p<0,05). [47] é \"observational, descriptive\" e compara escores entre cirurgia eletiva e de urgência, sem testá-los contra a conversão. [32] relaciona os graus de Parkland a variáveis clínicas e ao tipo de cirurgia, sem avaliar complicações. A correção sugerida atribuía complicações também a [24], o que foi ajustado.",
+   "correcao": "Escores intraoperatórios, como a escala de Parkland e o escore intraoperatório de vesícula, associaram-se a maiores taxas de conversão [24,29] e de complicações pós-operatórias [29]. Além disso, escores mais elevados foram observados nas cirurgias de urgência, nas quais a conversão foi mais frequente [47].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Um estudo boliviano [45] também não encontrou influência do tempo de espera nem da presença de cateter na conversão após drenagem.",
+   "tipo": "atribuicao_geografica_incorreta",
+   "justificativa": "A afiliação de [45] é 'Recep Tayyip Erdogan University... Rize, Türkiye'. Estar publicado na Rev Assoc Med Bras não faz dele um estudo boliviano, e nada no registro o liga à Bolívia (o estudo boliviano é o [31], de La Paz). O conteúdo confere: 'no statistically significant difference... between the presence of a catheter, the time of surgery 8 weeks before and after, and the conversion'.",
+   "correcao": "Um estudo turco [45] também não encontrou influência do tempo de espera (cirurgia antes ou após oito semanas) nem da presença de cateter na conversão após drenagem percutânea.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Estudos latino-americanos [1-4,8,10,15,16,28,31,33,52] apresentam taxas de conversão variáveis (1,96% a 12,3%), refletindo diferenças no perfil de urgência, acesso a exames de imagem avançados e volume cirúrgico institucional.",
+   "tipo": "atribuicao_geografica_incorreta",
+   "justificativa": "[4] (Jeddah, SAU) e [52] (Al Khobar, Arábia Saudita) são sauditas, [10] é polonês (Kielce, POL) e [28] é turco (Ankara). O limite de 12,3% vem de [10]: '28 (12.3%) cases'. [16] é caso-controle e não informa taxa. Entre os latino-americanos, as taxas são: [1] 2,2%, [2] 4,54%, [3] 9,6%, [8] 11,25%, [15] 1,96%, [31] 6,9% e [33] 3,3%. Três estudos latino-americanos não foram citados: [32] (Paraguai, 4,49%), [47] (México, 4,3%) e [55] (México, 12,14%). Nenhum resumo atribui as diferenças a acesso a imagem avançada ou a volume institucional, e [5] nem encontrou efeito do volume. Só [15] cita dificuldades de acesso que retardam o tratamento.",
+   "correcao": "Estudos latino-americanos [1-3,8,15,31-33,47,55] relataram taxas de conversão variáveis (1,96% a 12,14%), possivelmente refletindo diferenças no perfil de urgência e na composição das amostras, bem como dificuldades de acesso que retardam o tratamento cirúrgico [15].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Da mesma forma, o impacto da cirurgia abdominal prévia diverge: estudos identificaram-na como preditor forte e independente [4,5,8-12], enquanto uma análise turca [56] não observou diferença nas taxas de conversão entre pacientes com e sem laparotomia superior prévia, sugerindo que a técnica cirúrgica e a adesão a protocolos de dissecação podem mitigar esse risco.",
+   "tipo": "citacao_nao_sustenta_ou_contradiz",
+   "justificativa": "[12] contradiz a frase: 'previous abdominal surgeries were comparable between the two groups'. [4] só lista causas de conversão (aderências, anatomia distorcida). O multivariado de [10] não inclui cirurgia prévia. [9] usou apenas qui-quadrado/Fisher, então não há independência. Em [11], p = 0,047. [8] tem como desfecho a colecistectomia difícil. [44] sustenta a associação (OR 4,2) e não foi citado. [56] fala em 'upper abdominal surgery', não em laparotomia, e não menciona técnica nem protocolos de dissecação.",
+   "correcao": "Da mesma forma, o impacto da cirurgia abdominal prévia diverge: alguns estudos associaram-na a maior risco de conversão [5,9,11,44] ou de colecistectomia difícil [8], enquanto uma série do Sri Lanka [12] encontrou frequência semelhante de cirurgia abdominal prévia entre convertidos e não convertidos e uma análise turca [56] não observou diferença nas taxas de conversão entre pacientes com e sem cirurgia abdominal superior prévia, apesar de maior tempo operatório e grau de aderências, sugerindo que esse antecedente, isoladamente, não contraindica a via laparoscópica.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Escores baseados apenas em ultrassonografia e dados clínicos [19,22] oferecem praticidade, mas nomogramas que incorporam tomografia (índice de adesão vesícula-duodeno, atenuação do triângulo de Calot) [41] ou marcadores inflamatórios compostos [14,24] exibem discriminação superior (AUC > 0,90).",
+   "tipo": "dado_numerico_incorreto",
+   "justificativa": "Só [41] passa de 0,90 ('AUC = 0.903'), e o desfecho é colecistectomia difícil após drenagem percutânea. [14] teve 'training set (AUC = 0.868) and validation set (AUC = 0.833)'. [24] teve 'IBI... AUC: 0.792' para escores de Parkland mais altos, não para conversão. [22] também usa RNL e RPL do hemograma, então não é 'apenas ultrassonografia e dados clínicos'. Sem AUC em [19] e [22], a superioridade não pode ser demonstrada.",
+   "correcao": "Escores baseados em ultrassonografia, isolada ou combinada a índices do hemograma [19,22], oferecem praticidade; já o nomograma que incorpora tomografia (índice de adesão vesícula-duodeno, atenuação do triângulo de Calot) [41] alcançou AUC de 0,903 para colecistectomia difícil após drenagem percutânea, enquanto o nomograma com PCR [14] obteve AUC de 0,833 na validação e índices inflamatórios compostos atingiram AUC de até 0,792 para escores de Parkland elevados, e não para conversão [24].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "A identificação de que a obesidade classe 3 impacta custos e tempo de internação pós-conversão [7] adiciona dimensão econômica à decisão cirúrgica, pouco explorada nos demais estudos.",
+   "tipo": "atribuicao_de_efeito_incorreta",
+   "justificativa": "Em [7], a obesidade classe 3 é fator de risco para conversão ('AOR 1.45'). O aumento de custos e de internação foi associado à própria conversão: 'CTO was associated with incremental increases in hospitalization costs (β + $719...) and length of stay (β +2.20 days)'. Nada indica que a obesidade classe 3 tenha efeito sobre custos após a conversão.",
+   "correcao": "A constatação de que a conversão, para a qual a obesidade classe 3 foi fator de risco independente, associou-se a aumento incremental dos custos hospitalares e do tempo de internação [7] adiciona dimensão econômica à decisão cirúrgica, pouco explorada nos demais estudos.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "A predominância de colecistite aguda como indicação em séries de emergência [2,6,13-15,23,25,36,52,57] contrasta com séries eletivas onde a litíase vesicular crônica predomina [5,7,29-31,33,44].",
+   "tipo": "classificacao_incorreta_de_populacao",
+   "justificativa": "[7] incluiu 'acute cholecystitis patients... undergoing non-elective LC', então não é série eletiva de doença crônica. Em [25], a colecistite aguda é minoria (76/180; 90 colelitíases não complicadas). [2] é coorte de doença vesicular com cirurgia de emergência como uma das variáveis. [52] compara emergência e eletiva. [44] é misto (9,3% em emergência versus 2,2% em eletiva). [30] não informa o caráter da cirurgia. Os demais estão bem classificados: [5] é eletivo, [29] eletivo, [31] tem 72,5% ambulatorial e 69,9% de colecistite crônica, e [33] tem 95,1% eletivo.",
+   "correcao": "A predominância de colecistite aguda como indicação em séries de emergência ou não eletivas [6,7,13-15,23,36,57] contrasta com séries eletivas ou predominantemente ambulatoriais, nas quais a litíase vesicular crônica predomina [5,29,31,33].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "A associação entre comorbidades metabólicas e conversão mostrou-se consistente para diabetes mellitus tipo 2 [10,24,36,44] e hipertensão [36], mas o mecanismo — seja por inflamação crônica de baixo grau, microangiopatia ou anatomia distorcida por cirurgias prévias — não foi elucidado pelos delineamentos transversais.",
+   "tipo": "citacao_nao_sustenta",
+   "justificativa": "Em [24], o DM2 predisse 'higher PGS scores', não conversão. Em [44], o diabetes associou-se a 'postoperative complications'; a conversão associou-se a colecistite aguda, cirurgia prévia, obesidade e emergência. Só [10] (multivariada) e [36] (qui-quadrado, 'diabetes (22.2%)') ligam o DM à conversão. [10] é retrospectivo e [36] é 'prospective longitudinal', não transversal. Nenhum resumo menciona o mecanismo de 'anatomia distorcida por cirurgias prévias'.",
+   "correcao": "O diabetes mellitus tipo 2 associou-se à conversão em análise multivariada [10] e em análise bivariada [36], bem como a escores de Parkland mais elevados [24], e a hipertensão associou-se à conversão em análise bivariada [36]; em outra série, o diabetes associou-se a complicações pós-operatórias, mas não figurou entre os fatores associados à conversão [44]. O mecanismo dessas associações não foi elucidado pelos delineamentos observacionais disponíveis.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Ensaios e coortes apoiam a cirurgia precoce (≤ 72 h ou ≤ 7 dias) associada a menores taxas de conversão [6,15,57], porém a análise de splines cúbicos restritos em coorte japonesa [43] não identificou associação não-linear ou limiar temporal claro entre drenagem percutânea e cirurgia tardia sobre a necessidade de procedimento de salvamento (bailout).",
+   "tipo": "delineamento_e_citacao_incorretos",
+   "justificativa": "Nenhum estudo citado é ensaio clínico: [6] é 'retrospectively reviewed' e [15] é uma série comparativa observacional. [57] não liga o momento da cirurgia à conversão; diz apenas que 'Surgery after 72 h... well correlated with older age'. [13] sustenta a relação ('interval... (>72 h)' foi preditor independente) e não foi citado. [43] estudou o intervalo drenagem-colecistectomia: 'overall p = 0.3824; non-linear p = 0.6201'. É outra população, então o 'porém' cria uma falsa contradição.",
+   "correcao": "Estudos observacionais associam a cirurgia precoce (≤ 72 h ou ≤ 7 dias do início dos sintomas) a menores taxas de conversão [6,13,15]; em cenário distinto, o de pacientes previamente submetidos a drenagem percutânea, a análise de splines cúbicos restritos em coorte japonesa [43] não identificou associação, linear ou não linear, nem limiar temporal claro entre o intervalo drenagem-colecistectomia e a necessidade de procedimento de salvamento (bailout).",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Ensaios clínicos randomizados comparando estratégias de tempo cirúrgico (precoce versus tardio) após drenagem percutânea, com desfechos padronizados de dificuldade técnica e conversão, poderiam resolver a incerteza atual [6,15,43,45,57].",
+   "tipo": "citacao_nao_sustenta",
+   "justificativa": "Só [43] ('interval from PTGBD to LC') e [45] ('time to operation' após drenagem) tratam do tempo cirúrgico após drenagem percutânea. [6] e [15] comparam cirurgia precoce e tardia a partir do início dos sintomas. [6] só cita a drenagem como opção em idosos de alto risco. [57] estuda subgrupos etários em cirurgia de emergência. Esses três não sustentam a incerteza sobre o momento após a drenagem.",
+   "correcao": "Ensaios clínicos randomizados comparando estratégias de tempo cirúrgico (precoce versus tardio) após drenagem percutânea, com desfechos padronizados de dificuldade técnica e conversão, poderiam resolver a incerteza atual [43,45].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Sistemas de escore pré-operatórios baseados em variáveis clínicas, laboratoriais e ultrassonográficas exibiram boa performance discriminativa (AUC 0,75 a 0,93) [11,14,19,22,30,34,35,38-40,51,60].",
+   "tipo": "generalizacao_nao_sustentada",
+   "justificativa": "Informam AUC: [14] (0,833-0,868), [30] (0,893), [34] (0,927), [38] (0,88) e [40] (0,82 versus 0,75). [11], [19] e [60] não trazem medida de discriminação. [22] e [51] citam curva ROC sem valores. [35] teve 'sensitivity of 57.14%... positive predictive value... 39%' e [39] 'specificity... 63.5%', o que não sustenta 'boa performance' para todos.",
+   "correcao": "Entre os sistemas de escore pré-operatórios baseados em variáveis clínicas, laboratoriais e ultrassonográficas, os que relataram área sob a curva exibiram performance discriminativa moderada a boa (AUC 0,75 a 0,93) [14,30,34,38,40], enquanto outros relataram apenas sensibilidade e especificidade, por vezes modestas [35,39], ou não informaram valores de AUC no resumo [11,19,22,51,60].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Enquanto a coorte iraniana [25] e o estudo japonês [13] validaram pontos de corte específicos para PCR e razão PCR/albumina em colecistite aguda, a análise de regressão logística de um estudo turco [27] não confirmou parâmetros hematológicos como preditores independentes de conversão, apesar de diferenças significativas em análise univariada.",
+   "tipo": "forca_da_conclusao_exagerada",
+   "justificativa": "A atribuição de países está correta (Irã, Japão, Turquia), mas 'validaram' exagera. [25] é 'retrospective cohort' em que a 'ROC analysis determined optimal thresholds', ou seja, derivou o corte sem validação. [13] é retrospectivo, com 16 conversões, e mostrou a razão PCR/albumina ≥ 5,54 como preditora independente em análise multivariada. O resumo de [13] não menciona curva ROC, então a correção sugerida também erra ao atribuir-lhe ROC. Em [27], as diferenças significativas vieram de comparações entre grupos, não confirmadas na regressão logística.",
+   "correcao": "Enquanto a coorte retrospectiva iraniana [25] propôs, por análise de curva ROC, ponto de corte de 7,5 mg/L para a PCR e o estudo retrospectivo japonês [13] identificou a razão PCR/albumina ≥ 5,54 como preditora independente em análise multivariada, ambos sem validação externa, a análise de regressão logística de um estudo turco [27] não confirmou parâmetros hematológicos e razões derivadas como preditores independentes de conversão, apesar de diferenças significativas nas comparações entre grupos.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Por fim, poucos estudos incluídos avaliaram desfechos pós-operatórios da conversão, como tempo de internação e custos [7], o que limita a quantificação do real impacto clínico e econômico da conversão além da taxa do evento em si.",
+   "tipo": "afirmacao_contradiz_fontes",
+   "justificativa": "Não há contradição estrita, porque 'poucos' em 60 estudos é defensável. Mas citar só [7] subrepresenta a evidência. [10] traz 'increased duration of... hospitalization, a higher rate of surgical site infections', [33] 'longer hospital stay (p=0.009)', [45] 'Postoperative hospitalization days were significantly higher in Group 1' e [36] 'extended recovery periods'. A lacuna real é a de custos, avaliados apenas em [7].",
+   "correcao": "Por fim, embora alguns estudos tenham relatado maior tempo de internação, recuperação mais prolongada ou maior morbidade nos casos convertidos [7,10,33,36,45], apenas um avaliou custos [7], o que limita a quantificação do real impacto econômico da conversão além da taxa do evento em si.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "O uso de colangiografia fluorescente intraoperatória mostra potencial para reduzir conversão e lesão biliar em cenários de inflamação crônica ou anatomia duvidosa [46], devendo ser considerado onde disponível.",
+   "tipo": "populacao_extrapolada",
+   "justificativa": "[46] estudou só a colecistectomia tardia após recuperação de colecistite aguda ('DLC in 226 patients after recovering from AC'), com revisão retrospectiva e sem randomização. O desfecho de segurança somava 'Biliary and/or arterial injuries' (0% versus 7,3%). 'Inflamação crônica' e 'anatomia duvidosa' não aparecem no resumo.",
+   "correcao": "O uso de colangiografia fluorescente intraoperatória mostra potencial para reduzir a conversão (1,4% versus 15,9%) e as lesões biliares e/ou arteriais na colecistectomia tardia após colecistite aguda, segundo comparação retrospectiva não randomizada [46], podendo ser considerado onde disponível.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Pacientes com escores de risco elevados (ex.: escore modificado de Randhawa > 6, nomograma de Wu com probabilidade alta, Parkland grau 4-5 intraoperatório) poderiam ser direcionados para cirurgiões experientes, agendamento em horários com suporte completo, consentimento informado detalhado sobre probabilidade de conversão e, em casos selecionados, abordagem aberta planejada ou híbrida.",
+   "tipo": "atribuicao_de_dado_incorreta",
+   "justificativa": "Os resumos de [40] e [51] (Randhawa modificado) não informam ponto de corte. O corte '>6' vem do sistema de 15 pontos de [34]: 'score >6 predicted difficulty... High-score patients (>6) may be triaged to experienced surgeons or considered for early open conversion'. O resumo de [34] não diz que é o escore de Randhawa. Parkland é intraoperatório e não pode orientar escalação, agendamento ou consentimento pré-operatório. [49] liga Parkland 4-5 a falha da VCS. [38] sustenta informar o paciente, organizar a agenda e selecionar pessoal. A frase original não tem citações e 'híbrida' não tem fonte.",
+   "correcao": "Pacientes com escores pré-operatórios de risco elevado (ex.: escore > 6 no sistema de 15 pontos avaliado por Nagarla et al. [34], probabilidade alta no nomograma de Wu et al. [14]) poderiam ser direcionados para cirurgiões experientes, agendamento com suporte adequado, consentimento informado detalhado sobre a probabilidade de conversão e, em casos selecionados, conversão precoce para via aberta [34,38]; no intraoperatório, graus 4-5 de Parkland devem alertar para maior risco de falha na obtenção da visão crítica de segurança e de necessidade de procedimentos de salvamento [49].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Contudo, a validação externa permanece escassa; o nomograma de Wu et al. [14] destaca-se pela validação multicêntrica, enquanto a maioria dos escores foi testada apenas na coorte de derivação.",
+   "tipo": "afirmacao_contradiz_fontes",
+   "justificativa": "Vários estudos aplicaram escores preexistentes em coortes independentes da derivação: [35] ('scoring system proposed by Randhawa and Pujahari'), [39] ('A scoring system by Randhawa et al. was used'), [40] e [51] (Randhawa original e modificado). [30] foi 'subsequently validated through a prospective cohort study'. Assim, 'a maioria testada apenas na coorte de derivação' não procede. O que se sustenta é que as validações foram quase sempre unicêntricas. A correção sugerida omitia [30]; aqui ele foi incluído.",
+   "correcao": "Contudo, a validação externa permanece limitada: o nomograma de Wu et al. [14] destaca-se pela validação externa multicêntrica e o modelo de gradação de [30] foi validado em coorte prospectiva, enquanto os demais escores foram avaliados apenas na própria coorte de derivação [11,19,22,41] ou pela aplicação de escores preexistentes, como o de Randhawa e sua modificação, em amostras unicêntricas [35,39,40,51].",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Essa discrepância pode refletir diferenças na definição de desfecho (conversão versus dificuldade operatória), no momento da dosagem (eletiva versus emergência) ou no controle de confundimento.",
+   "tipo": "afirmacao_contradiz_fontes",
+   "justificativa": "Os três estudos comparados usam a conversão como desfecho: [25] 'CRP predicted conversion to open surgery', [13] 'predictors of conversion from laparoscopic to open' e [27] 'predicting the conversion to open surgery'. A diferença de desfecho não explica a discrepância. Outras explicações têm apoio nos resumos: os marcadores diferem (PCR e razão PCR/albumina em [25] e [13], hemograma em [27]), as amostras diferem ([13] só colecistite aguda, [27] cirurgias eletivas e de emergência) e o tamanho amostral é pequeno ([13] teve 16 conversões).",
+   "correcao": "Como os três estudos adotaram a conversão como desfecho, essa discrepância pode refletir diferenças nos marcadores avaliados (PCR e razão PCR/albumina versus parâmetros do hemograma), na composição das amostras (colecistite aguda versus cirurgias eletivas e de urgência), no tamanho amostral ou no controle de confundimento.",
+   "status": "corrigida"
+  },
+  {
+   "secao": "discussao_42_44",
+   "frase": "Essa distinção é crucial, pois a fisiopatologia inflamatória aguda impulsiona os marcadores (PCR, espessamento parietal, líquido perivesicular) que consistentemente predizem conversão, enquanto na doença crônica a fibrose e aderências silenciosas podem não ser capturadas adequadamente por escores baseados em inflamação aguda.",
+   "tipo": "generalizacao_nao_sustentada",
+   "justificativa": "Em [13], espessura parietal e líquido pericolecístico foram significativos só na análise univariada; na multivariada ficaram a razão PCR/albumina e o intervalo > 72 h. Em [55]: 'all of the variables, except pericholecystic fluid, were associated with conversion'. Em [27], os marcadores não se mantiveram na regressão. Logo, 'consistentemente' exagera. 'Aderências silenciosas' é especulação sem fonte.",
+   "correcao": "Essa distinção é relevante, pois a fisiopatologia inflamatória aguda impulsiona marcadores (PCR, espessamento parietal, líquido perivesicular) frequentemente associados à conversão, embora nem sempre como preditores independentes em análise multivariada [13,55], enquanto na doença crônica a fibrose e as aderências podem não ser capturadas adequadamente por escores baseados em inflamação aguda.",
+   "status": "corrigida"
+  }
+ ]
+}
