@@ -105,6 +105,7 @@ def _comparar_com_sistema(artigo_json: dict, resultados: list[dict]) -> dict:
         "Objetivo": "Objetivo no último parágrafo da Introdução",
         "mesmo número de frases": "Parágrafos vizinhos com número de frases diferente",
         "Métodos e Resultados secos": "Métodos sem opinião (humanização não vazou)",
+        "Limitações num único parágrafo": "Limitações enxutas: um parágrafo na Discussão, sem repetir no resumo/conclusão",
     }
     linhas = []
     for item in artigo_json.get("checklist", []):

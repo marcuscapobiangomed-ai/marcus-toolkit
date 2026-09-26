@@ -33,6 +33,7 @@ Tudo fica em `dados/artigos/<id>/`:
 |---|---|
 | `gerar pedido.json [--auditar] [--com-ia]` | Roda o pipeline inteiro e exporta o .docx automaticamente |
 | `retomar <id>` | Continua um artigo que parou (erro, cota, queda), sem refazer etapas prontas |
+| `revisar <id> triagem.csv` | Importa as decisões de seleção revisadas pelos autores; o PRISMA e o texto passam a segui-las |
 | `exportar <id> [--saida arq.docx]` | Reexporta o .docx a partir do estado salvo, sem gastar IA |
 | `painel [--porta 8765]` | Painel: gasto real × custo em API, por artigo, modelo e etapa; fallbacks; download do .docx |
 | `auditar artigo.docx [--offline] [--com-ia]` | Roda as skills separadamente sobre qualquer artigo (.docx/.md/.txt) |
@@ -52,6 +53,32 @@ Tudo fica em `dados/artigos/<id>/`:
 6. **Reforço de referências**, se faltar para chegar a 25.
 7. **Humanização por seção**, com a intensidade calibrada da skill.
 8. **Resumo/Abstract → montagem → checklist → .docx**.
+
+## O artigo é dos autores
+
+Vocês pesquisam, leem, decidem e reescrevem; o pipeline trabalha a partir disso.
+
+- **O que vocês fizeram vira fato nos Métodos.** Declare no pedido, em `contribuicao_autores`, o que vocês de fato fizeram. Por exemplo: triagem por dois autores de forma independente, divergências resolvidas com o orientador, leitura na íntegra, extração com conferência cruzada, busca manual, redação e revisão. Os Métodos descrevem esse processo na voz dos autores e não atribuem nenhuma etapa a ferramentas.
+- **As decisões de seleção de vocês prevalecem.** Abram o `triagem.csv` (no Excel serve), corrijam as colunas `triagem`/`elegibilidade` (`incluir`/`excluir`) e escrevam o motivo com as palavras de vocês. Depois rodem:
+
+  ```bash
+  python -m artigos_v2 revisar <id> triagem.csv   # recalcula o PRISMA com as decisões de vocês
+  python -m artigos_v2 retomar <id>               # refaz síntese, texto e .docx a partir delas
+  ```
+
+  O fluxograma passa a mostrar os motivos de exclusão escritos por vocês. Os Métodos registram que todas as decisões foram revisadas pelos autores.
+- **Limitações curtas e sem desculpas.**
+  - Um único parágrafo curto na Discussão, só com limitações do corpo de evidências e como vocês as contornaram.
+  - Nada que o processo de vocês já cobriu (por exemplo, "só resumos", se vocês leram na íntegra).
+  - Nenhuma menção a ferramentas.
+  - O parágrafo termina com o que a revisão agrega.
+  - Resumo e Conclusão não repetem ressalvas. A auditoria confere tudo isso.
+- **O estilo não mexe no que vocês afirmaram.** Um parágrafo volta ao original se a reescrita:
+  - tirar ou acrescentar um modalizador ("sugere", "pode", "associou-se");
+  - introduzir certeza ou causalidade ("demonstra", "eleva", "aumenta o risco");
+  - trocar o desenho do estudo ("série de casos" → "coorte").
+
+  O resto da reescrita é aproveitado. A contagem usa só formas verbais: "resultados" não conta como "resultar".
 
 ## Garantias (o que o código impede, não só o prompt)
 
@@ -109,7 +136,8 @@ Ver [docs/modelos-escrita.md](docs/modelos-escrita.md) para o ranking mundial de
 
 ## Limitações honestas
 
-- **Elegibilidade:** é avaliada pelo resumo completo e pelos metadados, não pelo texto integral. O relatório de triagem existe para os autores conferirem, e o uso de IA na seleção deve ser declarado conforme a política da revista.
+- **Elegibilidade automática:** sem a revisão dos autores, é feita pelo resumo completo. Com `revisar`, valem as decisões de vocês, inclusive as da leitura na íntegra.
+- **Métodos:** descrevem só as etapas que vocês declararam em `contribuicao_autores`. O sistema não inventa etapas, porque a banca e a revista conferem.
 - **LILACS e SciELO:** precisam da exportação RIS feita no portal, porque as APIs bloqueiam acesso automatizado.
 - **Checagens de estilo da auditoria:** são heurísticas objetivas (as mesmas da skill). Use `--com-ia` para uma leitura qualitativa.
 

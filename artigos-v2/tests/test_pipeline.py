@@ -4,7 +4,7 @@ import re
 import pytest
 from docx import Document
 
-from artigos_v2.pipeline import ETAPAS, Pedido, Pipeline, _problema_humanizacao
+from artigos_v2.pipeline import ETAPAS, Pedido, Pipeline, _problema_humanizacao, mesclar_humanizacao
 
 
 def _pipeline(ambiente):
@@ -121,3 +121,104 @@ def test_humanizacao_rejeitada_mantem_texto_original(ambiente):
     assert estado["humanizacao"]["discussao"] == "rejeitada"
     assert estado["humanizacao"]["introducao"] == "aplicada"
     assert estado["secoes"]["discussao"] == estado["secoes_originais"]["discussao"]
+
+
+# ------------------------------------------------ força das afirmações (Agente de Estilo)
+
+@pytest.mark.parametrize("original, novo, esperado", [
+    ("Os dados sugerem benefício da visita domiciliar [R1].", "Os dados indicam benefício da visita domiciliar [R1].",
+     "modalizador removido"),
+    ("A obesidade associou-se à conversão cirúrgica [R2].", "A obesidade eleva a chance de conversão cirúrgica [R2].",
+     "modalizador removido"),
+    ("Uma série de casos descreveu o desfecho [R3].", "Uma coorte descreveu o desfecho em detalhe [R3].",
+     "desenho de estudo alterado"),
+    ("O tabagismo foi frequente entre os pacientes [R4].", "O tabagismo aumenta o risco entre os pacientes [R4].",
+     "verbo de certeza"),
+    ("A intervenção reduziu a pressão arterial [R5].", "A intervenção pode ter reduzido a pressão arterial [R5].",
+     "mais fraca"),
+    # reescritas legítimas: mesma força, "resultados" é substantivo, corrobora → confirma é troca de vocabulário
+    ("Os resultados sugerem benefício, o que corrobora o achado anterior [R6].",
+     "Esses resultados sugerem benefício e confirmam o achado anterior [R6].", None),
+    ("A visita domiciliar associou-se a melhor adesão [R7].", "Na visita domiciliar, a adesão associou-se a ganhos [R7].",
+     None),
+])
+def test_trava_de_forca_das_afirmacoes(original, novo, esperado):
+    problema = _problema_humanizacao(original, novo)
+    assert (problema is None) if esperado is None else (esperado in problema)
+
+
+def test_humanizacao_por_paragrafo_preserva_so_o_que_exagerou():
+    original = "Os dados sugerem benefício [R1].\n\nOutro parágrafo com texto robótico e repetitivo [R2]."
+    novo = "Os dados demonstram benefício [R1].\n\nOutro parágrafo, agora com ritmo mais natural [R2]."
+    final, aceitos, total, problemas = mesclar_humanizacao(original, novo)
+    assert (aceitos, total) == (1, 2)
+    assert final.split("\n\n") == ["Os dados sugerem benefício [R1].", "Outro parágrafo, agora com ritmo mais natural [R2]."]
+
+
+# ------------------------------------------------ participação dos autores
+
+def test_contribuicao_dos_autores_entra_nos_metodos_e_na_discussao(ambiente):
+    config, ledger, cliente, fake, *_ = ambiente
+    prompts_vistos = []
+    responder = fake.responder
+    fake.responder = lambda p: (prompts_vistos.append(p), responder(p))[1]
+    contribuicao = {"triagem": "dois autores, de forma independente", "leitura_integra": "lidos na íntegra pelos autores",
+                    "busca_manual": ""}
+    _pipeline(ambiente).gerar(Pedido(tema="x", contribuicao_autores=contribuicao))
+    metodos = next(p for p in prompts_vistos if "seção MÉTODOS" in p)
+    assert "dois autores, de forma independente" in metodos and "leitura na íntegra" in metodos
+    assert "busca_manual" not in metodos  # campo vazio não vira fato
+    discussao = next(p for p in prompts_vistos if "Escreva a DISCUSSÃO" in p)
+    assert "lidos na íntegra pelos autores" in discussao and "UM único parágrafo" in discussao
+
+
+def test_autores_revisam_a_selecao_e_as_decisoes_deles_valem(ambiente):
+    import csv
+
+    config, ledger, *_ = ambiente
+    pipeline = _pipeline(ambiente)
+    docx = pipeline.gerar(Pedido(tema="x"))
+    artigo_id = docx.parent.name
+    planilha = docx.parent / "triagem.csv"
+    linhas = list(csv.DictReader(planilha.open(encoding="utf-8"), delimiter=";"))
+    incluidas = [l for l in linhas if l["elegibilidade"] == "incluir"]
+    # autores excluem 3 estudos na leitura integral e resgatam 1 excluído na triagem
+    for l in incluidas[:3]:
+        l["elegibilidade"], l["motivo_elegibilidade"] = "excluir", "Desfecho fora do escopo (leitura na íntegra)"
+    resgatada = next(l for l in linhas if l["triagem"] == "excluir")
+    resgatada.update(triagem="incluir", motivo_triagem="", elegibilidade="incluir")
+    revisada = docx.parent / "triagem-revisada.csv"
+    with revisada.open("w", encoding="utf-8-sig", newline="") as f:  # como o Excel salva
+        w = csv.DictWriter(f, fieldnames=linhas[0].keys(), delimiter=";")
+        w.writeheader()
+        w.writerows(linhas)
+
+    antes = json.loads((docx.parent / "estado.json").read_text(encoding="utf-8"))["prisma"]
+    resultado = pipeline.revisar_selecao(artigo_id, revisada)
+    p = resultado["prisma"]
+    assert len(resultado["alteradas"]) == 4
+    assert p["incluidos"] == antes["incluidos"] - 3 + 1
+    assert p["motivos_elegibilidade"]["Desfecho fora do escopo (leitura na íntegra)"] == 3
+    assert ledger.artigo(artigo_id)["status"] == "em_andamento"
+
+    docx2 = pipeline.executar(artigo_id)
+    estado = json.loads((docx2.parent / "estado.json").read_text(encoding="utf-8"))
+    assert len(estado["artigo"]["sintese"]) == p["incluidos"]
+    assert estado["artigo"]["prisma"] == p
+    assert "revisao_da_selecao" in pipeline._fatos_metodos(estado)["conduzido_pelos_autores"]
+
+
+def test_revisao_com_valor_invalido_explica_o_erro(ambiente):
+    import csv
+
+    pipeline = _pipeline(ambiente)
+    docx = pipeline.gerar(Pedido(tema="x"))
+    linhas = list(csv.DictReader((docx.parent / "triagem.csv").open(encoding="utf-8"), delimiter=";"))
+    linhas[0]["triagem"] = "talvez"
+    arquivo = docx.parent / "ruim.csv"
+    with arquivo.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=linhas[0].keys(), delimiter=";")
+        w.writeheader()
+        w.writerows(linhas)
+    with pytest.raises(ValueError, match="use incluir ou excluir"):
+        pipeline.revisar_selecao(docx.parent.name, arquivo)

@@ -153,3 +153,19 @@ def test_painel_api_e_download(artigo_gerado):
             pegar("/download/..%2F..%2Fetc%2Fpasswd.docx")
     finally:
         servidor.shutdown()
+
+
+def test_auditoria_cobra_limitacoes_enxutas(tmp_path):
+    base = ("## Introdução\n\nTexto com objetivo. O objetivo é revisar.\n\n## Discussão\n\n{disc}\n\n"
+            "## Conclusão\n\n{conc}\n\n## Referências\n\n1. Silva AB. Estudo. Rev X. 2020;1:1.\n")
+    enxuto = tmp_path / "enxuto.md"
+    enxuto.write_text(base.format(disc="Os achados divergem. A nosso ver, no SUS isso importa.\n\n"
+                                       "Esta revisão tem limitações ligadas ao desenho dos estudos primários, "
+                                       "contornadas pela busca em duas bases.",
+                                  conc="A APS é central."), encoding="utf-8")
+    espalhado = tmp_path / "espalhado.md"
+    espalhado.write_text(base.format(disc="Uma limitação é o idioma.\n\nOutra limitação é o período.\n\n"
+                                          "Mais uma limitação é o desenho.",
+                                     conc="Apesar das limitações, a APS é central."), encoding="utf-8")
+    assert _item(auditar(enxuto, offline=True), "discussao", "Limitações enxutas")["status"] == "ok"
+    assert _item(auditar(espalhado, offline=True), "discussao", "Limitações enxutas")["status"] == "falha"

@@ -55,6 +55,12 @@ class Pedido:
     observacoes: str = ""
     min_registros: int = 15
     max_registros: int = 300
+    # O que os autores fizeram, nas palavras deles — vira fato nos Métodos e orienta as limitações. Ex.:
+    # {"triagem": "dois autores, de forma independente", "divergencias": "consenso com o orientador",
+    #  "leitura_integra": "todos os artigos elegíveis foram lidos na íntegra pelos autores",
+    #  "extracao": "dois autores, com conferência cruzada", "busca_manual": "referências dos estudos incluídos",
+    #  "redacao": "texto escrito e revisado pelos autores"}
+    contribuicao_autores: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def de_arquivo(cls, caminho: str | Path) -> "Pedido":
@@ -259,10 +265,14 @@ class Pipeline:
         estado["prisma"] = self._prisma(estado)
         self._salvar_triagem_csv(artigo_id, estado)
 
+    def _motivo(self, estado, decisao: dict) -> str:
+        """Motivo escrito pelos autores (revisão da triagem) ou o critério de exclusão do protocolo."""
+        return decisao.get("motivo") or self._rotulo_criterio(estado, decisao.get("criterio", "E0"))
+
     def _prisma(self, estado) -> dict:
         busca = estado["busca"]
         motivos = lambda decisoes: dict(Counter(
-            self._rotulo_criterio(estado, d["criterio"]) for d in decisoes.values() if d["decisao"] == "excluir"))
+            self._motivo(estado, d) for d in decisoes.values() if d["decisao"] == "excluir"))
         identificados = sum(e["registros"] for e in busca["estrategias"])
         excl_triagem = sum(1 for d in estado["decisoes_triagem"].values() if d["decisao"] == "excluir")
         excl_eleg = sum(1 for d in estado["decisoes_elegibilidade"].values() if d["decisao"] == "excluir")
@@ -295,9 +305,76 @@ class Pipeline:
                 dt = estado["decisoes_triagem"][chave]
                 de = estado["decisoes_elegibilidade"].get(chave)
                 w.writerow([chave, r["base"], r["pmid"], r["doi"], r["ano"], r["titulo"], dt["decisao"],
-                            self._rotulo_criterio(estado, dt["criterio"]) if dt["decisao"] == "excluir" else "",
+                            self._motivo(estado, dt) if dt["decisao"] == "excluir" else "",
                             de["decisao"] if de else "",
-                            self._rotulo_criterio(estado, de["criterio"]) if de and de["decisao"] == "excluir" else ""])
+                            self._motivo(estado, de) if de and de["decisao"] == "excluir" else ""])
+
+    def revisar_selecao(self, artigo_id: str, caminho_csv: str | Path) -> dict:
+        """Importa o triagem.csv revisado pelos autores: as decisões deles passam a valer.
+
+        Recalcula o PRISMA e invalida as etapas a partir do quadro-síntese, que são refeitas no `retomar`.
+        """
+        estado = self._carregar(artigo_id)
+        if "decisoes_triagem" not in estado:
+            raise ValueError("A triagem ainda não foi feita para este artigo.")
+        bruto = Path(caminho_csv).read_bytes()
+        try:
+            texto = bruto.decode("utf-8-sig")
+        except UnicodeDecodeError:  # Excel no Windows salva em cp1252
+            texto = bruto.decode("cp1252")
+        delimitador = ";" if texto.splitlines()[0].count(";") >= texto.splitlines()[0].count(",") else ","
+        linhas = {l["chave"].strip(): l for l in csv.DictReader(texto.splitlines(), delimiter=delimitador)
+                  if l.get("chave")}
+
+        def decisao(valor: str, campo: str, chave: str) -> str:
+            v = (valor or "").strip().lower()
+            if v in ("incluir", "incluido", "incluído", "sim", "i"):
+                return "incluir"
+            if v in ("excluir", "excluido", "excluído", "nao", "não", "e"):
+                return "excluir"
+            raise ValueError(f"{chave}: valor '{valor}' em {campo} (use incluir ou excluir)")
+
+        faltando = [c for c in estado["triados"] if c not in linhas]
+        if faltando:
+            raise ValueError(f"A planilha não tem {len(faltando)} registro(s) triados: {faltando[:10]}")
+
+        mudancas, triagem, elegibilidade = [], {}, {}
+        for chave in estado["triados"]:
+            linha = linhas[chave]
+            dt = decisao(linha.get("triagem"), "triagem", chave)
+            triagem[chave] = {"decisao": dt, "motivo": (linha.get("motivo_triagem") or "").strip() or None,
+                              "criterio": estado["decisoes_triagem"][chave].get("criterio", "E0")}
+            if dt == "incluir":
+                if not (linha.get("elegibilidade") or "").strip():
+                    raise ValueError(f"{chave} foi incluído na triagem: preencha a coluna 'elegibilidade'")
+                de = decisao(linha["elegibilidade"], "elegibilidade", chave)
+                anterior = estado.get("decisoes_elegibilidade", {}).get(chave, {})
+                elegibilidade[chave] = {"decisao": de, "criterio": anterior.get("criterio", "E0"),
+                                        "motivo": (linha.get("motivo_elegibilidade") or "").strip() or None}
+            antes = (estado["decisoes_triagem"][chave]["decisao"],
+                     estado.get("decisoes_elegibilidade", {}).get(chave, {}).get("decisao"))
+            depois = (dt, elegibilidade.get(chave, {}).get("decisao"))
+            if antes != depois:
+                mudancas.append(chave)
+
+        estado["decisoes_triagem"] = triagem
+        estado["decisoes_elegibilidade"] = elegibilidade
+        estado["elegiveis"] = [c for c in estado["triados"] if triagem[c]["decisao"] == "incluir"]
+        estado["incluidos"] = [c for c in estado["elegiveis"] if elegibilidade[c]["decisao"] == "incluir"]
+        if not estado["incluidos"]:
+            raise ValueError("Nenhum estudo incluído após a revisão dos autores.")
+        estado["selecao_revisada_pelos_autores"] = True
+        estado["prisma"] = self._prisma(estado)
+        indice = ETAPAS.index("sintese")
+        estado["concluidas"] = [e for e in estado["concluidas"] if ETAPAS.index(e) < indice]
+        for chave in ("sintese", "secoes", "secoes_originais", "humanizacao", "resumos", "artigo", "checklist", "docx"):
+            estado.pop(chave, None)
+        self._salvar(artigo_id, estado)
+        self._salvar_triagem_csv(artigo_id, estado)
+        self.ledger.atualizar_artigo(artigo_id, status="em_andamento", etapa_atual="sintese", docx_path=None)
+        self.ledger.evento(artigo_id, f"Seleção revisada pelos autores: {len(mudancas)} decisão(ões) alterada(s); "
+                                      f"{len(estado['incluidos'])} estudos incluídos")
+        return {"alteradas": mudancas, "prisma": estado["prisma"]}
 
     def _etapa_sintese(self, artigo_id, estado):
         linhas = {}
@@ -360,9 +437,19 @@ class Pipeline:
             "criterios_inclusao": protocolo["criterios_inclusao"],
             "criterios_exclusao": protocolo["criterios_exclusao"],
             "selecao": "remoção de duplicatas entre bases (DOI, PMID e título); triagem por título e resumo; "
-                       "avaliação de elegibilidade pela leitura do resumo completo e metadados",
+                       + ("avaliação de elegibilidade pela leitura na íntegra"
+                          if self._processo_autores(estado).get("leitura_integra")
+                          else "avaliação de elegibilidade pela leitura do resumo completo"),
             "extracao": "quadro-síntese com autor/ano, desenho do estudo, população e principais achados",
+            "conduzido_pelos_autores": self._processo_autores(estado),
         }
+
+    def _processo_autores(self, estado) -> dict:
+        processo = {k: v for k, v in self._pedido(estado).contribuicao_autores.items() if v}
+        if estado.get("selecao_revisada_pelos_autores"):
+            processo.setdefault("revisao_da_selecao", "todas as decisões de triagem e elegibilidade foram revisadas "
+                                                      "pelos autores")
+        return processo
 
     def _etapa_metodos(self, artigo_id, estado):
         r = self.cliente.completar("tecnico", prompts.metodos(self._fatos_metodos(estado)),
@@ -391,7 +478,8 @@ class Pipeline:
         minimo = min(len(contexto) + len(estado["incluidos"]),
                      max(10, math.ceil(self._faltantes(estado) * 0.6) + len(estado["incluidos"]) // 2))
         sintese = [{k: s[k] for k in ("chave", "autor_ano", "desenho", "populacao", "achados")} for s in estado["sintese"]]
-        r = self.cliente.completar("escrita", prompts.discussao(estado["protocolo"], sintese, contexto, minimo),
+        r = self.cliente.completar("escrita", prompts.discussao(estado["protocolo"], sintese, contexto, minimo,
+                                                                self._processo_autores(estado)),
                                    etapa="discussao", artigo_id=artigo_id)
         estado["secoes"]["discussao"] = r.texto.strip()
 
@@ -434,18 +522,23 @@ class Pipeline:
             if secao in estado["humanizacao"]:
                 continue
             original = estado["secoes_originais"][secao]
-            final, situacao = original, "rejeitada"
+            melhor = None
             for _ in range(2):
                 r = self.cliente.completar("escrita", prompts.humanizar(secao, original),
                                            etapa=f"humanizacao_{secao}", artigo_id=artigo_id, temperatura=0.9)
-                problema = _problema_humanizacao(original, r.texto)
-                if not problema:
-                    final, situacao = r.texto.strip(), "aplicada"
+                resultado = mesclar_humanizacao(original, r.texto)
+                if melhor is None or resultado[1] > melhor[1]:
+                    melhor = resultado
+                if resultado[1] == resultado[2]:
                     break
-                self.ledger.evento(artigo_id, f"Humanização de {secao} alterou conteúdo ({problema}); refazendo",
-                                   "aviso")
+                self.ledger.evento(artigo_id, f"Humanização de {secao}: {resultado[2] - resultado[1]} parágrafo(s) "
+                                              f"mudariam o conteúdo ({'; '.join(resultado[3][:3])}); refazendo", "aviso")
+            final, aceitos, total, problemas = melhor
+            if problemas and aceitos < total:
+                self.ledger.evento(artigo_id, f"Humanização de {secao}: {total - aceitos} parágrafo(s) mantidos como "
+                                              "estavam para preservar o sentido", "aviso")
             estado["secoes"][secao] = final
-            estado["humanizacao"][secao] = situacao
+            estado["humanizacao"][secao] = "aplicada" if aceitos == total else "parcial" if aceitos else "rejeitada"
             self._salvar(artigo_id, estado)
 
     def _etapa_resumos(self, artigo_id, estado):
@@ -528,8 +621,59 @@ def _numeros(texto: str) -> set[str]:
     return {n.replace(",", ".") for n in re.findall(r"(?<![\w])\d+(?:[.,]\d+)?", sem_citacoes)}
 
 
+# Força das afirmações. Só formas verbais/expressões específicas: "resultados" (substantivo) não conta como
+# "resulta em", e "causa de óbito" só pesa se a reescrita acrescentar uma ocorrência nova.
+MODALIZADORES = [
+    "sugere", "sugerem", "sugeriu", "sugeriram", "sugerindo", "pode", "podem", "poderia", "poderiam",
+    "possivelmente", "provavelmente", "parece", "parecem", "aparentemente", "associou-se", "associaram-se",
+    "associado", "associada", "associados", "associadas", "associação", "associações", "tendência", "indício",
+    "indícios", "hipótese",
+]
+AFIRMACOES_FORTES = [
+    "demonstra", "demonstram", "demonstrou", "demonstraram", "comprova", "comprovam", "comprovou", "comprovaram",
+    "prova", "provam", "provou", "causa", "causam", "causou", "causaram", "eleva", "elevam", "elevou", "elevaram",
+    "determina", "determinam", "determinou", "garante", "garantem", "aumenta o risco", "aumentam o risco",
+    "reduz o risco", "reduzem o risco", "é responsável", "são responsáveis", "leva a", "levam a", "resulta em",
+    "resultam em", "indica", "indicam", "indicou", "confirma", "confirmam", "confirmou", "corrobora", "corroboram",
+    "corroborou", "evidencia", "evidenciam", "evidenciou", "mostra", "mostram", "mostrou", "mostraram",
+    "estabelece", "estabelecem", "inequivocamente", "claramente", "certamente", "sem dúvida",
+]
+DESENHOS = {
+    "ensaio clínico": r"ensaios? cl[ií]nicos?", "randomizado": r"randomizad[oa]s?", "coorte": r"coortes?",
+    "caso-controle": r"casos?[- ]controles?", "transversal": r"transversa(?:l|is)",
+    "série de casos": r"s[ée]ries? de casos?", "relato de caso": r"relatos? de casos?",
+    "revisão sistemática": r"revis(?:ão|ões) sistem[aá]ticas?", "metanálise": r"meta-?an[aá]lises?",
+    "ecológico": r"ecol[oó]gic[oa]s?", "qualitativo": r"qualitativ[oa]s?", "longitudinal": r"longitudina(?:l|is)",
+    "prospectivo": r"prospectiv[oa]s?", "retrospectivo": r"retrospectiv[oa]s?",
+}
+
+
+def _ocorrencias(texto: str, termos: list[str]) -> int:
+    minusculo = texto.lower()
+    return sum(len(re.findall(rf"(?<![\wà-ÿ-]){re.escape(t)}(?![\wà-ÿ-])", minusculo)) for t in termos)
+
+
+def _desenhos(texto: str) -> set[str]:
+    return {nome for nome, rx in DESENHOS.items() if re.search(rx, texto, re.I)}
+
+
+def _problema_forca(original: str, novo: str) -> str | None:
+    mod_o, mod_n = _ocorrencias(original, MODALIZADORES), _ocorrencias(novo, MODALIZADORES)
+    if mod_n < mod_o:
+        return f"modalizador removido ({mod_o}→{mod_n}): afirmação ficou mais forte"
+    if mod_n > mod_o:
+        return f"modalizador acrescentado ({mod_o}→{mod_n}): afirmação ficou mais fraca"
+    forte_o, forte_n = _ocorrencias(original, AFIRMACOES_FORTES), _ocorrencias(novo, AFIRMACOES_FORTES)
+    if forte_n > forte_o:
+        return f"verbo de certeza/causalidade acrescentado ({forte_o}→{forte_n})"
+    des_o, des_n = _desenhos(original), _desenhos(novo)
+    if des_o != des_n:
+        return f"desenho de estudo alterado ({sorted(des_o)}→{sorted(des_n)})"
+    return None
+
+
 def _problema_humanizacao(original: str, novo: str) -> str | None:
-    """A humanização só pode mudar a forma: mesmas citações e mesmos números."""
+    """A humanização só pode mudar a forma: mesmas citações, números, força das afirmações e desenhos."""
     if len(novo.strip()) < 0.6 * len(original.strip()):
         return "texto encurtado demais"
     cit_o, cit_n = set(chaves_citadas(original)), set(chaves_citadas(novo))
@@ -538,4 +682,29 @@ def _problema_humanizacao(original: str, novo: str) -> str | None:
     num_o, num_n = _numeros(original), _numeros(novo)
     if num_o != num_n:
         return f"números alterados (faltando {sorted(num_o - num_n)[:5]}, novos {sorted(num_n - num_o)[:5]})"
-    return None
+    return _problema_forca(original, novo)
+
+
+def _paragrafos(texto: str) -> list[str]:
+    return [p.strip() for p in re.split(r"\n\s*\n", texto.strip()) if p.strip()]
+
+
+def mesclar_humanizacao(original: str, novo: str) -> tuple[str, int, int, list[str]]:
+    """Aceita a reescrita parágrafo a parágrafo; o que mudar o conteúdo volta ao texto original.
+
+    Devolve (texto final, parágrafos aceitos, total de parágrafos, problemas encontrados).
+    """
+    orig, nov = _paragrafos(original), _paragrafos(novo)
+    if len(orig) != len(nov):  # a reescrita juntou/separou parágrafos: avalia a seção inteira
+        problema = _problema_humanizacao(original, novo)
+        return (original.strip(), 0, len(orig), [problema]) if problema else (novo.strip(), len(orig), len(orig), [])
+    saida, aceitos, problemas = [], 0, []
+    for o, n in zip(orig, nov):
+        problema = _problema_humanizacao(o, n)
+        if problema:
+            saida.append(o)
+            problemas.append(problema)
+        else:
+            saida.append(n)
+            aceitos += 1
+    return "\n\n".join(saida), aceitos, len(orig), problemas

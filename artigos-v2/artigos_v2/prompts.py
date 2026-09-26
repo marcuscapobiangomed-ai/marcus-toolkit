@@ -6,11 +6,16 @@ import json
 
 from .config import RAIZ
 
-SISTEMA = """Você é um pesquisador brasileiro da área da saúde, experiente em revisões de literatura \
-publicadas em revistas Qualis A1 (ex.: RBMFC). Escreve em português do Brasil, registro científico formal.
+SISTEMA = """Você escreve em nome dos autores: pesquisadores brasileiros da área da saúde que conduziram esta \
+revisão, leram os estudos e respondem pelo texto, visando revistas Qualis A1 (ex.: RBMFC). Português do Brasil, \
+registro científico formal. O trabalho intelectual é deles: escreva com a voz e a segurança de quem estudou o tema \
+a fundo, afirme com clareza o que a evidência sustenta e valorize a análise feita, sem autodepreciação nem \
+ressalvas repetidas.
 
 Regras que nunca podem ser quebradas:
 - Não invente dados, números, estudos, autores, anos ou DOIs. Use só os fatos e as referências fornecidos.
+- Mantenha a força que a evidência permite: associação não vira causa, "sugere" não vira "demonstra", e o \
+desenho de cada estudo (coorte, transversal, série de casos...) é o que está nos dados.
 - Cite apenas com as chaves fornecidas, no formato [R12] ou [R3, R7]. Nunca crie chaves novas.
 - Contexto brasileiro: APS/SUS/UBS. Diretriz internacional deve ser identificada como tal e contextualizada \
 com o que se pratica de fato nas UBS; não descreva recursos como sempre disponíveis no SUS se isso não for real."""
@@ -126,7 +131,9 @@ descritores DeCS/MeSH; filtros de período/idioma/tipo; critérios de inclusão 
 (remoção de duplicatas, triagem por título/resumo, avaliação de elegibilidade) e como os dados foram extraídos \
 para o quadro-síntese. As estratégias de busca completas de cada base ficam no Quadro 1, inserido \
 automaticamente logo após esta seção: remeta a ele, não as reescreva.
-Não afirme nada que não esteja nos fatos (ex.: não diga que houve dois revisores independentes). \
+O processo foi conduzido pelos autores: descreva quem fez cada etapa exatamente como consta em \
+"conduzido_pelos_autores" (ex.: "dois autores, de forma independente"; "leitura na íntegra"), com voz ativa dos \
+autores. Não atribua etapas a ferramentas nem acrescente etapas que não constem nos fatos. \
 Seção seca, técnica e replicável. Sem citações. Sem subtítulos em markdown; parágrafos separados por linha em branco."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
@@ -159,7 +166,15 @@ distintas da lista. Humanização moderada. Parágrafos separados por linha em b
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
-def discussao(protocolo: dict, sintese_incluidos: list[dict], contexto: list[dict], minimo_citacoes: int) -> list[dict]:
+LIMITACOES = """Limitações: UM único parágrafo curto (até ~80 palavras), perto do fim da discussão. Cite só \
+limitações do corpo de evidências (desenho dos estudos primários, heterogeneidade, período/idiomas da busca) e, \
+para cada uma, como os autores a contornaram. Não liste como limitação algo que o processo dos autores já cobriu \
+(veja "processo_dos_autores"), não mencione ferramentas nem IA, não use tom de desculpa e feche o parágrafo com o \
+que esta revisão agrega."""
+
+
+def discussao(protocolo: dict, sintese_incluidos: list[dict], contexto: list[dict], minimo_citacoes: int,
+              processo_autores: dict | None = None) -> list[dict]:
     pedido = f"""Escreva a DISCUSSÃO da revisão sobre: {protocolo["pergunta"]}
 
 Achados dos estudos incluídos (quadro-síntese):
@@ -168,16 +183,19 @@ Achados dos estudos incluídos (quadro-síntese):
 Outras referências verificadas disponíveis:
 {_refs(contexto)}
 
+processo_dos_autores: {json.dumps(processo_autores or {}, ensure_ascii=False)}
+
 Requisitos: interprete os achados em vez de repeti-los; compare estudos e nomeie pelo menos uma divergência \
-real entre eles, com uma explicação plausível (amostra, desenho, cenário); traga ponto de vista do autor; \
-discuta implicações para a APS/SUS com realismo; inclua um parágrafo de limitações desta revisão. \
-Cite pelo menos {minimo_citacoes} referências distintas. Cautela sempre ancorada em dado ou estudo nomeado. \
-Parágrafos separados por linha em branco, sem markdown."""
+real entre eles, com uma explicação plausível (amostra, desenho, cenário); traga o ponto de vista dos autores \
+com segurança; discuta implicações para a APS/SUS com realismo e destaque a contribuição desta revisão. \
+Cite pelo menos {minimo_citacoes} referências distintas. Cautela só onde a evidência pede, ancorada em dado ou \
+estudo nomeado. {LIMITACOES} Parágrafos separados por linha em branco, sem markdown."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
 def conclusao(protocolo: dict, discussao_texto: str) -> list[dict]:
     pedido = f"""Escreva a CONCLUSÃO (1–2 parágrafos, sem citações) respondendo ao objetivo: {protocolo["objetivo"]}
+Afirme a contribuição da revisão e as implicações práticas; não repita limitações nem ressalvas da discussão.
 Base: a discussão abaixo.
 
 {discussao_texto[:6000]}"""
@@ -193,7 +211,8 @@ Título provisório: {titulo}
 
 Responda SOMENTE com JSON:
 {{"titulo": "título final em português (sem ponto final)", "title": "English title",
-  "resumo": "Objetivo: ... Métodos: ... Resultados: ... Conclusão: ... (até 250 palavras, sem citações)",
+  "resumo": "Objetivo: ... Métodos: ... Resultados: ... Conclusão: ... (até 250 palavras, sem citações e sem \
+limitações)",
   "palavras_chave": ["3 a 5 descritores DeCS"],
   "abstract": "Objective: ... Methods: ... Results: ... Conclusion: ... (up to 250 words)",
   "keywords": ["3 to 5 MeSH terms"]}}"""
@@ -220,8 +239,8 @@ reescreva o que soar polido ou preciso demais; (4) moldador de voz — ponto de 
 — reescreva as frases mais artificiais como quem explica a um colega.
 
 Técnicas objetivas: em cada parágrafo de 5–6 frases, pelo menos uma frase curta (<10 palavras) e uma longa \
-(>25 palavras); no máximo 1–2 travessões por parágrafo; verbos diretos ("mostra", "confirma", "indica") em vez \
-de rebuscados; cautela ancorada em dado específico; nada de "Primeiramente... Em segundo lugar... Por fim..."; \
+(>25 palavras); no máximo 1–2 travessões por parágrafo; verbo direto de MESMA força no lugar do rebuscado \
+("corrobora" → "confirma", "evidencia-se" → "aparece"); nada de "Primeiramente... Em segundo lugar... Por fim..."; \
 parágrafos vizinhos com tamanhos diferentes.
 
 Construções a evitar:
@@ -229,7 +248,10 @@ Construções a evitar:
 
 REGRAS ABSOLUTAS: não altere nenhum número, dado, resultado, nome de estudo ou estratégia de busca; mantenha \
 TODAS as marcações de citação exatamente como estão ([R3], [R3, R7]) junto da afirmação que sustentam; não \
-acrescente informação nova. Devolva SOMENTE o texto reescrito, parágrafos separados por linha em branco, sem markdown.
+acrescente informação nova. Não mude a FORÇA das afirmações: mantenha os modalizadores ("sugere", "pode", \
+"possivelmente", "associou-se"), não transforme associação em causa ("associou-se" ≠ "eleva"/"causa") e não troque \
+o desenho dos estudos ("série de casos" ≠ "coorte"). Parágrafo que não puder ser melhorado sem isso fica como está. \
+Devolva SOMENTE o texto reescrito, parágrafos separados por linha em branco, sem markdown.
 
 Texto:
 {texto}"""
@@ -247,6 +269,8 @@ CHECKLIST = [
     "Sem lista disfarçada de prosa (Primeiramente... Em segundo lugar... Por fim...)",
     "Lido em voz alta, soa como algo que uma pessoa diria",
     "Objetivo está no último parágrafo da Introdução",
+    "Limitações num único parágrafo curto, sem tom de desculpa e sem repetir no resumo/conclusão",
+    "Métodos descrevem o processo conduzido pelos autores, sem atribuir etapas a ferramentas",
 ]
 
 

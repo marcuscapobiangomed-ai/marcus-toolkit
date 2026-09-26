@@ -3,6 +3,7 @@
   python -m artigos_v2 exemplo-pedido pedido.json      # gera um pedido de exemplo
   python -m artigos_v2 gerar pedido.json [--auditar]   # roda o pipeline e exporta o .docx
   python -m artigos_v2 retomar <id>                    # continua de onde parou
+  python -m artigos_v2 revisar <id> triagem.csv        # decisões de seleção revisadas pelos autores
   python -m artigos_v2 exportar <id>                   # reexporta o .docx sem gastar IA
   python -m artigos_v2 painel [--porta 8765]           # painel de gastos
   python -m artigos_v2 auditar artigo.docx [--com-ia]  # skills rodadas por fora do sistema
@@ -36,9 +37,29 @@ def cmd_exemplo(args):
         tema="Rastreamento e manejo da hipertensão arterial na Atenção Primária à Saúde no Brasil",
         autores=["Nome do Aluno"], orientador="Prof(a). Nome do Orientador", instituicao="Universidade",
         observacoes="Foco em estratégias da APS/ESF; população adulta.",
+        contribuicao_autores={
+            "triagem": "dois autores, de forma independente, revisaram todas as decisões de título e resumo",
+            "divergencias": "resolvidas por consenso com o orientador",
+            "leitura_integra": "os artigos elegíveis foram lidos na íntegra pelos autores",
+            "extracao": "dois autores extraíram os dados, com conferência cruzada",
+            "busca_manual": "",
+            "redacao": "texto redigido e revisado pelos autores",
+        },
     )
     Path(args.arquivo).write_text(json.dumps(asdict(pedido), ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"Pedido de exemplo salvo em {args.arquivo}. Edite tema, autores, revista e normas.")
+    print(f"Pedido de exemplo salvo em {args.arquivo}. Edite tema, autores, revista, normas e, em "
+          "'contribuicao_autores', descreva o que vocês fizeram (apague o que não se aplica).")
+
+
+def cmd_revisar(args):
+    from .pipeline import Pipeline
+
+    config, ledger, cliente = _contexto(args)
+    resultado = Pipeline(config, ledger, cliente).revisar_selecao(args.id, args.planilha)
+    p = resultado["prisma"]
+    print(f"{len(resultado['alteradas'])} decisão(ões) alterada(s) pelos autores. PRISMA: triados {p['triados']}, "
+          f"elegíveis {p['avaliados_elegibilidade']}, incluídos {p['incluidos']}.")
+    print(f"Agora rode: python -m artigos_v2 retomar {args.id}")
 
 
 def _auditar_depois(config, ledger, cliente, artigo_id, docx, com_ia):
@@ -143,6 +164,8 @@ def main(argv=None):
     p.add_argument("--com-ia", action="store_true", help="inclui parecer por IA na auditoria")
     p.set_defaults(func=cmd_gerar)
     p = sub.add_parser("retomar"); p.add_argument("id"); p.set_defaults(func=cmd_retomar)
+    p = sub.add_parser("revisar", help="importa o triagem.csv revisado pelos autores (as decisões deles valem)")
+    p.add_argument("id"); p.add_argument("planilha"); p.set_defaults(func=cmd_revisar)
     p = sub.add_parser("exportar"); p.add_argument("id"); p.add_argument("--saida"); p.set_defaults(func=cmd_exportar)
     p = sub.add_parser("painel"); p.add_argument("--host", default="127.0.0.1"); p.add_argument("--porta", type=int, default=8765)
     p.set_defaults(func=cmd_painel)

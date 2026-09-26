@@ -338,6 +338,7 @@ def skill_discussao(artigo: Artigo, **_) -> dict:
         _item("Contexto APS/SUS/UBS brasileiro", "ok" if re.search(r"\bsus\b|aten[cç][aã]o prim[aá]ria|\baps\b|\bubs\b", minusculo)
               else "falha", 1.5),
         _item("Discute limitações", "ok" if re.search(r"limita[cç]", minusculo) else "falha", 1),
+        _limitacoes_enxutas(artigo),
         _item("Discussão dialoga com a literatura (citações)", "ok" if len(re.findall(r"\[\^|\[\d", texto)) >= 5
               else "parcial" if re.search(r"\[\^|\[\d", texto) else "falha", 1),
     ]
@@ -346,6 +347,18 @@ def skill_discussao(artigo: Artigo, **_) -> dict:
         contextualiza = re.search(r"internaciona|no brasil|brasileir|ministério da saúde", minusculo)
         itens.append(_item("Diretrizes internacionais identificadas como tais", "ok" if contextualiza else "parcial", 0.5))
     return _resultado("discussao", "Discussão e realismo APS/SUS", 1.0, itens)
+
+
+def _limitacoes_enxutas(artigo: Artigo) -> dict:
+    """Limitações num só parágrafo da Discussão, sem se espalhar pelo resumo e pela conclusão."""
+    padrao = r"limita[cç][aãõ]|limitante"
+    na_discussao = [p for p in artigo.secoes.get("discussao", []) if re.search(padrao, p, re.I)]
+    fora = [s for s in ("resumo", "abstract", "conclusao") if re.search(padrao + r"|limitation", artigo.texto(s), re.I)]
+    palavras = sum(_palavras(p) for p in na_discussao)
+    ok = len(na_discussao) <= 1 and not fora and palavras <= 150
+    return _item("Limitações enxutas: um parágrafo na Discussão, sem repetir no resumo/conclusão",
+                 "ok" if ok else "parcial" if len(na_discussao) <= 2 and not fora else "falha", 1,
+                 f"{len(na_discussao)} parágrafo(s), {palavras} palavras" + (f"; também em: {fora}" if fora else ""))
 
 
 # ---------------------------------------------------------------- Humanização
