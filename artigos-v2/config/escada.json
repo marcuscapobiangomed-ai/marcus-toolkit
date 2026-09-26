@@ -1,0 +1,49 @@
+{
+  "_leia": "Escadas de fallback por papel. O pipeline tenta o 1º modelo; se falhar (erro, cota, resposta vazia) repete e depois desce um degrau. IDs no formato do OmniRoute (prefixo do provedor). Preços em US$ por 1M tokens (entrada/saída), conferidos em 26/09/2026 — ver docs/modelos-escrita.md. Marque gratuito_no_omniroute=true para modelos servidos por assinatura/cota grátis: o gasto real vira 0 e o painel continua mostrando o custo equivalente em API.",
+  "base_url": "http://localhost:20128/v1",
+  "cotacao_usd_brl": 5.18,
+  "timeout_s": 300,
+  "tentativas_por_degrau": 2,
+
+  "escadas": {
+    "escrita": [
+      "anthropic/claude-opus-5-5",
+      "anthropic/claude-opus-5",
+      "moonshot/kimi-k3",
+      "openai/gpt-6-sol",
+      "glm/glm-5.3"
+    ],
+    "tecnico": [
+      "anthropic/claude-sonnet-5",
+      "openai/gpt-6-sol",
+      "glm/glm-5.3",
+      "gemini/gemini-3.8-flash"
+    ],
+    "triagem": [
+      "gemini/gemini-3.8-flash",
+      "anthropic/claude-haiku-4-5",
+      "glm/glm-5.3-flash"
+    ],
+    "auditoria": [
+      "openai/gpt-6-sol",
+      "moonshot/kimi-k3",
+      "anthropic/claude-sonnet-5"
+    ]
+  },
+
+  "modelos": [
+    {"id": "anthropic/claude-opus-5-5", "nome": "Claude Opus 5.5", "provedor": "Anthropic", "entrada_usd_mtok": 4, "saida_usd_mtok": 20, "contexto": 1000000},
+    {"id": "anthropic/claude-fable-5-1", "nome": "Claude Fable 5.1", "provedor": "Anthropic", "entrada_usd_mtok": 10, "saida_usd_mtok": 50, "contexto": 1000000},
+    {"id": "anthropic/claude-opus-5", "nome": "Claude Opus 5", "provedor": "Anthropic", "entrada_usd_mtok": 5, "saida_usd_mtok": 25, "contexto": 1000000},
+    {"id": "anthropic/claude-sonnet-5", "nome": "Claude Sonnet 5", "provedor": "Anthropic", "entrada_usd_mtok": 2, "saida_usd_mtok": 10, "contexto": 1000000},
+    {"id": "anthropic/claude-haiku-4-5", "nome": "Claude Haiku 4.5", "provedor": "Anthropic", "entrada_usd_mtok": 1, "saida_usd_mtok": 5, "contexto": 200000},
+    {"id": "openai/gpt-6-astra", "nome": "GPT-6 Astra", "provedor": "OpenAI", "entrada_usd_mtok": 10, "saida_usd_mtok": 50},
+    {"id": "openai/gpt-6-sol", "nome": "GPT-6 Sol", "provedor": "OpenAI", "entrada_usd_mtok": 2, "saida_usd_mtok": 10},
+    {"id": "moonshot/kimi-k3", "nome": "Kimi K3", "provedor": "Moonshot", "entrada_usd_mtok": 3, "saida_usd_mtok": 15, "contexto": 1048576},
+    {"id": "glm/glm-5.3", "nome": "GLM-5.3", "provedor": "Z.ai", "entrada_usd_mtok": 1.4, "saida_usd_mtok": 4.4},
+    {"id": "glm/glm-5.3-flash", "nome": "GLM-5.3 Flash", "provedor": "Z.ai", "entrada_usd_mtok": 0.15, "saida_usd_mtok": 0.5},
+    {"id": "gemini/gemini-3.8-flash", "nome": "Gemini 3.8 Flash", "provedor": "Google", "entrada_usd_mtok": 0.75, "saida_usd_mtok": 3.75},
+    {"id": "xai/grok-4.7", "nome": "Grok 4.7", "provedor": "xAI", "entrada_usd_mtok": 2, "saida_usd_mtok": 6, "contexto": 500000},
+    {"id": "maritalk/sabia-4-thinking", "nome": "Sabiá 4 Thinking", "provedor": "Maritaca", "entrada_usd_mtok": 0.97, "saida_usd_mtok": 7.72, "contexto": 1000000}
+  ]
+}
