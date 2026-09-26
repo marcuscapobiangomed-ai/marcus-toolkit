@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Artigos v2</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-0: #f4f3f0;
+    --surface-1: #fcfcfb;
+    --surface-2: #f0efec;
+    --border: #dddcd7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #77766f;
+    --series-1: #2a78d6;
+    --track: #e4e3de;
+    --good: #0ca30c;
+    --warning: #b07800;
+    --critical: #d03b3b;
+    --accent-soft: #cde2fb;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-0: #121211;
+      --surface-1: #1a1a19;
+      --surface-2: #232321;
+      --border: #34332f;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #9a998f;
+      --series-1: #3987e5;
+      --track: #2c2c29;
+      --good: #0ca30c;
+      --warning: #fab219;
+      --critical: #e66767;
+      --accent-soft: #184f95;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-0: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #34332f;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --series-1: #3987e5; --track: #2c2c29; --good: #0ca30c; --warning: #fab219; --critical: #e66767;
+    --accent-soft: #184f95;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--surface-0); color: var(--text-primary);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  h1 { font-size: 20px; margin: 0; }
+  h2 { font-size: 15px; margin: 0 0 12px; }
+  .muted { color: var(--text-muted); }
+  .secondary { color: var(--text-secondary); }
+  .controles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .segmentado { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface-1); }
+  .segmentado button { border: 0; background: transparent; color: var(--text-secondary); padding: 6px 12px; font: inherit; cursor: pointer; }
+  .segmentado button[aria-pressed="true"] { background: var(--accent-soft); color: var(--text-primary); font-weight: 600; }
+  select { font: inherit; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); max-width: 320px; }
+  .cartao { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .topo { display: grid; grid-template-columns: minmax(240px, 1.3fr) repeat(4, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .heroi .valor { font-size: 48px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+  .tile .rotulo, .heroi .rotulo { color: var(--text-secondary); font-size: 13px; }
+  .tile .valor { font-size: 24px; font-weight: 600; margin-top: 4px; }
+  .tile .nota, .heroi .nota { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+  .grade2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .barras { display: grid; gap: 8px; }
+  .barra { display: grid; grid-template-columns: minmax(120px, 34%) 1fr auto; gap: 10px; align-items: center; cursor: default; }
+  .barra .nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-secondary); font-size: 13px; }
+  .barra .trilho { height: 14px; background: transparent; position: relative; }
+  .barra .preench { height: 100%; background: var(--series-1); border-radius: 0 4px 4px 0; min-width: 2px; }
+  .barra .num { font-variant-numeric: tabular-nums; font-size: 13px; min-width: 76px; text-align: right; }
+  .barra:hover .nome { color: var(--text-primary); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--border); padding: 8px 8px; white-space: nowrap; }
+  td { border-bottom: 1px solid var(--border); padding: 8px 8px; vertical-align: top; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr.clicavel { cursor: pointer; }
+  tbody tr.clicavel:hover, tbody tr.sel { background: var(--surface-2); }
+  .tabela-rolavel { overflow-x: auto; }
+  .chip { display: inline-block; border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; margin: 1px 2px 1px 0; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .status { white-space: nowrap; }
+  .status .ic { font-weight: 700; margin-right: 4px; }
+  .ok .ic { color: var(--good); } .erro .ic { color: var(--critical); } .andamento .ic { color: var(--series-1); } .aviso .ic { color: var(--warning); }
+  .degrau { font-size: 12px; color: var(--warning); white-space: nowrap; }
+  a { color: var(--series-1); }
+  .vazio { color: var(--text-muted); padding: 12px 0; }
+  #tooltip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.15); display: none; z-index: 10; max-width: 320px; }
+  .escada { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .escada ol { margin: 0; padding-left: 20px; }
+  .escada li { margin-bottom: 6px; }
+  section { margin-bottom: 12px; }
+  @media (max-width: 900px) {
+    .topo { grid-template-columns: 1fr 1fr; }
+    .heroi { grid-column: 1 / -1; }
+    .grade2, .escada { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .topo { grid-template-columns: 1fr; }
+    .heroi .valor { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Painel · Artigos v2</h1>
+      <div class="muted" id="atualizado">carregando…</div>
+    </div>
+    <div class="controles">
+      <select id="filtro-artigo" aria-label="Filtrar por artigo"><option value="">Todos os artigos</option></select>
+      <div class="segmentado" role="group" aria-label="Tipo de custo">
+        <button data-custo="real" aria-pressed="true">Gasto real</button>
+        <button data-custo="api" aria-pressed="false">Custo em API</button>
+      </div>
+      <div class="segmentado" role="group" aria-label="Moeda">
+        <button data-moeda="BRL" aria-pressed="true">R$</button>
+        <button data-moeda="USD" aria-pressed="false">US$</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="topo">
+    <div class="cartao heroi">
+      <div class="rotulo">Gasto real com IA</div>
+      <div class="valor" id="heroi-valor">—</div>
+      <div class="nota" id="heroi-nota"></div>
+    </div>
+    <div class="cartao tile"><div class="rotulo">Custo equivalente em API</div><div class="valor" id="t-api">—</div><div class="nota">se tudo fosse pago por token</div></div>
+    <div class="cartao tile"><div class="rotulo">Artigos concluídos</div><div class="valor" id="t-artigos">—</div><div class="nota" id="t-artigos-nota"></div></div>
+    <div class="cartao tile"><div class="rotulo">Custo médio por artigo</div><div class="valor" id="t-medio">—</div><div class="nota" id="t-medio-nota"></div></div>
+    <div class="cartao tile"><div class="rotulo">Chamadas com fallback</div><div class="valor" id="t-fallback">—</div><div class="nota" id="t-fallback-nota"></div></div>
+  </div>
+
+  <div class="grade2">
+    <section class="cartao"><h2 id="titulo-modelos">Custo por modelo</h2><div class="barras" id="barras-modelos"></div></section>
+    <section class="cartao"><h2 id="titulo-etapas">Custo por etapa</h2><div class="barras" id="barras-etapas"></div></section>
+  </div>
+
+  <section class="cartao">
+    <h2>Artigos</h2>
+    <div class="tabela-rolavel">
+      <table>
+        <thead><tr><th>Tema</th><th>Status</th><th>Etapa</th><th>IA usada</th><th class="n">Gasto real</th><th class="n">Custo API</th><th class="n">Chamadas</th><th>DOCX</th></tr></thead>
+        <tbody id="tabela-artigos"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cartao" id="detalhe" hidden>
+    <h2 id="detalhe-titulo">Chamadas do artigo</h2>
+    <div id="detalhe-auditoria"></div>
+    <div class="tabela-rolavel">
+      <table>
+        <thead><tr><th>Hora</th><th>Etapa</th><th>Modelo que respondeu</th><th>Degrau</th><th class="n">Tokens in/out</th><th class="n">Gasto real</th><th class="n">Custo API</th><th class="n">Latência</th><th>Status</th></tr></thead>
+        <tbody id="tabela-chamadas"></tbody>
+      </table>
+    </div>
+    <h2 style="margin-top:16px">Eventos</h2>
+    <div class="tabela-rolavel"><table><tbody id="tabela-eventos"></tbody></table></div>
+  </section>
+
+  <section class="cartao">
+    <h2>Escada de modelos configurada</h2>
+    <div class="escada" id="escada"></div>
+  </section>
+</main>
+<div id="tooltip" role="tooltip"></div>
+
+<script>
+const estado = { custo: "real", moeda: "BRL", artigo: "", cotacao: 5.4, selecionado: null };
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function dinheiro(usd) {
+  if (usd === null || usd === undefined) return "—";
+  const valor = estado.moeda === "BRL" ? usd * estado.cotacao : usd;
+  const casas = Math.abs(valor) > 0 && Math.abs(valor) < 0.1 ? 4 : 2;
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: estado.moeda, minimumFractionDigits: casas, maximumFractionDigits: casas }).format(valor);
+}
+const inteiro = (n) => new Intl.NumberFormat("pt-BR", { notation: n >= 100000 ? "compact" : "standard" }).format(n || 0);
+const campoCusto = () => (estado.custo === "real" ? "custo_real_usd" : "custo_api_usd");
+const hora = (iso) => (iso ? new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : "");
+const ETAPAS = {
+  escopo: "Escopo", busca_refinamento: "Refino da busca", triagem: "Triagem", elegibilidade: "Elegibilidade",
+  sintese: "Quadro-síntese", metodos: "Métodos", resultados: "Resultados", introducao: "Introdução",
+  discussao: "Discussão", reforco_referencias: "Reforço de referências", conclusao: "Conclusão",
+  resumos: "Resumo e abstract", checklist: "Checklist",
+};
+function rotulo(d) {
+  if (d.nome) return d.nome;
+  const [grupo, secao] = d.chave.split(/_(.+)/);
+  if (grupo === "humanizacao" && secao) return "Humanização · " + (ETAPAS[secao] || secao);
+  if (grupo === "auditoria" && secao) return "Auditoria · " + (ETAPAS[secao] || secao);
+  return ETAPAS[d.chave] || d.chave;
+}
+
+async function pegar(url) {
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(url + " → " + r.status);
+  return r.json();
+}
+
+function statusHtml(status) {
+  const mapa = { concluido: ["ok", "✓", "Concluído"], em_andamento: ["andamento", "◔", "Em andamento"], erro: ["erro", "✕", "Erro"] };
+  const [classe, icone, rotulo] = mapa[status] || ["aviso", "!", status];
+  return `<span class="status ${classe}"><span class="ic" aria-hidden="true">${icone}</span>${rotulo}</span>`;
+}
+
+function barras(el, linhas, rotuloVazio) {
+  const campo = campoCusto();
+  const dados = linhas.filter((l) => l.chamadas_ok > 0).sort((a, b) => (b[campo] || 0) - (a[campo] || 0));
+  if (!dados.length) { el.innerHTML = `<div class="vazio">${rotuloVazio}</div>`; return; }
+  const max = Math.max(...dados.map((d) => d[campo] || 0), 1e-9);
+  el.innerHTML = dados.map((d, i) => `
+    <div class="barra" data-i="${i}">
+      <div class="nome" title="${esc(d.chave)}">${esc(rotulo(d))}</div>
+      <div class="trilho"><div class="preench" style="width:${((d[campo] || 0) / max) * 100}%"></div></div>
+      <div class="num">${dinheiro(d[campo] || 0)}</div>
+    </div>`).join("");
+  el.querySelectorAll(".barra").forEach((linha) => {
+    const d = dados[+linha.dataset.i];
+    linha.addEventListener("mousemove", (ev) => mostrarTooltip(ev, `
+      <strong>${esc(rotulo(d))}</strong><br><span class="muted">${esc(d.chave)}</span><br>
+      Gasto real: ${dinheiro(d.custo_real_usd)}<br>
+      Custo em API: ${dinheiro(d.custo_api_usd)}<br>
+      Chamadas: ${d.chamadas_ok}${d.falhas ? ` · falhas: ${d.falhas}` : ""}<br>
+      Tokens: ${inteiro(d.tokens_entrada)} entrada / ${inteiro(d.tokens_saida)} saída
+      ${d.sem_preco ? "<br><em>sem preço cadastrado em escada.json</em>" : ""}`));
+    linha.addEventListener("mouseleave", esconderTooltip);
+  });
+}
+
+function mostrarTooltip(ev, html) {
+  const t = $("tooltip");
+  t.innerHTML = html;
+  t.style.display = "block";
+  const x = Math.min(ev.clientX + 14, window.innerWidth - t.offsetWidth - 8);
+  const y = Math.min(ev.clientY + 14, window.innerHeight - t.offsetHeight - 8);
+  t.style.left = x + "px"; t.style.top = y + "px";
+}
+function esconderTooltip() { $("tooltip").style.display = "none"; }
+
+function renderResumo(r) {
+  estado.cotacao = r.cotacao_usd_brl;
+  $("heroi-valor").textContent = dinheiro(r.gasto_real_usd);
+  $("heroi-nota").textContent = `${inteiro(r.chamadas)} chamadas · ${inteiro(r.tokens_entrada + r.tokens_saida)} tokens` + (estado.moeda === "BRL" ? ` · US$ 1 = R$ ${r.cotacao_usd_brl.toFixed(2)}` : "");
+  $("t-api").textContent = dinheiro(r.custo_api_usd);
+  $("t-artigos").textContent = `${r.concluidos} de ${r.artigos}`;
+  $("t-artigos-nota").textContent = [r.em_andamento && `${r.em_andamento} em andamento`, r.com_erro && `${r.com_erro} com erro`].filter(Boolean).join(" · ") || "nenhum pendente";
+  const medio = estado.custo === "real" ? r.custo_medio_real_usd : r.custo_medio_api_usd;
+  $("t-medio").textContent = dinheiro(medio);
+  $("t-medio-nota").textContent = estado.custo === "real" ? "gasto real, só concluídos" : "custo em API, só concluídos";
+  $("t-fallback").textContent = inteiro(r.chamadas_fallback);
+  $("t-fallback-nota").textContent = `${r.falhas} tentativa(s) com falha` + (r.sem_preco.length ? ` · sem preço: ${r.sem_preco.join(", ")}` : "");
+}
+
+function renderArtigos(artigos) {
+  const sel = $("filtro-artigo");
+  const atual = sel.value;
+  sel.innerHTML = `<option value="">Todos os artigos</option>` + artigos.map((a) => `<option value="${esc(a.id)}">${esc(a.tema.slice(0, 60))} (${esc(a.id)})</option>`).join("");
+  sel.value = atual;
+  const corpo = $("tabela-artigos");
+  if (!artigos.length) { corpo.innerHTML = `<tr><td colspan="8" class="vazio">Nenhum artigo ainda. Gere um com <code>python -m artigos_v2 gerar pedido.json</code>.</td></tr>`; return; }
+  corpo.innerHTML = artigos.map((a) => `
+    <tr class="clicavel ${estado.selecionado === a.id ? "sel" : ""}" data-id="${esc(a.id)}">
+      <td><strong>${esc(a.tema)}</strong><br><span class="muted">${esc(a.id)} · ${hora(a.criado_em)}</span>${a.erro ? `<br><span class="status erro"><span class="ic">✕</span>${esc(a.erro.slice(0, 160))}</span>` : ""}</td>
+      <td>${statusHtml(a.status)}</td>
+      <td class="secondary">${esc(a.etapa_atual || "—")}</td>
+      <td>${a.modelos.map((m) => `<span class="chip" title="${esc(m.modelo)} · ${m.chamadas} chamada(s)">${esc(m.nome)}</span>`).join("") || "—"}</td>
+      <td class="n">${dinheiro(a.custo_real_usd)}</td>
+      <td class="n">${dinheiro(a.custo_api_usd)}</td>
+      <td class="n">${a.chamadas}${a.falhas ? ` <span class="degrau">(${a.falhas} falhas)</span>` : ""}</td>
+      <td>${a.tem_docx ? `<a href="/download/${encodeURIComponent(a.id)}.docx" onclick="event.stopPropagation()">Baixar .docx</a>` : `<span class="muted">—</span>`}</td>
+    </tr>`).join("");
+  corpo.querySelectorAll("tr.clicavel").forEach((tr) => tr.addEventListener("click", () => { estado.selecionado = tr.dataset.id; atualizar(); }));
+}
+
+async function renderDetalhe() {
+  const secao = $("detalhe");
+  if (!estado.selecionado) { secao.hidden = true; return; }
+  const d = await pegar(`/api/artigos/${encodeURIComponent(estado.selecionado)}`);
+  secao.hidden = false;
+  $("detalhe-titulo").textContent = `Chamadas · ${d.artigo.tema}`;
+  $("tabela-chamadas").innerHTML = d.chamadas.map((c) => `
+    <tr>
+      <td class="muted">${hora(c.criado_em)}</td>
+      <td>${esc(rotulo({ chave: c.etapa }))} <span class="muted">(${esc(c.papel)})</span></td>
+      <td>${esc(c.modelo_respondeu || c.modelo_solicitado)}${c.modelo_respondeu && c.modelo_respondeu !== c.modelo_solicitado ? `<br><span class="muted">pedido: ${esc(c.modelo_solicitado)}</span>` : ""}</td>
+      <td>${c.degrau === 0 ? `<span class="muted">1º</span>` : `<span class="degrau">↓ ${c.degrau + 1}º (fallback)</span>`}</td>
+      <td class="n">${c.sucesso ? `${inteiro(c.tokens_entrada)} / ${inteiro(c.tokens_saida)}${c.tokens_estimados ? "*" : ""}` : "—"}</td>
+      <td class="n">${c.sucesso ? dinheiro(c.custo_real_usd) : "—"}</td>
+      <td class="n">${c.sucesso ? dinheiro(c.custo_api_usd) : "—"}</td>
+      <td class="n">${c.latencia_ms != null ? (c.latencia_ms / 1000).toFixed(1) + " s" : ""}</td>
+      <td>${c.sucesso ? statusHtml("concluido").replace("Concluído", "OK") : `<span class="status erro" title="${esc(c.erro)}"><span class="ic">✕</span>${esc((c.erro || "").slice(0, 60))}</span>`}</td>
+    </tr>`).join("") || `<tr><td colspan="9" class="vazio">Sem chamadas.</td></tr>`;
+  $("tabela-eventos").innerHTML = d.eventos.map((e) => `
+    <tr><td class="muted" style="width:140px">${hora(e.criado_em)}</td><td>${statusHtml(e.nivel === "erro" ? "erro" : e.nivel === "aviso" ? "aviso" : "concluido").replace(/Concluído|aviso|Erro/, e.nivel)}</td><td>${esc(e.mensagem)}</td></tr>`).join("");
+  const a = d.auditoria;
+  $("detalhe-auditoria").innerHTML = a ? `<p><strong>Auditoria externa:</strong> ${a.nota_geral}% de conformidade · ${a.skills.map((s) => `<span class="chip">${esc(s.nome)}: ${s.nota}%</span>`).join("")}</p>` : "";
+}
+
+function renderEscada(escada) {
+  const nomes = { escrita: "Escrita (introdução, discussão, humanização)", tecnico: "Técnico (escopo, métodos, resultados)", triagem: "Triagem (seleção de estudos)" };
+  $("escada").innerHTML = Object.entries(escada).map(([papel, modelos]) => `
+    <div><h2>${esc(nomes[papel] || papel)}</h2><ol>${modelos.map((m) => `
+      <li><strong>${esc(m.nome)}</strong> <span class="muted">${esc(m.id)}</span><br>
+      <span class="secondary">${m.entrada_usd_mtok != null ? `US$ ${m.entrada_usd_mtok} / ${m.saida_usd_mtok} por 1M tokens (entrada/saída)` : "preço não cadastrado"}${m.gratuito ? " · <strong>gratuito no OmniRoute</strong>" : ""}</span></li>`).join("")}</ol></div>`).join("");
+}
+
+async function atualizar() {
+  try {
+    const filtro = estado.artigo ? `?artigo=${encodeURIComponent(estado.artigo)}` : "";
+    const [resumo, artigos, modelos, etapas] = await Promise.all([
+      pegar("/api/resumo"), pegar("/api/artigos"), pegar("/api/modelos" + filtro), pegar("/api/etapas" + filtro),
+    ]);
+    renderResumo(resumo);
+    renderArtigos(artigos);
+    const sufixo = estado.artigo ? " (artigo selecionado)" : "";
+    const tipo = estado.custo === "real" ? "Gasto real" : "Custo em API";
+    $("titulo-modelos").textContent = `${tipo} por modelo${sufixo}`;
+    $("titulo-etapas").textContent = `${tipo} por etapa${sufixo}`;
+    barras($("barras-modelos"), modelos, "Nenhuma chamada registrada.");
+    barras($("barras-etapas"), etapas, "Nenhuma chamada registrada.");
+    await renderDetalhe();
+    $("atualizado").textContent = "Atualizado às " + new Date().toLocaleTimeString("pt-BR") + " · atualiza a cada 5 s";
+  } catch (e) {
+    $("atualizado").textContent = "Erro ao atualizar: " + e.message;
+  }
+}
+
+document.querySelectorAll("[data-custo]").forEach((b) => b.addEventListener("click", () => {
+  estado.custo = b.dataset.custo;
+  document.querySelectorAll("[data-custo]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  atualizar();
+}));
+document.querySelectorAll("[data-moeda]").forEach((b) => b.addEventListener("click", () => {
+  estado.moeda = b.dataset.moeda;
+  document.querySelectorAll("[data-moeda]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  atualizar();
+}));
+$("filtro-artigo").addEventListener("change", (e) => { estado.artigo = e.target.value; if (e.target.value) estado.selecionado = e.target.value; atualizar(); });
+
+pegar("/api/escada").then(renderEscada).catch(() => {});
+atualizar();
+setInterval(atualizar, 5000);
+</script>
+</body>
+</html>
