@@ -79,12 +79,14 @@ class FakeOmniRoute:
                                for c in chaves], ensure_ascii=False)
         if "seção MÉTODOS" in prompt:
             data = re.search(r'"data_da_busca": "([^"]+)"', prompt).group(1)
+            chave = re.search(r"modelo PRISMA 2020.*?\[(R\d+)\]", prompt, re.S)
+            prisma = f" O relato da seleção seguiu o modelo PRISMA 2020 [{chave.group(1)}]." if chave else ""
             return (f"Trata-se de uma revisão de literatura. A busca foi feita em {data} no PubMed e no Europe PMC, "
                     "com descritores DeCS e MeSH combinados por operadores booleanos AND e OR (Quadro 1).\n\n"
                     "Os critérios de inclusão foram estudos com adultos hipertensos na APS publicados de 2016 a 2026. "
                     "Os critérios de exclusão foram estudos fora do tema, hospitalares ou editoriais.\n\n"
                     "Após a remoção de duplicatas, fez-se a triagem por título e resumo e a avaliação de elegibilidade. "
-                    "Os dados foram extraídos para um quadro-síntese.")
+                    "Os dados foram extraídos para um quadro-síntese." + prisma)
         if "seção RESULTADOS" in prompt:
             fatos = json.loads(re.search(r"sem arredondar\): (\{.*?\})\nEstudos", prompt, re.S).group(1))
             chaves = re.findall(r'"chave": "(R\d+)"', prompt)
@@ -138,12 +140,39 @@ def _registro(base: str, i: int, com_doi: bool = True) -> Registro:
                     idioma="por")
 
 
+PMID_PRISMA_2020 = "33782057"
+
+
+def _registro_prisma() -> Registro:
+    """Metadados da declaração PRISMA 2020 como o PubMed devolve (dado de teste, não usado em produção)."""
+    return Registro(base="PubMed", id_base=PMID_PRISMA_2020, pmid=PMID_PRISMA_2020,
+                    titulo="The PRISMA 2020 statement: an updated guideline for reporting systematic reviews",
+                    autores=["Page MJ", "McKenzie JE", "Bossuyt PM", "Boutron I", "Hoffmann TC", "Mulrow CD",
+                             "Shamseer L"],
+                    revista="BMJ", ano="2021", volume="372", paginas="n71", doi="10.1136/bmj.n71",
+                    resumo="The PRISMA 2020 statement replaces the 2009 statement.", tipos=["Journal Article"],
+                    idioma="eng")
+
+
 class FakePubMed:
-    def __init__(self, total: int = 40):
+    def __init__(self, total: int = 40, mesh_invalidos: list[str] | None = None):
         self.total = total
+        self.mesh_invalidos = list(mesh_invalidos or [])  # descritores que "não existem" no MeSH
+        self.consultas_contadas: list[str] = []
+        self.falhar_detalhes: set[str] = set()             # PMIDs cujo efetch falha (simula rede)
 
     def contar(self, consulta):
+        self.consultas_contadas.append(consulta)
         return self.total, ""
+
+    def validar_descritores_mesh(self, consulta):
+        invalidos = []
+        for termo in self.mesh_invalidos:
+            padrao = rf'"?{re.escape(termo)}"?\[(?:MeSH Terms|MeSH|mh)\]'
+            if re.search(padrao, consulta, re.I):
+                consulta = re.sub(padrao, f'"{termo}"[tiab]', consulta, flags=re.I)
+                invalidos.append(termo)
+        return consulta, invalidos
 
     def buscar(self, consulta, limite, data_busca):
         registros = [_registro("PubMed", i) for i in range(min(self.total, limite))]
@@ -154,7 +183,11 @@ class FakePubMed:
         return 100, [str(base + i) for i in range(limite)], ""
 
     def detalhes(self, ids):
-        return [_registro("PubMed", int(i)) for i in ids]
+        if self.falhar_detalhes & set(ids):
+            raise RuntimeError("Falha ao acessar efetch (simulada)")
+        # PMID 3000000i é o registro i da busca: o efetch devolve o mesmo artigo (mesmo PMID e DOI)
+        return [_registro_prisma() if i == PMID_PRISMA_2020 else
+                _registro("PubMed", int(i) - 30000000 if int(i) >= 30000000 else int(i)) for i in ids]
 
 
 class FakeEuropePMC:

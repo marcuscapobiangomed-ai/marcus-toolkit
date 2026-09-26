@@ -45,10 +45,14 @@ def cmd_exemplo(args):
             "busca_manual": "",
             "redacao": "texto redigido e revisado pelos autores",
         },
+        declaracao_ia="nenhuma",
     )
     Path(args.arquivo).write_text(json.dumps(asdict(pedido), ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Pedido de exemplo salvo em {args.arquivo}. Edite tema, autores, revista, normas e, em "
-          "'contribuicao_autores', descreva o que vocês fizeram (apague o que não se aplica).")
+          "'contribuicao_autores', descreva o que vocês fizeram (apague o que não se aplica).\n"
+          "Em 'declaracao_ia': \"nenhuma\" (padrão: o artigo não menciona IA), \"breve\" (uma frase dizendo que "
+          "ferramentas de IA apoiaram busca, organização dos dados e redação, e que os autores conduziram a análise, "
+          "reescreveram o texto e respondem por ele) ou o texto da declaração exigida pela revista, que entra como está.")
 
 
 def cmd_revisar(args):
