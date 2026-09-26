@@ -17,10 +17,11 @@ import re
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from datetime import date, datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import Callable
 
-from . import prompts
+from . import prompts, referencias
 from .bases import EuropePMC, PubMed, Registro, ResultadoBusca, deduplicar, importar_ris
 from .config import Config
 from .ledger import Ledger, agora
@@ -35,6 +36,11 @@ ETAPAS = [
 SECOES = ["introducao", "metodos", "resultados", "discussao", "conclusao"]
 MINIMO_REFERENCIAS = 25
 IDIOMAS = {"en": ("english", "eng"), "pt": ("portuguese", "por"), "es": ("spanish", "spa")}
+# Page MJ et al. The PRISMA 2020 statement. BMJ 2021;372:n71 — metadados sempre vindos do PubMed.
+PMID_PRISMA_2020 = "33782057"
+DECLARACAO_IA_BREVE = ("Ferramentas de inteligência artificial foram usadas como apoio na busca, na organização dos "
+                       "dados e na redação; os autores conduziram a análise, revisaram e reescreveram integralmente o "
+                       "conteúdo e assumem responsabilidade por ele.")
 
 
 @dataclass
@@ -61,6 +67,9 @@ class Pedido:
     #  "extracao": "dois autores, com conferência cruzada", "busca_manual": "referências dos estudos incluídos",
     #  "redacao": "texto escrito e revisado pelos autores"}
     contribuicao_autores: dict[str, str] = field(default_factory=dict)
+    # Declaração de uso de IA ao fim do artigo: "nenhuma" (padrão, nada é mencionado), "breve" (texto padrão
+    # que credita os autores) ou um texto próprio, usado como está.
+    declaracao_ia: str = "nenhuma"
 
     @classmethod
     def de_arquivo(cls, caminho: str | Path) -> "Pedido":
@@ -184,6 +193,8 @@ class Pipeline:
         buscadores = {"pubmed": self.pubmed, "europepmc": self.europepmc}
         importados = {nome: importar_ris(caminho, nome) for nome, caminho in p.ris.items()}
         n_importados = sum(len(v) for v in importados.values())
+        mesh_invalidos: list[str] = []
+        consultas = self._validar_mesh(artigo_id, consultas, mesh_invalidos)
 
         for rodada in range(4):
             contagens = {b: buscadores[b].contar(self._filtros(p, b, q))[0] for b, q in consultas.items()}
@@ -199,6 +210,7 @@ class Pipeline:
                                                      estado["protocolo"]),
                 etapa="busca_refinamento", artigo_id=artigo_id)
             consultas = {b: novo.get("consultas", {}).get(b) or consultas[b] for b in consultas}
+            consultas = self._validar_mesh(artigo_id, consultas, mesh_invalidos)
 
         data_busca = datetime.now().strftime("%d/%m/%Y")
         resultados: list[ResultadoBusca] = []
@@ -225,7 +237,25 @@ class Pipeline:
             "estrategias": [{"base": r.base, "estrategia": r.consulta, "registros": len(r.registros),
                              "traducao": r.traducao} for r in resultados],
             "duplicatas": duplicatas,
+            "mesh_invalidos": mesh_invalidos,
         }
+
+    def _validar_mesh(self, artigo_id, consultas: dict, mesh_invalidos: list[str]) -> dict:
+        """Descritor MeSH que não existe vira texto livre [tiab] antes de contar (senão a busca some calada)."""
+        validar = getattr(self.pubmed, "validar_descritores_mesh", None)
+        if not validar or not consultas.get("pubmed"):
+            return consultas
+        try:
+            corrigida, invalidos = validar(consultas["pubmed"])
+        except Exception as e:  # validação é proteção extra: sem ela, segue com a consulta como está
+            self.ledger.evento(artigo_id, f"Validação dos descritores MeSH falhou: {e}", "aviso")
+            return consultas
+        if not invalidos:
+            return consultas
+        mesh_invalidos.extend(t for t in invalidos if t not in mesh_invalidos)
+        self.ledger.evento(artigo_id, "Descritores MeSH inexistentes convertidos em texto livre [tiab]: "
+                                      + "; ".join(invalidos), "aviso")
+        return {**consultas, "pubmed": corrigida or consultas["pubmed"]}
 
     def _decidir(self, artigo_id, estado, chaves, fase, lote) -> dict:
         decisoes = {}
@@ -417,19 +447,36 @@ class Pipeline:
             for r in self.pubmed.detalhes(ids):
                 if r.resumo:
                     contexto.append(chave_para(r))
-        estado["contexto"] = [c for c in dict.fromkeys(contexto) if c not in estado["incluidos"]]
+        estado["prisma2020"] = self._referencia_prisma2020(artigo_id, chave_para)
+        # A declaração PRISMA só é citada nos Métodos: fora do contexto, a introdução e a discussão não a usam.
+        estado["contexto"] = [c for c in dict.fromkeys(contexto)
+                              if c not in estado["incluidos"] and c != estado["prisma2020"]]
         self.ledger.evento(artigo_id, f"{len(estado['contexto'])} referências de contexto verificadas no PubMed")
+
+    def _referencia_prisma2020(self, artigo_id, chave_para) -> str:
+        """Chave da declaração PRISMA 2020 com os metadados reais do PubMed, ou "" se não deu para verificar."""
+        try:
+            registro = next((r for r in self.pubmed.detalhes([PMID_PRISMA_2020]) if r.pmid == PMID_PRISMA_2020), None)
+        except Exception as e:
+            self.ledger.evento(artigo_id, f"Declaração PRISMA 2020 não recuperada no PubMed: {e}", "aviso")
+            return ""
+        if registro is None:
+            self.ledger.evento(artigo_id, f"PMID {PMID_PRISMA_2020} (PRISMA 2020) não retornou do PubMed", "aviso")
+            return ""
+        return chave_para(registro)
 
     def _fatos_metodos(self, estado) -> dict:
         p = self._pedido(estado)
         protocolo = estado["protocolo"]
-        return {
+        invalidos = estado["busca"].get("mesh_invalidos", [])
+        fatos = {
             "tipo_estudo": "revisão de literatura",
             "pergunta": protocolo["pergunta"],
             "data_da_busca": estado["busca"]["data"],
             "bases": [e["base"] for e in estado["busca"]["estrategias"]],
             "descritores_decs": protocolo.get("descritores_decs", []),
-            "descritores_mesh": protocolo.get("descritores_mesh", []),
+            "descritores_mesh": [d for d in protocolo.get("descritores_mesh", [])
+                                 if _termo_mesh(d) not in {_termo_mesh(t) for t in invalidos}],
             "periodo": f"{p.periodo[0]} a {p.periodo[1]}",
             "idiomas": [IDIOMAS[i][0] for i in p.idiomas if i in IDIOMAS],
             "filtros_automaticos": "período de publicação e idioma aplicados na própria estratégia; excluídos "
@@ -443,6 +490,9 @@ class Pipeline:
             "extracao": "quadro-síntese com autor/ano, desenho do estudo, população e principais achados",
             "conduzido_pelos_autores": self._processo_autores(estado),
         }
+        if invalidos:  # sem descritor MeSH correspondente: entraram na estratégia como texto livre
+            fatos["termos_em_texto_livre"] = invalidos
+        return fatos
 
     def _processo_autores(self, estado) -> dict:
         processo = {k: v for k, v in self._pedido(estado).contribuicao_autores.items() if v}
@@ -452,7 +502,8 @@ class Pipeline:
         return processo
 
     def _etapa_metodos(self, artigo_id, estado):
-        r = self.cliente.completar("tecnico", prompts.metodos(self._fatos_metodos(estado)),
+        r = self.cliente.completar("tecnico", prompts.metodos(self._fatos_metodos(estado),
+                                                             self._chave_prisma2020(estado)),
                                    etapa="metodos", artigo_id=artigo_id, temperatura=0.4)
         estado.setdefault("secoes", {})["metodos"] = r.texto.strip()
 
@@ -462,6 +513,10 @@ class Pipeline:
         r = self.cliente.completar("tecnico", prompts.resultados(estado["prisma"], incluidos),
                                    etapa="resultados", artigo_id=artigo_id, temperatura=0.4)
         estado["secoes"]["resultados"] = r.texto.strip()
+
+    def _chave_prisma2020(self, estado) -> str:
+        chave = estado.get("prisma2020") or ""
+        return chave if chave in estado["registros"] else ""
 
     def _faltantes(self, estado) -> int:
         return max(0, MINIMO_REFERENCIAS + 2 - len(estado["incluidos"]))
@@ -551,40 +606,64 @@ class Pipeline:
     def _etapa_montagem(self, artigo_id, estado):
         p = self._pedido(estado)
         numerador = Numerador(set(estado["registros"]))
+        # Ordem do documento: a numeração Vancouver segue a primeira aparição de cada referência.
         secoes = {}
         for secao in ("introducao", "metodos", "resultados"):
             secoes[secao] = numerador.resolver(estado["secoes"][secao])
+        chave_prisma = self._chave_prisma2020(estado)  # "Fonte" da Figura 1, logo após Resultados
+        prisma_citacao = numerador.resolver(f"[{chave_prisma}]") if chave_prisma else ""
         sintese = []
-        for linha in estado["sintese"]:  # quadro-síntese vem logo após Resultados
+        for linha in estado["sintese"]:  # quadro-síntese vem logo após a Figura 1
             sintese.append({**linha, "citacao": numerador.resolver(f"[{linha['chave']}]")})
         for secao in ("discussao", "conclusao"):
             secoes[secao] = numerador.resolver(estado["secoes"][secao])
 
+        textos, siglas_corpo = definir_siglas([secoes[s] for s in SECOES])
+        secoes = dict(zip(SECOES, textos))
+        resumos = estado.get("resumos", {})
+        (resumo,), siglas_resumo = definir_siglas([resumos.get("resumo", "")])
+        if siglas_corpo or siglas_resumo:
+            self.ledger.evento(artigo_id, "Siglas definidas por extenso na primeira ocorrência: "
+                                          f"corpo {siglas_corpo or '-'}; resumo {siglas_resumo or '-'}")
+
+        registros = [self._reg(estado, chave) for chave in numerador.ordem]
+        preparar = getattr(referencias, "preparar_referencias", None)
+        if preparar:  # metadados canônicos (PubMed/NLM) antes de formatar
+            try:
+                preparados = preparar(registros, pubmed=self.pubmed)
+                if len(preparados) == len(registros):
+                    registros = preparados
+                else:
+                    self.ledger.evento(artigo_id, "Preparação das referências devolveu outra quantidade; "
+                                                  "mantidos os metadados originais", "aviso")
+            except Exception as e:
+                self.ledger.evento(artigo_id, f"Preparação das referências falhou: {e}", "aviso")
         formatar = FORMATOS.get(p.formato_referencias, FORMATOS["vancouver"])
-        referencias = [formatar(self._reg(estado, chave)) for chave in numerador.ordem]
+        lista_referencias = [formatar(r) for r in registros]
         if numerador.bloqueadas:
             self.ledger.evento(artigo_id, f"Citações inexistentes bloqueadas: {sorted(set(numerador.bloqueadas))}",
                                "aviso")
-        if len(referencias) < MINIMO_REFERENCIAS:
-            self.ledger.evento(artigo_id, f"Artigo com {len(referencias)} referências (mínimo {MINIMO_REFERENCIAS})",
-                               "aviso")
-        resumos = estado.get("resumos", {})
+        if len(lista_referencias) < MINIMO_REFERENCIAS:
+            self.ledger.evento(artigo_id, f"Artigo com {len(lista_referencias)} referências "
+                                          f"(mínimo {MINIMO_REFERENCIAS})", "aviso")
         estado["artigo"] = {
             "id": artigo_id,
             "titulo": resumos.get("titulo") or estado["protocolo"].get("titulo_provisorio", p.tema),
             "title": resumos.get("title", ""),
             "autores": p.autores, "orientador": p.orientador, "instituicao": p.instituicao,
             "revista": p.revista, "formato_citacao": p.formato_citacao, "formato_referencias": p.formato_referencias,
-            "resumo": resumos.get("resumo", ""), "palavras_chave": resumos.get("palavras_chave", []),
+            "resumo": resumo, "palavras_chave": resumos.get("palavras_chave", []),
             "abstract": resumos.get("abstract", ""), "keywords": resumos.get("keywords", []),
             "secoes": secoes,
             "estrategias": estado["busca"]["estrategias"], "data_busca": estado["busca"]["data"],
             "prisma": estado["prisma"],
+            "prisma_citacao": prisma_citacao,
             "sintese": sintese,
-            "referencias": referencias,
+            "referencias": lista_referencias,
             "referencias_chaves": numerador.ordem,
             "citacoes_bloqueadas": sorted(set(numerador.bloqueadas)),
             "humanizacao": estado.get("humanizacao", {}),
+            "declaracao_ia": declaracao_ia(p.declaracao_ia),
         }
 
     def _etapa_checklist(self, artigo_id, estado):
@@ -616,9 +695,119 @@ class Pipeline:
         self.ledger.evento(artigo_id, f"DOCX exportado: {docx}")
 
 
+def declaracao_ia(valor: str) -> str:
+    """"nenhuma" → sem declaração; "breve" → texto padrão que credita os autores; outro texto → usado como está."""
+    texto = (valor or "").strip()
+    if texto.lower() in ("", "nenhuma", "nenhum"):
+        return ""
+    return DECLARACAO_IA_BREVE if texto.lower() == "breve" else texto
+
+
+def _termo_mesh(termo: str) -> str:
+    """'"Primary Health Care"[MeSH Terms]' → 'primary health care' (para comparar descritores)."""
+    return " ".join(re.sub(r"\[[^\]]*\]", " ", termo).replace('"', " ").lower().split())
+
+
+# ------------------------------------------------ siglas por extenso na primeira ocorrência
+
+# sigla: (forma por extenso, plural ou None, contexto exigido ou None). O contexto evita falso positivo:
+# "OR" só é odds ratio antes de um número (o operador booleano OR não conta) e "IC" só antes de "95%".
+_ESTATISTICA = r"(?=\s*(?:ajustad[oa]\s*)?[=:]?\s*\d)"
+SIGLAS = {
+    "APS": ("Atenção Primária à Saúde", None, None),
+    "SUS": ("Sistema Único de Saúde", None, None),
+    "UBS": ("Unidade Básica de Saúde", "Unidades Básicas de Saúde", None),
+    "ESF": ("Estratégia Saúde da Família", None, None),
+    "ACS": ("Agente Comunitário de Saúde", "Agentes Comunitários de Saúde", None),
+    "HAS": ("hipertensão arterial sistêmica", None, None),
+    "DM": ("diabetes mellitus", None, None),
+    "DCNT": ("doenças crônicas não transmissíveis", None, None),
+    "IMC": ("índice de massa corporal", None, None),
+    "IC": ("intervalo de confiança", "intervalos de confiança", r"(?=\s*(?:de\s+)?\d{2}\s*%)"),
+    "OR": ("odds ratio", None, _ESTATISTICA),
+    "RR": ("risco relativo", "riscos relativos", _ESTATISTICA),
+    "ECR": ("ensaio clínico randomizado", "ensaios clínicos randomizados", None),
+    "OMS": ("Organização Mundial da Saúde", None, None),
+    "BVS": ("Biblioteca Virtual em Saúde", None, None),
+    "DeCS": ("Descritores em Ciências da Saúde", None, None),
+    "MeSH": ("Medical Subject Headings", None, None),
+    "LILACS": ("Literatura Latino-Americana e do Caribe em Ciências da Saúde", None, None),
+    "SciELO": ("Scientific Electronic Library Online", None, None),
+    "PRISMA": ("Preferred Reporting Items for Systematic Reviews and Meta-Analyses", None, None),
+}
+_PLURAIS = {"as", "os", "às", "aos", "das", "dos", "nas", "nos", "pelas", "pelos", "essas", "esses", "estas", "estes",
+            "duas", "dois", "três", "várias", "vários", "diversas", "diversos", "algumas", "alguns", "muitas",
+            "muitos"}
+_MARCADORES = re.compile(r"\{\{cite:[^}]*\}\}|\[\s*R\d+[^\]]*\]")
+
+
+def _primeira_ocorrencia(texto: str, sigla: str, contexto: str | None):
+    """Primeira ocorrência fora dos marcadores de citação: (match, já_definida) ou None."""
+    protegidos = [m.span() for m in _MARCADORES.finditer(texto)]
+    padrao = rf"(?<![\w-]){re.escape(sigla)}" + (contexto or r"(?![\w-])")
+    definicao = rf"(?<=\()\s*{re.escape(sigla)}\s*(?=\))"  # "(SIGLA)": o autor já definiu
+    candidatas = [(m, False) for m in re.finditer(padrao, texto)] + [(m, True) for m in re.finditer(definicao, texto)]
+    candidatas = [c for c in candidatas if not any(a <= c[0].start() < b for a, b in protegidos)]
+    return min(candidatas, key=lambda c: (c[0].start(), not c[1]), default=None)
+
+
+def definir_siglas(textos: list[str]) -> tuple[list[str], list[str]]:
+    """Garante "Forma por extenso (SIGLA)" na primeira ocorrência de cada sigla conhecida.
+
+    `textos` são trechos na ordem do documento, tratados como um texto só. Idempotente: sigla já definida
+    ("... (SIGLA)") fica como está. Devolve (textos, siglas expandidas).
+    """
+    textos = list(textos)
+    expandidas = []
+    for sigla, (extenso, plural, contexto) in SIGLAS.items():
+        for i, texto in enumerate(textos):
+            achado = _primeira_ocorrencia(texto, sigla, contexto)
+            if achado is None:
+                continue
+            m, definida = achado
+            if not definida:
+                inicio = m.start()
+                # "descritores DeCS" → "Descritores em Ciências da Saúde (DeCS)", sem repetir a palavra
+                repetida = re.search(r"(\w+)\s+$", texto[:inicio])
+                if repetida and repetida.group(1).lower() in {f.split()[0].lower() for f in (extenso, plural) if f}:
+                    inicio = repetida.start(1)
+                anterior = re.search(r"(?<![\d.,])(\w+)\s+$", texto[:inicio])  # palavra logo antes: "as", "3"
+                anterior = anterior.group(1).lower() if anterior else ""
+                forma = plural if plural and (anterior in _PLURAIS or (anterior.isdigit() and int(anterior) > 1)) \
+                    else extenso
+                if re.search(r"(?:^|[.!?]\s|\n)\s*$", texto[:inicio]):  # início de frase
+                    forma = forma[0].upper() + forma[1:]
+                textos[i] = f"{texto[:inicio]}{forma} ({sigla}){texto[m.end():]}"
+                expandidas.append(sigla)
+                # definição repetida mais adiante ("Sistema Único de Saúde (SUS)") vira só a sigla
+                redundante = re.compile(rf"(?:{re.escape(extenso)}{'|' + re.escape(plural) if plural else ''})"
+                                        rf"\s*\(\s*{re.escape(sigla)}\s*\)", re.I)
+                corte = inicio + len(forma) + len(sigla) + 3
+                textos[i] = textos[i][:corte] + redundante.sub(sigla, textos[i][corte:])
+                for j in range(i + 1, len(textos)):
+                    textos[j] = redundante.sub(sigla, textos[j])
+            break
+    return textos, expandidas
+
+
+# ------------------------------------------------ números (trava da humanização)
+
+# Padrão brasileiro: ponto de milhar e vírgula decimal ("1.054", "0,5"); o modelo às vezes usa "1054" ou "0.5".
+# Grupo de milhar só com o 1º grupo sem zero à esquerda: "0.125" é decimal, não 125.
+_NUMERO = re.compile(r"(?<![\w])(?:[1-9]\d{0,2}(?:\.\d{3})+(?:,\d+)?(?![\d.,]?\d)|\d+(?:[.,]\d+)?)")
+
+
+def _valor(numero: str) -> str:
+    if re.fullmatch(r"[1-9]\d{0,2}(?:\.\d{3})+(?:,\d+)?", numero):
+        numero = numero.replace(".", "")
+    valor = Decimal(numero.replace(",", "."))
+    return format(valor.normalize(), "f") if valor else "0"
+
+
 def _numeros(texto: str) -> set[str]:
+    """Valores numéricos do texto, iguais qualquer que seja a grafia ("1.054" = "1054"; "0,5" = "0.5")."""
     sem_citacoes = re.sub(r"\[\s*R\d+[^\]]*\]", " ", texto)
-    return {n.replace(",", ".") for n in re.findall(r"(?<![\w])\d+(?:[.,]\d+)?", sem_citacoes)}
+    return {_valor(n) for n in _NUMERO.findall(sem_citacoes)}
 
 
 # Força das afirmações. Só formas verbais/expressões específicas: "resultados" (substantivo) não conta como

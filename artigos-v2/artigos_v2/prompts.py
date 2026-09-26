@@ -18,7 +18,14 @@ Regras que nunca podem ser quebradas:
 desenho de cada estudo (coorte, transversal, série de casos...) é o que está nos dados.
 - Cite apenas com as chaves fornecidas, no formato [R12] ou [R3, R7]. Nunca crie chaves novas.
 - Contexto brasileiro: APS/SUS/UBS. Diretriz internacional deve ser identificada como tal e contextualizada \
-com o que se pratica de fato nas UBS; não descreva recursos como sempre disponíveis no SUS se isso não for real."""
+com o que se pratica de fato nas UBS; não descreva recursos como sempre disponíveis no SUS se isso não for real.
+- Ortografia correta com todos os acentos (ex.: colédoco, não coledoco)."""
+
+SIGLAS = """Siglas: na primeira ocorrência no texto, escreva a forma por extenso seguida da sigla entre parênteses \
+(ex.: "Atenção Primária à Saúde (APS)", "Sistema Único de Saúde (SUS)"); depois use só a sigla."""
+
+NUMEROS = """Números no padrão brasileiro: vírgula decimal e ponto de milhar (ex.: "1.054 participantes", "0,5"), \
+"p < 0,001", "IC 95%", "OR 2,3"."""
 
 
 def _expressoes() -> str:
@@ -112,6 +119,7 @@ def sintese(protocolo: dict, registros: list[dict]) -> list[dict]:
     pedido = f"""Extraia, apenas do que está escrito em cada resumo, os dados para o quadro-síntese da revisão.
 Pergunta da revisão: {protocolo["pergunta"]}
 Se um dado não estiver no resumo, escreva "não informado no resumo". Frases curtas, sem citar chaves.
+{NUMEROS}
 
 {itens}
 
@@ -121,7 +129,12 @@ Responda SOMENTE com JSON:
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
-def metodos(fatos: dict) -> list[dict]:
+def metodos(fatos: dict, chave_prisma: str = "") -> list[dict]:
+    if chave_prisma:
+        citacao = (f"O relato da seleção seguiu o modelo PRISMA 2020: mencione isso uma vez (ex.: ao descrever as \
+etapas de seleção e o fluxograma) e cite a declaração com [{chave_prisma}], a única citação desta seção.")
+    else:
+        citacao = "Sem citações."
     pedido = f"""Escreva a seção MÉTODOS de uma revisão de literatura a partir destes fatos reais da busca:
 
 {json.dumps(fatos, ensure_ascii=False, indent=1)}
@@ -134,7 +147,8 @@ automaticamente logo após esta seção: remeta a ele, não as reescreva.
 O processo foi conduzido pelos autores: descreva quem fez cada etapa exatamente como consta em \
 "conduzido_pelos_autores" (ex.: "dois autores, de forma independente"; "leitura na íntegra"), com voz ativa dos \
 autores. Não atribua etapas a ferramentas nem acrescente etapas que não constem nos fatos. \
-Seção seca, técnica e replicável. Sem citações. Sem subtítulos em markdown; parágrafos separados por linha em branco."""
+Seção seca, técnica e replicável. {citacao} {SIGLAS} Sem subtítulos em markdown; parágrafos separados por linha \
+em branco."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
@@ -149,7 +163,7 @@ Estrutura: um parágrafo com o resultado da busca e da seleção citando a Figur
 depois uma descrição breve dos principais pontos abordados pelos estudos incluídos, agrupados por tema \
 (não estudo por estudo), remetendo ao Quadro 2 (quadro-síntese). Humanização mínima: sem opinião, sem frases como \
 "os resultados demonstraram que". Não crie tabela nem figura no texto (elas são inseridas depois). \
-Parágrafos separados por linha em branco, sem markdown."""
+{NUMEROS} {SIGLAS} Parágrafos separados por linha em branco, sem markdown."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
@@ -162,7 +176,7 @@ Referências verificadas disponíveis (cite com a chave):
 Requisitos: no máximo ~1.100 palavras (limite de 3 páginas); contextualize o problema com dados \
 epidemiológicos e com a realidade da APS/SUS; justifique a revisão; o ÚLTIMO parágrafo apresenta o \
 objetivo de forma clara e direta: "{protocolo["objetivo"]}". Cite pelo menos {minimo_citacoes} referências \
-distintas da lista. Humanização moderada. Parágrafos separados por linha em branco, sem markdown."""
+distintas da lista. Humanização moderada. {SIGLAS} Parágrafos separados por linha em branco, sem markdown."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
@@ -189,13 +203,14 @@ Requisitos: interprete os achados em vez de repeti-los; compare estudos e nomeie
 real entre eles, com uma explicação plausível (amostra, desenho, cenário); traga o ponto de vista dos autores \
 com segurança; discuta implicações para a APS/SUS com realismo e destaque a contribuição desta revisão. \
 Cite pelo menos {minimo_citacoes} referências distintas. Cautela só onde a evidência pede, ancorada em dado ou \
-estudo nomeado. {LIMITACOES} Parágrafos separados por linha em branco, sem markdown."""
+estudo nomeado. {LIMITACOES} {NUMEROS} {SIGLAS} Parágrafos separados por linha em branco, sem markdown."""
     return [{"role": "system", "content": SISTEMA}, {"role": "user", "content": pedido}]
 
 
 def conclusao(protocolo: dict, discussao_texto: str) -> list[dict]:
     pedido = f"""Escreva a CONCLUSÃO (1–2 parágrafos, sem citações) respondendo ao objetivo: {protocolo["objetivo"]}
 Afirme a contribuição da revisão e as implicações práticas; não repita limitações nem ressalvas da discussão.
+{SIGLAS}
 Base: a discussão abaixo.
 
 {discussao_texto[:6000]}"""
@@ -212,7 +227,7 @@ Título provisório: {titulo}
 Responda SOMENTE com JSON:
 {{"titulo": "título final em português (sem ponto final)", "title": "English title",
   "resumo": "Objetivo: ... Métodos: ... Resultados: ... Conclusão: ... (até 250 palavras, sem citações e sem \
-limitações)",
+limitações; siglas por extenso na primeira ocorrência do resumo, ex.: Atenção Primária à Saúde (APS))",
   "palavras_chave": ["3 a 5 descritores DeCS"],
   "abstract": "Objective: ... Methods: ... Results: ... Conclusion: ... (up to 250 words)",
   "keywords": ["3 to 5 MeSH terms"]}}"""
@@ -248,7 +263,8 @@ Construções a evitar:
 
 REGRAS ABSOLUTAS: não altere nenhum número, dado, resultado, nome de estudo ou estratégia de busca; mantenha \
 TODAS as marcações de citação exatamente como estão ([R3], [R3, R7]) junto da afirmação que sustentam; não \
-acrescente informação nova. Não mude a FORÇA das afirmações: mantenha os modalizadores ("sugere", "pode", \
+acrescente informação nova. Mantenha as siglas definidas por extenso onde estão e a grafia dos números. \
+Não mude a FORÇA das afirmações: mantenha os modalizadores ("sugere", "pode", \
 "possivelmente", "associou-se"), não transforme associação em causa ("associou-se" ≠ "eleva"/"causa") e não troque \
 o desenho dos estudos ("série de casos" ≠ "coorte"). Parágrafo que não puder ser melhorado sem isso fica como está. \
 Devolva SOMENTE o texto reescrito, parágrafos separados por linha em branco, sem markdown.
