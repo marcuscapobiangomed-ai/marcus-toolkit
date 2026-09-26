@@ -163,16 +163,23 @@ def _estrategia_pubmed(artigo: Artigo) -> str | None:
     return None
 
 
+NUM = r"(\d{1,3}(?:\.\d{3})+|\d+)"  # 1054 ou 1.054 (milhar no padrão brasileiro)
+
+
+def _int(numero: str) -> int:
+    return int(numero.replace(".", ""))
+
+
 def _n_reportado(artigo: Artigo, base_regex: str) -> int | None:
     textos = [t.texto for t in artigo.tabelas] + artigo.secoes.get("resultados", []) + artigo.secoes.get("metodos", [])
     for texto in textos:
-        m = re.search(base_regex + r"[^\n\d]{0,25}?\(?n\s*=\s*(\d+)", texto, re.I)
+        m = re.search(base_regex + r"[^\n\d]{0,25}?\(?n\s*=\s*" + NUM, texto, re.I)
         if m:
-            return int(m.group(1))
+            return _int(m.group(1))
     for t in artigo.tabelas:
         for linha in t.linhas:
-            if linha and re.search(base_regex, linha[0], re.I) and linha[-1].strip().isdigit():
-                return int(linha[-1])
+            if linha and re.search(base_regex, linha[0], re.I) and re.fullmatch(NUM, linha[-1].strip()):
+                return _int(linha[-1].strip())
     return None
 
 
@@ -296,18 +303,18 @@ def _descritores_mesh_existem(estrategia: str, verificador: Verificador | None) 
 def _numeros_prisma(artigo: Artigo) -> dict:
     texto = "\n".join([t.texto for t in artigo.tabelas] + artigo.secoes.get("resultados", []) + artigo.legendas)
     padroes = {
-        "identificados": r"(?:registros?|estudos?|artigos?) (?:identificad|encontrad|recuperad)\w*[^()\n]{0,60}\(n\s*=\s*(\d+)\)",
-        "duplicatas": r"duplica\w*[^()\n]{0,40}\(n\s*=\s*(\d+)\)",
-        "triados": r"(?:triad|rastread|selecionad\w* para leitura de t[ií]tulo)\w*[^()\n]{0,60}\(n\s*=\s*(\d+)\)",
-        "avaliados": r"(?:avaliad|lid)\w*[^()\n]{0,40}(?:elegibilidade|[ií]ntegra|texto completo)[^()\n]{0,20}\(n\s*=\s*(\d+)\)",
-        "incluidos": r"inclu[ií]d\w*[^()\n]{0,50}\(n\s*=\s*(\d+)\)",
+        "identificados": r"(?:registros?|estudos?|artigos?) (?:identificad|encontrad|recuperad)\w*[^()\n]{0,60}\(n\s*=\s*" + NUM + r"\)",
+        "duplicatas": r"duplica\w*[^()\n]{0,40}\(n\s*=\s*" + NUM + r"\)",
+        "triados": r"(?:triad|rastread|selecionad\w* para leitura de t[ií]tulo)\w*[^()\n]{0,60}\(n\s*=\s*" + NUM + r"\)",
+        "avaliados": r"(?:avaliad|lid)\w*[^()\n]{0,40}(?:elegibilidade|[ií]ntegra|texto completo)[^()\n]{0,20}\(n\s*=\s*" + NUM + r"\)",
+        "incluidos": r"inclu[ií]d\w*[^()\n]{0,50}\(n\s*=\s*" + NUM + r"\)",
     }
     achados = {}
     for nome, rx in padroes.items():
         m = re.search(rx, texto, re.I)
         if m:
-            achados[nome] = int(m.group(1))
-    excluidos = [int(n) for n in re.findall(r"exclu[ií]d\w*[^()\n]{0,30}\(n\s*=\s*(\d+)\)", texto, re.I)]
+            achados[nome] = _int(m.group(1))
+    excluidos = [_int(n) for n in re.findall(r"exclu[ií]d\w*[^()\n]{0,30}\(n\s*=\s*" + NUM + r"\)", texto, re.I)]
     achados["excluidos"] = excluidos
     return achados
 
@@ -411,6 +418,12 @@ def _prisma_2020_citado(artigo: Artigo) -> dict:
 def _eh_vancouver(ref: str) -> bool:
     return bool(re.search(r"^\s*\d*\.?\s*(?:(?:de|da|do|dos|das|del|di|van|von)\s)?[A-ZÀ-Ý][\w'’\-À-ÿ ]+ [A-ZÀ-Ý]{1,5}[,.]", ref)
                 and re.search(r"\b(19|20)\d{2}\s*;?\s*\d*", ref))
+
+
+def _fasciculo_malformado(ref: str) -> str:
+    """Suplemento colado no volume ('21Suppl 02'), repetido no fascículo ou com zero à esquerda ('Suppl 02')."""
+    m = re.search(r"\b(?:19|20)\d{2}\s*;\s*(\d+[A-Za-z][^:(.]*(?:\([^)]*\))?|\d+\s*\((?:[^)]*\bSuppl\.?\s*0\d[^)]*)\))", ref)
+    return m.group(1).strip() if m else ""
 
 
 def skill_referencias(artigo: Artigo, verificador: Verificador | None = None, **_) -> dict:
@@ -539,6 +552,10 @@ def _detalhes_referencias(refs: list[str]) -> list[dict]:
     urls = {i: u for i, r in enumerate(refs, 1) if (u := _url_indevida(r))}
     itens.append(_item("URL só quando não há DOI/PMID, com data de acesso", status(urls, len(refs)), 0.5,
                        "; ".join(f"[{i}] {u}" for i, u in list(urls.items())[:10])))
+    fasciculos = {i: f for i, r in enumerate(refs, 1) if (f := _fasciculo_malformado(r))}
+    itens.append(_item("Volume e fascículo bem formados (ex.: 21(Suppl 2), não 21Suppl 02(Suppl 02))",
+                       status(fasciculos, len(refs)), 0.5,
+                       "; ".join(f"[{i}] {f}" for i, f in list(fasciculos.items())[:10])))
     sem_iniciais = {i: a for i, r in enumerate(refs, 1) if (a := _autores_sem_iniciais(r))}
     itens.append(_item("Autores com iniciais", status(sem_iniciais, len(refs)), 0.5,
                        "; ".join(f"[{i}] {', '.join(a)}" for i, a in list(sem_iniciais.items())[:10])))

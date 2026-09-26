@@ -87,6 +87,10 @@ Vocês pesquisam, leem, decidem e reescrevem; o pipeline trabalha a partir disso
 - **O PRISMA sai dos dados.** Os números do fluxograma são contados das decisões registradas e conferidos antes de exportar (identificados − duplicatas = triados, e assim por diante).
 - **A humanização não mexe em dados.** Se a reescrita mudar um número ou uma citação, ela é refeita. Se falhar de novo, fica o texto original, e o painel mostra `rejeitada`.
 - **Métodos descrevem o que foi feito de fato.** O prompt proíbe inventar procedimentos (por exemplo, "dois revisores independentes"). As estratégias exatas ficam no Quadro 1.
+- **Descritor MeSH só se existir.** Antes de buscar, cada termo marcado como MeSH na estratégia do PubMed é conferido na base MeSH. Termo que não existe (ex.: "Predictive Factors") vira texto livre `[tiab]`; termo de entrada vira o descritor oficial. Os Métodos só listam como MeSH o que é MeSH.
+- **PRISMA 2020 citado com dados reais.** A declaração PRISMA 2020 (Page et al., BMJ 2021;372:n71) vem do PubMed (PMID 33782057) e é citada nos Métodos e na fonte da Figura 1, na numeração correta.
+- **Siglas por extenso na primeira vez.** Os redatores recebem a regra, e uma passada final garante 20 siglas comuns (APS, SUS, UBS, ESF, DeCS, MeSH, PRISMA...) definidas na primeira ocorrência, sem mexer nas citações nem no operador booleano OR.
+- **Números no padrão brasileiro** (1.054; 0,5; p < 0,001; IC 95%). A trava da humanização entende que "1.054" e "1054" são o mesmo número, e continua pegando qualquer valor alterado.
 
 ## O .docx exportado
 
@@ -96,9 +100,20 @@ Vocês pesquisam, leem, decidem e reescrevem; o pipeline trabalha a partir disso
 - **Quadro 1** (estratégias de busca por base, data e nº de registros), dentro de Métodos.
 - **Figura 1** (fluxograma PRISMA editável no Word, com os motivos de exclusão).
 - **Quadro 2** (síntese dos estudos).
-- **Legendas:** título acima e "Fonte:" abaixo de cada figura e quadro.
+- **Legendas:** título acima e "Fonte:" abaixo de cada figura e quadro, em 10 pt. A fonte da Figura 1 cita o PRISMA 2020 ("adaptado de Page et al.").
+- **Quadro 2 em página paisagem**, com título e fonte juntos; o documento volta a retrato em seguida.
+- **Tabelas com layout fixo** e largura mínima por coluna (Nº, data e registros não espremem); cabeçalho repetido em cada página.
+- **Fluxograma:** "(n = 1.054)" nunca quebra de linha e os números usam separador de milhar.
+- **Resumo, Abstract e Referências** com título centralizado; hifenização automática em português.
 - **Citações** em sobrescrito, entre colchetes ou entre parênteses, conforme a revista.
-- **Referências** no formato escolhido.
+- **Referências** no formato escolhido:
+  - periódico abreviado no padrão NLM (catálogo da NLM pelo ISSN; sem pontos quando a revista não está lá);
+  - registro de outra base com PMID usa os metadados do PubMed;
+  - página ou e-locator (completado pelo Crossref quando o PubMed não tem);
+  - suplemento no formato certo ("21(Suppl 2)");
+  - sem pontuação duplicada; URL só quando não há DOI/PMID, com data de acesso;
+  - iniciais dos autores preservadas (o "E" de "Altamirano, E" não some).
+- **Declaração de IA opcional** (`"declaracao_ia"` no pedido). O padrão é `"nenhuma"`: nenhuma menção a IA no texto. Com `"breve"`, entra uma frase verdadeira que credita os autores: "Ferramentas de inteligência artificial foram usadas como apoio na busca, na organização dos dados e na redação; os autores conduziram a análise, revisaram e reescreveram integralmente o conteúdo e assumem responsabilidade por ele." Qualquer outro texto é usado como está.
 
 ## Painel
 
@@ -116,10 +131,10 @@ O `auditar` não usa nada do pipeline: lê só o arquivo final, como a banca ler
 
 | Skill | Valor na rubrica | O que confere |
 |---|---:|---|
-| Estrutura e Introdução | 1,5 | Seções obrigatórias; Resumo/Abstract; ≤3 páginas; objetivo no último parágrafo; citações; orientador |
-| Métodos | 2,5 | PubMed + ≥2 bases; descritores; AND/OR; critérios; período; data; etapas de seleção; **refaz a busca do PubMed e compara com o nº relatado** (a professora vai conferir) |
-| Resultados | 2,5 | Fluxograma; **contas do PRISMA fecham**; quadro com uma linha por estudo incluído; descrição dos achados; frases robotizadas |
-| Referências | 1,5 | ≥25; toda citação tem referência e vice-versa; ordem Vancouver; formato; **cada referência verificada no PubMed/Europe PMC** (DOI/PMID/título) |
+| Estrutura e Introdução | 1,5 | Seções obrigatórias; Resumo/Abstract; ≤3 páginas; objetivo no último parágrafo; citações; orientador; **siglas definidas na primeira ocorrência** |
+| Métodos | 2,5 | PubMed + ≥2 bases; descritores; AND/OR; critérios; período; data; etapas de seleção; **refaz a busca do PubMed e compara com o nº relatado** (a professora vai conferir); **descritores MeSH existem no MeSH**; processo conduzido pelos autores; nenhuma etapa atribuída a IA |
+| Resultados | 2,5 | Fluxograma; **contas do PRISMA fecham** (também com separador de milhar); quadro com uma linha por estudo incluído; descrição dos achados; frases robotizadas; **números no padrão brasileiro**; **PRISMA 2020 citado** |
+| Referências | 1,5 | ≥25; toda citação tem referência e vice-versa; ordem Vancouver; formato; **cada referência verificada no PubMed/Europe PMC** (DOI/PMID/título); abreviatura NLM sem pontos; sem pontuação duplicada; página ou e-locator; URL só sem DOI/PMID e com data de acesso; autores com iniciais; volume e suplemento bem formados |
 | Figuras e tabelas | 1,0 | Título numerado, "Fonte:", citadas no texto |
 | Discussão e APS/SUS | 1,0* | Divergência entre estudos, ponto de vista, contexto SUS/APS/UBS, limitações, diretrizes internacionais identificadas |
 | Humanização | — | Mistura de frases curtas e longas; irregularidade (CV); travessões; transições repetidas; ênfase vazia; verbos rebuscados; lista disfarçada de prosa; métodos sem opinião |

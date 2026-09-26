@@ -81,8 +81,34 @@ def _preparar(r: Registro, canonicos: dict[str, Registro], pubmed, rede: dict) -
     url = normalizar_url(r.url)
     if doi_de_url(url):
         url = ""
-    return replace(r, revista=abreviar_revista(r.revista), paginas=normalizar_paginas(r.paginas),
+    paginas = normalizar_paginas(r.paginas)
+    if not paginas and doi and rede["ok"] and hasattr(pubmed, "localizador_crossref"):
+        try:  # PubMed sem paginação: o Crossref costuma ter o número do artigo (e-locator)
+            paginas = normalizar_paginas(pubmed.localizador_crossref(doi))
+        except Exception:
+            rede["ok"] = False
+    volume, numero = normalizar_volume_numero(r.volume, r.numero)
+    return replace(r, revista=abreviar_revista(r.revista), paginas=paginas, volume=volume, numero=numero,
                    doi=doi, url=url, issn=normalizar_issn(r.issn) or r.issn.strip())
+
+
+def _chave_fasciculo(texto: str) -> str:
+    return re.sub(r"(?<!\d)0+(?=\d)", "", re.sub(r"[^a-z0-9]", "", texto.lower()))
+
+
+def normalizar_volume_numero(volume: str, numero: str) -> tuple[str, str]:
+    """O PubMed às vezes repete o suplemento no volume: ('21Suppl 02', 'Suppl 02') -> ('21', 'Suppl 2')."""
+    volume = re.sub(r"\s+", " ", volume or "").strip()
+    numero = re.sub(r"\s+", " ", numero or "").strip()
+    m = re.match(r"^(\d+)\s*((?:suppl|sup|spec|pt)\.?\s*\S*)$", volume, re.I)
+    if m:
+        volume, resto = m.group(1), m.group(2)
+        if not numero or _chave_fasciculo(numero) == _chave_fasciculo(resto):
+            numero = resto
+        elif _chave_fasciculo(resto) not in _chave_fasciculo(numero):
+            numero = f"{numero} {resto}"
+    numero = re.sub(r"\b(?:suppl|sup)\.?\s*0*(\d+)", r"Suppl \1", numero, flags=re.I)
+    return volume, numero
 
 
 def _normalizar_doi(doi: str) -> str:
@@ -160,7 +186,7 @@ def vancouver(r: Registro) -> str:
         partes.append(_pontuar(r.titulo))
     fonte = abreviar_revista(r.revista)
     detalhe = " ".join(x for x in (f"{fonte}." if fonte else "", r.ano.strip()) if x)
-    volume, numero = r.volume.strip(), r.numero.strip()
+    volume, numero = normalizar_volume_numero(r.volume, r.numero)
     if volume or numero:
         detalhe += ";" + volume + (f"({numero})" if numero else "")
     paginas = normalizar_paginas(r.paginas)
@@ -203,10 +229,11 @@ def abnt(r: Registro) -> str:
         partes.append(_pontuar(r.titulo))
     fonte = re.sub(r"\s+", " ", r.revista).strip().rstrip(". ,;")
     detalhes = [fonte] if fonte else []
-    if r.volume.strip():
-        detalhes.append(f"v. {r.volume.strip()}")
-    if r.numero.strip():
-        detalhes.append(f"n. {r.numero.strip()}")
+    volume, numero = normalizar_volume_numero(r.volume, r.numero)
+    if volume:
+        detalhes.append(f"v. {volume}")
+    if numero:
+        detalhes.append(f"n. {numero}")
     paginas = normalizar_paginas(r.paginas)
     if paginas:  # e-locator (e20230045) não leva "p."
         detalhes.append(paginas if paginas[0].isalpha() else f"p. {paginas}")

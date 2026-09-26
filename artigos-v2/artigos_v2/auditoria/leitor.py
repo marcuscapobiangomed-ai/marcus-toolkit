@@ -16,6 +16,8 @@ SECOES = {
     "resultados": r"resultados",
     "discussao": r"discuss[aã]o",
     "conclusao": r"conclus(?:[aã]o|[oõ]es)|considera[cç][oõ]es finais",
+    # declaração opcional de uso de IA: fica fora do corpo do artigo e das checagens de estilo
+    "declaracao": r"declara[cç][aã]o de uso de intelig[eê]ncia artificial|declara[cç][aã]o de uso de ia",
     "referencias": r"refer[eê]ncias(?: bibliogr[aá]ficas)?|bibliografia",
 }
 
@@ -182,7 +184,9 @@ def _ler_texto(caminho: Path) -> Artigo:
         for linha in bloco.splitlines():
             if linha.strip().startswith("|"):
                 if not re.fullmatch(r"\s*\|[\s\-:|]+\|\s*", linha):
-                    tabela_atual.append([c.strip() for c in linha.strip().strip("|").split("|")])
+                    # células separadas só por "|" sem escape; o exportador escapa \\* \\_ \\| nas estratégias
+                    celulas = re.split(r"(?<!\\)\|", linha.strip().strip("|"))
+                    tabela_atual.append([re.sub(r"\\([\\*_|])", r"\1", c).strip() for c in celulas])
         if tabela_atual:
             artigo.tabelas.append(Tabela(tabela_atual, atual or "preambulo"))
             tabela_atual = []

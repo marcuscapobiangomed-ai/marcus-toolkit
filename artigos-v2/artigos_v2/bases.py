@@ -13,6 +13,7 @@ import html
 import json
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -21,6 +22,7 @@ from pathlib import Path
 
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 EUROPEPMC = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+CROSSREF = "https://api.crossref.org/works/"
 USER_AGENT = "artigos-v2/2.0 (revisao de literatura; contato via NCBI_EMAIL)"
 
 
@@ -105,6 +107,7 @@ def doi_de_url(valor: str) -> str:
 
 # ISSN -> abreviatura NLM (MedlineTA); vale para o processo inteiro, o catálogo quase não muda
 _CACHE_NLM: dict[str, str] = {}
+_CACHE_CROSSREF: dict[str, str] = {}
 
 # Etiquetas de campo MeSH aceitas pelo PubMed ("X"[MeSH Terms], X[mh], "X"[majr:noexp]...)
 _ETIQUETA_MESH = r"(?i:mesh\s+major\s+topic|mesh\s+terms|mesh|mh|majr)(?:\s*:\s*(?i:noexp))?"
@@ -199,6 +202,37 @@ class PubMed:
                     break
         _CACHE_NLM[issn] = abreviatura
         return abreviatura
+
+    # ------------------------------------------------------------------ Crossref
+
+    def localizador_crossref(self, doi: str) -> str:
+        """Páginas ou número do artigo (e-locator) pelo Crossref, para registros sem paginação no PubMed.
+
+        Só aceita número de artigo com cara de e-locator ("e180008", "3023"); o resto fica
+        vazio e o DOI segue como localizador. 404 devolve ""; erro de rede sobe para quem chamou.
+        """
+        doi = (doi or "").strip()
+        if not doi:
+            return ""
+        if doi in _CACHE_CROSSREF:
+            return _CACHE_CROSSREF[doi]
+        contato = f" (mailto:{self.email})" if self.email else ""
+        requisicao = urllib.request.Request(CROSSREF + urllib.parse.quote(doi, safe="/"),
+                                            headers={"User-Agent": USER_AGENT + contato})
+        try:
+            with urllib.request.urlopen(requisicao, timeout=20) as resposta:
+                mensagem = json.loads(resposta.read().decode("utf-8")).get("message", {})
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                _CACHE_CROSSREF[doi] = ""
+                return ""
+            raise
+        localizador = (mensagem.get("page") or "").strip()
+        numero = (mensagem.get("article-number") or "").strip()
+        if not localizador and re.fullmatch(r"[eE]?\d+", numero):
+            localizador = numero
+        _CACHE_CROSSREF[doi] = localizador
+        return localizador
 
     # --------------------------------------------------------------------- MeSH
 

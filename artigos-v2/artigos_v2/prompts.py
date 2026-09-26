@@ -287,6 +287,8 @@ CHECKLIST = [
     "Objetivo está no último parágrafo da Introdução",
     "Limitações num único parágrafo curto, sem tom de desculpa e sem repetir no resumo/conclusão",
     "Métodos descrevem o processo conduzido pelos autores, sem atribuir etapas a ferramentas",
+    "Siglas definidas por extenso na primeira ocorrência",
+    "Números no padrão brasileiro (vírgula decimal, milhar com ponto, p < 0,001, IC 95%)",
 ]
 
 
