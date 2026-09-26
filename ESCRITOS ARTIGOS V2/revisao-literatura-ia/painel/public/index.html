@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de Revisão de Literatura</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="marca">
+      <span class="logo">RL</span>
+      <div>
+        <h1>Painel de Revisão de Literatura</h1>
+        <p>PubMed · SciELO · LILACS — busca real, verificação na fonte e redação auditada</p>
+      </div>
+    </div>
+    <div id="chips" class="chips"></div>
+    <button id="btn-config" class="btn fantasma" type="button">Configurações</button>
+  </header>
+
+  <div class="layout">
+    <aside class="lateral">
+      <a href="#novo" class="btn primario largo">+ Novo artigo</a>
+      <h2 class="rotulo">Trabalhos</h2>
+      <ul id="lista"></ul>
+    </aside>
+    <main id="principal"></main>
+  </div>
+
+  <dialog id="dlg-config">
+    <form method="dialog" id="form-config">
+      <div class="corpo">
+        <h2>Configurações</h2>
+        <div class="nota">As chaves ficam só nesta máquina, em <span class="mono">painel/config.local.json</span> (fora do git). Deixe em branco para manter a atual.</div>
+        <div class="campo">
+          <label for="cfg-openrouter">Chave OpenRouter</label>
+          <input type="password" id="cfg-openrouter" autocomplete="off" placeholder="sk-or-…">
+          <span class="ajuda" id="cfg-openrouter-origem"></span>
+        </div>
+        <div class="campo">
+          <label for="cfg-modelo">Modelo OpenRouter</label>
+          <input type="text" id="cfg-modelo">
+          <span class="ajuda">Com chave gratuita, use modelos terminados em <span class="mono">:free</span> (limite de 50 chamadas/dia).</span>
+        </div>
+        <div class="campo">
+          <label for="cfg-anthropic">Chave Anthropic (opcional)</label>
+          <input type="password" id="cfg-anthropic" autocomplete="off" placeholder="sk-ant-…">
+        </div>
+        <div class="grade-2">
+          <div class="campo">
+            <label for="cfg-ncbi">Chave NCBI (opcional)</label>
+            <input type="password" id="cfg-ncbi" autocomplete="off">
+            <span class="ajuda">Aumenta o limite do PubMed de 3 para 10 req/s.</span>
+          </div>
+          <div class="campo">
+            <label for="cfg-email">E-mail de contato para NCBI/Crossref (opcional)</label>
+            <input type="text" id="cfg-email">
+          </div>
+        </div>
+        <div class="campo">
+          <label for="cfg-janela">Janela do Chrome durante a busca</label>
+          <select id="cfg-janela">
+            <option value="visivel">Visível (recomendado — você acompanha a navegação)</option>
+            <option value="fora-da-tela">Fora da tela (continua sendo um Chrome real)</option>
+          </select>
+        </div>
+      </div>
+      <div class="rodape">
+        <button class="btn" value="cancelar" type="submit">Cancelar</button>
+        <button class="btn primario" value="salvar" type="submit">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

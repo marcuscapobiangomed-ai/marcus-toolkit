@@ -1,0 +1,17 @@
+{
+  "name": "painel-revisao-literatura",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Painel local para gerar revisoes de literatura verificadas (PubMed, SciELO, BVS/LILACS) com navegador real via Playwright.",
+  "scripts": {
+    "start": "node server.mjs",
+    "cli": "node cli.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

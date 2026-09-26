@@ -1,3 +1,8 @@
+---
+name: headroom
+description: Compressor semântico de tokens para LLMs (outputs, logs, arquivos grandes e chunks RAG), reduzindo uso de contexto mantendo acurácia.
+---
+
 # Headroom: Token Compression for LLMs
 
 ## O que é
