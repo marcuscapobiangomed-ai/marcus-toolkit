@@ -106,12 +106,18 @@ def _comparar_com_sistema(artigo_json: dict, resultados: list[dict]) -> dict:
         "mesmo número de frases": "Parágrafos vizinhos com número de frases diferente",
         "Métodos e Resultados secos": "Métodos sem opinião (humanização não vazou)",
         "Limitações num único parágrafo": "Limitações enxutas: um parágrafo na Discussão, sem repetir no resumo/conclusão",
+        # um item do sistema pode corresponder a mais de um da auditoria: concorda só se todos estiverem ok
+        "processo conduzido pelos autores": ("Métodos descrevem o processo conduzido pelos autores",
+                                             S.CRITERIO_IA_METODOS),
+        "siglas": S.CRITERIO_SIGLAS,
+        "números no padrão brasileiro": S.CRITERIO_NUMEROS,
     }
     linhas = []
     for item in artigo_json.get("checklist", []):
         alvo = next((v for k, v in mapa.items() if k.lower() in item["item"].lower()), None)
-        if alvo and alvo in externos:
-            externo_ok = externos[alvo] == "ok"
+        alvos = [alvo] if isinstance(alvo, str) else list(alvo or [])
+        if alvos and all(a in externos for a in alvos):
+            externo_ok = all(externos[a] == "ok" for a in alvos)
             linhas.append({"item": item["item"], "sistema_disse_ok": item["ok"], "auditoria_ok": externo_ok,
                            "concorda": item["ok"] == externo_ok})
     concordancia = round(100 * sum(l["concorda"] for l in linhas) / len(linhas), 1) if linhas else None

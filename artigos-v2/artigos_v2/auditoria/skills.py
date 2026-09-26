@@ -12,8 +12,8 @@ import re
 import statistics
 from collections import Counter
 
-from .leitor import Artigo
-from .verificacao import Verificador
+from .leitor import Artigo, expandir_numeros
+from .verificacao import PARTICULAS, Verificador, extrair_titulo
 
 PONTOS = {"ok": 1.0, "parcial": 0.5, "nao_verificavel": 0.5, "falha": 0.0}
 
@@ -39,6 +39,17 @@ ROBOTICAS = ["os resultados demonstraram que", "é possível observar que", "obs
 DIVERGENCIA = ["diverge", "divergem", "divergência", "diferentemente", "em contraste", "ao contrário",
                "contradiz", "contrasta", "discordância", "discordante", "inconsistente", "inconsistência",
                "não confirmou", "não confirmaram", "resultado oposto", "resultados opostos", "conflitante"]
+# Siglas: operadores booleanos e siglas universais não precisam de definição
+SIGLAS_LIVRES = {"DNA", "RNA", "AND", "OR", "NOT"}
+SIGLAS_MISTAS = r"DeCS|MeSH|SciELO"
+IA_NOS_METODOS = (r"(?i:intelig[eê]ncia artificial|chat\s?gpt|\bGPT-?\d|\bLLMs?\b|modelos? (?:amplos? )?de linguagem"
+                  r"|ferramentas? automatizadas?)|\bIA\b")  # "IA" só em maiúsculas
+ACOES_METODOS = (r"triag|triad|selecion|sele[cç][aã]o|extra[ií]|extra[cç]|redig|reda[cç]|revis|anal[ií]s|classific"
+                 r"|aux[ií]li|apoio|assistid|utiliz|empreg|usad|usando|gerad|conduzid|realizad|automatiz")
+# abreviaturas de periódico com ponto (NLM não usa pontos: "Rev Saude Publica", não "Rev. Saúde Pública")
+ABREV_PERIODICO = (r"Rev|Bras|J|Med|Enferm|Cienc|Ciênc|Colet|Esc|Int|Am|Eur|Arq|Cad|Nutr|Clin|Epidemiol|Serv|Fam"
+                   r"|Res|Cardiol|Soc|Psicol|Odontol|Pediatr|Ann|Arch|Intern|Gen|Pract|Br|Engl|Natl|Acad|Sci|Assoc"
+                   r"|Hosp|Nurs|Physiol|Pharm|Ther|Prev|Glob|Saude|Publica|Latinoam|Gaucha|Paul")
 PONTO_DE_VISTA = ["entendemos", "acreditamos", "defendemos", "a nosso ver", "na nossa avaliação", "parece-nos",
                   "nossa leitura", "consideramos", "argumentamos", "sustentamos", "esta revisão sugere",
                   "esta revisão indica", "nossa interpretação", "o que nos leva"]
@@ -101,7 +112,34 @@ def skill_estrutura_introducao(artigo: Artigo, **_) -> dict:
     preambulo = " ".join(artigo.preambulo).lower()
     itens.append(_item("Nome do(a) orientador(a) consta no trabalho (se houver orientação)",
                        "ok" if "orientador" in preambulo or "orientadora" in preambulo else "nao_verificavel", 0.5))
+    itens.append(_siglas_definidas(artigo))
     return _resultado("introducao", "Estrutura e Introdução", 1.5, itens)
+
+
+CRITERIO_SIGLAS = "Siglas definidas na primeira ocorrência"
+
+
+def _siglas_definidas(artigo: Artigo) -> dict:
+    """Da Introdução à Conclusão, a primeira ocorrência de cada sigla é a definição: "Atenção Primária (APS)"."""
+    vistas, sem_definicao = set(), []
+    for secao in ("introducao", "metodos", "resultados", "discussao", "conclusao"):
+        for paragrafo in artigo.secoes.get(secao, []):
+            texto = re.sub(r"\[[^\]]*\]", " ", paragrafo)                    # citações e campos [MeSH Terms]
+            texto = re.sub(r"Europe PMC", " ", texto)                         # nome próprio da base
+            texto = re.sub(r"\b[A-Z_]+:(?=[\"(\[\w])", " ", texto)             # campos do Europe PMC (LANG:"por")
+            padrao = rf"(?<![\w\-/])(?:({SIGLAS_MISTAS})|([A-ZÁÂÃÉÊÍÓÔÕÚÇ]{{2,6}}(?:-\d{{1,2}})?)s?)(?![\w\-/])"
+            for m in re.finditer(padrao, texto):
+                sigla = m.group(1) or m.group(2)
+                if sigla in vistas or sigla in SIGLAS_LIVRES or re.fullmatch(r"X{0,2}(?:IX|IV|V?I{0,3})", sigla):
+                    continue
+                vistas.add(sigla)
+                definida = (re.search(r"[\wÀ-ÿ]\s*\(\s*$", texto[:m.start()])
+                            and re.match(r"\s*\)", texto[m.end():]))
+                if not definida:
+                    sem_definicao.append(f"{sigla} ({secao})")
+    status = "ok" if not sem_definicao else "parcial" if len(sem_definicao) <= 2 else "falha"
+    return _item(CRITERIO_SIGLAS, status, 1,
+                 f"sem definição \"Nome por extenso (SIGLA)\" na 1ª ocorrência: {sem_definicao[:15]}" if sem_definicao else "")
 
 
 # -------------------------------------------------------------------- Métodos
@@ -162,7 +200,14 @@ def skill_metodos(artigo: Artigo, verificador: Verificador | None = None, **_) -
                        "ok" if all(re.search(rx, minusculo) for rx in (r"duplicad|duplicat", r"t[ií]tulo", r"resumo"))
                        else "parcial" if re.search(r"t[ií]tulo|resumo", minusculo) else "falha", 1))
 
+    so_texto = artigo.texto("metodos")
+    itens.append(_item("Métodos descrevem o processo conduzido pelos autores",
+                       "ok" if re.search(r"\b(?:autor|revisor|pesquisador|avaliador)(?:e?s|as|a)?\b", so_texto, re.I)
+                       else "parcial", 0.5, "" if so_texto else "seção de Métodos não encontrada"))
+    itens.append(_sem_ia_nos_metodos(so_texto))
+
     estrategia = _estrategia_pubmed(artigo)
+    itens.append(_descritores_mesh_existem(estrategia or texto, verificador))
     if verificador and estrategia:
         reportado = _n_reportado(artigo, r"pub\s?med")
         try:
@@ -181,6 +226,69 @@ def skill_metodos(artigo: Artigo, verificador: Verificador | None = None, **_) -
         itens.append(_item("Busca no PubMed reproduzível (a professora vai conferir)", "nao_verificavel", 2,
                            "estratégia do PubMed não encontrada no texto" if not estrategia else "modo offline"))
     return _resultado("metodos", "Métodos", 2.5, itens)
+
+
+CRITERIO_IA_METODOS = "Nenhuma etapa atribuída a IA/ferramentas nos Métodos"
+TAG_MESH = r"\[(?:mesh(?:\s+terms|\s+major\s+topic)?|mh|majr)(?::\s*no\s*exp)?\]"
+# descritores MeSH são em inglês: estas palavras marcam a prosa dos Métodos antes de um termo sem aspas
+PROSA_ANTES_DO_TERMO = {"foi", "foram", "é", "a", "o", "as", "os", "e", "em", "no", "na", "nos", "nas", "com", "de",
+                        "do", "da", "dos", "das", "para", "por", "pelo", "pela", "como", "usando", "utilizou-se",
+                        "usou-se", "estratégia", "busca", "pubmed", "termo", "termos", "descritor", "descritores",
+                        "depois", "ainda", "também", "além", "combinados", "combinado", "seguinte", "seguintes"}
+
+
+def _sem_ia_nos_metodos(texto: str) -> dict:
+    """Frases dos Métodos que põem IA/ferramenta como agente de uma etapa (triagem, extração, redação...).
+
+    Só a menção ao tema não conta ("estudos sobre inteligência artificial"): a frase precisa de uma ação.
+    """
+    texto = re.sub(r"\[[^\]]*\]", "", texto)
+    # o tema da revisão ("estudos sobre inteligência artificial") não é etapa atribuída a ferramenta
+    texto = re.sub(rf"(?i:sobre|acerca d[aeo]s?|envolvendo|baseados? em|baseadas? em)\s+(?:{IA_NOS_METODOS})", " ", texto)
+    frases = [f for f in re.split(r"(?<=[.!?])\s+", texto) if re.search(IA_NOS_METODOS, f)]
+    etapas = [f.strip()[:160] for f in frases if re.search(ACOES_METODOS, f, re.I)]
+    return _item(CRITERIO_IA_METODOS, "ok" if not etapas else "falha", 1, etapas[:3] or "")
+
+
+def descritores_mesh(estrategia: str) -> list[str]:
+    """Termos marcados como MeSH ([MeSH Terms], [mh], [MeSH], [majr]) numa estratégia do PubMed."""
+    termos = []
+    for m in re.finditer(TAG_MESH, estrategia, re.I):
+        antes = estrategia[:m.start()].rstrip()
+        if antes.endswith('"'):
+            termo = antes[antes.rfind('"', 0, len(antes) - 1) + 1:-1]
+        else:
+            # sem aspas, o termo são as palavras logo antes da marcação, sem a prosa em português
+            palavras = []
+            for palavra in reversed(re.split(r'[()\[\]":;]|\.\s|\b(?:AND|OR|NOT)\b', antes)[-1].split()[-8:]):
+                if palavra.lower().strip(",") in PROSA_ANTES_DO_TERMO:
+                    break
+                palavras.insert(0, palavra)
+            termo = " ".join(palavras)
+        termo = re.sub(r"\s+", " ", termo.split("/")[0]).strip(" *")  # "Hypertension/therapy"[mh]
+        if termo and termo.lower() not in {t.lower() for t in termos}:
+            termos.append(termo)
+    return termos
+
+
+def _descritores_mesh_existem(estrategia: str, verificador: Verificador | None) -> dict:
+    criterio = "Descritores MeSH da estratégia existem no MeSH"
+    termos = descritores_mesh(estrategia or "")
+    if not termos:
+        return _item(criterio, "nao_verificavel", 1, "nenhum termo marcado como [MeSH Terms]/[mh] na estratégia")
+    if not verificador:
+        return _item(criterio, "nao_verificavel", 1, f"modo offline; descritores: {termos}")
+    invalidos = []
+    try:
+        for termo in termos:
+            r = verificador.verificar_descritor_mesh(termo)
+            if not r["existe"]:
+                invalidos.append(f"{termo} (o descritor é \"{r['descritor']}\")" if r.get("descritor") else termo)
+    except Exception as e:
+        return _item(criterio, "nao_verificavel", 1, f"falha ao consultar o MeSH: {e}")
+    return _item(criterio, "ok" if not invalidos else "falha", 1,
+                 f"não existem como descritor (no PubMed, [mh] não recupera nada): {invalidos}" if invalidos
+                 else f"{len(termos)} descritor(es) conferido(s)")
 
 
 # ----------------------------------------------------------------- Resultados
@@ -209,6 +317,7 @@ def skill_resultados(artigo: Artigo, **_) -> dict:
     legendas = " ".join(artigo.legendas).lower()
     tem_fluxo = bool(re.search(r"fluxograma|prisma", legendas + " " + artigo.texto("resultados").lower()))
     itens.append(_item("Fluxograma da seleção (PRISMA) presente", "ok" if tem_fluxo else "falha", 2))
+    itens.append(_prisma_2020_citado(artigo))
 
     n = _numeros_prisma(artigo)
     checagens, erros = [], []
@@ -249,7 +358,52 @@ def skill_resultados(artigo: Artigo, **_) -> dict:
     itens.append(_item("Sem frases robotizadas em série (\"observa-se que\"...)",
                        "ok" if sum(roboticas.values()) <= 1 else "parcial" if sum(roboticas.values()) <= 3 else "falha",
                        0.5, dict(roboticas) or ""))
+    itens.append(_numeros_padrao_brasileiro(artigo))
     return _resultado("resultados", "Resultados", 2.5, itens)
+
+
+CRITERIO_NUMEROS = "Números no padrão brasileiro (vírgula decimal, IC 95%)"
+NUMERO_EM_INGLES = [
+    # p-valor com ponto: p<0.05, p = 0.001
+    r"\bp\s*[<>=≤≥]\s*0?\.\d+",
+    # ponto decimal com 1–2 casas (0.05, 1.5); "1.054" é separador de milhar brasileiro e não entra
+    r"(?<![\w.,/:\-])\d+\.\d{1,2}(?![\w]|[.,]\d)",
+    r"\b95\s*%\s*CI\b", r"\bCI\s*95\s*%",
+]
+
+
+def _numeros_padrao_brasileiro(artigo: Artigo) -> dict:
+    textos = artigo.secoes.get("resultados", []) + [t.texto for t in artigo.tabelas
+                                                    if t.secao in ("resultados", "discussao")]
+    achados = []
+    for texto in textos:
+        texto = re.sub(r"\[[^\]]*\]|https?://\S+|doi:?\s*\S+", " ", texto, flags=re.I)  # citações, links e DOIs
+        for rx in NUMERO_EM_INGLES:
+            achados += [m.group(0) for m in re.finditer(rx, texto)]
+    achados = list(dict.fromkeys(achados))
+    return _item(CRITERIO_NUMEROS, "ok" if not achados else "parcial" if len(achados) <= 2 else "falha", 1,
+                 f"formato em inglês: {achados[:10]}" if achados else "")
+
+
+def _eh_prisma_2020(ref: str) -> bool:
+    return bool(re.search(r"PRISMA 2020 statement|10\.1136/bmj\.n71\b", ref, re.I))
+
+
+def _cita(texto: str, n: int) -> bool:
+    """O texto cita a referência n? ([^n], [n] ou (n), inclusive em faixas "[^3-7]")."""
+    grupos = re.findall(r"\[\^?([\d,;\s\-–]+)\]|\((\d+(?:\s*[,;\-–]\s*\d+)*)\)", texto)
+    return any(n in expandir_numeros(a or b) for a, b in grupos)
+
+
+def _prisma_2020_citado(artigo: Artigo) -> dict:
+    criterio = "Modelo PRISMA 2020 citado (nas referências e nos Métodos ou na fonte da Figura)"
+    n = next((i for i, r in enumerate(artigo.referencias, 1) if _eh_prisma_2020(r)), None)
+    if n is None:
+        return _item(criterio, "falha", 1, "declaração PRISMA 2020 (Page et al., BMJ 2021;372:n71) ausente das referências")
+    onde = [nome for nome, texto in (("Métodos", artigo.texto("metodos")),
+                                     ("fonte da Figura", "\n".join(artigo.legendas))) if _cita(texto, n)]
+    return _item(criterio, "ok" if onde else "parcial", 1,
+                 f"referência {n}, citada em: {onde}" if onde else f"referência {n} não é citada nos Métodos nem na Figura")
 
 
 # ---------------------------------------------------------------- Referências
@@ -284,6 +438,7 @@ def skill_referencias(artigo: Artigo, verificador: Verificador | None = None, **
     itens.append(_item("Formatação consistente (padrão Vancouver detectado)",
                        "ok" if refs and padrao / len(refs) >= 0.9 else "parcial" if padrao else "falha", 1,
                        f"{padrao}/{len(refs)} no padrão"))
+    itens += _detalhes_referencias(refs)
 
     verificacao = []
     if verificador and refs:
@@ -301,6 +456,93 @@ def skill_referencias(artigo: Artigo, verificador: Verificador | None = None, **
     resultado = _resultado("referencias", "Referências", 1.5, itens)
     resultado["verificacao"] = verificacao
     return resultado
+
+
+def _sem_numero(ref: str) -> str:
+    return re.sub(r"^\s*\[?\d+[\.\)\]]\s*", "", ref).strip()
+
+
+def _problemas_nlm(ref: str) -> bool:
+    """Periódico abreviado com pontos ("Rev. Bras. Enferm.") no trecho depois do título."""
+    titulo = extrair_titulo(ref)
+    inicio = ref.find(titulo) + len(titulo) if titulo and titulo in ref else 0
+    ano = re.search(r"\.\s*(?:19|20)\d{2}\s*(?:[;:(]|[A-Z][a-z]{2}\b|\.|$)", ref[inicio:])
+    trecho = ref[inicio:inicio + ano.start() + 1] if ano else ref[inicio:]
+    return bool(re.search(rf"\b(?:{ABREV_PERIODICO})\.\s+[A-ZÀ-Ý]", trecho))
+
+
+def _pontuacao_duplicada(ref: str) -> list[str]:
+    """"..", ".,", ",." e ". ." — sem contar reticências, "et al.," e iniciais ABNT ("SILVA, A. B.,")."""
+    achados = []
+    for m in re.finditer(r"(?<!\.)\.\.(?!\.)|\.,|,\.|(?<!\.)\.\s\.(?!\.)", ref):
+        antes = ref[max(0, m.start() - 8):m.start()]
+        if m.group(0) == ".," and re.search(r"(?:\bet al|(?<![\w])[A-ZÀ-Ý])$", antes):
+            continue
+        achados.append(ref[max(0, m.start() - 15):m.end() + 5])
+    return achados
+
+
+def _tem_paginas(ref: str) -> bool:
+    return bool(re.search(r"(?:19|20)\d{2}[^.]{0,40}?;[^.:]*:\s*[A-Za-z]{0,4}\d+|\bp\.\s*\d+|\be\d{3,}\b|:\s*e\d+", ref))
+
+
+def _eh_artigo_de_periodico(ref: str) -> bool:
+    """Vancouver "2020;54(3)" ou ABNT "v. 54" — livros, sites e documentos não têm páginas obrigatórias."""
+    return bool(re.search(r"\b(?:19|20)\d{2}\s*(?:[A-Z][a-z]{2}(?:\s\d{1,2})?)?\s*;\s*\d+|\bv\.\s*\d+", ref))
+
+
+def _url_indevida(ref: str) -> str:
+    urls = [u for u in re.findall(r"https?://\S+|\bwww\.\S+", ref) if "doi.org/" not in u]
+    if not urls:
+        return ""
+    if re.search(r"\b10\.\d{4,9}/|PMID:?\s*\d", ref, re.I):
+        return "URL com DOI/PMID"
+    if not re.search(r"cit(?:ado|ed)|acess(?:o|ado) em|accessed", ref, re.I):
+        return "URL sem data de acesso"
+    return ""
+
+
+def _autores_sem_iniciais(ref: str) -> list[str]:
+    """No bloco de autores Vancouver ("Silva AB, Altamirano, Souza C."), autor sem iniciais."""
+    texto = _sem_numero(ref)
+    if re.match(r"^[A-ZÀ-Ý]{2,}[\w\-]*,\s", texto):  # ABNT: "SILVA, A. B.; ..."
+        return []
+    fim = re.search(r"\.\s", texto)  # em Vancouver as iniciais não têm ponto: o 1º ". " fecha o bloco
+    itens = [x.strip() for x in (texto[:fim.start()] if fim else "").split(",") if x.strip()]
+    autor = rf"(?:(?:{PARTICULAS}|[A-ZÀ-Ý][\w'’\-À-ÿ]*)\s)+[A-ZÀ-Ý]{{1,5}}"
+    if len(itens) < 2 or not any(re.fullmatch(autor, x) for x in itens):
+        return []  # autor institucional ("Brasil. Ministério da Saúde.") ou bloco não reconhecido
+    return [x for x in itens if re.fullmatch(rf"(?:{PARTICULAS}\s)?[A-ZÀ-Ý][\w'’\-À-ÿ]+", x) and not x.isupper()]
+
+
+def _detalhes_referencias(refs: list[str]) -> list[dict]:
+    """Detalhes de formatação (pesos baixos: não devem dominar a rubrica)."""
+    def status(problemas, total):
+        return "ok" if not problemas else "parcial" if len(problemas) <= max(1, total // 10) else "falha"
+
+    vancouver = [(i, r) for i, r in enumerate(refs, 1) if _eh_vancouver(r)]
+    itens = []
+    if vancouver:
+        pontos = [i for i, r in vancouver if _problemas_nlm(r)]
+        itens.append(_item("Periódicos abreviados no padrão NLM (sem pontos)", status(pontos, len(vancouver)), 0.5,
+                           f"com pontos na abreviatura: {pontos[:15]}" if pontos else ""))
+    else:
+        itens.append(_item("Periódicos abreviados no padrão NLM (sem pontos)", "nao_verificavel", 0.5,
+                           "referências fora do padrão Vancouver"))
+    duplicada = {i: d for i, r in enumerate(refs, 1) if (d := _pontuacao_duplicada(r))}
+    itens.append(_item("Sem pontuação duplicada (\"..\", \".,\", \",.\")", status(duplicada, len(refs)), 0.5,
+                       "; ".join(f"[{i}] …{d[0]}…" for i, d in list(duplicada.items())[:8])))
+    periodicos = [(i, r) for i, r in enumerate(refs, 1) if _eh_artigo_de_periodico(r)]
+    sem_paginas = [i for i, r in periodicos if not _tem_paginas(r)]
+    itens.append(_item("Páginas ou e-locator presentes", status(sem_paginas, len(periodicos)) if periodicos
+                       else "nao_verificavel", 0.5, f"sem páginas: {sem_paginas[:15]}" if sem_paginas else ""))
+    urls = {i: u for i, r in enumerate(refs, 1) if (u := _url_indevida(r))}
+    itens.append(_item("URL só quando não há DOI/PMID, com data de acesso", status(urls, len(refs)), 0.5,
+                       "; ".join(f"[{i}] {u}" for i, u in list(urls.items())[:10])))
+    sem_iniciais = {i: a for i, r in enumerate(refs, 1) if (a := _autores_sem_iniciais(r))}
+    itens.append(_item("Autores com iniciais", status(sem_iniciais, len(refs)), 0.5,
+                       "; ".join(f"[{i}] {', '.join(a)}" for i, a in list(sem_iniciais.items())[:10])))
+    return itens
 
 
 # ---------------------------------------------------------- Figuras e tabelas

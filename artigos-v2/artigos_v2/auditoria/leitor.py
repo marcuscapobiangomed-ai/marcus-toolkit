@@ -38,6 +38,8 @@ class Artigo:
     legendas: list[str] = field(default_factory=list)
     referencias: list[str] = field(default_factory=list)
     preambulo: list[str] = field(default_factory=list)
+    # subtítulos dentro das seções (### 2.1 ..., estilo Título 2): não fazem parte do texto da seção
+    subtitulos: list[str] = field(default_factory=list)
     # citações numéricas encontradas no corpo (texto sobrescrito ou entre colchetes), em ordem
     citacoes: list[list[int]] = field(default_factory=list)
 
@@ -129,11 +131,16 @@ def _ler_docx(caminho: Path) -> Artigo:
             atual = secao
             artigo.secoes.setdefault(atual, [])
             continue
-        if _eh_legenda(bruto):
-            artigo.legendas.append(bruto)
+        if atual not in (None, "referencias") and ("heading" in estilo or "título" in estilo or "titulo" in estilo):
+            artigo.subtitulos.append(bruto)
             continue
-        if atual == "referencias":
+        if atual == "referencias":  # antes da legenda: uma referência pode começar por "Fonte AB."
             artigo.referencias.append(bruto)
+            continue
+        if _eh_legenda(bruto):
+            # a linha "Fonte:" pode citar referência (ex.: modelo PRISMA 2020); a citação conta
+            texto, _ = _texto_paragrafo(paragrafo, artigo, contar=atual not in (None, "resumo", "abstract"))
+            artigo.legendas.append(texto)
             continue
         texto, _ = _texto_paragrafo(paragrafo, artigo, contar=atual not in (None, "resumo", "abstract"))
         if atual is None:
@@ -189,11 +196,17 @@ def _ler_texto(caminho: Path) -> Artigo:
             atual = secao
             artigo.secoes.setdefault(atual, [])
             continue
-        if _eh_legenda(texto):
-            artigo.legendas.append(texto)
+        if cabecalho and atual not in (None, "referencias"):
+            artigo.subtitulos.append(cabecalho.group(1).strip())
             continue
         if atual == "referencias":
             artigo.referencias.extend(l.strip() for l in bloco.splitlines() if l.strip())
+            continue
+        if _eh_legenda(texto):
+            artigo.legendas.append(texto)
+            if atual not in (None, "resumo", "abstract"):
+                for m in re.finditer(r"\[(\d+(?:\s*[,;\-–]\s*\d+)*)\]", texto):
+                    artigo.citacoes.append(expandir_numeros(m.group(1)))
             continue
         if atual in (None,):
             artigo.preambulo.append(texto)

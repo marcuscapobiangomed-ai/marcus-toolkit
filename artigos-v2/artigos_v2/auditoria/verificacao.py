@@ -52,6 +52,30 @@ class Verificador:
     def contar_pubmed(self, estrategia: str) -> int:
         return self._esearch(estrategia, retmax=0)[0]
 
+    def verificar_descritor_mesh(self, termo: str) -> dict:
+        """O termo é o nome exato de um descritor MeSH?
+
+        No PubMed, "Termo"[mh] só recupera algo com o nome do descritor; um sinônimo (termo de
+        entrada, ex.: "High Blood Pressure") ou termo inexistente ("Predictive Factors") volta vazio.
+        Devolve {"existe": bool, "descritor": nome oficial quando o termo é só sinônimo}.
+        """
+        termo = re.sub(r"\s+", " ", termo.strip().strip('"*')).strip()
+        params = {"db": "mesh", "term": f'"{termo}"[MeSH Terms]', "retmode": "json", "retmax": 5, "tool": "artigos-v2"}
+        if self.api_key:
+            params["api_key"] = self.api_key
+        ids = self._get_json(f"{EUTILS}/esearch.fcgi?" + urllib.parse.urlencode(params))["esearchresult"].get("idlist", [])
+        if not ids:
+            return {"existe": False, "descritor": ""}
+        params = {"db": "mesh", "id": ",".join(ids), "retmode": "json", "tool": "artigos-v2"}
+        if self.api_key:
+            params["api_key"] = self.api_key
+        dados = self._get_json(f"{EUTILS}/esummary.fcgi?" + urllib.parse.urlencode(params)).get("result", {})
+        nomes = [(dados.get(i) or {}).get("ds_meshterms") or [""] for i in ids]
+        for nome in nomes:  # o primeiro termo do registro é o nome do descritor
+            if nome[0].lower() == termo.lower():
+                return {"existe": True, "descritor": nome[0]}
+        return {"existe": False, "descritor": nomes[0][0]}
+
     def verificar_referencia(self, referencia: str) -> dict:
         """Procura a referência no PubMed (PMID, DOI, título) e, se não achar, no Europe PMC."""
         titulo = extrair_titulo(referencia)
