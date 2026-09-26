@@ -1037,16 +1037,44 @@ export class Trabalho extends EventEmitter {
     });
     const r = f.resumo || {};
     const ab = f.abstract || {};
+    const res = f.resumen || {};
+    const resumoTxt = [
+      r.objetivo ? `**Objetivo:** ${r.objetivo}` : '',
+      r.metodos ? `**Métodos:** ${r.metodos}` : '',
+      r.resultados ? `**Resultados:** ${r.resultados}` : '',
+      r.conclusao ? `**Conclusão:** ${r.conclusao}` : '',
+    ].filter(Boolean).join(' ');
+
+    const abstractTxt = [
+      ab.objective ? `**Objective:** ${ab.objective}` : '',
+      ab.methods ? `**Methods:** ${ab.methods}` : '',
+      ab.results ? `**Results:** ${ab.results}` : '',
+      ab.conclusion ? `**Conclusion:** ${ab.conclusion}` : '',
+    ].filter(Boolean).join(' ');
+
+    const resumenTxt = [
+      res.objetivo ? `**Objetivo:** ${res.objetivo}` : '',
+      res.metodos ? `**Métodos:** ${res.metodos}` : '',
+      res.resultados ? `**Resultados:** ${res.resultados}` : '',
+      res.conclusion ? `**Conclusión:** ${res.conclusion}` : '',
+    ].filter(Boolean).join(' ');
+
+    const palavrasChave = plano.palavras_chave?.length ? plano.palavras_chave.join('; ') + '.' : '';
+    const keywords = plano.keywords?.length ? plano.keywords.join('; ') + '.' : '';
+    const palabrasClave = ((f.palabras_clave && f.palabras_clave.length) ? f.palabras_clave : (plano.palabras_clave || plano.palavras_chave || [])).join('; ') + '.';
+
     const cabecalho = [
       `# ${f.titulo || plano.titulo_provisorio}`,
       f.titulo_en ? `*${f.titulo_en}*` : '',
-      `**Autores:** ${params.autores || '[preencher: autores e professor orientador]'}`,
-      '## Resumo',
-      `**Objetivo:** ${r.objetivo || ''}`, `**Métodos:** ${r.metodos || ''}`, `**Resultados:** ${r.resultados || ''}`, `**Conclusão:** ${r.conclusao || ''}`,
-      `**Palavras-chave:** ${plano.palavras_chave.join('; ')}.`,
-      '## Abstract',
-      `**Objective:** ${ab.objective || ''}`, `**Methods:** ${ab.methods || ''}`, `**Results:** ${ab.results || ''}`, `**Conclusion:** ${ab.conclusion || ''}`,
-      `**Keywords:** ${plano.keywords.join('; ')}.`,
+      f.titulo_es ? `*${f.titulo_es}*` : '',
+      `**Autores:** ${params.autores || '[Nome do Aluno]¹, [Nome do Orientador]²'}`,
+      params.afiliacoes ? `*${params.afiliacoes}*` : '*¹Discente do Curso de Medicina. ²Docente Orientador.*',
+      resumoTxt ? `**RESUMO:** ${resumoTxt}` : '',
+      palavrasChave ? `**Palavras-chave:** ${palavrasChave}` : '',
+      abstractTxt ? `**ABSTRACT:** ${abstractTxt}` : '',
+      keywords ? `**Keywords:** ${keywords}` : '',
+      resumenTxt ? `**RESUMEN:** ${resumenTxt}` : '',
+      resumenTxt && palabrasClave ? `**Palabras clave:** ${palabrasClave}` : '',
     ].filter(Boolean).join('\n\n');
     const nota = notaTransparencia({ modo: params.declaracao_ia, provedor: this.estado.llm.provedor, modelo: this.estado.llm.modelos.join(', '), data: dataExtenso(new Date(this.estado.data_busca)) });
     const referencias = `## Referências\n\n${refs.map((x) => `${x.n}. ${x.texto}`).join('\n')}`;

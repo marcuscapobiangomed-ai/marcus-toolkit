@@ -142,7 +142,7 @@ Responda apenas com o texto da discussão em Markdown.`;
 }
 
 export function promptResumoConclusao({ plano, fatos, introducao, discussao, tipoRevisao }) {
-  return `Com base no artigo abaixo, escreva título, resumo estruturado, abstract e conclusão.
+  return `Com base no artigo abaixo, escreva título (em português, inglês e espanhol), resumo estruturado (em português, inglês e espanhol) e conclusão.
 
 Fatos metodológicos exatos (use estes números sem alterar):
 ${fatos}
@@ -155,9 +155,13 @@ ${discussao.slice(0, 9000)}
 
 Regras: resumo com no máximo 250 palavras, estruturado em Objetivo, Métodos, Resultados e Conclusão; não use citações [n] no resumo nem na conclusão; não mencione limitações no resumo nem na conclusão (elas ficam só na Discussão); a conclusão (1 a 2 parágrafos) responde à pergunta "${plano.pergunta}" sem extrapolar os achados; o tipo de estudo é "revisão ${tipoRevisao} da literatura".
 Responda SOMENTE com JSON:
-{"titulo": "título final em português", "titulo_en": "title in English",
+{"titulo": "título final em português",
+ "titulo_en": "title in English",
+ "titulo_es": "título en español",
  "resumo": {"objetivo": "", "metodos": "", "resultados": "", "conclusao": ""},
  "abstract": {"objective": "", "methods": "", "results": "", "conclusion": ""},
+ "resumen": {"objetivo": "", "metodos": "", "resultados": "", "conclusion": ""},
+ "palabras_clave": ["término 1", "término 2", "término 3"],
  "conclusao": "texto em Markdown"}`;
 }
 

@@ -106,12 +106,14 @@ const ESTILOS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="${W}">
 <w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman" w:eastAsia="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="pt-BR" w:eastAsia="pt-BR" w:bidi="ar-SA"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="360" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>
 <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="709"/></w:pPr></w:style>
-<w:style w:type="paragraph" w:styleId="Titulo"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:after="240"/></w:pPr><w:rPr><w:b/><w:caps/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="Subtitulo"><w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:after="360"/></w:pPr><w:rPr><w:i/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="Frontal"><w:name w:val="Frontal"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:style>
+<w:style w:type="paragraph" w:styleId="Titulo"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:after="160"/></w:pPr><w:rPr><w:b/><w:caps/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Subtitulo"><w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:before="40" w:after="120" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:i/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Frontal"><w:name w:val="Frontal"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:before="60" w:after="120" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Afiliacao"><w:name w:val="Afiliacao"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:before="40" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:i/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Titulo1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="360" w:after="240"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:caps/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Titulo2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="240" w:after="120"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="Resumo"><w:name w:val="Resumo"/><w:basedOn w:val="Normal"/><w:pPr><w:ind w:firstLine="0"/><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:style>
+<w:style w:type="paragraph" w:styleId="Resumo"><w:name w:val="Resumo"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="0"/><w:spacing w:before="80" w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="PalavrasChave"><w:name w:val="PalavrasChave"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="0"/><w:spacing w:before="40" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Legenda"><w:name w:val="caption"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="240" w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Fonte"><w:name w:val="Fonte"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="0"/><w:spacing w:before="60" w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="TabelaTexto"><w:name w:val="Tabela texto"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="20" w:after="20" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr></w:style>
@@ -175,9 +177,16 @@ function corpoDocumento(md, dir) {
     let m;
     if ((m = linha.match(/^#\s+(.*)$/))) blocos.push(paragrafo('Titulo', m[1]));
     else if ((m = linha.match(/^##\s+(.*)$/))) {
-      secaoAtual = m[1].toLowerCase();
-      // ABNT: titulos sem indicativo numerico (Resumo, Abstract, Referencias) sao centralizados.
-      blocos.push(paragrafo('Titulo1', m[1], /^\d/.test(m[1]) ? '' : '<w:jc w:val="center"/>'));
+      const tit = m[1].trim();
+      secaoAtual = tit.toLowerCase();
+      if (/^(resumo|abstract|resumen)$/i.test(tit)) {
+        // Se vier como subtitulo isolado sem corpo em paragrafo unico, centraliza
+        blocos.push(paragrafo('Titulo1', tit, '<w:jc w:val="center"/>'));
+      } else {
+        // ABNT: titulos com indicativo numerico alinhados a esquerda; sem numero (Referencias) centralizados
+        const isNum = /^\d/.test(tit);
+        blocos.push(paragrafo('Titulo1', tit, isNum ? '' : '<w:jc w:val="center"/>'));
+      }
     } else if ((m = linha.match(/^###\s+(.*)$/))) blocos.push(paragrafo('Titulo2', m[1]));
     else if ((m = linha.match(/^!\[[^\]]*\]\(([\w./-]+\.png)\)$/))) {
       const arq = path.join(dir, m[1]);
@@ -195,11 +204,25 @@ function corpoDocumento(md, dir) {
       // o ultimo paragrafo de Fonte/Notas separa a ilustracao do texto seguinte
       const proxima = linhas.slice(i + 1).find((l) => l.trim());
       blocos.push(paragrafo('Fonte', linha, proxima && RE_RODAPE.test(proxima.trim()) ? '' : '<w:spacing w:after="240"/>'));
-    } else if (/^\*[^*].*\*$/.test(linha) && blocos.length === 1) blocos.push(paragrafo('Subtitulo', linha));
-    else if (/^\*\*(Autores|Tipo de estudo|Revista-alvo)/.test(linha)) blocos.push(paragrafo('Frontal', linha));
-    else if (/^refer[eê]ncias/.test(secaoAtual) && /^\d+\.\s/.test(linha)) blocos.push(paragrafo('Referencia', linha));
-    else if (/^(resumo|abstract)/.test(secaoAtual)) blocos.push(paragrafo('Resumo', linha));
-    else blocos.push(paragrafo('Normal', linha));
+    } else if (/^\*[^*].*\*$/.test(linha) && blocos.length <= 5 && !secaoAtual) {
+      if (/¹|²|³|\b(discente|docente|orientador|faculdade|universidade|hospital|e-mail|departamento)\b/i.test(linha)) {
+        blocos.push(paragrafo('Afiliacao', linha));
+      } else {
+        blocos.push(paragrafo('Subtitulo', linha));
+      }
+    } else if (/^\*\*(Autores|Tipo de estudo|Revista-alvo)/.test(linha) || (!secaoAtual && /¹|²|³|\bautores\b/i.test(linha))) {
+      blocos.push(paragrafo('Frontal', linha));
+    } else if (/^\*{0,2}(Palavras-chave|Keywords|Palabras clave):?\*{0,2}/i.test(linha)) {
+      blocos.push(paragrafo('PalavrasChave', linha));
+    } else if (/^\*{0,2}(RESUMO|ABSTRACT|RESUMEN):?\*{0,2}/i.test(linha)) {
+      blocos.push(paragrafo('Resumo', linha));
+    } else if (/^refer[eê]ncias/.test(secaoAtual) && /^\d+\.\s/.test(linha)) {
+      blocos.push(paragrafo('Referencia', linha));
+    } else if (/^(resumo|abstract|resumen)/.test(secaoAtual)) {
+      blocos.push(paragrafo('Resumo', linha));
+    } else {
+      blocos.push(paragrafo('Normal', linha));
+    }
   }
   if (tabelaAtual) fecharTabela();
   fecharPaisagem();
