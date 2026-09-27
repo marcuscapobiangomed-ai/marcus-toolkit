@@ -46,17 +46,32 @@ const quebraSecao = (opcoes) => `<w:p><w:pPr>${secao(opcoes)}</w:pPr></w:p>`;
 
 function larguras(linhas, total) {
   const n = linhas[0].length;
+  const cabecalhos = linhas[0].map((h) => h.toLowerCase().trim().replace(/[*_]/g, ''));
+
+  // 1. Tabela 2 (Distribuição por eixo temático - 4 colunas em Retrato)
+  if (cabecalhos.some((h) => h.includes('eixo')) && cabecalhos.some((h) => h.includes('referência') || h.includes('referencia'))) {
+    return [Math.round(total * 0.50), Math.round(total * 0.12), Math.round(total * 0.13), Math.round(total * 0.25)];
+  }
+  // 2. Quadro 1 (Estratégias de busca - 4 colunas em Retrato)
+  if (cabecalhos.includes('base') && cabecalhos.some((h) => h.includes('estratégia') || h.includes('estrategia'))) {
+    return [Math.round(total * 0.16), Math.round(total * 0.46), Math.round(total * 0.26), Math.round(total * 0.12)];
+  }
+  // 3. Tabela 1 (Caracterização dos estudos - 6 colunas em Paisagem)
+  if (cabecalhos.some((h) => h.includes('autor')) && cabecalhos.some((h) => h.includes('achados'))) {
+    return [Math.round(total * 0.15), Math.round(total * 0.09), Math.round(total * 0.20), Math.round(total * 0.18), Math.round(total * 0.15), Math.round(total * 0.23)];
+  }
+
+  // 4. Heurística aprimorada para tabelas arbitrárias
   const medias = Array.from({ length: n }, (_, c) => {
     const tamanhos = linhas.map((l) => (l[c] || '').length);
     return Math.max(...tamanhos.slice(0, 1), tamanhos.reduce((a, b) => a + b, 0) / tamanhos.length);
   });
-  const pesos = medias.map((m) => Math.min(Math.max(Math.sqrt(m), 3), 14));
-  const soma = pesos.reduce((a, b) => a + b, 0);
+  const pesos = medias.map((m) => Math.min(Math.max(Math.sqrt(m), 2.5), 14));
+  const soma = pesos.reduce((a, b) => a + b, 0) || 1;
   const propostas = pesos.map((p) => (p / soma) * total);
-  // Minimo: a palavra mais longa da coluna cabe inteira (fonte 9 pt, ~95 twips por caractere + margens).
   const minimos = Array.from({ length: n }, (_, c) => {
     const maior = Math.max(...linhas.map((l) => Math.max(0, ...String(l[c] || '').replace(/\*/g, '').split(/\s+/).map((w) => w.length))));
-    return Math.min(maior * 95 + 180, total * 0.3);
+    return Math.min(maior * 95 + 180, total * 0.35);
   });
   const fixas = propostas.map((w, c) => Math.max(w, minimos[c]));
   const excesso = fixas.reduce((a, b) => a + b, 0) - total;
@@ -68,20 +83,74 @@ function larguras(linhas, total) {
   return fixas.map(Math.round);
 }
 
+function alinhamentoColuna(linhas, colIdx) {
+  const cab = (linhas[0][colIdx] || '').toLowerCase().trim().replace(/[*_]/g, '');
+  if (['n', '%', 'país', 'pais', 'ano', 'registros (n)', 'referências', 'referencias'].includes(cab)) {
+    return 'center';
+  }
+  const dados = linhas.slice(1).map((l) => String(l[colIdx] || '').trim()).filter(Boolean);
+  if (!dados.length) return 'left';
+  const curtos = dados.filter((d) => /^(\d+([.,]\d+)?%?|—|ni|sim|não|nao|\[\d+(,\d+)*\])$/i.test(d) || d.length <= 12).length;
+  if (curtos / dados.length >= 0.75) return 'center';
+  return 'left';
+}
+
 function tabela(linhas, { tipo, paisagem }) {
   const total = paisagem ? LARGURA_PAISAGEM : LARGURA_RETRATO;
   const cols = larguras(linhas, total);
   const quadro = tipo === 'quadro';
+  const alinhamentos = cols.map((_, c) => alinhamentoColuna(linhas, c));
+
   const bordaExterna = quadro
-    ? '<w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/>'
-    : '<w:top w:val="single" w:sz="8" w:space="0" w:color="000000"/><w:left w:val="nil"/><w:bottom w:val="single" w:sz="8" w:space="0" w:color="000000"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/>';
-  const xml = [`<w:tbl><w:tblPr><w:tblW w:w="${total}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders>${bordaExterna}</w:tblBorders><w:tblCellMar><w:left w:w="70" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${cols.map((c) => `<w:gridCol w:w="${c}"/>`).join('')}</w:tblGrid>`];
+    ? '<w:top w:val="single" w:sz="6" w:space="0" w:color="4A5568"/><w:left w:val="single" w:sz="6" w:space="0" w:color="4A5568"/><w:bottom w:val="single" w:sz="6" w:space="0" w:color="4A5568"/><w:right w:val="single" w:sz="6" w:space="0" w:color="4A5568"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/>'
+    : '<w:top w:val="single" w:sz="12" w:space="0" w:color="000000"/><w:left w:val="nil"/><w:bottom w:val="single" w:sz="12" w:space="0" w:color="000000"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/>';
+
+  const celMar = '<w:top w:w="120" w:type="dxa"/><w:bottom w:w="120" w:type="dxa"/><w:left w:w="150" w:type="dxa"/><w:right w:w="150" w:type="dxa"/>';
+
+  const xml = [
+    `<w:tbl>`,
+    `<w:tblPr>`,
+    `<w:tblW w:w="${total}" w:type="dxa"/>`,
+    `<w:jc w:val="center"/>`,
+    `<w:tblLayout w:type="fixed"/>`,
+    `<w:tblBorders>${bordaExterna}</w:tblBorders>`,
+    `<w:tblCellMar>${celMar}</w:tblCellMar>`,
+    `</w:tblPr>`,
+    `<w:tblGrid>${cols.map((c) => `<w:gridCol w:w="${c}"/>`).join('')}</w:tblGrid>`,
+  ];
+
   linhas.forEach((linha, i) => {
     const cab = i === 0;
     xml.push(`<w:tr><w:trPr><w:cantSplit/>${cab ? '<w:tblHeader/>' : ''}</w:trPr>`);
     linha.forEach((celula, c) => {
-      const bordaCab = cab && !quadro ? '<w:tcBorders><w:bottom w:val="single" w:sz="6" w:space="0" w:color="000000"/></w:tcBorders>' : '';
-      xml.push(`<w:tc><w:tcPr><w:tcW w:w="${cols[c]}" w:type="dxa"/>${bordaCab}</w:tcPr><w:p><w:pPr><w:pStyle w:val="${cab ? 'TabelaCabecalho' : 'TabelaTexto'}"/></w:pPr>${runs(celula)}</w:p></w:tc>`);
+      const align = alinhamentos[c];
+      const bordaCab = cab && !quadro ? '<w:tcBorders><w:bottom w:val="single" w:sz="8" w:space="0" w:color="000000"/></w:tcBorders>' : '';
+      const shd = cab
+        ? (quadro ? '<w:shd w:val="clear" w:color="auto" w:fill="EDF2F7"/>' : '<w:shd w:val="clear" w:color="auto" w:fill="F8F9FA"/>')
+        : '';
+      const vAlign = `<w:vAlign w:val="${cab ? 'center' : 'top'}"/>`;
+      const jcAttr = align === 'center' ? '<w:jc w:val="center"/>' : '<w:jc w:val="left"/>';
+      const estilo = cab
+        ? (align === 'center' ? 'TabelaCabecalhoCentro' : 'TabelaCabecalho')
+        : (align === 'center' ? 'TabelaTextoCentro' : 'TabelaTexto');
+
+      xml.push(
+        `<w:tc>`,
+        `<w:tcPr>`,
+        `<w:tcW w:w="${cols[c]}" w:type="dxa"/>`,
+        bordaCab,
+        shd,
+        vAlign,
+        `</w:tcPr>`,
+        `<w:p>`,
+        `<w:pPr>`,
+        `<w:pStyle w:val="${estilo}"/>`,
+        jcAttr,
+        `</w:pPr>`,
+        runs(celula),
+        `</w:p>`,
+        `</w:tc>`
+      );
     });
     xml.push('</w:tr>');
   });
@@ -116,8 +185,10 @@ const ESTILOS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:style w:type="paragraph" w:styleId="PalavrasChave"><w:name w:val="PalavrasChave"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="0"/><w:spacing w:before="40" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Legenda"><w:name w:val="caption"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="240" w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Fonte"><w:name w:val="Fonte"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="both"/><w:ind w:firstLine="0"/><w:spacing w:before="60" w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="TabelaTexto"><w:name w:val="Tabela texto"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="20" w:after="20" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="TabelaCabecalho"><w:name w:val="Tabela cabecalho"/><w:basedOn w:val="TabelaTexto"/><w:rPr><w:b/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="TabelaTexto"><w:name w:val="Tabela texto"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="left"/><w:ind w:firstLine="0"/><w:spacing w:before="30" w:after="30" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:sz w:val="19"/><w:szCs w:val="19"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="TabelaTextoCentro"><w:name w:val="Tabela texto centro"/><w:basedOn w:val="TabelaTexto"/><w:pPr><w:jc w:val="center"/></w:pPr></w:style>
+<w:style w:type="paragraph" w:styleId="TabelaCabecalho"><w:name w:val="Tabela cabecalho"/><w:basedOn w:val="TabelaTexto"/><w:pPr><w:spacing w:before="40" w:after="40"/></w:pPr><w:rPr><w:b/><w:sz w:val="19"/><w:szCs w:val="19"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="TabelaCabecalhoCentro"><w:name w:val="Tabela cabecalho centro"/><w:basedOn w:val="TabelaCabecalho"/><w:pPr><w:jc w:val="center"/></w:pPr></w:style>
 <w:style w:type="paragraph" w:styleId="Figura"><w:name w:val="Figura"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:jc w:val="center"/><w:ind w:firstLine="0"/><w:spacing w:line="240" w:lineRule="auto"/></w:pPr></w:style>
 <w:style w:type="paragraph" w:styleId="Referencia"><w:name w:val="Referencia"/><w:basedOn w:val="Normal"/><w:pPr><w:jc w:val="left"/><w:ind w:left="425" w:hanging="425"/><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:style>
 </w:styles>`;

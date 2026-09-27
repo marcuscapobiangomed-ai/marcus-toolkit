@@ -91,6 +91,67 @@ export async function statusProvedores(forcar = false) {
   return valor;
 }
 
+export function estimarCusto({ provedor, modelo, prompt_tokens = 0, completion_tokens = 0 }) {
+  if (modelo?.endsWith(':free')) return 0;
+  if (provedor === 'anthropic' || provedor === 'claude_cli' || modelo?.includes('claude')) {
+    if (modelo?.includes('opus')) {
+      return Number(((prompt_tokens * 15 + completion_tokens * 75) / 1_000_000).toFixed(6));
+    }
+    if (modelo?.includes('haiku')) {
+      return Number(((prompt_tokens * 0.25 + completion_tokens * 1.25) / 1_000_000).toFixed(6));
+    }
+    return Number(((prompt_tokens * 3 + completion_tokens * 15) / 1_000_000).toFixed(6));
+  }
+  if (modelo?.includes('glm')) {
+    return Number(((prompt_tokens * 0.5 + completion_tokens * 1.0) / 1_000_000).toFixed(6));
+  }
+  if (modelo?.includes('deepseek')) {
+    return Number(((prompt_tokens * 0.14 + completion_tokens * 0.28) / 1_000_000).toFixed(6));
+  }
+  return Number(((prompt_tokens * 1.0 + completion_tokens * 2.0) / 1_000_000).toFixed(6));
+}
+
+export async function consultarUsoProvedores() {
+  const cfg = lerConfig();
+  const or = chaveOpenRouter(cfg);
+  const resultado = {
+    openrouter: null,
+  };
+  if (or) {
+    try {
+      const [rCred, rKey] = await Promise.all([
+        fetch('https://openrouter.ai/api/v1/credits', {
+          headers: { Authorization: `Bearer ${or.chave}` },
+          signal: AbortSignal.timeout(8000),
+        }).then((res) => (res.ok ? res.json() : null)).catch(() => null),
+        fetch('https://openrouter.ai/api/v1/key', {
+          headers: { Authorization: `Bearer ${or.chave}` },
+          signal: AbortSignal.timeout(8000),
+        }).then((res) => (res.ok ? res.json() : null)).catch(() => null),
+      ]);
+      const credData = rCred?.data || {};
+      const keyData = rKey?.data || {};
+      const totalCredits = Number(credData.total_credits || 0);
+      const totalUsage = Number(credData.total_usage || 0);
+      const freeReq = keyData.free_model_daily_requests || {};
+      resultado.openrouter = {
+        ativo: true,
+        origem: or.origem,
+        total_creditos_usd: totalCredits,
+        total_gasto_usd: totalUsage,
+        saldo_restante_usd: Math.max(0, totalCredits - totalUsage),
+        is_free_tier: Boolean(keyData.is_free_tier),
+        gratis_usadas: freeReq.used ?? null,
+        gratis_limite: freeReq.limit ?? null,
+        gratis_restantes: freeReq.remaining ?? null,
+      };
+    } catch {
+      // falha de rede silenciosa
+    }
+  }
+  return resultado;
+}
+
 async function viaClaudeCli({ sistema, prompt, modelo, limiteMs = 900000 }) {
   const args = [
     '-p', '--output-format', 'json', '--model', modelo,
@@ -106,7 +167,16 @@ async function viaClaudeCli({ sistema, prompt, modelo, limiteMs = 900000 }) {
     throw new Error(`Claude CLI falhou (codigo ${r.code}): ${(r.err || r.out).slice(0, 300)}`);
   }
   if (j.is_error) throw new Error(`Claude CLI: ${j.result}`);
-  return { texto: j.result, modelo };
+  const prompt_tokens = j.usage?.input_tokens || 0;
+  const completion_tokens = j.usage?.output_tokens || 0;
+  const total_tokens = prompt_tokens + completion_tokens;
+  const custo = typeof j.total_cost_usd === 'number' ? j.total_cost_usd : estimarCusto({ provedor: 'claude_cli', modelo, prompt_tokens, completion_tokens });
+  return {
+    texto: j.result,
+    modelo,
+    usage: { prompt_tokens, completion_tokens, total_tokens },
+    custo_usd: Number(custo.toFixed(6)),
+  };
 }
 
 async function viaAnthropic({ sistema, prompt, modelo, maxTokens, temperatura }) {
@@ -118,7 +188,16 @@ async function viaAnthropic({ sistema, prompt, modelo, maxTokens, temperatura })
   });
   const j = await r.json();
   if (!r.ok) throw Object.assign(new Error(`Anthropic HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status });
-  return { texto: j.content.filter((c) => c.type === 'text').map((c) => c.text).join(''), modelo };
+  const prompt_tokens = j.usage?.input_tokens || 0;
+  const completion_tokens = j.usage?.output_tokens || 0;
+  const total_tokens = prompt_tokens + completion_tokens;
+  const custo = estimarCusto({ provedor: 'anthropic', modelo, prompt_tokens, completion_tokens });
+  return {
+    texto: j.content.filter((c) => c.type === 'text').map((c) => c.text).join(''),
+    modelo,
+    usage: { prompt_tokens, completion_tokens, total_tokens },
+    custo_usd: custo,
+  };
 }
 
 async function viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura }) {
@@ -145,7 +224,18 @@ async function viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura }
   }
   const texto = j.choices?.[0]?.message?.content || '';
   if (!texto.trim()) throw Object.assign(new Error(`OpenRouter ${modelo} devolveu resposta vazia`), { status: 502 });
-  return { texto, modelo: j.model || modelo };
+  const prompt_tokens = j.usage?.prompt_tokens || 0;
+  const completion_tokens = j.usage?.completion_tokens || 0;
+  const total_tokens = j.usage?.total_tokens || (prompt_tokens + completion_tokens);
+  const custo = typeof j.usage?.total_cost === 'number' ? j.usage.total_cost :
+                typeof j.usage?.cost === 'number' ? j.usage.cost :
+                estimarCusto({ provedor: 'openrouter', modelo, prompt_tokens, completion_tokens });
+  return {
+    texto,
+    modelo: j.model || modelo,
+    usage: { prompt_tokens, completion_tokens, total_tokens },
+    custo_usd: Number(custo.toFixed(6)),
+  };
 }
 
 // Chamada unica com re-tentativas e troca de modelo (so no OpenRouter, onde modelos gratuitos oscilam).

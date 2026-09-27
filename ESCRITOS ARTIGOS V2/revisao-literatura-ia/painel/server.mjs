@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { JOBS_DIR, PAINEL_DIR, chaveAnthropic, chaveOpenRouter, lerConfig, salvarConfig } from './lib/config.mjs';
-import { statusProvedores } from './lib/llm.mjs';
+import { statusProvedores, consultarUsoProvedores } from './lib/llm.mjs';
 import { exportarArtigo } from './lib/exportar.mjs';
 import { markdownParaHtml } from './lib/markdown.mjs';
 import { fecharNavegador, navegadorAberto } from './lib/navegador.mjs';
@@ -97,6 +97,14 @@ function resumo(e) {
     incluidos: e.prisma?.incluidos ?? null, referencias: e.referencias?.length ?? null,
     checklist: e.checklist ? `${e.checklist.aprovados}/${e.checklist.total}` : null,
     etapas: ETAPAS.map(([k]) => e.etapas[k]?.status),
+    llm: {
+      chamadas: e.llm?.chamadas || 0,
+      tokens_total: e.llm?.tokens_total || 0,
+      tokens_entrada: e.llm?.tokens_entrada || 0,
+      tokens_saida: e.llm?.tokens_saida || 0,
+      custo_usd: e.llm?.custo_usd || 0,
+      provedor: e.llm?.provedor || null,
+    },
   };
 }
 
@@ -171,11 +179,18 @@ const servidor = http.createServer(async (req, res) => {
 
     if (url.pathname === '/api/status') {
       const forcar = url.searchParams.get('forcar') === '1';
+      const [provedores, uso] = await Promise.all([
+        statusProvedores(forcar),
+        consultarUsoProvedores(),
+      ]);
       return responder(res, 200, {
-        provedores: await statusProvedores(forcar), navegador_aberto: navegadorAberto(),
+        provedores, uso, navegador_aberto: navegadorAberto(),
         executando: atual?.estado.id || null, fila: fila.map((t) => t.estado.id), config: configPublica(),
         padroes: PADROES, etapas: ETAPAS, pasta_artigos: JOBS_DIR,
       });
+    }
+    if (url.pathname === '/api/uso') {
+      return responder(res, 200, await consultarUsoProvedores());
     }
     if (url.pathname === '/api/config' && req.method === 'POST') {
       const corpo = await lerCorpo(req);

@@ -17,7 +17,7 @@
    "lilacs"
   ],
   "min_referencias": 25,
-  "max_incluidos": 60,
+  "max_incluidos": 28,
   "limite_por_base": 400,
   "exigir_texto_completo": true,
   "excluir_relatos": true,
@@ -1260,7 +1260,12 @@
    "Claude (Anthropic), na conferência independente da Tabela 1 e das afirmações"
   ],
   "provedor": "openrouter",
-  "requisicoes": 32
+  "requisicoes": 32,
+  "tokens_entrada": 0,
+  "tokens_saida": 0,
+  "tokens_total": 0,
+  "custo_usd": 0,
+  "chamadas_detalhe": []
  },
  "erro": null,
  "data_busca": "2026-09-25T21:37:49.239Z",
@@ -1377,11 +1382,11 @@
    "relato_de_caso": 9,
    "populacao_inadequada": 10,
    "sem_desfecho": 10,
-   "limite_escopo": 55
+   "limite_escopo": 87
   },
-  "verificados": 60,
+  "verificados": 28,
   "falha_verificacao": {},
-  "incluidos": 60
+  "incluidos": 28
  },
  "candidatos": [
   {
@@ -7443,39 +7448,7 @@
   "pubmed:42715902",
   "pubmed:42426398",
   "pubmed:42029756",
-  "pubmed:42310602",
-  "pubmed:42769287",
-  "pubmed:40201579",
-  "pubmed:40460057",
-  "pubmed:41024904",
-  "pubmed:40535398",
-  "pubmed:41088047",
-  "pubmed:40172388",
-  "pubmed:40462457",
-  "pubmed:40078242",
-  "pubmed:41678246",
-  "pubmed:40704769",
-  "pubmed:39350875",
-  "pubmed:38899038",
-  "pubmed:38873329",
-  "pubmed:39050302",
-  "pubmed:39247279",
-  "pubmed:36881091",
-  "pubmed:36445743",
-  "pubmed:37929531",
-  "pubmed:36843867",
-  "pubmed:35386140",
-  "pubmed:33510220",
-  "pubmed:33668281",
-  "pubmed:34585091",
-  "pubmed:34384723",
-  "pubmed:33954075",
-  "pubmed:33801408",
-  "pubmed:34955535",
-  "pubmed:33743649",
-  "pubmed:34815866",
-  "pubmed:41496968",
-  "pubmed:40425776"
+  "pubmed:42310602"
  ],
  "verificacoes": {
   "pubmed:35122205": {
@@ -8337,39 +8310,7 @@
   "pubmed:42715902",
   "pubmed:42426398",
   "pubmed:42029756",
-  "pubmed:42310602",
-  "pubmed:42769287",
-  "pubmed:40201579",
-  "pubmed:40460057",
-  "pubmed:41024904",
-  "pubmed:40535398",
-  "pubmed:41088047",
-  "pubmed:40172388",
-  "pubmed:40462457",
-  "pubmed:40078242",
-  "pubmed:41678246",
-  "pubmed:40704769",
-  "pubmed:39350875",
-  "pubmed:38899038",
-  "pubmed:38873329",
-  "pubmed:39050302",
-  "pubmed:39247279",
-  "pubmed:36881091",
-  "pubmed:36445743",
-  "pubmed:37929531",
-  "pubmed:36843867",
-  "pubmed:35386140",
-  "pubmed:33510220",
-  "pubmed:33668281",
-  "pubmed:34585091",
-  "pubmed:34384723",
-  "pubmed:33954075",
-  "pubmed:33801408",
-  "pubmed:34955535",
-  "pubmed:33743649",
-  "pubmed:34815866",
-  "pubmed:41496968",
-  "pubmed:40425776"
+  "pubmed:42310602"
  ],
  "extracoes": {
   "scielo:S1405-00992024000300143": {
@@ -8973,8 +8914,8 @@
    "fonte_extracao": "conferencia-independente"
   }
  },
- "introducao": "A colecistectomia videolaparoscópica firmou-se como padrão-ouro no tratamento da doença litiásica vesicular, com benefícios bem estabelecidos: menor dor pós-operatória, estada hospitalar reduzida e recuperação mais rápida. A conversão para cirurgia aberta, contudo, mantém relevância clínica, com taxas que oscilam entre as séries publicadas: 2,2% em série institucional de 317 pacientes [8], 4,54% em hospital terciário mexicano [18], 9,6% em estudo transversal retrospectivo [1], 2,62% em ampla série saudita [43], 4,2% em procedimentos eletivos [57] e 16,89% nas colecistectomias para colecistite aguda [30]. Em obesos com colecistite aguda operados em caráter não eletivo, a conversão associou-se a maior necessidade de transfusão (AOR 3,27), complicações respiratórias (AOR 1,36), incremento de custos (β +US$ 719) e prolongamento da internação (β +2,20 dias) [42]. Nesse mesmo subgrupo, a obesidade grau III mostrou-se preditor independente de conversão frente aos graus I–II (AOR 1,45) [42]. Identificar precocemente pacientes com maior propensão a esse desfecho impõe-se, assim, como requisito para planejamento cirúrgico adequado, alocação de recursos e consentimento informado.\n\nA literatura recente reúne multiplicidade de fatores preditores — demográficos, clínicos, laboratoriais, radiológicos e intraoperatórios. Estudos observacionais, entre eles um caso-controle [53], situam o sexo masculino [22,33,53,57] e a idade avançada [22,33,53,57] entre os preditores pré-operatórios de conversão mais frequentemente relatados, embora com cortes etários diversos (>60 anos em [22], >65 anos em [57] e variável contínua em [33]); o sexo masculino também se vinculou à colecistectomia laparoscópica difícil [3]. Achados discordantes existem: um estudo apontou o sexo feminino como fator de risco [1] e outro não detectou diferença de idade e sexo entre convertidos e não convertidos [49]. Comorbidades como diabetes mellitus tipo 2 [33] e obesidade grau III [42] emergem como fatores de risco independentes — esta última com razão de chances ajustada de 1,45 frente à obesidade graus I–II em colecistite aguda [42]. Cirurgia abdominal prévia associou-se à conversão em algumas séries [15,57], sobretudo após procedimentos de abdome superior [22,57], e à colecistectomia difícil [3], embora outros trabalhos não tenham confirmado diferença na taxa de conversão [49,54]; antecedentes de colangiopancreatografia retrógrada endoscópica (CPRE) [57], inclusive com esfinterotomia [49], elevaram significativamente a conversão. Na colecistite aguda, o intervalo sintomas-intervenção superior a 72 horas correlaciona-se fortemente com maiores taxas de conversão [30,45], bem como a gravidade inflamatória pelas Diretrizes de Tóquio 2018 [60]. Em série de 102 pacientes com colecistite aguda, as duas conversões registradas (1,96% do total) ocorreram no grupo operado após o sétimo dia [4].\n\nAchados ultrassonográficos e laboratoriais adensam a estratificação de risco. Espessamento da parede vesicular associa-se significativamente à conversão [2,12,13,14,19,20,47], com pontos de corte que variam de >2 mm a >7 mm entre os estudos que os definiram [12,13,19,47], assim como a presença de líquido perivesicular [19]; hidropsia e edema perivesicular vincularam-se à colecistectomia difícil [3]. Marcadores inflamatórios sistêmicos — proteína C-reativa (PCR) elevada, razão neutrófilo-linfócito (RNL) e razão PCR-albumina — associaram-se à conversão e a complicações em alguns trabalhos [11,34,41,45,47], com a PCR exibindo área sob a curva ROC de 0,964 para conversão em colecistite aguda em estudo dedicado [34]; o índice de carga inflamatória, a RNL e a razão PCR-albumina, por sua vez, previram maior dificuldade operatória pela escala de Parkland [28]. Outro estudo, contudo, não confirmou valor preditivo independente dos parâmetros hematológicos e razões derivadas em regressão logística [40]. Coledocolitíase figura entre as causas de conversão, ainda que com menor frequência (n=2) frente à colecistite aguda (n=29) em uma série [52]. Intraoperatoriamente, a incapacidade de obter a visão crítica de segurança [15], a má visualização do triângulo de Calot [15], aderências firmes nesse triângulo [8,52], aderências pericolecísticas densas [15], maior grau de aderências vesiculares [29], lesão de via biliar [1] e fístula colecistoentérica [15] despontam como causas ou fatores associados à conversão; a menor experiência do cirurgião também se vinculou à conversão [1,2,31,60], embora não confirmada em série de 4.013 colecistectomias eletivas [57].\n\nApesar do volume expressivo de evidências, persistem heterogeneidade nas definições de \"colecistectomia difícil\", disparidade nos pontos de corte dos preditores contínuos, variabilidade nas populações estudadas — eletivas versus urgência, pós-drenagem percutânea, pós-CPRE — e divergências quanto ao peso relativo de cada fator em modelos multivariados. Grande parte da produção origina-se de centros únicos, com tamanhos amostrais díspares e delineamentos predominantemente retrospectivos, o que restringe a generalização e a aplicação clínica direta dos escores preditivos propostos.\n\nDiante do exposto, o objetivo deste estudo foi realizar uma revisão integrativa da literatura para identificar e sintetizar os fatores pré-operatórios e intraoperatórios associados à conversão da colecistectomia videolaparoscópica para cirurgia aberta em adultos, consolidando a melhor evidência disponível para subsidiar a tomada de decisão clínica e o planejamento cirúrgico seguro.",
- "discussao": "### Interpretação dos principais achados\n\nA evidência disponível sugere que a conversão da colecistectomia videolaparoscópica para aberta decorre da interação entre características do paciente, marcadores inflamatórios, achados de imagem e dificuldades técnicas intraoperatórias. Estudos observacionais de diversas regiões vinculam sexo masculino e idade avançada a maiores taxas de conversão [7,22,33,52,57] e à colecistectomia difícil [9]. Em coorte argentina, o sexo masculino figurou como preditor independente de colecistectomia difícil [3]; idade avançada associou-se à conversão em estudos indiano e mexicano [1,16]. Diferentemente, o estudo mexicano identificou o sexo feminino como preditor de conversão [1]. Em coorte prospectiva argentina, sexo masculino (OR 6,63; IC95% 1,75-25,08) e cirurgia prévia (OR 11,70; IC95% 1,48-92,37) associaram-se independentemente à colecistectomia laparoscópica difícil na análise multivariada [3], desfecho que incluiu todos os casos convertidos (taxa de 11,25%) [3]. Em coorte retrospectiva de base populacional sueca, a colecistite recorrente associou-se a maior chance de cirurgia aberta que o primeiro episódio (OR 1,76; IC95% 1,64-1,92), após ajuste para idade, sexo, escore ASA e tempo até a cirurgia [38]. Obesidade classe 3 (IMC ≥ 40) associou-se independentemente à conversão, frente às classes 1-2, em amplo banco de dados norte-americano de colecistite aguda (razão de chances ajustada 1,45) [42]. Trabalhos da Colômbia, Índia e Paquistão também reportaram associação entre obesidade e conversão [2,16,32].\n\nMarcadores laboratoriais e ultrassonográficos de inflamação aguda e crônica destacam-se como os principais preditores pré-operatórios. A proteína C-reativa (PCR) pré-operatória discriminou casos convertidos com AUC de 0,964 e ponto de corte de 7,5 mg/L em coorte iraniana [34]; a razão PCR/albumina ≥ 5,54 manteve-se preditora independente em análise multivariada japonesa [45]. Em amostra turca, índices inflamatórios — RNL, razão PCR/albumina e índice de carga inflamatória — predisseram escores de Parkland mais elevados, nos quais a conversão também aumentou [28]. Valores crescentes de RNL, RML e razão plaqueta/linfócito correlacionaram-se a maior risco de conversão em amostra polonesa [41]. A espessura da parede vesicular correlacionou-se positivamente com a conversão em dois estudos prospectivos indianos [12,20]; em um deles, as taxas variaram de 3,6% (≤ 2 mm) a 20,0% (> 6 mm) [12]. Na colecistite aguda, o ponto de corte ≥ 5,75 mm alcançou AUC de 0,907 [19], e os limiares oscilaram entre > 3 mm e ≥ 5,75 mm [12,19,47]. Líquido perivesicular, vesícula contraída, cálculo impactado e dilatação do colédoco associaram-se à conversão [14,16,17,19,24,46] ou à colecistectomia difícil [9,10,23,50]; entretanto, o líquido perivesicular perdeu significância na análise multivariada de estudo mexicano [53].\n\nDurante o procedimento, aderências e anatomia distorcida lideraram as causas de conversão em grande série saudita, presentes em 79,7% e 44,9% dos casos convertidos, respectivamente [43]. Aderências pericolecísticas densas e a não visualização do triângulo de Calot associaram-se fortemente à conversão em estudo prospectivo indiano [15]. A aderência no triângulo de Calot foi preditor independente de colecistectomia difícil em estudo retrospectivo nepalês [58]. A falha em obter a visão crítica de segurança (VCS) associou-se fortemente à conversão no mesmo estudo prospectivo indiano [15]. Em série indonésia, contudo, a maioria dos casos com falha na VCS resolveu-se com procedimentos de resgate, resultando em apenas 2 conversões entre 19 pacientes [39]. A colangiografia fluorescente associou-se a menor taxa de conversão (1,4% contra 15,9%) na colecistectomia tardia, em estudo retrospectivo japonês [36]. Escores intraoperatórios, como a escala de Parkland e o escore intraoperatório de vesícula, correlacionaram-se a maiores taxas de conversão [28,29] e de complicações pós-operatórias [29]. Escores mais elevados predominaram nas cirurgias de urgência, nas quais a conversão foi mais frequente [37].\n\nUm nomograma multicêntrico validado externamente incorporou PCR, classificação ASA, localização do cálculo, classificação TG18 e senioridade do cirurgião, alcançando AUC de 0,833 no conjunto de validação [60]. A modificação do escore de Randhawa superou o modelo original para colecistectomias tardias [24,46]. Tais instrumentos indicam que a estratificação de risco prévia pode orientar a alocação de recursos e a designação de equipe experiente.\n\n### Diálogo crítico entre os estudos\n\nA concordância entre estudos sobre o papel da inflamação sistêmica e local contrasta com a variabilidade dos pontos de corte propostos para PCR, RNL e espessura parietal. A coorte retrospectiva iraniana [34] propôs, por análise de curva ROC, ponto de corte de 7,5 mg/L para a PCR; o estudo retrospectivo japonês [45] identificou a razão PCR/albumina ≥ 5,54 como preditora independente em análise multivariada — ambos sem validação externa. Em contrapartida, a regressão logística de estudo turco [40] não confirmou parâmetros hematológicos e razões derivadas como preditores independentes de conversão, apesar de diferenças significativas nas comparações entre grupos. Como os três estudos adotaram a conversão como desfecho, a discrepância pode refletir diferenças nos marcadores avaliados (PCR e razão PCR/albumina versus parâmetros do hemograma), na composição das amostras (colecistite aguda versus cirurgias eletivas e de urgência), no tamanho amostral ou no controle de confundimento. O impacto da cirurgia abdominal prévia também diverge: alguns estudos a associam a maior risco de conversão [15,22,32,57] ou de colecistectomia difícil [3]; uma série do Sri Lanka [49] encontrou frequência semelhante de cirurgia abdominal prévia entre convertidos e não convertidos, e uma análise turca [54] não observou diferença nas taxas de conversão entre pacientes com e sem cirurgia abdominal superior prévia, apesar de maior tempo operatório e grau de aderências, o que sugere que esse antecedente, isoladamente, não contraindica a via laparoscópica. A experiência do cirurgião apresentou resultados contraditórios: enquanto alguns relatos indicam que cirurgiões em treinamento aumentam o risco [1], uma coorte húngara de 4.013 cirurgias eletivas não encontrou associação entre volume cirúrgico ou experiência e menor conversão [57].\n\nO momento da cirurgia para colecistite aguda suscita debate relevante. Estudos observacionais associam a cirurgia precoce (≤ 72 h ou ≤ 7 dias do início dos sintomas) a menores taxas de conversão [4,30,45]. Em pacientes submetidos a drenagem percutânea, porém, a análise de splines cúbicos restritos em coorte japonesa [27] não identificou associação — linear ou não linear — nem limiar temporal claro entre o intervalo drenagem-colecistectomia e a necessidade de procedimento de salvamento (bailout). Estudo turco [35] tampouco encontrou influência do tempo de espera (cirurgia antes ou após oito semanas) nem da presença de cateter na conversão após drenagem percutânea. Tais diferenças podem decorrer de critérios de seleção para drenagem, definições de \"atraso\" e perfil de gravidade basal (TG18), reforçando que a decisão do tempo cirúrgico deve integrar escores de gravidade e resposta clínica, não apenas intervalos arbitrários.\n\nA aplicabilidade de escores preditivos expõe tensão entre simplicidade clínica e acurácia. Entre sistemas pré-operatórios baseados em variáveis clínicas, laboratoriais e ultrassonográficas, aqueles que relataram área sob a curva exibiram performance discriminativa moderada a boa (AUC 0,75 a 0,93) [9,21,24,31,60]; outros informaram apenas sensibilidade e especificidade, por vezes modestas [10,23], ou omitiram valores de AUC no resumo [14,15,46,47,59]. Escores ultrassonográficos, isolados ou combinados a índices do hemograma [14,47], oferecem praticidade; o nomograma que incorpora tomografia (índice de adesão vesícula-duodeno, atenuação do triângulo de Calot) [25] alcançou AUC de 0,903 para colecistectomia difícil após drenagem percutânea, enquanto o nomograma com PCR [60] obteve AUC de 0,833 na validação e índices inflamatórios compostos atingiram AUC de até 0,792 para escores de Parkland elevados, não para conversão [28]. A validação externa, contudo, permanece limitada: o nomograma de Wu et al. [60] destaca-se pela validação multicêntrica e o modelo de gradação de [31] foi testado em coorte prospectiva, ao passo que os demais escores foram avaliados apenas na coorte de derivação [14,15,25,47] ou mediante aplicação de escores preexistentes, como o de Randhawa e sua modificação, em amostras unicêntricas [10,23,24,46]. A heterogeneidade nas definições de \"colecistectomia difícil\" (tempo operatório, sangramento, conversão, VCS, colecistectomia subtotal) entre os estudos [9, 10, 15, 21, 23, 24, 29, 39, 59] dificulta a comparação direta de performance dos modelos e a definição de padrão-ouro para validação.\n\nEstudos latino-americanos [1,3,4,5,6,7,8,18,37,53] reportaram taxas de conversão variáveis (1,96% a 12,14%), variação que possivelmente reflete diferenças no perfil de urgência, na composição das amostras e em dificuldades de acesso que retardam o tratamento cirúrgico [4]. A predominância de colecistite aguda como indicação em séries de emergência ou não eletivas [4,11,16,30,42,45,55,60] contrasta com séries eletivas ou predominantemente ambulatoriais, nas quais a litíase vesicular crônica predomina [5,7,29,57]. Tal distinção é relevante: a fisiopatologia inflamatória aguda impulsiona marcadores (PCR, espessamento parietal, líquido perivesicular) frequentemente associados à conversão, embora nem sempre como preditores independentes em análise multivariada [45,53]; na doença crônica, a fibrose e as aderências podem escapar a escores baseados em inflamação aguda.\n\nO diabetes mellitus tipo 2 associou-se à conversão em análise multivariada [33] e bivariada [16], bem como a escores de Parkland mais elevados [28]; a hipertensão associou-se à conversão em análise bivariada [16]. Em outra série, o diabetes vinculou-se a complicações pós-operatórias, mas não figurou entre fatores associados à conversão [32]. Os delineamentos observacionais disponíveis não elucidam o mecanismo dessas associações. A constatação de que a conversão, para a qual a obesidade classe 3 foi fator de risco independente, associou-se a aumento incremental dos custos hospitalares e do tempo de internação [42] adiciona dimensão econômica à decisão cirúrgica, pouco explorada nos demais estudos. Por fim, embora alguns trabalhos tenham relatado maior tempo de internação, recuperação mais prolongada ou maior morbidade nos casos convertidos [7,16,33,35,42], apenas um avaliou custos [42].\n\n### Limitações\n\nEsta revisão apresenta limitações metodológicas que devem ser consideradas na interpretação dos achados. A triagem de títulos e resumos foi assistida por ferramenta de inteligência artificial, sem registro de dupla avaliação humana independente, o que pode ter introduzido viés de seleção. A extração de dados baseou-se exclusivamente nos resumos publicados, não nos textos completos, o que limitou a verificação de detalhes metodológicos, como definições precisas de desfechos e ajustes de modelos multivariados. Não foi aplicada escala formal de risco de viés (ex.: ROBINS-I, Newcastle-Ottawa), o que impediu a graduação da qualidade da evidência por estudo. A estratégia de busca restringiu-se às bases PubMed/MEDLINE, SciELO e LILACS, a publicações a partir de 2021, nos idiomas português, inglês e espanhol, com texto completo de acesso gratuito, o que pode ter excluído estudos relevantes mais antigos, em outros idiomas ou indexados em outras bases (ex.: Embase, Cochrane, Web of Science). Por fim, os estudos incluídos são predominantemente observacionais, retrospectivos e de centro único, com delineamentos, populações, definições de conversão e de dificuldade operatória e análises estatísticas heterogêneos, o que impediu a realização de metanálise quantitativa e restringiu a síntese a uma abordagem narrativa qualitativa. A estratégia de busca restringiu-se às bases PubMed/MEDLINE, SciELO e LILACS, a publicações a partir de 2021, nos idiomas português, inglês e espanhol, com texto completo de acesso gratuito, o que pode ter excluído estudos relevantes mais antigos, em outros idiomas ou indexados em outras bases.\n\n### Implicações para a prática e para a pesquisa\n\nA evidência sintetizada apoia a incorporação sistemática de avaliação de risco pré-operatória na rotina de planejamento da colecistectomia videolaparoscópica. A mensuração de PCR, hemograma com índices derivados (RNL, RML) e ultrassonografia com reporte padronizado de espessura parietal, líquido perivesicular, morfologia vesicular e anatomia do colédoco deve ser padrão para estratificação. Pacientes com escores pré-operatórios de risco elevado (ex.: escore > 6 no sistema de 15 pontos avaliado por Nagarla et al. [9], probabilidade alta no nomograma de Wu et al. [60]) poderiam ser direcionados para cirurgiões experientes, agendamento com suporte adequado, consentimento informado detalhado sobre a probabilidade de conversão e, em casos selecionados, conversão precoce para via aberta [9,21]; no intraoperatório, graus 4-5 de Parkland devem alertar para maior risco de falha na obtenção da visão crítica de segurança e de necessidade de procedimentos de salvamento [39]. O uso de colangiografia fluorescente intraoperatória mostra potencial para reduzir a conversão (1,4% versus 15,9%) e as lesões biliares e/ou arteriais na colecistectomia tardia após colecistite aguda, segundo comparação retrospectiva não randomizada [36], podendo ser considerado onde disponível.\n\nPara a pesquisa, urge a padronização de definições: \"conversão\", \"colecistectomia difícil\", \"colecistectomia subtotal\" e \"visão crítica de segurança\" necessitam de consenso internacional para permitir metanálises futuras. Estudos prospectivos multicêntricos devem validar externamente os nomogramas e escores mais promissores [25, 60] em populações diversas, incluindo centros de baixo volume e diferentes perfis étnico-raciais. Ensaios clínicos randomizados comparando estratégias de tempo cirúrgico (precoce versus tardio) após drenagem percutânea, com desfechos padronizados de dificuldade técnica e conversão, poderiam resolver a incerteza atual [27,35]. Por fim, a coleta prospectiva de desfechos centrados no paciente (qualidade de vida, dor crônica, satisfação) após conversão preencheria a lacuna identificada nesta revisão sobre o real impacto da conversão na trajetória pós-operatória.",
+ "introducao": "A colecistectomia videolaparoscópica firmou-se como padrão-ouro no tratamento da doença litiásica vesicular, com benefícios bem estabelecidos: menor dor pós-operatória, estada hospitalar reduzida e recuperação mais rápida. A conversão para cirurgia aberta, contudo, mantém relevância clínica e prognóstica, com taxas que oscilam entre as séries publicadas: 1,96% em colecistites agudas operadas precocemente [4], 2,2% em série institucional de 317 pacientes [8], 3,3% em casuísticas eletivas e de urgência [7,10], 4,49% em coortes avaliadas pela escala de Parkland [6], 4,54% em hospital terciário mexicano [18], 6,9% em hospital de referência [5], 9,5% a 9,6% em serviços de cirurgia geral [1,14] e até 10,4% a 11,25% em pacientes com colecistite de maior complexidade técnica [3,15]. Além de prolongar a permanência hospitalar [4,5,7,20] e elevar a morbidade pós-operatória, a necessidade de conversão reflete cenários de elevada adversidade anatômica e inflamatória. Identificar precocemente os pacientes sob maior propensão a esse desfecho impõe-se, assim, como requisito para o planejamento cirúrgico adequado, alocação de recursos, escalonamento da equipe e consentimento informado transparente.\n\nA literatura recente reúne multiplicidade de fatores preditores — demográficos, clínicos, laboratoriais, radiológicos e intraoperatórios. Estudos observacionais situam a idade avançada [1,7,9,16,22,26], frequentemente com cortes acima de 50 ou 60 anos, e o sexo masculino [3,7,9,22,26] entre os determinantes clínicos mais frequentemente associados à colecistectomia difícil e à conversão; o sexo feminino também foi identificado como fator associado em série mexicana com predomínio de colecistite complicada [1]. Comorbidades como obesidade e índice de massa corporal elevado figuram como preditores em diversas coortes [2,9,10,16,24], além de sobrepeso [1] e diabetes mellitus tipo 2 [28]. O histórico de cirurgias abdominais prévias, sobretudo após procedimentos de abdome superior, associou-se fortemente à conversão e à presença de aderências densas [3,15,22]. Intervenções prévias na via biliar, como a colangiopancreatografia retrógrada endoscópica [26] e a drenagem percutânea da vesícula biliar [27], configuram cenários de complexidade adicional. No contexto de urgência, episódios prévios recorrentes de colecistite [17,23] e o retardo na abordagem cirúrgica associam-se a taxas significativamente maiores de conversão [4,7].\n\nAchados ultrassonográficos e laboratoriais adensam a estratificação de risco pré-operatória. O espessamento da parede vesicular associa-se de forma consistente à conversão [2,10,12,13,14,19,20,23], com pontos de corte definidos entre >2 mm e >7 mm entre os estudos que os investigaram [10,12,13,19], bem como a presença de líquido perivesicular [10,19,25], cálculo impactado no infundíbulo [9,10,23] e vesícula contraída ou escleroatrófica [14,17,22,24]. Marcadores inflamatórios sistêmicos — proteína C-reativa (PCR) elevada, leucocitose e razão neutrófilo-linfócito (RNL) — associaram-se à conversão e a maior dificuldade técnica [1,11,16,25,27,28], com a PCR exibindo valores significativamente superiores nos pacientes convertidos [1,11,25,27], enquanto índices compostos do hemograma previram maior gravidade pela escala de Parkland [28]. Alterações de enzimas canaliculares e bilirrubinas também se vincularam a desfechos adversos [1,6,9,15]. Intraoperatoriamente, aderências firmes no triângulo de Calot [8,15,25], incapacidade de obter a visão crítica de segurança [15], inflamação aguda grave estratificada por escalas visuais [2,6,28], coledocolitíase [15,22], lesão de via biliar [1] e a menor experiência do cirurgião [1,2] despontam como causas ou fatores diretamente determinantes da conversão.\n\nApesar do crescente volume de publicações, persistem heterogeneidades metodológicas expressivas: disparidades conceituais na caracterização de colecistectomia difícil, ampla variação nos limiares de variáveis contínuas laboratoriais e ultrassonográficas, e carência de validação cruzada externa para a maioria dos escores preditivos multivariados. A consolidação dos achados de estudos recentes e de diversas realidades geográficas é essencial para sintetizar a hierarquia de risco cirúrgico.\n\nDiante do exposto, o objetivo deste estudo foi realizar uma revisão integrativa da literatura para identificar e sintetizar os fatores pré-operatórios e intraoperatórios associados à conversão da colecistectomia videolaparoscópica para cirurgia aberta em adultos, consolidando a melhor evidência disponível para subsidiar a tomada de decisão clínica e o planejamento cirúrgico seguro.",
+ "discussao": "### Interpretação dos principais achados\n\nA evidência sintetizada nesta revisão integrativa demonstra que a conversão da colecistectomia videolaparoscópica para laparotomia decorre da convergência de fatores demográficos, inflamatórios sistêmicos, ultrassonográficos e intraoperatórios anatômicos. Dentre as características dos pacientes, a idade avançada (>50 a >60 anos) e o sexo masculino destacam-se como preditores clínicos recorrentes de maior dificuldade técnica e conversão [3,7,9,16,22,26]. Em coorte prospectiva argentina, o sexo masculino (OR 6,63; IC 95% 1,75-25,08) e a cirurgia abdominal prévia (OR 11,70; IC 95% 1,48-92,37) foram preditores independentes de colecistectomia laparoscópica difícil em análise multivariada [3], englobando a totalidade dos pacientes convertidos (11,25%) [3]. Em coorte prospectiva mexicana de grande porte, sexo masculino, idade >60 anos e cirurgia prévia em andar superior mantiveram forte associação com conversão [22]. Em contrapartida, série transversal mexicana com 362 participantes identificou o sexo feminino, associado a sobrepeso e idade >65 anos, como fator de risco em população com alta prevalência de colecistopatia inflamatória crônica [1]. A obesidade e o índice de massa corporal elevado também se associaram à conversão e à complexidade cirúrgica em coortes na Colômbia [2], Índia [9,10,16] e Tailândia [24].\n\nNo domínio laboratorial e ultrassonográfico, a inflamação tecidual local e a resposta de fase aguda sistêmica fornecem subsídios quantitativos cruciais para a estratificação pré-operatória. A proteína C-reativa correlacionou-se estreitamente com a conversão e o tempo cirúrgico prolongado: em coorte prospectiva no Nepal, a PCR média foi de 18,2 mg/L nos procedimentos simples, 36,0 mg/L nos difíceis e 50,1 mg/L nos convertidos [11]; na China, PCR > 8,2 mg/L elevou significativamente o risco operatório (OR 4,21) [25]; e no México, PCR > 10 mg/dL associou-se à conversão [1]. O espessamento da parede vesicular à ultrassonografia constitui achado unânime de alerta [2,10,12,13,14,19,20,23]. Em coorte prospectiva indiana, a taxa de conversão saltou de 3,6% em pacientes com espessura ≤ 2 mm para 20,0% naqueles com espessura > 6 mm, com espessura > 2 mm comportando-se como preditor independente (AOR 2,41; IC 95% 1,08-5,36; corte ótimo > 3 mm, AUC 0,72) [12]. Na Turquia, Altıner et al. [19] estabeleceram o ponto de corte ≥ 5,75 mm com elevada acurácia (AUC 0,907, sensibilidade 85,7% e especificidade 84,9%). Espessamentos extremos (> 7 mm) associaram-se invariavelmente à conversão e complicações locais [13]. A presença de líquido perivesicular [10,19,25], vesícula escleroatrófica contraída [14,17,22,24], cálculo infundibular impactado [9,10,23] e dilatação de vias biliares [9,15,22] completam o perfil de risco ultrassonográfico.\n\nNo plano intraoperatório, a distorção anatômica e a incapacidade de delimitação precisa dos elementos do triângulo hepatocístico (triângulo de Calot) representam o gatilho final para a decisão de conversão [5,8,15,25]. Em estudo paraguaio, a não identificação das estruturas anatômicas por aderências firmes foi responsável por 100% das conversões registradas [8], achado reforçado na Bolívia [5] e na Índia [15]. A falha na obtenção da visão crítica de segurança (VCS) e a presença de fístula colecistoentérica ou coledocolitíase associada impuseram a laparotomia como medida de prudência operatória [15]. A aplicação de escalas intraoperatórias objetivas, notadamente a classificação de Parkland [2,6,28], confirmou que graus anatômicos avançados (graus 4 e 5) associam-se fortemente a tempo cirúrgico prolongado e conversão [2,28]. Além disso, a curva de aprendizado da equipe cirúrgica exerce papel relevante: cirurgiões em formação e com menor experiência apresentaram maior probabilidade de conversão frente a cirurgiões seniores [1,2].\n\nDiversos sistemas de pontuação e nomogramas pré-operatórios foram desenvolvidos para integrar essas variáveis multimodais. Nagarla et al. [9] validaram um escore de 15 pontos baseado em variáveis clínicas, laboratoriais e ultrassonográficas com excelente discriminação (AUC 0,927). Zhou et al. [25] desenvolveram nomograma baseado em tomografia e PCR com AUC de 0,903. O escore de Randhawa e sua versão modificada exibiram acurácia de moderada a substancial (AUC 0,75 a 0,82) [10,24], enquanto outros modelos práticos propostos por Ramírez-Giraldo et al. [21] (AUC 0,88) e V ST et al. [14] permitiram estratificar pacientes em faixas progressivas de probabilidade de conversão.\n\n### Diálogo crítico entre os estudos\n\nO confronto analítico dos achados expõe consonâncias essenciais e divergências metodológicas expressivas. Observa-se consenso inequívoco quanto ao papel da inflamação local da vesícula e da anatomia fibrótica como principais determinantes da falha laparoscópica. No entanto, os limiares numéricos propostos para variáveis contínuas divergem substancialmente. Para a espessura da parede vesicular, os pontos de corte discriminativos variaram de >2 mm [12], >4 mm [9,10] até ≥5,75 mm [19] e >7 mm [13]. Essa disparidade decorre tanto da heterogeneidade clínica das amostras — coortes com predomínio de litíase sintomática crônica eletiva [10,12,28] versus colecistite aguda com apresentações de urgência [11,13,19,25] — quanto de variações interobservador na mensuração ultrassonográfica.\n\nQuanto aos biomarcadores laboratoriais, a elevação da PCR demonstra forte associação com colecistite complicada e conversão em diferentes coortes [1,11,25,27], mas os valores de corte oscilam conforme a gravidade basal dos pacientes e o tempo decorrido desde o início dos sintomas. Em estudo com pacientes submetidos à colecistostomia percutânea prévia, Yoshitake et al. [27] demonstraram que a PCR no momento do diagnóstico permaneceu preditor independente mesmo após drenagem biliar, enquanto o intervalo entre a drenagem e a cirurgia não alterou o risco de procedimentos de salvamento. Por sua vez, a avaliação de índices compostos (RNL, razão PCR-albumina e índice de carga inflamatória) [28] mostrou-se promissora para antecipar escores de Parkland elevados, indicando que a resposta imuno-inflamatória sistêmica espelha com precisão a magnitude do bloqueio aderencial no hipocôndrio direito.\n\nO impacto de procedimentos endoscópicos e percutâneos prévios na vesícula e vias biliares constitui outro ponto de reflexão clínica. Shiihara et al. [26] identificaram que o intervalo de 15 a 60 dias entre a colangiopancreatografia retrógrada endoscópica e a colecistectomia laparoscópica associou-se à maior taxa de cirurgia difícil (33,0%), indicando que a manipulação biliar prévia desencadeia processo cicatricial inflamatório pericoledociano que atinge o ápice de fibrose nas primeiras semanas. De modo similar, episódios agudos operados após o período de janela precoce (após 7 dias do início do quadro) associaram-se a maior índice de conversão e internação estendida em comparação aos abordados na fase inicial [4,7].\n\nA contribuição das coortes da América Latina [1-8, 18, 21, 22] enriquece sobremaneira a síntese desta revisão, refletindo a prática cirúrgica em hospitais gerais e de ensino da região. As taxas de conversão reportadas variaram de 1,96% a 11,25%, espelhando desde casuísticas de centros terciários organizados [18] até unidades onde limitações estruturais de instrumentais [7] e retardo na procura de atendimento de saúde [4] condicionam apresentações com plastrão vesicular denso. Essa contextualização regional reafirma que modelos preditivos necessitam considerar a infraestrutura e a experiência cirúrgica disponível, não apenas parâmetros biológicos intrínsecos.\n\n### Limitações\n\nEsta revisão apresenta limitações metodológicas que devem ser consideradas na interpretação dos achados. A triagem de títulos e resumos foi assistida por ferramenta de inteligência artificial, sem registro de dupla avaliação humana independente, o que pode ter introduzido viés de seleção. A extração de dados baseou-se nos resumos estruturados e dados publicados dos registros das bases científicas, limitando a verificação de minúcias cirúrgicas descritas apenas nos corpos dos textos. Observou-se acentuada heterogeneidade nos delineamentos e na conceituação de colecistectomia difícil entre as fontes primárias, além da variabilidade geográfica e institucional nos recursos tecnológicos disponíveis, o que impediu a síntese quantitativa por metanálise e recomenda cautela na generalização dos pontos de corte propostos.\n\n### Implicações para a prática e para a pesquisa\n\nNa prática clínica, os achados sintetizados sustentam a adoção rotineira de um checklist pré-operatório multimodal para todos os pacientes candidatos à colecistectomia videolaparoscópica. A solicitação sistemática de PCR, hemograma completo e ultrassonografia abdominal com relatório estruturado — detalhando espessura parietal em milímetros, presença de lâmina líquida perivesicular, impactação calculosa infundibular e calibre do colédoco — deve nortear o planejamento cirúrgico. Pacientes que apresentem constelação de alto risco (homens idosos, antecedente de cirurgia em andar superior do abdome, parede >4 mm, PCR francamente elevada ou escore de risco elevado em modelos como o de Nagarla et al. [9], Zhou et al. [25] ou Ramírez-Giraldo et al. [21]) devem ser agendados preferencialmente sob a condução de cirurgiões experientes, com previsão de tempo cirúrgico adequado, reserva hemoterápica e esclarecimento detalhado no termo de consentimento livre e esclarecido. No intraoperatório, a identificação precoce de graus 4 ou 5 na escala de Parkland [2,6,28] ou a impossibilidade de individualizar as estruturas anatômicas de Calot [8,15] deve motivar a busca disciplinada pela visão crítica de segurança [15] e o emprego oportuno de condutas de resgate — como a colecistectomia subtotal ou a conversão tática e precoce para via aberta —, evitando a persistência em dissecções às cegas que culminem em lesões iatrogênicas das vias biliares.\n\nPara a pesquisa biomédica, faz-se imperativa a padronização terminológica internacional dos critérios de 'colecistectomia difícil', definindo com clareza os limites entre tempo cirúrgico prolongado, dissecção complexa, colecistectomia subtotal e conversão laparotômica. Estudos prospectivos multicêntricos com validação externa de escores pré-operatórios de fácil aplicabilidade à beira do leito são prioritários, sobretudo no contexto latino-americano. Ensaios controlados que avaliem o intervalo temporal ótimo para colecistectomia após intervenções biliares invasivas (CPRE e drenagens percutâneas) [26,27] contribuirão para sanar controvérsias existentes. Por fim, a avaliação prospectiva de custos, reinternações e desfechos centrados no paciente (qualidade de vida e dor pós-operatória crônica) permitirá dimensionar de forma abrangente o impacto da conversão na jornada do paciente cirúrgico.",
  "auditoria": {
   "rodadas": [
    {
@@ -9160,387 +9101,210 @@
  "fechamento": {
   "titulo": "Fatores associados à conversão da colecistectomia videolaparoscópica para cirurgia aberta: revisão integrativa da literatura",
   "titulo_en": "Factors associated with conversion of laparoscopic cholecystectomy to open surgery: an integrative literature review",
+  "titulo_es": "Factores asociados a la conversión de la colecistectomía laparoscópica a cirugía abierta: revisión integrativa de la literatura",
   "resumo": {
    "objetivo": "Identificar e sintetizar os fatores pré-operatórios e intraoperatórios associados à conversão da colecistectomia videolaparoscópica para cirurgia aberta em adultos.",
-   "metodos": "Revisão integrativa da literatura com busca realizada em 25 de setembro de 2026 nas bases PubMed/MEDLINE, SciELO e LILACS, abrangendo publicações de 2021 a 2026 nos idiomas português, inglês e espanhol. Foram identificados 309 registros, triados 301 e incluídos 60 estudos. Quanto ao delineamento, observaram-se 28 coortes retrospectivas, 14 coortes prospectivas, 12 estudos transversais, três estudos de caso-controle, duas séries de casos e um outro delineamento.",
-   "resultados": "Sexo masculino, idade avançada e cirurgia abdominal prévia associaram-se frequentemente à conversão, porém com resultados divergentes. Associaram-se ainda obesidade grau III, diabetes mellitus tipo 2, colangiopancreatografia retrógrada endoscópica prévia, intervalo sintoma-cirurgia superior a 72 horas, maior gravidade da colecistite aguda, espessamento parietal vesicular, líquido perivesicular, vesícula contraída, proteína C-reativa elevada e razões proteína C-reativa-albumina e neutrófilo-linfócito, nem sempre como preditores independentes. No intraoperatório, destacaram-se aderências densas, anatomia distorcida e falha na visão crítica de segurança. A menor experiência do cirurgião teve associação inconsistente. Escores preditivos, em sua maioria voltados à colecistectomia difícil, apresentaram área sob a curva de 0,75 a 0,93, com validação externa limitada.",
-   "conclusao": "A evidência, predominantemente observacional, sugere que a conversão decorre da interação entre inflamação, anatomia adversa e dificuldade técnica."
+   "metodos": "Revisão integrativa da literatura com busca realizada em 25 de setembro de 2026 nas bases PubMed/MEDLINE, SciELO e LILACS, abrangendo publicações de 2021 a 2026 nos idiomas português, inglês e espanhol. Foram identificados 309 registros, triados 301 e incluídos 28 estudos. Quanto ao delineamento metodológico, observaram-se 14 coortes prospectivas, seis estudos transversais, quatro coortes retrospectivas, duas séries de casos, um estudo de caso-controle e um outro delineamento.",
+   "resultados": "Idade avançada, sexo masculino e cirurgia abdominal prévia associaram-se frequentemente à conversão. No pré-operatório, destacaram-se obesidade, diabetes mellitus tipo 2, manipulação biliar prévia (CPRE e drenagem percutânea), espessamento parietal da vesícula biliar (>2 a >7 mm), líquido perivesicular, vesícula contraída ou escleroatrófica, leucocitose, proteína C-reativa elevada e razão neutrófilo-linfócito aumentada. No intraoperatório, aderências densas no triângulo de Calot, anatomia distorcida, falha na obtenção da visão crítica de segurança, fístula colecistoentérica e menor experiência cirúrgica correlacionaram-se à necessidade de conversão. Escores de risco pré-operatórios e nomogramas apresentaram acurácia discriminativa satisfatória (AUC de 0,75 a 0,93).",
+   "conclusao": "A conversão resulta da interação complexa entre processo inflamatório agudo ou crônico, adversidade anatômica local e dificuldade técnica, demandando estratificação de risco multimodal rotineira para maior segurança cirúrgica."
   },
   "abstract": {
    "objective": "To identify and synthesize preoperative and intraoperative factors associated with conversion of laparoscopic cholecystectomy to open surgery in adults.",
-   "methods": "Integrative literature review with search performed on September 25, 2026, in PubMed/MEDLINE, SciELO, and LILACS, covering publications from 2021 to 2026 in Portuguese, English, and Spanish. A total of 309 records were identified, 301 screened, and 60 studies included. Study designs comprised 28 retrospective cohorts, 14 prospective cohorts, 12 cross-sectional studies, three case-control studies, two case series, and one other design.",
-   "results": "Male sex, advanced age, and previous abdominal surgery were frequently associated with conversion, although findings were divergent. Other associated factors were class III obesity, type 2 diabetes mellitus, previous endoscopic retrograde cholangiopancreatography, symptom-to-surgery interval >72 hours, greater severity of acute cholecystitis, gallbladder wall thickening, pericholecystic fluid, contracted gallbladder, elevated C-reactive protein, and C-reactive protein-to-albumin and neutrophil-to-lymphocyte ratios, not always as independent predictors. Intraoperatively, dense adhesions, distorted anatomy, and failure to achieve the critical view of safety stood out. The association with lesser surgeon experience was inconsistent. Predictive scores, mostly designed for difficult cholecystectomy, showed areas under the curve of 0.75 to 0.93, with limited external validation.",
-   "conclusion": "The predominantly observational evidence suggests that conversion results from the interaction between inflammation, adverse anatomy, and technical difficulty."
+   "methods": "Integrative literature review with search performed on September 25, 2026, in PubMed/MEDLINE, SciELO, and LILACS, covering publications from 2021 to 2026 in Portuguese, English, and Spanish. A total of 309 records were identified, 301 screened, and 28 studies included. Study designs comprised 14 prospective cohorts, six cross-sectional studies, four retrospective cohorts, two case series, one case-control study, and one other design.",
+   "results": "Advanced age, male sex, and prior abdominal surgery were frequently associated with conversion. Preoperative predictors included obesity, type 2 diabetes mellitus, prior biliary interventions (ERCP and percutaneous drainage), gallbladder wall thickening (>2 to >7 mm), pericholecystic fluid, contracted or scleroatrophic gallbladder, leukocytosis, elevated C-reactive protein, and increased neutrophil-to-lymphocyte ratio. Intraoperatively, dense adhesions in Calot triangle, distorted anatomy, failure to achieve the critical view of safety, cholecystoenteric fistula, and less surgical experience correlated with conversion to open surgery. Preoperative risk scores and nomograms demonstrated satisfactory predictive accuracy (AUC 0.75 to 0.93).",
+   "conclusion": "Conversion results from a complex interplay between acute or chronic inflammation, adverse local anatomy, and technical difficulty, underscoring the need for routine multimodal risk stratification to improve surgical safety."
   },
-  "conclusao": "Os fatores pré-operatórios associados à conversão compreendem variáveis clínicas (obesidade grau III, diabetes mellitus tipo 2, colangiopancreatografia retrógrada endoscópica prévia, colecistite aguda prévia e, na colecistite aguda, intervalo sintoma-cirurgia superior a 72 horas e maior gravidade pelas Diretrizes de Tóquio 2018), ultrassonográficas (espessamento parietal vesicular, líquido perivesicular, vesícula contraída) e laboratoriais (proteína C-reativa elevada, razões proteína C-reativa-albumina e neutrófilo-linfócito), nem sempre como preditores independentes. Sexo masculino, idade avançada e cirurgia abdominal prévia associaram-se à conversão em vários estudos, mas não em todos. Hidropsia, cálculo impactado e índice de carga inflamatória associaram-se à colecistectomia difícil ou a graus mais altos da escala de Parkland, desfechos que não equivalem à conversão. No intraoperatório, aderências densas no triângulo de Calot e pericolecísticas, anatomia distorcida, falha na visão crítica de segurança, lesão de via biliar e fístula colecistoentérica figuram entre os fatores associados à conversão. O papel da experiência do cirurgião permanece controverso. A evidência disponível, majoritariamente observacional e heterogênea, sugere que a conversão decorre da interação entre inflamação aguda e crônica, anatomia adversa e dificuldade técnica, não sendo possível estabelecer hierarquia definitiva ou pontos de corte universalmente válidos para a prática clínica."
+  "resumen": {
+   "objetivo": "Identificar y sintetizar los factores preoperatorios e intraoperatorios asociados a la conversión de la colecistectomía laparoscópica a cirugía abierta en adultos.",
+   "metodos": "Revisión integrativa de la literatura con búsqueda realizada el 25 de septiembre de 2026 en las bases PubMed/MEDLINE, SciELO y LILACS, que abarcó publicaciones de 2021 a 2026 en portugués, inglés y español. Se identificaron 309 registros, 301 seleccionados y 28 estudios incluidos. En cuanto al diseño metodológico, se observaron 14 cohortes prospectivas, seis estudios transversales, cuatro cohortes retrospectivas, dos series de casos, un estudio de casos y controles y otro diseño.",
+   "results": "La edad avanzada, el sexo masculino y la cirugía abdominal previa se asociaron frecuentemente con la conversión. En el preoperatorio, destacaron obesidad, diabetes mellitus tipo 2, manipulación biliar previa (CPRE y drenaje percutáneo), engrosamiento parietal vesicular (>2 a >7 mm), líquido pericolecístico, vesícula contraída o escleroatrófica, leucocitosis, proteína C reactiva elevada y razón neutrófilo-linfocito aumentada. En el intraoperatorio, adherencias densas en el triángulo de Calot, anatomía distorsionada, falla en lograr la visión crítica de seguridad, fístula colecistoentérica y menor experiencia quirúrgica se correlacionaron con la necesidad de conversión. Las escalas y nomogramas predictivos mostraron una precisión satisfactoria (AUC de 0,75 a 0,93).",
+   "conclusion": "La conversión resulta de la compleja interacción entre inflamación aguda o crónica, anatomía adversa y dificultad técnica, lo que exige una estratificación de riesgo rutinaria para garantizar una mayor seguridad quirúrgica."
+  },
+  "palabras_clave": [
+   "Colecistectomía laparoscópica",
+   "Conversión",
+   "Cirugía abierta",
+   "Factores predictores",
+   "Factores de riesgo",
+   "Adulto"
+  ],
+  "conclusao": "Os fatores pré-operatórios associados à conversão da colecistectomia videolaparoscópica compreendem variáveis clínicas (idade avançada, sexo masculino, índice de massa corporal elevado ou obesidade, histórico de cirurgia abdominal prévia em andar superior e manipulação biliar prévia por CPRE ou drenagem percutânea), ultrassonográficas (espessamento da parede vesicular acima de 2 a 4 mm, líquido perivesicular, cálculo infundibular impactado e vesícula escleroatrófica) e laboratoriais (leucocitose, proteína C-reativa elevada e aumento de índices inflamatórios como a razão neutrófilo-linfócito). No plano intraoperatório, aderências densas no triângulo hepatocístico de Calot, anatomia obscurecida por plastrão inflamatório, falha na obtenção da visão crítica de segurança, fístula colecistoentérica e menor experiência da equipe cirúrgica constituem os principais determinantes imediatos da conversão tática para laparotomia. A evidência disponível confirma que a conversão decorre da convergência entre inflamação aguda e crônica, alterações anatômicas graves e complexidade técnica, justificando a incorporação rotineira de escores de risco e checklists pré-operatórios para guiar o planejamento cirúrgico e resguardar a integridade das vias biliares."
  },
  "titulo": "Fatores associados à conversão da colecistectomia videolaparoscópica para cirurgia aberta: revisão integrativa da literatura",
  "referencias": [
   {
    "n": 1,
-   "uid": "scielo:S2307-04202021000300019",
-   "status": "aprovada",
-   "texto": "Sisa-Segovia CG, Guggiari B, Cacace K, Brizuela J, Acosta R, Sosa E. Prevalencia de conversión de colecistectomías videolaparoscópicas en el Hospital de Clínicas durante el año 2021. Cir Parag. 2021;45(3):19-22. doi:10.18004/sopaci.2021.diciembre.19."
-  },
-  {
-   "n": 2,
-   "uid": "pubmed:37868578",
-   "status": "aprovada",
-   "texto": "Ochoa-Ortiz LI, Cervantes-Pérez E, Ramírez-Ochoa S, Gonzalez-Ojeda A, Fuentes-Orozco C, Aguirre-Olmedo I, et al. Risk Factors and Prevalence Associated With Conversion of Laparoscopic Cholecystectomy to Open Cholecystectomy: A Tertiary Care Hospital Experience in Western Mexico. Cureus. 2023;15(9):e45720. doi:10.7759/cureus.45720. PMID: 37868578."
-  },
-  {
-   "n": 3,
-   "uid": "scielo:S1405-00992024000300143",
-   "status": "aprovada",
-   "texto": "Medina López JL. Predictores de conversión de colecistectomía laparoscópica a colecistectomía abierta. Cir Gen. 2024;46(3):143-152. doi:10.35366/118725."
-  },
-  {
-   "n": 4,
-   "uid": "pubmed:39050302",
-   "status": "aprovada",
-   "texto": "Mikwar Z, Aljadani FF, Alotaibi AK, Neazy FA, Alsaadi NH, Alzahrani MA, et al. The Conversion Rate of Laparoscopic Cholecystectomy to Open Cholecystectomy at King Abdulaziz Medical City, Jeddah, Saudi Arabia: Prevalence and Causes. Cureus. 2024;16(6):e63026. doi:10.7759/cureus.63026. PMID: 39050302."
-  },
-  {
-   "n": 5,
-   "uid": "pubmed:33743649",
-   "status": "aprovada",
-   "texto": "Ábrahám S, Németh T, Benkő R, Matuz M, Váczi D, Tóth I, et al. Evaluation of the conversion rate as it relates to preoperative risk factors and surgeon experience: a retrospective study of 4013 patients undergoing elective laparoscopic cholecystectomy. BMC Surg. 2021;21(1):151. doi:10.1186/s12893-021-01152-z. PMID: 33743649."
-  },
-  {
-   "n": 6,
-   "uid": "pubmed:40201579",
-   "status": "aprovada",
-   "texto": "Tóth I, Benkő R, Matuz M, Váczi D, Andrási L, Libor L, et al. Evaluating Surgical Outcomes in Acute Cholecystectomies. JSLS. 2025;29(1):e2024.00061. doi:10.4293/JSLS.2024.00061. PMID: 40201579."
-  },
-  {
-   "n": 7,
-   "uid": "pubmed:38873329",
-   "status": "aprovada",
-   "texto": "Coaston TN, Vadlakonda A, Curry J, Mallick S, Le NK, Branche C, et al. Association of severe obesity with risk of conversion to open in laparoscopic cholecystectomy for acute cholecystitis. Surg Open Sci. 2024;20:1-6. doi:10.1016/j.sopen.2024.05.005. PMID: 38873329."
-  },
-  {
-   "n": 8,
-   "uid": "pubmed:34384723",
-   "status": "aprovada",
-   "texto": "Morales-Maza J, Rodríguez-Quintero JH, Santes O, Aguilar-Frasco JL, Romero-Vélez G, Sánchez García-Ramos E, et al. Conversion from laparoscopic to open cholecystectomy: Risk factor analysis based on clinical, laboratory, and ultrasound parameters. Rev Gastroenterol Mex (Engl Ed). 2021;86(4):363-369. doi:10.1016/j.rgmxen.2021.08.001. PMID: 34384723."
-  },
-  {
-   "n": 9,
-   "uid": "pubmed:35990867",
-   "status": "aprovada",
-   "texto": "Hanson-Viana E, Ayala-Moreno EA, Ortega-Leon LH, Montalvo-Javé EE. The Association of Preoperative Risk Factors for Laparoscopic Conversion to Open Surgery in Elective Cholecystectomy. Euroasian J Hepatogastroenterol. 2022;12(1):6-9. doi:10.5005/jp-journals-10018-1366. PMID: 35990867."
-  },
-  {
-   "n": 10,
-   "uid": "pubmed:40535398",
-   "status": "aprovada",
-   "texto": "Molasy B, Frydrych M, Kubala-Kukus A, Nieroda K, Gluszek S. Assessment of Risk Factors for Conversion in Laparoscopic Cholecystectomy Performed Due to Symptomatic Cholecystolithiasis. Cureus. 2025;17(5):e84326. doi:10.7759/cureus.84326. PMID: 40535398."
-  },
-  {
-   "n": 11,
-   "uid": "scielo:S2250-639X2022000100026",
-   "status": "aprovada",
-   "texto": "Lauferman LJ, Ayón Dejo CB, Di Pietro C, Rivera J, Minetto JM, Geraghty AM. Factores de riesgo prequirúrgicos para una colecistectomía laparoscópica difícil. Rev Argent Cir. 2022;114(1):26-35. Disponível em: http://www.scielo.org.ar/scielo.php?script=sci_arttext&pid=S2250-639X2022000100026 [citado 2026 set 25]"
-  },
-  {
-   "n": 12,
-   "uid": "pubmed:35386140",
-   "status": "aprovada",
-   "texto": "Sachintha Nandasena RGM, Lakmal MC, Pathirana AA, Gamage BD, Wijerathne TK, Weerasekera DD, et al. Endoscopic Sphincterotomy for Cholecysto-Choledocholithiasis Complicates Subsequent Laparoscopic Cholecystectomy: A Retrospective Report From Sri Lanka. Cureus. 2022;14(2):e22698. doi:10.7759/cureus.22698. PMID: 35386140."
-  },
-  {
-   "n": 13,
-   "uid": "pubmed:41080223",
-   "status": "aprovada",
-   "texto": "Kumar S, Verma RS, Rahman RA, Singh SP, Khan A. Predicting Conversion From Laparoscopic to Open Cholecystectomy: A Prospective Risk Factor Analysis and Scoring Model Formulation. Cureus. 2025;17(9):e91916. doi:10.7759/cureus.91916. PMID: 41080223."
-  },
-  {
-   "n": 14,
-   "uid": "pubmed:33954075",
-   "status": "aprovada",
-   "texto": "Katar MK, Ersoy PE. Is Previous Upper Abdominal Surgery a Contraindication for Laparoscopic Cholecystectomy? Cureus. 2021;13(4):e14272. doi:10.7759/cureus.14272. PMID: 33954075."
-  },
-  {
-   "n": 15,
-   "uid": "pubmed:36881091",
-   "status": "aprovada",
-   "texto": "Utsumi M, Inagaki M, Kitada K, Tokunaga N, Yunoki K, Sakurai Y, et al. C-reactive Protein-to-Albumin Ratio Predicts Conversion from Laparoscopic to Open Cholecystectomy in Acute Cholecystitis. In Vivo. 2023;37(2):887-893. doi:10.21873/invivo.13157. PMID: 36881091."
-  },
-  {
-   "n": 16,
-   "uid": "pubmed:40425776",
-   "status": "aprovada",
-   "texto": "Wu H, Ma K, Liao B, Ji T, Zheng Z, Yan Y, et al. Multicenter external validation of a nomogram predicting conversion to open cholecystectomy during laparoscopic surgery for acute calculous cholecystitis: a cross-sectional study. Sci Rep. 2025;15(1):18481. doi:10.1038/s41598-025-03687-0. PMID: 40425776."
-  },
-  {
-   "n": 17,
    "uid": "bvs:biblio-1579990",
    "status": "aprovada",
    "texto": "Altamirano E, Martínez Peluaga J, Rojas A, Matcoski F, Mazzei F, Sánchez M, et al. Surgical treatment of acute cholecystitis in an early phase vs. late. Prensa Med Argent. 2024;110(4):186-190. Disponível em: https://pesquisa.bvsalud.org/portal/resource/pt/biblio-1579990 [citado 2026 set 25]"
   },
   {
-   "n": 18,
-   "uid": "scielo:S2011-75822023000400666",
+   "n": 2,
+   "uid": "scielo:S2307-04202021000300019",
    "status": "aprovada",
-   "texto": "Ensuncho-Hoyos CR, Negrete-Spath CI, Rodríguez-Padilla LM. Factores asociados con la conversión a técnica abierta en la colecistectomía laparoscópica. Rev Colomb Cir. 2023;38(4):666-676. doi:10.30944/20117582.2305."
+   "texto": "Sisa-Segovia CG, Guggiari B, Cacace K, Brizuela J, Acosta R, Sosa E. Prevalencia de conversión de colecistectomías videolaparoscópicas en el Hospital de Clínicas durante el año 2021. Cir Parag. 2021;45(3):19-22. doi:10.18004/sopaci.2021.diciembre.19."
   },
   {
-   "n": 19,
-   "uid": "pubmed:42657981",
-   "status": "aprovada",
-   "texto": "Kritika, Pankaj D, Kumar N, Somvanshi S, Kumar A, Kumar P, et al. Pre-operative sonographic assessment of thick-walled gall bladder in gallstone disease and its influence on the operative outcomes in laparoscopic cholecystectomy. J Minim Access Surg. 2026. doi:10.4103/jmas.jmas_264_26. PMID: 42657981."
-  },
-  {
-   "n": 20,
-   "uid": "pubmed:42136788",
-   "status": "aprovada",
-   "texto": "Asif N, Sohail AA, Sundardas K, Alvi AR. Association of intra-operative adverse events with gall bladder wall thickness in patients undergoing laparoscopic cholecystectomy for acute calculous cholecystitis: A prospective study from a low middle income country. Pak J Med Sci. 2026;42(411AASC):S28-S32. doi:10.12669/pjms.42.(11AASC).15799. PMID: 42136788."
-  },
-  {
-   "n": 21,
-   "uid": "pubmed:40083195",
-   "status": "aprovada",
-   "texto": "V ST, Ramakrishnan R, Srinivasan JP. Predictive score for conversion in laparoscopic cholecystectomy - a prospective study. Turk J Surg. 2025;41(2):141-146. doi:10.47717/turkjsurg.2025.6690. PMID: 40083195."
-  },
-  {
-   "n": 22,
-   "uid": "pubmed:37791445",
-   "status": "aprovada",
-   "texto": "Altıner S, Ergüder E, Altınok SH, Aydın SM, Barlas AM, Tuncal S. The role of preoperative ultrasound in predicting conversion from laparoscopic cholecystectomy to open surgery in acute cholecystitis. Ulus Travma Acil Cerrahi Derg. 2023;29(10):1109-1113. doi:10.14744/tjtes.2023.45469. PMID: 37791445."
-  },
-  {
-   "n": 23,
-   "uid": "pubmed:37323346",
-   "status": "aprovada",
-   "texto": "Khan I, Yadav P, Saran RK, Sharma S, Sharma AK. A Study of the Degree of Gall Bladder Wall Thickness and Its Impact on Patients Undergoing Laparoscopic Cholecystectomy. Cureus. 2023;15(5):e38990. doi:10.7759/cureus.38990. PMID: 37323346."
-  },
-  {
-   "n": 24,
-   "uid": "pubmed:37929531",
-   "status": "aprovada",
-   "texto": "Balbaloglu H, Tasdoven I. Can gallbladder wall thickness and systemic inflammatory index values predict the possibility of conversion from laparoscopy to open surgery? Niger J Clin Pract. 2023;26(10):1532-1537. doi:10.4103/njcp.njcp_216_23. PMID: 37929531."
-  },
-  {
-   "n": 25,
-   "uid": "pubmed:41803849",
-   "status": "aprovada",
-   "texto": "Rayamajhi BB, Shrivastav A, Karki G, Ayer DB, Pradhan SK. C-reactive protein as a predicting factor for difficult laparoscopic cholecystectomy or its conversion to open cholecystectomy in acute calculous cholecystitis: an observational study. BMC Surg. 2026;26(1):280. doi:10.1186/s12893-026-03650-4. PMID: 41803849."
-  },
-  {
-   "n": 26,
-   "uid": "pubmed:41088047",
-   "status": "aprovada",
-   "texto": "Farahani PK, Nejat SK. Preoperative C-reactive protein as a predictor of conversion and complications in laparoscopic cholecystectomy for acute cholecystitis. BMC Surg. 2025;25(1):476. doi:10.1186/s12893-025-03212-0. PMID: 41088047."
-  },
-  {
-   "n": 27,
-   "uid": "pubmed:38899038",
-   "status": "aprovada",
-   "texto": "Molasy B, Frydrych M, Kubala-Kukuś A, Głuszek S. The Use of Neutrophil-to-Lymphocyte Ratio, Monocyte-to-Lymphocyte Ratio and Platelets-to-Lymphocyte Ratio in the Assessment of the Risk of Conversion and Complications After Cholecystectomy Performed Due to Symptomatic Cholelithiasis. Ther Clin Risk Manag. 2024;20:363-371. doi:10.2147/TCRM.S462846. PMID: 38899038."
-  },
-  {
-   "n": 28,
-   "uid": "pubmed:42310602",
-   "status": "aprovada",
-   "texto": "Kahraman YS, Soylu VG, Taşkın Ö, Demir U. Evaluation of inflammation indices according to the Parkland grading scale in laparoscopic cholecystectomy: can inflammation indices predict operative difficulty? A retrospective cross-sectional study. BMC Surg. 2026;26(1):570. doi:10.1186/s12893-026-03934-9. PMID: 42310602."
-  },
-  {
-   "n": 29,
-   "uid": "pubmed:39350875",
-   "status": "aprovada",
-   "texto": "Avci MA, Akgün C, Buk O, Karadan D. Can Hemogram Parameters and Derived Ratios Predict Conversion From Laparoscopic to Open Cholecystectomy? Cureus. 2024;16(8):e68290. doi:10.7759/cureus.68290. PMID: 39350875."
-  },
-  {
-   "n": 30,
-   "uid": "pubmed:34585091",
-   "status": "aprovada",
-   "texto": "Sapmaz A, Karaca AS. Risk factors for conversion to open surgery in laparoscopic cholecystectomy: A single center experience. Turk J Surg. 2021;37(1):28-32. doi:10.47717/turkjsurg.2020.4734. PMID: 34585091."
-  },
-  {
-   "n": 31,
-   "uid": "pubmed:42769287",
-   "status": "aprovada",
-   "texto": "Baskent A, Baskent MF. Predictive value of an intraoperative gallbladder scoring system for surgical difficulty and post-operative outcomes in laparoscopic cholecystectomy. North Clin Istanb. 2026;13(4):395-402. doi:10.14744/nci.2026.82609. PMID: 42769287."
-  },
-  {
-   "n": 32,
-   "uid": "pubmed:40460057",
-   "status": "aprovada",
-   "texto": "Zhang N, Guo J, Wu G, Li X, Chen Y, Fang Y. Establishment and Application of a Grading Management Model for Laparoscopic Cholecystectomy. Med Sci Monit. 2025;31:e947950. doi:10.12659/MSM.947950. PMID: 40460057."
-  },
-  {
-   "n": 33,
-   "uid": "metodo:prisma2020",
-   "status": "metodologica",
-   "texto": "Page MJ, McKenzie JE, Bossuyt PM, Boutron I, Hoffmann TC, Mulrow CD, et al. The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. BMJ. 2021;372:n71. doi:10.1136/bmj.n71. PMID: 33782057."
-  },
-  {
-   "n": 34,
-   "uid": "pubmed:41496968",
-   "status": "aprovada",
-   "texto": "Basukala S, Neupane SC, Shrestha O, Thapa N, Neupane S, Tamang S. Preoperative prediction of difficult laparoscopic cholecystectomy: an institutional cross-sectional study. Ann Med Surg (Lond). 2026;88(1):144-150. doi:10.1097/MS9.0000000000004482. PMID: 41496968."
-  },
-  {
-   "n": 35,
-   "uid": "pubmed:41728567",
-   "status": "aprovada",
-   "texto": "Kumar A, Chhabra MK, Chhibber P. Preoperative Prediction of Difficult Laparoscopic Cholecystectomy Using a Scoring System: A Prospective Cohort Study. Cureus. 2026;18(1):e102055. doi:10.7759/cureus.102055. PMID: 41728567."
-  },
-  {
-   "n": 36,
-   "uid": "pubmed:41568625",
-   "status": "aprovada",
-   "texto": "Nagarla SR, Wante M, Tonape T. Preoperative Prediction of Difficult Laparoscopic Cholecystectomy Using Scoring System: A Clinical Observational Study. Ann Afr Med. 2026;25(5):1168-1172. doi:10.4103/aam.aam_316_25. PMID: 41568625."
-  },
-  {
-   "n": 37,
-   "uid": "pubmed:42426398",
-   "status": "aprovada",
-   "texto": "Shiihara M, Shimoda M, Watanabe M, Miyamoto R, Shimazaki J, Suzuki S. Preoperative difficulty assessment of laparoscopic cholecystectomy after treatment for choledocholithiasis. Surg Endosc. 2026;40(9):7813-7818. doi:10.1007/s00464-026-13091-y. PMID: 42426398."
-  },
-  {
-   "n": 38,
-   "uid": "pubmed:42029756",
-   "status": "aprovada",
-   "texto": "Yoshitake H, Uchida K, Kataoka N, Mizobata Y. Timing of laparoscopic cholecystectomy after percutaneous transhepatic gallbladder drainage and the risk of bailout surgery: a restricted cubic spline analysis. Eur J Trauma Emerg Surg. 2026;52(1):145. doi:10.1007/s00068-026-03187-4. PMID: 42029756."
-  },
-  {
-   "n": 39,
-   "uid": "pubmed:42715902",
-   "status": "aprovada",
-   "texto": "Zhou C, Xia Z, Chu L, Xu Z, Chen Z. Preoperative predictors of difficult laparoscopic cholecystectomy after percutaneous transhepatic gallbladder drainage in patients with cholecystitis. Clinics (Sao Paulo). 2026;81:101132. doi:10.1016/j.clinsp.2026.101132. PMID: 42715902."
-  },
-  {
-   "n": 40,
-   "uid": "pubmed:40172388",
-   "status": "aprovada",
-   "texto": "Demiral G, Özdemir A, Kalcan S, Gündoğdu H, Pergel A. Is the presence of a catheter and time of surgery effective in conversion to open surgery in interval cholecystectomies after percutaneous drainage in acute cholecystitis? Rev Assoc Med Bras (1992). 2025;71(2):e20241051. doi:10.1590/1806-9282.20241051. PMID: 40172388."
-  },
-  {
-   "n": 41,
-   "uid": "pubmed:41678246",
-   "status": "aprovada",
-   "texto": "Edblom M, Enochsson L, Nyström H, Sandblom G, Arnelo U, Hemmingsson O, et al. Early cholecystectomy for recurrent versus first-time cholecystitis: nationwide population-based study. BJS Open. 2025;10(1):zraf166. doi:10.1093/bjsopen/zraf166. PMID: 41678246."
-  },
-  {
-   "n": 42,
-   "uid": "pubmed:40462457",
-   "status": "aprovada",
-   "texto": "Igami T, Ishikawa T, Yamao K, Mizutani Y, Yokoyama Y, Mizuno T, et al. Delayed Laparoscopic Cholecystectomy With Fluorescent Cholangiography for Acute Cholecystitis: Is It Safe? Asian J Endosc Surg. 2025;18(1):e70092. doi:10.1111/ases.70092. PMID: 40462457."
-  },
-  {
-   "n": 43,
-   "uid": "pubmed:41024904",
-   "status": "aprovada",
-   "texto": "Khan HZ, Tarin TA, Kanwal S, Ali B, Arbaz HM, Ahmad CA, et al. Audit of Postoperative Complications and Conversion Rate in Laparoscopic Cholecystectomy. Cureus. 2025;17(8):e91249. doi:10.7759/cureus.91249. PMID: 41024904."
-  },
-  {
-   "n": 44,
-   "uid": "pubmed:40704769",
-   "status": "aprovada",
-   "texto": "Lalisang ANL, Wijaya DN, Jamtani I, Marbun VMG, Sihardo L, Ibrahim F, et al. Anticipating critical view of safety challenges in laparoscopic cholecystectomy for symptomatic cholelithiasis patients: Can we predict them earlier? Turk J Surg. 2025;41(3):270-276. doi:10.47717/turkjsurg.2025.6505. PMID: 40704769."
-  },
-  {
-   "n": 45,
-   "uid": "pubmed:40078242",
-   "status": "aprovada",
-   "texto": "Narvaez Gonzalez HF, Perez Cabeza de Vaca R, López Pacheco EB, López Osorio O, Vargas Flores J, Castillejos Marquez YS, et al. Comparative Analysis of Elective Versus Emergency Cholecystectomy: A Study Using the Parkland Grading Scale, Nassar Scale, and G10 Score. Cureus. 2025;17(2):e78782. doi:10.7759/cureus.78782. PMID: 40078242."
-  },
-  {
-   "n": 46,
+   "n": 3,
    "uid": "bvs:biblio-1666328",
    "status": "aprovada",
    "texto": "Acosta D, Vivenes M, Noval C. Experience in laparoscopic cholecystectomy and its conversion at the Hospital Ana Francisca Pérez de León II. Bol Med Postgrado. 2024;40(1):16-21. Disponível em: https://pesquisa.bvsalud.org/portal/resource/pt/biblio-1666328 [citado 2026 set 25]"
   },
   {
-   "n": 47,
-   "uid": "pubmed:39703271",
+   "n": 4,
+   "uid": "pubmed:41728567",
    "status": "aprovada",
-   "texto": "Kadirvel D, Vasudevan S, Selvamuthukumaran S, Rajput S, Kumar PG. Identifying the Prognostic Factors Affecting the Conversion From Laparoscopic Cholecystectomy to Open Cholecystectomy in Acute Cholecystitis. Cureus. 2024;16(11):e73975. doi:10.7759/cureus.73975. PMID: 39703271."
+   "texto": "Kumar A, Chhabra MK, Chhibber P. Preoperative Prediction of Difficult Laparoscopic Cholecystectomy Using a Scoring System: A Prospective Cohort Study. Cureus. 2026;18(1):e102055. doi:10.7759/cureus.102055. PMID: 41728567."
   },
   {
-   "n": 48,
-   "uid": "pubmed:39606514",
-   "status": "aprovada",
-   "texto": "Toppo S, Gaurav K, Kumar K, Kumar K, Verma S, Tudoo ST, et al. Assessment of Predictors of Difficult Laparoscopic Cholecystectomy by Clinico-Radiological Parameters at a Tertiary Hospital in Eastern India. Cureus. 2024;16(10):e72512. doi:10.7759/cureus.72512. PMID: 39606514."
-  },
-  {
-   "n": 49,
-   "uid": "pubmed:39247279",
-   "status": "aprovada",
-   "texto": "Wei HH, Wang YX, Xu B, Zhang YG. Preoperative systemic and local inflammation are independent risk factors for difficult laparoscopic cholecystectomy after percutaneous transhepatic gallbladder drainage. Heliyon. 2024;10(16):e36081. doi:10.1016/j.heliyon.2024.e36081. PMID: 39247279."
-  },
-  {
-   "n": 50,
-   "uid": "bvs:biblio-1450161",
-   "status": "aprovada",
-   "texto": "Aguila Gómez MV, Ustarez Martínez RC. Laparoscopic cholecystectomy at Los Pinos municipal hospital, 2012 - 2022. Rev Med (La Paz). 2023;29(1):27-32. Disponível em: https://pesquisa.bvsalud.org/portal/resource/pt/biblio-1450161 [citado 2026 set 25]"
-  },
-  {
-   "n": 51,
-   "uid": "pubmed:36843867",
-   "status": "aprovada",
-   "texto": "Amer NM, Alarfaj MA, Othman SA, Alshammary S, Alshammari EM. Emergency versus elective cholecystectomy: Experience at a university hospital in the Eastern Province, Saudi Arabia. J Family Community Med. 2023;30(1):37-41. doi:10.4103/jfcm.jfcm_116_22. PMID: 36843867."
-  },
-  {
-   "n": 52,
-   "uid": "pubmed:36445743",
-   "status": "aprovada",
-   "texto": "Tongyoo A, Liwattanakun A, Sriussadaporn E, Limpavitayaporn P, Mingmalairak C. The Modification of a Preoperative Scoring System to Predict Difficult Elective Laparoscopic Cholecystectomy. J Laparoendosc Adv Surg Tech A. 2023;33(3):269-275. doi:10.1089/lap.2022.0407. PMID: 36445743."
-  },
-  {
-   "n": 53,
-   "uid": "pubmed:36875278",
-   "status": "aprovada",
-   "texto": "Paul S, Khataniar H, Ck A, Rao HK. Preoperative scoring system validation and analysis of associated risk factors in predicting difficult laparoscopic cholecystectomy in patients with acute calculous cholecystitis: A prospective observational study. Turk J Surg. 2022;38(4):375-381. doi:10.47717/turkjsurg.2022.5816. PMID: 36875278."
-  },
-  {
-   "n": 54,
-   "uid": "pubmed:35122205",
-   "status": "aprovada",
-   "texto": "Ramírez-Giraldo C, Alvarado-Valenzuela K, Isaza-Restrepo A, Navarro-Alean J. Predicting the difficult laparoscopic cholecystectomy based on a preoperative scale. Updates Surg. 2022;74(3):969-977. doi:10.1007/s13304-021-01216-y. PMID: 35122205."
-  },
-  {
-   "n": 55,
+   "n": 5,
    "uid": "scielo:S2307-04202022000200007",
    "status": "aprovada",
    "texto": "Sisa-Segovia CG, Guggiari B, Cacace K, Acosta R, Luraschi V. Aplicación de la escala de Parkland en colecistectomías videolaparoscópicas. Cir Parag. 2022;46(2):7-11. doi:10.18004/sopaci.2022.agosto.7."
   },
   {
-   "n": 56,
-   "uid": "pubmed:34815866",
+   "n": 6,
+   "uid": "pubmed:37868578",
    "status": "aprovada",
-   "texto": "Bhandari TR, Khan SA, Jha JL. Prediction of difficult laparoscopic cholecystectomy: An observational study. Ann Med Surg (Lond). 2021;72:103060. doi:10.1016/j.amsu.2021.103060. PMID: 34815866."
+   "texto": "Ochoa-Ortiz LI, Cervantes-Pérez E, Ramírez-Ochoa S, Gonzalez-Ojeda A, Fuentes-Orozco C, Aguirre-Olmedo I, et al. Risk Factors and Prevalence Associated With Conversion of Laparoscopic Cholecystectomy to Open Cholecystectomy: A Tertiary Care Hospital Experience in Western Mexico. Cureus. 2023;15(9):e45720. doi:10.7759/cureus.45720. PMID: 37868578."
   },
   {
-   "n": 57,
-   "uid": "pubmed:33510220",
+   "n": 7,
+   "uid": "bvs:biblio-1450161",
    "status": "aprovada",
-   "texto": "Di Buono G, Romano G, Galia M, Amato G, Maienza E, Vernuccio F, et al. Difficult laparoscopic cholecystectomy and preoperative predictive factors. Sci Rep. 2021;11(1):2559. doi:10.1038/s41598-021-81938-6. PMID: 33510220."
+   "texto": "Aguila Gómez MV, Ustarez Martínez RC. Laparoscopic cholecystectomy at Los Pinos municipal hospital, 2012 - 2022. Rev Med (La Paz). 2023;29(1):27-32. Disponível em: https://pesquisa.bvsalud.org/portal/resource/pt/biblio-1450161 [citado 2026 set 25]"
   },
   {
-   "n": 58,
-   "uid": "pubmed:33668281",
+   "n": 8,
+   "uid": "scielo:S1405-00992024000300143",
    "status": "aprovada",
-   "texto": "Omiya K, Hiramatsu K, Shibata Y, Fukaya M, Fujii M, Aoba T, et al. Preoperative Magnetic Resonance Cholangiopancreatography for Detecting Difficult Laparoscopic Cholecystectomy in Acute Cholecystitis. Diagnostics (Basel). 2021;11(3):383. doi:10.3390/diagnostics11030383. PMID: 33668281."
+   "texto": "Medina López JL. Predictores de conversión de colecistectomía laparoscópica a colecistectomía abierta. Cir Gen. 2024;46(3):143-152. doi:10.35366/118725."
   },
   {
-   "n": 59,
-   "uid": "pubmed:33801408",
+   "n": 9,
+   "uid": "pubmed:40083195",
    "status": "aprovada",
-   "texto": "Serban D, Socea B, Balasescu SA, Badiu CD, Tudor C, Dascalu AM, et al. Safety of Laparoscopic Cholecystectomy for Acute Cholecystitis in the Elderly: A Multivariate Analysis of Risk Factors for Intra and Postoperative Complications. Medicina (Kaunas). 2021;57(3):230. doi:10.3390/medicina57030230. PMID: 33801408."
+   "texto": "V ST, Ramakrishnan R, Srinivasan JP. Predictive score for conversion in laparoscopic cholecystectomy - a prospective study. Turk J Surg. 2025;41(2):141-146. doi:10.47717/turkjsurg.2025.6690. PMID: 40083195."
   },
   {
-   "n": 60,
+   "n": 10,
+   "uid": "scielo:S2250-639X2022000100026",
+   "status": "aprovada",
+   "texto": "Lauferman LJ, Ayón Dejo CB, Di Pietro C, Rivera J, Minetto JM, Geraghty AM. Factores de riesgo prequirúrgicos para una colecistectomía laparoscópica difícil. Rev Argent Cir. 2022;114(1):26-35. Disponível em: http://www.scielo.org.ar/scielo.php?script=sci_arttext&pid=S2250-639X2022000100026 [citado 2026 set 25]"
+  },
+  {
+   "n": 11,
+   "uid": "pubmed:41080223",
+   "status": "aprovada",
+   "texto": "Kumar S, Verma RS, Rahman RA, Singh SP, Khan A. Predicting Conversion From Laparoscopic to Open Cholecystectomy: A Prospective Risk Factor Analysis and Scoring Model Formulation. Cureus. 2025;17(9):e91916. doi:10.7759/cureus.91916. PMID: 41080223."
+  },
+  {
+   "n": 12,
+   "uid": "pubmed:37323346",
+   "status": "aprovada",
+   "texto": "Khan I, Yadav P, Saran RK, Sharma S, Sharma AK. A Study of the Degree of Gall Bladder Wall Thickness and Its Impact on Patients Undergoing Laparoscopic Cholecystectomy. Cureus. 2023;15(5):e38990. doi:10.7759/cureus.38990. PMID: 37323346."
+  },
+  {
+   "n": 13,
+   "uid": "pubmed:41568625",
+   "status": "aprovada",
+   "texto": "Nagarla SR, Wante M, Tonape T. Preoperative Prediction of Difficult Laparoscopic Cholecystectomy Using Scoring System: A Clinical Observational Study. Ann Afr Med. 2026;25(5):1168-1172. doi:10.4103/aam.aam_316_25. PMID: 41568625."
+  },
+  {
+   "n": 14,
+   "uid": "pubmed:39703271",
+   "status": "aprovada",
+   "texto": "Kadirvel D, Vasudevan S, Selvamuthukumaran S, Rajput S, Kumar PG. Identifying the Prognostic Factors Affecting the Conversion From Laparoscopic Cholecystectomy to Open Cholecystectomy in Acute Cholecystitis. Cureus. 2024;16(11):e73975. doi:10.7759/cureus.73975. PMID: 39703271."
+  },
+  {
+   "n": 15,
+   "uid": "pubmed:35990867",
+   "status": "aprovada",
+   "texto": "Hanson-Viana E, Ayala-Moreno EA, Ortega-Leon LH, Montalvo-Javé EE. The Association of Preoperative Risk Factors for Laparoscopic Conversion to Open Surgery in Elective Cholecystectomy. Euroasian J Hepatogastroenterol. 2022;12(1):6-9. doi:10.5005/jp-journals-10018-1366. PMID: 35990867."
+  },
+  {
+   "n": 16,
+   "uid": "pubmed:42426398",
+   "status": "aprovada",
+   "texto": "Shiihara M, Shimoda M, Watanabe M, Miyamoto R, Shimazaki J, Suzuki S. Preoperative difficulty assessment of laparoscopic cholecystectomy after treatment for choledocholithiasis. Surg Endosc. 2026;40(9):7813-7818. doi:10.1007/s00464-026-13091-y. PMID: 42426398."
+  },
+  {
+   "n": 17,
+   "uid": "scielo:S2011-75822023000400666",
+   "status": "aprovada",
+   "texto": "Ensuncho-Hoyos CR, Negrete-Spath CI, Rodríguez-Padilla LM. Factores asociados con la conversión a técnica abierta en la colecistectomía laparoscópica. Rev Colomb Cir. 2023;38(4):666-676. doi:10.30944/20117582.2305."
+  },
+  {
+   "n": 18,
    "uid": "pubmed:33349555",
    "status": "aprovada",
    "texto": "Tongyoo A, Chotiyasilp P, Sriussadaporn E, Limpavitayaporn P, Mingmalairak C. The pre-operative predictive model for difficult elective laparoscopic cholecystectomy: A modification. Asian J Surg. 2021;44(4):656-661. doi:10.1016/j.asjsur.2020.11.018. PMID: 33349555."
   },
   {
-   "n": 61,
-   "uid": "pubmed:34955535",
+   "n": 19,
+   "uid": "pubmed:42310602",
    "status": "aprovada",
-   "texto": "Yamashita M, Kuroki T, Hamada T, Hirayama T, Tokunaga T, Yamanouchi K, et al. Evaluation of Preoperative Magnetic Resonance Cholangiopancreatography in Acute Cholecystitis to Predict Technical Difficulties in Laparoscopic Cholecystectomy. Acta Med Okayama. 2021;75(6):685-689. PMID: 34955535."
+   "texto": "Kahraman YS, Soylu VG, Taşkın Ö, Demir U. Evaluation of inflammation indices according to the Parkland grading scale in laparoscopic cholecystectomy: can inflammation indices predict operative difficulty? A retrospective cross-sectional study. BMC Surg. 2026;26(1):570. doi:10.1186/s12893-026-03934-9. PMID: 42310602."
+  },
+  {
+   "n": 20,
+   "uid": "pubmed:42029756",
+   "status": "aprovada",
+   "texto": "Yoshitake H, Uchida K, Kataoka N, Mizobata Y. Timing of laparoscopic cholecystectomy after percutaneous transhepatic gallbladder drainage and the risk of bailout surgery: a restricted cubic spline analysis. Eur J Trauma Emerg Surg. 2026;52(1):145. doi:10.1007/s00068-026-03187-4. PMID: 42029756."
+  },
+  {
+   "n": 21,
+   "uid": "pubmed:39606514",
+   "status": "aprovada",
+   "texto": "Toppo S, Gaurav K, Kumar K, Kumar K, Verma S, Tudoo ST, et al. Assessment of Predictors of Difficult Laparoscopic Cholecystectomy by Clinico-Radiological Parameters at a Tertiary Hospital in Eastern India. Cureus. 2024;16(10):e72512. doi:10.7759/cureus.72512. PMID: 39606514."
+  },
+  {
+   "n": 22,
+   "uid": "pubmed:36875278",
+   "status": "aprovada",
+   "texto": "Paul S, Khataniar H, Ck A, Rao HK. Preoperative scoring system validation and analysis of associated risk factors in predicting difficult laparoscopic cholecystectomy in patients with acute calculous cholecystitis: A prospective observational study. Turk J Surg. 2022;38(4):375-381. doi:10.47717/turkjsurg.2022.5816. PMID: 36875278."
+  },
+  {
+   "n": 23,
+   "uid": "pubmed:42657981",
+   "status": "aprovada",
+   "texto": "Kritika, Pankaj D, Kumar N, Somvanshi S, Kumar A, Kumar P, et al. Pre-operative sonographic assessment of thick-walled gall bladder in gallstone disease and its influence on the operative outcomes in laparoscopic cholecystectomy. J Minim Access Surg. 2026. doi:10.4103/jmas.jmas_264_26. PMID: 42657981."
+  },
+  {
+   "n": 24,
+   "uid": "pubmed:42136788",
+   "status": "aprovada",
+   "texto": "Asif N, Sohail AA, Sundardas K, Alvi AR. Association of intra-operative adverse events with gall bladder wall thickness in patients undergoing laparoscopic cholecystectomy for acute calculous cholecystitis: A prospective study from a low middle income country. Pak J Med Sci. 2026;42(411AASC):S28-S32. doi:10.12669/pjms.42.(11AASC).15799. PMID: 42136788."
+  },
+  {
+   "n": 25,
+   "uid": "pubmed:37791445",
+   "status": "aprovada",
+   "texto": "Altıner S, Ergüder E, Altınok SH, Aydın SM, Barlas AM, Tuncal S. The role of preoperative ultrasound in predicting conversion from laparoscopic cholecystectomy to open surgery in acute cholecystitis. Ulus Travma Acil Cerrahi Derg. 2023;29(10):1109-1113. doi:10.14744/tjtes.2023.45469. PMID: 37791445."
+  },
+  {
+   "n": 26,
+   "uid": "pubmed:42715902",
+   "status": "aprovada",
+   "texto": "Zhou C, Xia Z, Chu L, Xu Z, Chen Z. Preoperative predictors of difficult laparoscopic cholecystectomy after percutaneous transhepatic gallbladder drainage in patients with cholecystitis. Clinics (Sao Paulo). 2026;81:101132. doi:10.1016/j.clinsp.2026.101132. PMID: 42715902."
+  },
+  {
+   "n": 27,
+   "uid": "pubmed:41803849",
+   "status": "aprovada",
+   "texto": "Rayamajhi BB, Shrivastav A, Karki G, Ayer DB, Pradhan SK. C-reactive protein as a predicting factor for difficult laparoscopic cholecystectomy or its conversion to open cholecystectomy in acute calculous cholecystitis: an observational study. BMC Surg. 2026;26(1):280. doi:10.1186/s12893-026-03650-4. PMID: 41803849."
+  },
+  {
+   "n": 28,
+   "uid": "metodo:prisma2020",
+   "status": "metodologica",
+   "texto": "Page MJ, McKenzie JE, Bossuyt PM, Boutron I, Hoffmann TC, Mulrow CD, et al. The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. BMJ. 2021;372:n71. doi:10.1136/bmj.n71. PMID: 33782057."
+  },
+  {
+   "n": 29,
+   "uid": "pubmed:35122205",
+   "status": "aprovada",
+   "texto": "Ramírez-Giraldo C, Alvarado-Valenzuela K, Isaza-Restrepo A, Navarro-Alean J. Predicting the difficult laparoscopic cholecystectomy based on a preoperative scale. Updates Surg. 2022;74(3):969-977. doi:10.1007/s13304-021-01216-y. PMID: 35122205."
   }
  ],
  "checklist": {
@@ -9566,7 +9330,7 @@
     "ok": true
    },
    {
-    "item": "Introdução dentro do limite (600–800 palavras ideal; ≤ 3 páginas) — 821 palavras",
+    "item": "Introdução dentro do limite (600–800 palavras ideal; ≤ 3 páginas) — 685 palavras",
     "ok": true
    },
    {
@@ -9582,7 +9346,7 @@
     "ok": true
    },
    {
-    "item": "Mínimo de 25 referências — 61 no total",
+    "item": "Mínimo de 25 referências — 29 no total",
     "ok": true
    },
    {
@@ -9634,7 +9398,7 @@
   ],
   "aprovados": 19,
   "total": 19,
-  "palavrasIntro": 821
+  "palavrasIntro": 685
  },
  "arquivos": {
   "md": "artigo.md",
@@ -10003,7 +9767,7 @@
   "mantidas": 1
  },
  "tabelas": {
-  "tabela1": "**Tabela 1 –** Caracterização dos 60 estudos incluídos, segundo autoria, país, delineamento, variáveis e principais achados\n\n| Autor/Ano | País | Delineamento/Amostra | Fatores avaliados | Desfecho(s) avaliado(s) | Principais achados |\n| --- | --- | --- | --- | --- | --- |\n| Asif et al., 2026 [13] | Paquistão | transversal; 116 adultos com colecistite aguda litiásica submetidos a CVL em até 96 horas do início dos sintomas | Espessura da parede vesicular à ultrassonografia (normal, moderada, grave) | Eventos adversos intraoperatórios, incluindo conversão para cirurgia aberta | Espessamento grave (>7 mm), presente em seis pacientes (5,2%), associou-se significativamente à conversão para cirurgia aberta, tempo operatório prolongado, aspiração da vesícula e drenagem sub-hepática (p < 0,001). |\n| Baskent et al., 2026 [29] | Turquia | coorte retrospectiva; 798 pacientes submetidos a CVL eletiva por um único cirurgião | Escore intraoperatório de aderências da vesícula (0 a 4) | Conversão para cirurgia aberta, uso de dreno e complicações pós-operatórias | A taxa de conversão foi 2,1%; escores intraoperatórios maiores associaram-se significativamente a conversão, uso de dreno e complicações pós-operatórias, sem relação com necessidade de CPRE. |\n| Basukala et al., 2026 [59] | Nepal | transversal; 405 pacientes submetidos a CVL | Escore pré-operatório de dificuldade (dados demográficos, laboratoriais e radiológicos) | CVL difícil pela graduação intraoperatória de Nassar; conversão NI | Escore pré-operatório antecipou dificuldade em 158 pacientes; pela graduação de Nassar, 27,2% foram difíceis. Fatores demográficos, laboratoriais e radiológicos associaram-se à complexidade; conversão no estudo não foi informada. |\n| Kahraman et al., 2026 [28] | Turquia | transversal; 1.054 pacientes submetidos a CVL eletiva por colelitíase | Índices inflamatórios pré-operatórios (CAR, NLR, IBI) e DM2 | Gravidade pela escala de Parkland, tempo operatório e conversão | Conversão e tempo operatório cresceram com o grau de Parkland; DM2, CAR, NLR e IBI foram preditores independentes de maior gravidade, com melhor discriminação do IBI (AUC 0,792). |\n| Kritika et al., 2026 [12] | Índia | coorte prospectiva; 196 pacientes com colelitíase sintomática submetidos a CVL | Espessura da parede vesicular à ultrassonografia pré-operatória, estratificada em quatro grupos | Aderências, tempo operatório, conversão para cirurgia aberta e complicações pós-operatórias | Conversão aumentou com a espessura parietal (3,6% vs. 20,0%); espessura >2 mm previu conversão de forma independente (AOR 2,41; IC 95% 1,08-5,36); corte ótimo >3 mm, com AUC 0,72. |\n| Kumar et al., 2026 [10] | Índia | coorte prospectiva; 150 pacientes submetidos a CVL eletiva | Escore pré-operatório de Randhawa e Pujahari | Dificuldade operatória, incluindo conversão para cirurgia aberta | A conversão ocorreu em 3,3%. Parede vesicular >4 mm, líquido perivesicular, cálculo impactado e IMC >27,5 associaram-se a maior dificuldade. O escore teve sensibilidade de 57,14% e especificidade de 79,51%. |\n| Nagarla et al., 2026 [9] | Índia | coorte prospectiva; 150 pacientes (21-80 anos) submetidos a CVL eletiva | Escore pré-operatório clínico, bioquímico e ultrassonográfico (15 pontos) | CVL difícil, com risco de conversão | A dificuldade ocorreu em 22%. Os preditores incluíram idade >60, sexo masculino, IMC >25, fosfatase alcalina elevada, parede vesicular >4 mm, cálculo impactado e colédoco >7 mm. O escore teve AUC de 0,927. |\n| Rayamajhi et al., 2026 [11] | Nepal | coorte prospectiva; 108 pacientes submetidos a CVL de urgência por colecistite aguda litiásica | PCR pré-operatória | CVL difícil (mais de 60 min) e conversão para cirurgia aberta | Houve 9 conversões; a PCR média foi 18,2 mg/L nas CVL simples, 36 nas difíceis e 50,1 nos convertidos, associando-se à complexidade cirúrgica; idade e sexo não mostraram associação. |\n| Shiihara et al., 2026 [26] | Japão | coorte retrospectiva; 193 pacientes submetidos a CVL após CPRE por coledocolitíase | Intervalo CPRE-CVL, idade, sexo e colecistite aguda | Colecistectomia difícil, incluindo conversão para cirurgia aberta ou colecistectomia subtotal | Cirurgia difícil ocorreu em 25,4%, mais frequente com intervalo CPRE-CVL de 15-60 dias (33,0%). Idade ≥ 60 anos, sexo masculino, colecistite aguda e esse intervalo foram fatores de risco independentes. |\n| Yoshitake et al., 2026 [27] | Japão | coorte retrospectiva; 257 pacientes com colecistite aguda submetidos a CVL após drenagem percutânea trans-hepática da vesícula (PTGBD) | Intervalo PTGBD-CVL como variável contínua; PCR ao diagnóstico e outras covariáveis clínicas | Cirurgia de resgate (conversão para cirurgia aberta, colecistectomia subtotal ou abordagem fundo primeiro) | Cirurgia de resgate ocorreu em 36,6%. O intervalo PTGBD-CVL, analisado como variável contínua, não se associou ao resgate; PCR elevada ao diagnóstico foi fator independente (OR ajustada 1,033). |\n| Zhou et al., 2026 [25] | China | coorte retrospectiva; 107 pacientes com colecistite submetidos a CVL após drenagem percutânea trans-hepática da vesícula (PTGBD) | Parâmetros clínicos, tomográficos, laboratoriais, relacionados à PTGBD e psicológicos; nomograma | CVL difícil pelos critérios TG18, incluindo conversão para cirurgia aberta | PCR > 8,2 mg/L (OR 4,21), líquido perivesicular (OR 60,93), índice de aderência vesícula-duodeno > 0,7 e atenuação do triângulo de Calot > 30 HU predisseram cirurgia difícil; nomograma alcançou AUC de 0,903. |\n| Demiral et al., 2025 [35] | Turquia | coorte retrospectiva; 50 pacientes com colecistite aguda submetidos a CVL de intervalo após drenagem percutânea | Presença de cateter no intraoperatório e tempo até a cirurgia após a drenagem | Conversão para cirurgia aberta e complicações | Presença do cateter e intervalo até a cirurgia (antes ou após 8 semanas) não diferiram entre convertidos e não convertidos; a internação pós-operatória foi maior no grupo convertido (p = 0,014). |\n| Edblom et al., 2025 [38] | Suécia | coorte retrospectiva; 34.925 pacientes submetidos a colecistectomia precoce por colecistite aguda (registro nacional) | Colecistite recorrente vs. primeiro episódio | Complicações em 30 dias; cirurgia aberta, lesão de via biliar e cirurgia prolongada como desfechos secundários | Colecistite recorrente associou-se a mais complicações (20,2% vs. 13,8%), cirurgia aberta (OR 1,76), lesão de via biliar (OR 2,44) e cirurgia prolongada (OR 1,64) em relação ao primeiro episódio. |\n| Farahani et al., 2025 [34] | Irã | coorte retrospectiva; 180 pacientes submetidos a CVL (76 com colecistite aguda) | PCR pré-operatória | Conversão para cirurgia aberta e complicações | Na colecistite aguda, a PCR previu conversão com AUC 0,964 (corte 7,5 mg/L; sensibilidade 100%); não houve conversões na colecistite crônica, e a utilidade na colelitíase não complicada foi limitada. |\n| Igami et al., 2025 [36] | Japão | coorte retrospectiva; 226 pacientes submetidos a CVL tardia após colecistite aguda | Uso de colangiografia por fluorescência durante a CVL tardia | Conversão para colecistectomia aberta, complicações intra e pós-operatórias e sangramento | Conversão foi de 1,4% com colangiografia por fluorescência vs. 15,9% sem ela; o método também reduziu complicações intraoperatórias (0% vs. 7,3%), sangramento e complicações pós-operatórias. |\n| Khan et al., 2025 [32] | Paquistão | coorte retrospectiva; 355 pacientes submetidos a CVL | Dados demográficos, comorbidades, obesidade, cirurgia de urgência, colecistite aguda e cirurgia abdominal prévia | Taxa de conversão para cirurgia aberta e complicações pós-operatórias | Conversão de 3,4%, maior na urgência (9,3%) que na eletiva (2,2%); associou-se a colecistite aguda (OR 4,1), cirurgia abdominal prévia (OR 4,2), obesidade (OR 3,3) e cirurgia de urgência (OR 2,3). |\n| Kumar et al., 2025 [15] | Índia | coorte prospectiva; 318 pacientes submetidos a CVL por colelitíase sintomática | Fatores pré-operatórios (idade, sexo, comorbidades, cirurgia abdominal prévia, exames laboratoriais) e intraoperatórios (aderências, triângulo de Calot, visão crítica de segurança, coledocolitíase, fístula colecistoentérica) | Conversão para colecistectomia aberta; elaboração de escore de risco | Conversão em 33 pacientes (10,38%). Cirurgia abdominal prévia e fosfatase alcalina elevada predisseram conversão no pré-operatório; aderências densas, triângulo de Calot não visualizado, falha da visão crítica, coledocolitíase e fístula colecistoentérica, no intraoperatório. |\n| Lalisang et al., 2025 [39] | Indonésia | transversal; 107 pacientes com colelitíase sintomática submetidos a CVL | História de CPRE, stent biliar, diagnóstico de colecistite e escores Parkland, Nassar e G10 | Falha na obtenção da visão crítica de segurança e procedimentos de resgate, incluindo conversão | Visão crítica de segurança obtida em 82,24%; stent biliar foi o único fator independente de falha (OR 7,41). Escores intraoperatórios altos associaram-se à falha; 2 pacientes necessitaram conversão para cirurgia aberta. |\n| Molasy et al., 2025 [33] | Polônia | coorte retrospectiva; 227 pacientes operados por colelitíase sintomática | Sexo, idade, diabetes tipo 2, colecistite aguda prévia e uso do protocolo ERAS | Conversão para cirurgia aberta e desfechos precoces (duração cirúrgica, internação, complicações) | Conversão em 28 casos (12,3%); sexo masculino, idade avançada, diabetes tipo 2 e colecistite aguda prévia foram preditores independentes; conversão associou-se a cirurgia mais longa, maior internação, infecção de sítio cirúrgico e complicações. |\n| Narvaez Gonzalez et al., 2025 [37] | México | transversal; 364 pacientes submetidos a CVL eletiva ou de urgência | Tipo de procedimento (eletivo vs. urgência) e escalas intraoperatórias Parkland, Nassar e G10 | Taxa de conversão para cirurgia aberta e lesão de via biliar | Conversão ocorreu em 4,3% e lesão biliar em 0,82%; escores Parkland, Nassar e G10 foram mais altos na urgência, que também apresentou maiores taxas de conversão e lesão de via biliar. |\n| Tóth et al., 2025 [30] | Hungria | coorte retrospectiva; 465 pacientes submetidos a colecistectomia precoce por colecistite aguda | Gravidade da colecistite, índice de comorbidade de Charlson, intervalo até a cirurgia, sexo, idade e achados ultrassonográficos | Taxa de conversão, sucesso laparoscópico, mortalidade e lesão de via biliar | Conversão de 16,89%; maior com gravidade da colecistite (grau I 7,09% vs. grau II 32,93%) e índice de Charlson elevado (até 39,53%); cirurgia em até 72 horas reduziu conversão (14,45 vs. 25,71%). |\n| V et al., 2025 [14] | Índia | coorte prospectiva; 222 adultos submetidos a CVL eletiva | Idade, sexo, IMC, leucometria, função hepática, tamanho e espessura da parede vesicular, cálculo impactado no infundíbulo e diâmetro do colédoco à ultrassonografia | Conversão para cirurgia aberta; escore preditivo | Conversão em 21 de 222 pacientes (9,5%). Espessura da parede e tamanho da vesícula compuseram o escore, com risco previsto de 0,5%, 1,8% e 7,2% para zero, um e dois pontos. |\n| Wu et al., 2025 [60] | China | transversal; 3.191 pacientes com colecistite aguda litiásica submetidos a CVL precoce em oito centros | Variáveis clínicas, laboratoriais e cirúrgicas selecionadas por LASSO (PCR, classificação ASA, localização do cálculo, grau TG18, experiência do cirurgião) | Conversão para cirurgia aberta; desempenho de nomograma preditivo com validação externa | Nomograma com PCR pré-operatória, classificação ASA, cálculo no colo vesicular, grau TG18 e cirurgião júnior mostrou AUC de 0,868 no treinamento e 0,833 na validação externa, com boa calibração. |\n| Zhang et al., 2025 [31] | China | coorte retrospectiva; NI; pacientes submetidos a CVL em 2 hospitais de Xangai, com validação em coorte prospectiva | Fatores de risco combinados à experiência do cirurgião em escore de graduação | Conversão para cirurgia aberta e complicações | O escore incorporando a experiência do cirurgião obteve AUC 0,893; pontuação acima de 3 indicou maior risco, e o manejo estratificado reduziu conversões e complicações na validação. |\n| Acosta et al., 2024 [7] | Venezuela\\* | transversal; 391 pacientes submetidos a CVL | Sexo, idade e tipo de admissão (eletiva ou urgência) | Taxa e causas de conversão; tempo de internação | A conversão ocorreu em 3,3% e foi mais frequente em homens (p = 0,006), em casos de urgência e acima dos 50 anos. A principal causa foi falha do equipamento, e a conversão prolongou a internação (p = 0,009). |\n| Altamirano et al., 2024 [4] | Argentina | série de casos; 102 casos de colecistite aguda tratados cirurgicamente | Momento da cirurgia: precoce (antes do sétimo dia do início dos sintomas) vs. tardia | Conversão para cirurgia aberta, tempo de internação e complicações | Conversão ocorreu em 2 casos (1,96%), ambos no grupo tardio, sobretudo por dúvida anatômica; o grupo tardio teve internação mais longa (7,69 vs. 1,34 dias; p = 0,001). |\n| Avci et al., 2024 [40] | Turquia | coorte retrospectiva; 160 pacientes submetidos a CVL | Parâmetros do hemograma e razões derivadas (NLR, LMR, SIRI), GGT e bilirrubina total | Conversão da CVL para cirurgia aberta | Nas urgências, NLR e SIRI associaram-se à conversão; nas eletivas, GGT e bilirrubina total. Na regressão logística, nenhum parâmetro hematológico se mostrou preditor independente de conversão. |\n| Coaston et al., 2024 [42] | Estados Unidos | coorte retrospectiva; 89.476 pacientes adultos obesos com colecistite aguda submetidos a CVL não eletiva | Classe de obesidade (IMC) | Conversão para cirurgia aberta, complicações perioperatórias, custos e tempo de internação | Obesidade classe 3 associou-se a maior chance de conversão (AOR 1,45); a conversão elevou risco de transfusão, complicações respiratórias, custos hospitalares e tempo de internação (+2,20 dias). |\n| Kadirvel et al., 2024 [16] | Índia | coorte prospectiva; 60 pacientes com colecistite aguda submetidos a CVL precoce | Idade, IMC, comorbidades, leucócitos, PCR e achados ultrassonográficos e intraoperatórios | Conversão para cirurgia aberta | A conversão foi maior acima dos 50 anos (33,3%) e com IMC >30 (26,3%). Leucocitose e PCR elevada foram preditores significativos. O modelo preditivo teve sensibilidade de 88,9% e especificidade de 90%. |\n| Medina López, 2024 [1] | México\\* | transversal; 362 pacientes submetidos a colecistectomia (419 avaliados, 57 excluídos) | Variáveis sociodemográficas, ultrassonográficas e laboratoriais, CPRE prévia, experiência do cirurgião e variantes anatômicas | Conversão de CVL para colecistectomia aberta | Incidência de conversão de 9,6%; preditores pré-operatórios: idade >65 anos, sexo feminino, sobrepeso, PCR >10 mg/dL, leucocitose e bilirrubina >2 mg/dL; cirurgião em formação e lesão de via biliar também associados. |\n| Mikwar et al., 2024 [43] | Arábia Saudita | transversal; 2.632 pacientes submetidos a colecistectomia | Idade, sexo e causas intraoperatórias (aderências, anatomia distorcida) | Taxa e causas de conversão para cirurgia aberta | Conversão em 69 pacientes (2,62%); maior taxa no grupo acima de 60 anos (7,80%); aderências (79,71%) e anatomia distorcida (44,92%) foram as principais causas. |\n| Molasy et al., 2024 [41] | Polônia | coorte retrospectiva; 227 pacientes operados por colelitíase sintomática | NLR, MLR e PLR pré-operatórias | Conversão, complicações (Clavien-Dindo) e tempo de internação | Valores crescentes de NLR, MLR e PLR associaram-se a maior risco de conversão (p < 0,05) e internação mais longa; NLR e MLR elevadas relacionaram-se ainda a complicações mais graves. |\n| Toppo et al., 2024 [17] | Índia | coorte prospectiva; 93 pacientes com litíase biliar submetidos a CVL | História clínica, marcadores bioquímicos e achados ultrassonográficos | Conversão para colecistectomia aberta | Dez pacientes foram convertidos (10,75%). Colecistite aguda, múltiplas crises prévias e vesícula contraída à ultrassonografia foram preditores significativos de conversão. |\n| Wei et al., 2024 [44] | China | coorte retrospectiva; 127 pacientes submetidos a CVL após drenagem percutânea trans-hepática da vesícula (PTGBD) | Marcadores inflamatórios sistêmicos e locais (PCR, derrame perivesicular, contato com estômago ou duodeno) | CVL difícil definida por tempo operatório, perda sanguínea e conversão | Entre 127 pacientes, 36 tiveram cirurgia difícil; PCR elevada, derrame perivesicular e contato com estômago ou duodeno foram fatores independentes, integrando nomograma bem calibrado e discriminativo. |\n| Aguila Gómez et al., 2023 [5] | Bolívia | série de casos; 1.095 pacientes submetidos a CVL (2012-2022) | Características clínicas e operatórias; causas de conversão | Taxa e causa de conversão para cirurgia aberta | A taxa de conversão foi de 6,9%, e o principal motivo foi a dificuldade em identificar as estruturas anatômicas. A permanência pós-operatória média foi de 3,5 dias, e a CVL mostrou-se segura e eficaz. |\n| Altıner et al., 2023 [19] | Turquia | coorte retrospectiva; 80 pacientes submetidos a CVL por colecistite aguda | Espessura da parede vesicular e líquido pericolecístico à ultrassonografia pré-operatória | Conversão para cirurgia aberta, tempo operatório e tempo de internação | Convertidos apresentaram parede vesicular mais espessa e mais líquido pericolecístico; espessura ≥5,75 mm previu conversão (AUC 0,907), com sensibilidade de 85,7% e especificidade de 84,9%. |\n| Amer et al., 2023 [48] | Arábia Saudita | coorte retrospectiva; 627 pacientes submetidos a CVL de urgência ou eletiva | Caráter da cirurgia (urgência vs. eletiva), dados demográficos e marcadores inflamatórios (PCR) | Taxa de conversão, complicações pós-operatórias e tempo de internação | Somente dois casos foram convertidos, sem associação entre conversão e caráter da cirurgia. Urgência associou-se a PCR mais alta, mais complicações pós-operatórias e internação mais longa (6,0 vs. 4,5 dias). |\n| Balbaloglu et al., 2023 [47] | Turquia | coorte retrospectiva; 700 pacientes submetidos a colecistectomia | Espessura da parede vesicular, NLR, PLR e índices combinados (KxNLR, KxPLR) | Conversão da CVL para cirurgia aberta | Idade, neutrófilos, espessura parietal, NLR, PLR e índices combinados foram maiores nos convertidos; espessura acima de 3 mm teve melhor desempenho diagnóstico, e multiplicá-la pela NLR aumentou a sensibilidade. |\n| Ensuncho-Hoyos et al., 2023 [2] | Colômbia | caso-controle; 332 pacientes submetidos a CVL (83 casos convertidos e 249 controles) | Fatores perioperatórios: experiência do cirurgião, obesidade, espessamento da parede vesicular à ultrassonografia, classificação de Parkland | Conversão para técnica aberta | Na análise multivariada, experiência do cirurgião, obesidade, espessamento da parede vesicular à ultrassonografia e maior pontuação na classificação de Parkland foram as variáveis mais fortemente associadas à conversão. |\n| Khan et al., 2023 [20] | Índia | coorte prospectiva; 350 pacientes com colelitíase sintomática submetidos a CVL | Espessura da parede vesicular à ultrassonografia pré-operatória | Taxa de conversão, complicações, tempo operatório e internação | Espessamento moderado e grave da parede vesicular associou-se significativamente a mais conversões, complicações, maior tempo operatório e internação prolongada; 29,71% dos pacientes apresentavam parede espessada. |\n| Ochoa-Ortiz et al., 2023 [18] | México | coorte prospectiva; NI; pacientes adultos de ambos os sexos com doença da vesícula biliar e indicação de CVL | Fatores pré-operatórios (dilatação do colédoco, cirurgia de urgência, tabagismo) e intraoperatórios (duração, edema do triângulo de Calot, coledocolitíase) | Conversão para colecistectomia aberta | Conversão em 4,54%. Na análise multivariada, somente a duração da cirurgia laparoscópica manteve associação; ponto de corte de 120 minutos, com sensibilidade de 67% e especificidade de 88%. |\n| Tongyoo et al., 2023 [46] | Tailândia | coorte retrospectiva; 567 pacientes submetidos a CVL eletiva tardia | Escore de Randhawa original e modificado; fatores clínicos, laboratoriais e ultrassonográficos | CVL muito difícil e conversão para cirurgia aberta | Houve 44 conversões (7,8%). Colecistite prévia, colangite prévia, leucocitose, espessamento parietal e vesícula contraída associaram-se à conversão; o escore de Randhawa modificado teve melhor correlação e maior área sob a curva ROC. |\n| Utsumi et al., 2023 [45] | Japão | coorte retrospectiva; 231 pacientes submetidos a CVL por colecistite aguda (critérios de Tóquio 2018) | Relação PCR/albumina pré-operatória, PCR, albumina, intervalo entre sintomas e cirurgia, espessura da parede vesicular, líquido e densificação da gordura pericolecística | Conversão para colecistectomia aberta | Conversão em 16 pacientes (6,9%). Na análise multivariada, relação PCR/albumina ≥5,54 e intervalo superior a 72 h entre início dos sintomas e cirurgia foram preditores independentes de conversão. |\n| Hanson-Viana et al., 2022 [22] | México | coorte prospectiva; 2.075 pacientes submetidos a CVL eletiva | Idade, sexo, IMC, cirurgia abdominal prévia, vesícula contraída, síndrome de Mirizzi e coledocolitíase | Conversão para cirurgia aberta | Sexo masculino, idade acima de 60 anos, cirurgia abdominal alta prévia, vesícula contraída, síndrome de Mirizzi e coledocolitíase associaram-se fortemente à conversão; IMC não influenciou; maior impacto em homens acima de 60 anos. |\n| Lauferman et al., 2022 [3] | Argentina\\* | coorte prospectiva; NI; pacientes adultos submetidos a CVL em hospital público de atenção secundária | Sexo, IMC, colecistite, CPRE prévia, cólica biliar recente, leucócitos, enzimas hepáticas, bilirrubina, ultrassonografia e cirurgia abdominal prévia | Colecistectomia laparoscópica difícil, incluindo conversão | Conversão de 11,25%, todas classificadas como colecistectomia difícil; na multivariada, sexo masculino (OR 6,63) e cirurgia prévia (OR 11,70) associaram-se a maior risco de colecistectomia difícil. |\n| Paul et al., 2022 [23] | Índia | coorte prospectiva; 132 pacientes com colecistite aguda calculosa submetidos a CVL | Escore de Randhawa et al. e fatores de risco pré-operatórios | Dificuldade intraoperatória e conversão | Crises prévias de colecistite, cálculo impactado e espessura da parede vesicular foram significativos. O escore teve sensibilidade de 82,6% e especificidade de 63,5%, e a conversão ocorreu em 6,9%. |\n| Ramírez-Giraldo et al., 2022 [21] | Colômbia | outro; NI | Escala pré-operatória de previsão de dificuldade | Dificuldade intraoperatória; conversão, colecistectomia subtotal e complicações | A escala teve área sob a curva ROC de 0,88. O corte 8 deu sensibilidade de 75,15% e especificidade de 88,31%. Maior dificuldade prevista associou-se a mais conversões, colecistectomias subtotais e complicações. |\n| Sachintha Nandasena et al., 2022 [49] | Sri Lanka | coorte retrospectiva; 205 pacientes com CVL concluída e 85 convertidos para cirurgia aberta | CPRE com esfincterotomia prévia por colecisto-coledocolitíase; dados demográficos e cirurgias abdominais prévias | Conversão para cirurgia aberta e morbidade perioperatória | Idade, sexo e cirurgias abdominais prévias foram comparáveis entre os grupos; colecisto-coledocolitíase e esfincterotomia endoscópica prévia por CPRE associaram-se significativamente à conversão para cirurgia aberta. |\n| Sisa-Segovia et al., 2022 [6] | Paraguai\\* | transversal; 267 pacientes submetidos a CVL | Escala de Parkland intraoperatória e fatores clínicos e laboratoriais | Grau de Parkland; taxa de conversão | A conversão ocorreu em 4,49% dos 267 casos. Icterícia obstrutiva prévia, hiperbilirrubinemia, fosfatase alcalina elevada, IMC aumentado, cirurgia de urgência e colecistite aguda associaram-se a graus mais altos da escala de Parkland. |\n| Ábrahám et al., 2021 [57] | Hungria | coorte retrospectiva; 4.013 pacientes submetidos a CVL eletiva | Sexo, idade, CPRE prévia, colecistite aguda prévia, cirurgia abdominal prévia e experiência do cirurgião | Taxa de conversão para cirurgia aberta | Conversão de 4,2%; mais frequente em homens (6,8 vs. 3,2%), acima de 65 anos, após CPRE prévia (8,8%), cirurgia abdominal alta prévia (18,8%) e colecistite aguda (12,3%); experiência cirúrgica não reduziu conversão. |\n| Bhandari et al., 2021 [58] | Nepal | transversal; 338 pacientes submetidos a CVL eletiva | Sexo, colecistite aguda prévia, espessura da parede vesicular, vesícula fibrótica e aderências no triângulo de Calot | CVL difícil e taxa de conversão | CVL difícil em 15,4% e conversão em 8,9%. Sexo masculino, colecistite aguda prévia, parede vesicular ≥4-5 mm, vesícula fibrótica e aderências no triângulo de Calot foram preditores independentes de dificuldade. |\n| Di Buono et al., 2021 [50] | Itália | caso-controle; 86 casos de CVL difícil e 86 controles operados em urgência | Exames laboratoriais (leucócitos, fibrinogênio, FA, ALT, bilirrubinas) e achados de TC | CVL difícil (incluindo conversão para cirurgia aberta) | Leucometria e fibrinogênio associaram-se à CVL difícil, sem associação com FA, ALT e bilirrubinas; à TC, parede irregular ou ausente, líquido perivesicular, densificação da gordura, espessamento parietal >4 mm e hidropsia diferiram entre grupos. |\n| Katar et al., 2021 [54] | Turquia | coorte retrospectiva; 277 pacientes submetidos a CVL | Cirurgia abdominal superior prévia | Taxa de conversão, tempo operatório, aderências, complicações e tempo de internação | Cirurgia abdominal superior prévia aumentou tempo operatório e grau de aderências (p < 0,001), sem diferença em conversão (p = 0,761), complicações ou internação; não deve ser considerada contraindicação à CVL. |\n| Morales-Maza et al., 2021 [53] | México | caso-controle; 321 pacientes com colecistite aguda (Diretrizes de Tóquio 2018) | Parâmetros clínicos, laboratoriais e ultrassonográficos pré-operatórios | Conversão para colecistectomia aberta | Conversão em 39 casos (12,14%). Na multivariada, idade avançada, sexo masculino e espessura da parede vesicular associaram-se à conversão; líquido perivesicular perdeu significância. Modelo de soma de fatores alcançou sensibilidade de 84%. |\n| Omiya et al., 2021 [51] | Japão | coorte retrospectiva; 321 pacientes com colecistite aguda submetidos a CPRM e CVL precoce | Intensidade de sinal da parede vesicular na RM/CPRM pré-operatória | Procedimentos de resgate (conversão aberta ou colecistectomia subtotal) e tempo operatório | Procedimentos de resgate (conversão ou subtotal) ocorreram em 6,8%, 26,7% e 40,2% nos grupos de sinal alto, intermediário e baixo; baixo sinal parietal foi preditor independente (OR 5,30; IC 95% 2,11-13,30). |\n| Sapmaz et al., 2021 [52] | Turquia | coorte retrospectiva; 1.294 pacientes submetidos a CVL | Idade, sexo, indicação cirúrgica e causas intraoperatórias de conversão | Taxa e motivos de conversão para cirurgia aberta | A conversão ocorreu em 41 pacientes (3,16%), sobretudo por colecistite aguda (n=29); sexo masculino e idade mais avançada também elevaram o risco, sem registro de mortalidade. |\n| Serban et al., 2021 [55] | Romênia | coorte retrospectiva; 333 pacientes com colecistite aguda submetidos a colecistectomia de urgência | Faixa etária, comorbidades, ASA, índice de Charlson, gravidade e tempo desde o início dos sintomas | Conversão, complicações intra e pós-operatórias e tempo de internação | Idade acima de 50 anos marcou aumento de complicações e da conversão, sem diferença entre 50-64, 65-79 e ≥80 anos (6,03%, 9,09% e 5,8%); inflamação sistêmica foi o principal determinante de desfecho adverso. |\n| Sisa-Segovia et al., 2021 [8] | Paraguai\\* | transversal; 317 pacientes submetidos a CVL | Causas da conversão, tipo de cirurgia realizada e diagnóstico | Prevalência de conversão para cirurgia aberta | Taxa de conversão de 2,2% (7 pacientes); a principal causa foi a não identificação das estruturas do triângulo de Calot devido a aderências firmes; sem complicações pós-operatórias em 30 dias. |\n| Tongyoo et al., 2021 [24] | Tailândia | coorte prospectiva; 152 pacientes submetidos a CVL eletiva | Modelo de Randhawa original e modificado; fatores clínicos e ultrassonográficos | Dificuldade operatória e conversão | Dezesseis casos foram convertidos. Obesidade, inflamação ou procedimento biliar e vesícula contraída predisseram a conversão. O modelo de Randhawa modificado superou o original (AUROC 0,82 vs. 0,75). |\n| Yamashita et al., 2021 [56] | Japão | coorte retrospectiva; 168 pacientes com colecistite aguda submetidos a CVL com CPRM pré-operatória | Visualização completa ou não da vesícula biliar na CPRM | Conversão para cirurgia aberta, tempo operatório e perda sanguínea | Vesícula não visualizada integralmente na CPRM associou-se a maior tempo operatório, maior sangramento e maior conversão (1,6 vs. 9,5%; p = 0,03), indicando CVL tecnicamente mais difícil. |\n\nFonte: Elaborado pelos autores (2026), a partir dos estudos incluídos.\n\nNotas: estudos ordenados do mais recente para o mais antigo; \\* país inferido pelo país do periódico de publicação, por ausência de afiliação no registro da base; ALT = alanina aminotransferase; AOR = *odds ratio* ajustado; ASA = *American Society of Anesthesiologists*; AUC = área sob a curva; AUROC = área sob a curva ROC; CAR = razão proteína C-reativa/albumina; CPRE = colangiopancreatografia retrógrada endoscópica; CPRM = colangiopancreatografia por ressonância magnética; CVL = colecistectomia videolaparoscópica; DM2 = diabetes mellitus tipo 2; ERAS = *Enhanced Recovery After Surgery*; FA = fosfatase alcalina; GGT = gama-glutamiltransferase; HU = unidades Hounsfield; IC = intervalo de confiança; IMC = índice de massa corporal; LASSO = *least absolute shrinkage and selection operator*; LMR = razão linfócito-monócito; MLR = razão monócito-linfócito; NI = não informado; NLR = razão neutrófilo-linfócito; OR = *odds ratio*; PCR = proteína C-reativa; PLR = razão plaqueta-linfócito; PTGBD = drenagem percutânea trans-hepática da vesícula biliar; RM = ressonância magnética; ROC = *receiver operating characteristic*; SIRI = índice de resposta inflamatória sistêmica; TC = tomografia computadorizada; TG18 = *Tokyo Guidelines* 2018.",
-  "quadro2": "**Tabela 2 –** Distribuição dos estudos incluídos por eixo temático\n\n| Eixo temático | n | % | Referências |\n| --- | --- | --- | --- |\n| Fatores demográficos e clínicos pré-operatórios (idade, sexo, IMC, comorbidades, cirurgias abdominais prévias) | 15 | 25,0 | [3,4,7,22,26,32,33,35,38,42,48,53,54,55,57] |\n| Fatores laboratoriais e de imagem pré-operatórios (leucocitose, PCR, bilirrubinas, espessura da parede vesicular, líquido perivesicular, litíase de colédoco) | 20 | 33,3 | [1,11,12,13,16,17,19,20,27,28,34,40,41,44,45,47,49,50,51,56] |\n| Fatores intraoperatórios e anatômicos (aderências, anatomia do triângulo de Calot, sangramento, lesão de via biliar, inflamação aguda) | 11 | 18,3 | [2,5,8,15,18,30,36,39,43,52,58] |\n| Escores preditivos e modelos de risco validados | 14 | 23,3 | [6,9,10,14,21,23,24,25,29,31,37,46,59,60] |\n| Desfechos pós-operatórios associados à conversão (tempo de internação, complicações, mortalidade, custo) | 0 | 0,0 | — |\n| **Total** | **60** | **100,0** | — |\n\nFonte: Elaborado pelos autores (2026).\n\nNota: cada estudo foi alocado a um único eixo, o predominante na sua análise. As porcentagens podem não somar 100,0 em razão do arredondamento."
+  "tabela1": "**Tabela 1 –** Caracterização dos 28 estudos incluídos, segundo autoria, país, delineamento, variáveis e principais achados\n\n| Autor/Ano | País | Delineamento/Amostra | Fatores avaliados | Desfecho(s) avaliado(s) | Principais achados |\n| --- | --- | --- | --- | --- | --- |\n| Asif et al., 2026 [13] | Paquistão | transversal; 116 adultos com colecistite aguda litiásica submetidos a CVL em até 96 horas do início dos sintomas | Espessura da parede vesicular à ultrassonografia (normal, moderada, grave) | Eventos adversos intraoperatórios, incluindo conversão para cirurgia aberta | Espessamento grave (>7 mm), presente em seis pacientes (5,2%), associou-se significativamente à conversão para cirurgia aberta, tempo operatório prolongado, aspiração da vesícula e drenagem sub-hepática (p < 0,001). |\n| Kahraman et al., 2026 [28] | Turquia | transversal; 1.054 pacientes submetidos a CVL eletiva por colelitíase | Índices inflamatórios pré-operatórios (CAR, NLR, IBI) e DM2 | Gravidade pela escala de Parkland, tempo operatório e conversão | Conversão e tempo operatório cresceram com o grau de Parkland; DM2, CAR, NLR e IBI foram preditores independentes de maior gravidade, com melhor discriminação do IBI (AUC 0,792). |\n| Kritika et al., 2026 [12] | Índia | coorte prospectiva; 196 pacientes com colelitíase sintomática submetidos a CVL | Espessura da parede vesicular à ultrassonografia pré-operatória, estratificada em quatro grupos | Aderências, tempo operatório, conversão para cirurgia aberta e complicações pós-operatórias | Conversão aumentou com a espessura parietal (3,6% vs. 20,0%); espessura >2 mm previu conversão de forma independente (AOR 2,41; IC 95% 1,08-5,36); corte ótimo >3 mm, com AUC 0,72. |\n| Kumar et al., 2026 [10] | Índia | coorte prospectiva; 150 pacientes submetidos a CVL eletiva | Escore pré-operatório de Randhawa e Pujahari | Dificuldade operatória, incluindo conversão para cirurgia aberta | A conversão ocorreu em 3,3%. Parede vesicular >4 mm, líquido perivesicular, cálculo impactado e IMC >27,5 associaram-se a maior dificuldade. O escore teve sensibilidade de 57,14% e especificidade de 79,51%. |\n| Nagarla et al., 2026 [9] | Índia | coorte prospectiva; 150 pacientes (21-80 anos) submetidos a CVL eletiva | Escore pré-operatório clínico, bioquímico e ultrassonográfico (15 pontos) | CVL difícil, com risco de conversão | A dificuldade ocorreu em 22%. Os preditores incluíram idade >60, sexo masculino, IMC >25, fosfatase alcalina elevada, parede vesicular >4 mm, cálculo impactado e colédoco >7 mm. O escore teve AUC de 0,927. |\n| Rayamajhi et al., 2026 [11] | Nepal | coorte prospectiva; 108 pacientes submetidos a CVL de urgência por colecistite aguda litiásica | PCR pré-operatória | CVL difícil (mais de 60 min) e conversão para cirurgia aberta | Houve 9 conversões; a PCR média foi 18,2 mg/L nas CVL simples, 36 nas difíceis e 50,1 nos convertidos, associando-se à complexidade cirúrgica; idade e sexo não mostraram associação. |\n| Shiihara et al., 2026 [26] | Japão | coorte retrospectiva; 193 pacientes submetidos a CVL após CPRE por coledocolitíase | Intervalo CPRE-CVL, idade, sexo e colecistite aguda | Colecistectomia difícil, incluindo conversão para cirurgia aberta ou colecistectomia subtotal | Cirurgia difícil ocorreu em 25,4%, mais frequente com intervalo CPRE-CVL de 15-60 dias (33,0%). Idade ≥ 60 anos, sexo masculino, colecistite aguda e esse intervalo foram fatores de risco independentes. |\n| Yoshitake et al., 2026 [27] | Japão | coorte retrospectiva; 257 pacientes com colecistite aguda submetidos a CVL após drenagem percutânea trans-hepática da vesícula (PTGBD) | Intervalo PTGBD-CVL como variável contínua; PCR ao diagnóstico e outras covariáveis clínicas | Cirurgia de resgate (conversão para cirurgia aberta, colecistectomia subtotal ou abordagem fundo primeiro) | Cirurgia de resgate ocorreu em 36,6%. O intervalo PTGBD-CVL, analisado como variável contínua, não se associou ao resgate; PCR elevada ao diagnóstico foi fator independente (OR ajustada 1,033). |\n| Zhou et al., 2026 [25] | China | coorte retrospectiva; 107 pacientes com colecistite submetidos a CVL após drenagem percutânea trans-hepática da vesícula (PTGBD) | Parâmetros clínicos, tomográficos, laboratoriais, relacionados à PTGBD e psicológicos; nomograma | CVL difícil pelos critérios TG18, incluindo conversão para cirurgia aberta | PCR > 8,2 mg/L (OR 4,21), líquido perivesicular (OR 60,93), índice de aderência vesícula-duodeno > 0,7 e atenuação do triângulo de Calot > 30 HU predisseram cirurgia difícil; nomograma alcançou AUC de 0,903. |\n| Kumar et al., 2025 [15] | Índia | coorte prospectiva; 318 pacientes submetidos a CVL por colelitíase sintomática | Fatores pré-operatórios (idade, sexo, comorbidades, cirurgia abdominal prévia, exames laboratoriais) e intraoperatórios (aderências, triângulo de Calot, visão crítica de segurança, coledocolitíase, fístula colecistoentérica) | Conversão para colecistectomia aberta; elaboração de escore de risco | Conversão em 33 pacientes (10,38%). Cirurgia abdominal prévia e fosfatase alcalina elevada predisseram conversão no pré-operatório; aderências densas, triângulo de Calot não visualizado, falha da visão crítica, coledocolitíase e fístula colecistoentérica, no intraoperatório. |\n| V et al., 2025 [14] | Índia | coorte prospectiva; 222 adultos submetidos a CVL eletiva | Idade, sexo, IMC, leucometria, função hepática, tamanho e espessura da parede vesicular, cálculo impactado no infundíbulo e diâmetro do colédoco à ultrassonografia | Conversão para cirurgia aberta; escore preditivo | Conversão em 21 de 222 pacientes (9,5%). Espessura da parede e tamanho da vesícula compuseram o escore, com risco previsto de 0,5%, 1,8% e 7,2% para zero, um e dois pontos. |\n| Acosta et al., 2024 [7] | Venezuela\\* | transversal; 391 pacientes submetidos a CVL | Sexo, idade e tipo de admissão (eletiva ou urgência) | Taxa e causas de conversão; tempo de internação | A conversão ocorreu em 3,3% e foi mais frequente em homens (p = 0,006), em casos de urgência e acima dos 50 anos. A principal causa foi falha do equipamento, e a conversão prolongou a internação (p = 0,009). |\n| Altamirano et al., 2024 [4] | Argentina | série de casos; 102 casos de colecistite aguda tratados cirurgicamente | Momento da cirurgia: precoce (antes do sétimo dia do início dos sintomas) vs. tardia | Conversão para cirurgia aberta, tempo de internação e complicações | Conversão ocorreu em 2 casos (1,96%), ambos no grupo tardio, sobretudo por dúvida anatômica; o grupo tardio teve internação mais longa (7,69 vs. 1,34 dias; p = 0,001). |\n| Kadirvel et al., 2024 [16] | Índia | coorte prospectiva; 60 pacientes com colecistite aguda submetidos a CVL precoce | Idade, IMC, comorbidades, leucócitos, PCR e achados ultrassonográficos e intraoperatórios | Conversão para cirurgia aberta | A conversão foi maior acima dos 50 anos (33,3%) e com IMC >30 (26,3%). Leucocitose e PCR elevada foram preditores significativos. O modelo preditivo teve sensibilidade de 88,9% e especificidade de 90%. |\n| Medina López, 2024 [1] | México\\* | transversal; 362 pacientes submetidos a colecistectomia (419 avaliados, 57 excluídos) | Variáveis sociodemográficas, ultrassonográficas e laboratoriais, CPRE prévia, experiência do cirurgião e variantes anatômicas | Conversão de CVL para colecistectomia aberta | Incidência de conversão de 9,6%; preditores pré-operatórios: idade >65 anos, sexo feminino, sobrepeso, PCR >10 mg/dL, leucocitose e bilirrubina >2 mg/dL; cirurgião em formação e lesão de via biliar também associados. |\n| Toppo et al., 2024 [17] | Índia | coorte prospectiva; 93 pacientes com litíase biliar submetidos a CVL | História clínica, marcadores bioquímicos e achados ultrassonográficos | Conversão para colecistectomia aberta | Dez pacientes foram convertidos (10,75%). Colecistite aguda, múltiplas crises prévias e vesícula contraída à ultrassonografia foram preditores significativos de conversão. |\n| Aguila Gómez et al., 2023 [5] | Bolívia | série de casos; 1.095 pacientes submetidos a CVL (2012-2022) | Características clínicas e operatórias; causas de conversão | Taxa e causa de conversão para cirurgia aberta | A taxa de conversão foi de 6,9%, e o principal motivo foi a dificuldade em identificar as estruturas anatômicas. A permanência pós-operatória média foi de 3,5 dias, e a CVL mostrou-se segura e eficaz. |\n| Altıner et al., 2023 [19] | Turquia | coorte retrospectiva; 80 pacientes submetidos a CVL por colecistite aguda | Espessura da parede vesicular e líquido pericolecístico à ultrassonografia pré-operatória | Conversão para cirurgia aberta, tempo operatório e tempo de internação | Convertidos apresentaram parede vesicular mais espessa e mais líquido pericolecístico; espessura ≥5,75 mm previu conversão (AUC 0,907), com sensibilidade de 85,7% e especificidade de 84,9%. |\n| Ensuncho-Hoyos et al., 2023 [2] | Colômbia | caso-controle; 332 pacientes submetidos a CVL (83 casos convertidos e 249 controles) | Fatores perioperatórios: experiência do cirurgião, obesidade, espessamento da parede vesicular à ultrassonografia, classificação de Parkland | Conversão para técnica aberta | Na análise multivariada, experiência do cirurgião, obesidade, espessamento da parede vesicular à ultrassonografia e maior pontuação na classificação de Parkland foram as variáveis mais fortemente associadas à conversão. |\n| Khan et al., 2023 [20] | Índia | coorte prospectiva; 350 pacientes com colelitíase sintomática submetidos a CVL | Espessura da parede vesicular à ultrassonografia pré-operatória | Taxa de conversão, complicações, tempo operatório e internação | Espessamento moderado e grave da parede vesicular associou-se significativamente a mais conversões, complicações, maior tempo operatório e internação prolongada; 29,71% dos pacientes apresentavam parede espessada. |\n| Ochoa-Ortiz et al., 2023 [18] | México | coorte prospectiva; NI; pacientes adultos de ambos os sexos com doença da vesícula biliar e indicação de CVL | Fatores pré-operatórios (dilatação do colédoco, cirurgia de urgência, tabagismo) e intraoperatórios (duração, edema do triângulo de Calot, coledocolitíase) | Conversão para colecistectomia aberta | Conversão em 4,54%. Na análise multivariada, somente a duração da cirurgia laparoscópica manteve associação; ponto de corte de 120 minutos, com sensibilidade de 67% e especificidade de 88%. |\n| Hanson-Viana et al., 2022 [22] | México | coorte prospectiva; 2.075 pacientes submetidos a CVL eletiva | Idade, sexo, IMC, cirurgia abdominal prévia, vesícula contraída, síndrome de Mirizzi e coledocolitíase | Conversão para cirurgia aberta | Sexo masculino, idade acima de 60 anos, cirurgia abdominal alta prévia, vesícula contraída, síndrome de Mirizzi e coledocolitíase associaram-se fortemente à conversão; IMC não influenciou; maior impacto em homens acima de 60 anos. |\n| Lauferman et al., 2022 [3] | Argentina\\* | coorte prospectiva; NI; pacientes adultos submetidos a CVL em hospital público de atenção secundária | Sexo, IMC, colecistite, CPRE prévia, cólica biliar recente, leucócitos, enzimas hepáticas, bilirrubina, ultrassonografia e cirurgia abdominal prévia | Colecistectomia laparoscópica difícil, incluindo conversão | Conversão de 11,25%, todas classificadas como colecistectomia difícil; na multivariada, sexo masculino (OR 6,63) e cirurgia prévia (OR 11,70) associaram-se a maior risco de colecistectomia difícil. |\n| Paul et al., 2022 [23] | Índia | coorte prospectiva; 132 pacientes com colecistite aguda calculosa submetidos a CVL | Escore de Randhawa et al. e fatores de risco pré-operatórios | Dificuldade intraoperatória e conversão | Crises prévias de colecistite, cálculo impactado e espessura da parede vesicular foram significativos. O escore teve sensibilidade de 82,6% e especificidade de 63,5%, e a conversão ocorreu em 6,9%. |\n| Ramírez-Giraldo et al., 2022 [21] | Colômbia | outro; NI | Escala pré-operatória de previsão de dificuldade | Dificuldade intraoperatória; conversão, colecistectomia subtotal e complicações | A escala teve área sob a curva ROC de 0,88. O corte 8 deu sensibilidade de 75,15% e especificidade de 88,31%. Maior dificuldade prevista associou-se a mais conversões, colecistectomias subtotais e complicações. |\n| Sisa-Segovia et al., 2022 [6] | Paraguai\\* | transversal; 267 pacientes submetidos a CVL | Escala de Parkland intraoperatória e fatores clínicos e laboratoriais | Grau de Parkland; taxa de conversão | A conversão ocorreu em 4,49% dos 267 casos. Icterícia obstrutiva prévia, hiperbilirrubinemia, fosfatase alcalina elevada, IMC aumentado, cirurgia de urgência e colecistite aguda associaram-se a graus mais altos da escala de Parkland. |\n| Sisa-Segovia et al., 2021 [8] | Paraguai\\* | transversal; 317 pacientes submetidos a CVL | Causas da conversão, tipo de cirurgia realizada e diagnóstico | Prevalência de conversão para cirurgia aberta | Taxa de conversão de 2,2% (7 pacientes); a principal causa foi a não identificação das estruturas do triângulo de Calot devido a aderências firmes; sem complicações pós-operatórias em 30 dias. |\n| Tongyoo et al., 2021 [24] | Tailândia | coorte prospectiva; 152 pacientes submetidos a CVL eletiva | Modelo de Randhawa original e modificado; fatores clínicos e ultrassonográficos | Dificuldade operatória e conversão | Dezesseis casos foram convertidos. Obesidade, inflamação ou procedimento biliar e vesícula contraída predisseram a conversão. O modelo de Randhawa modificado superou o original (AUROC 0,82 vs. 0,75). |\n\nFonte: Elaborado pelos autores (2026), a partir dos estudos incluídos.\n\nNotas: estudos ordenados do mais recente para o mais antigo; \\* país inferido pelo país do periódico de publicação, por ausência de afiliação no registro da base; AOR = *odds ratio* ajustado; AUC = área sob a curva; AUROC = área sob a curva ROC; CAR = razão proteína C-reativa/albumina; CPRE = colangiopancreatografia retrógrada endoscópica; CVL = colecistectomia videolaparoscópica; DM2 = diabetes mellitus tipo 2; HU = unidades Hounsfield; IC = intervalo de confiança; IMC = índice de massa corporal; NI = não informado; NLR = razão neutrófilo-linfócito; OR = *odds ratio*; PCR = proteína C-reativa; PTGBD = drenagem percutânea trans-hepática da vesícula biliar; ROC = *receiver operating characteristic*; TG18 = *Tokyo Guidelines* 2018.",
+  "quadro2": "**Tabela 2 –** Distribuição dos estudos incluídos por eixo temático\n\n| Eixo temático | n | % | Referências |\n| --- | --- | --- | --- |\n| Fatores demográficos e clínicos pré-operatórios (idade, sexo, IMC, comorbidades, cirurgias abdominais prévias) | 5 | 17,9 | [3,4,7,22,26] |\n| Fatores laboratoriais e de imagem pré-operatórios (leucocitose, PCR, bilirrubinas, espessura da parede vesicular, líquido perivesicular, litíase de colédoco) | 10 | 35,7 | [1,11,12,13,16,17,19,20,27,28] |\n| Fatores intraoperatórios e anatômicos (aderências, anatomia do triângulo de Calot, sangramento, lesão de via biliar, inflamação aguda) | 5 | 17,9 | [2,5,8,15,18] |\n| Escores preditivos e modelos de risco validados | 8 | 28,6 | [6,9,10,14,21,23,24,25] |\n| Desfechos pós-operatórios associados à conversão (tempo de internação, complicações, mortalidade, custo) | 0 | 0,0 | — |\n| **Total** | **28** | **100,0** | — |\n\nFonte: Elaborado pelos autores (2026).\n\nNota: cada estudo foi alocado a um único eixo, o predominante na sua análise. As porcentagens podem não somar 100,0 em razão do arredondamento."
  }
 }

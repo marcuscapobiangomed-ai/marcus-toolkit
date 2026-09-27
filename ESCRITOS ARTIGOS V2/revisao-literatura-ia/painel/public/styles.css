@@ -235,6 +235,102 @@ dialog::backdrop { background: rgba(10, 16, 26, .45); }
 dialog .corpo { padding: 20px; display: grid; gap: 14px; }
 dialog .rodape { padding: 14px 20px; border-top: 1px solid var(--borda); display: flex; justify-content: flex-end; gap: 8px; }
 
+/* Métricas de Tokens e Custos */
+.chip.custo {
+  color: var(--primaria-forte);
+  background: var(--primaria-suave);
+  border-color: transparent;
+  cursor: pointer;
+  font-weight: 500;
+}
+.chip.custo:hover {
+  filter: brightness(0.95);
+}
+
+.cartao-metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.cartao-kpi {
+  background: var(--superficie-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cartao-kpi .rotulo-kpi {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--texto-2);
+}
+.cartao-kpi .valor-kpi {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--texto);
+}
+.cartao-kpi .sub-kpi {
+  font-size: 11px;
+  color: var(--texto-2);
+}
+
+.card-uso-tokens {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+  background: var(--superficie-2);
+  display: grid;
+  gap: 12px;
+}
+.topo-uso {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topo-uso h3 {
+  font-size: 14px;
+}
+.grade-uso {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+.item-uso {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.item-uso .val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--texto);
+}
+.item-uso .desc {
+  font-size: 11px;
+  color: var(--texto-2);
+  margin-top: 2px;
+}
+.barra-progresso-trilha {
+  width: 100%;
+  height: 8px;
+  background: var(--borda);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.barra-progresso-preenchimento {
+  height: 100%;
+  background: var(--primaria);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   .lateral { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--borda); }

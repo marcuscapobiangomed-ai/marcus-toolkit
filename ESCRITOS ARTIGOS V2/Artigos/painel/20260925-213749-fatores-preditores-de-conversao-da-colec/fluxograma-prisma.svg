@@ -18,17 +18,17 @@
 <rect x="78" y="523" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
 <text x="92" y="579" font-weight="700">Registros elegíveis (n = 115)</text>
 <rect x="554" y="523" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
-<text x="568" y="554" font-weight="700">Não incluídos por limite de síntese</text><text x="568" y="579" font-weight="700">(n = 55):</text><text x="588" y="604">menor relevância para a pergunta</text>
+<text x="568" y="554" font-weight="700">Não incluídos por limite de síntese</text><text x="568" y="579" font-weight="700">(n = 87):</text><text x="588" y="604">menor relevância para a pergunta</text>
 <line x1="498" y1="572" x2="554" y2="572" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
 <line x1="288" y1="621" x2="288" y2="665" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
 <rect x="78" y="665" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
-<text x="92" y="696" font-weight="700">Registros com existência e metadados</text><text x="92" y="721" font-weight="700">verificados na fonte original</text><text x="92" y="746" font-weight="700">(n = 60)</text>
+<text x="92" y="696" font-weight="700">Registros com existência e metadados</text><text x="92" y="721" font-weight="700">verificados na fonte original</text><text x="92" y="746" font-weight="700">(n = 28)</text>
 <rect x="554" y="665" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
 <text x="568" y="708.5" font-weight="700">Registros excluídos na verificação</text><text x="568" y="733.5" font-weight="700">(n = 0)</text>
 <line x1="498" y1="714" x2="554" y2="714" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
 <rect x="16" y="306" width="44" height="457" rx="8" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text transform="translate(45,534.5) rotate(-90)" text-anchor="middle" font-weight="700">Triagem</text>
 <line x1="288" y1="763" x2="288" y2="807" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
 <rect x="78" y="807" width="420" height="124" fill="#eeeeee" stroke="#000" stroke-width="1.5"/>
-<text x="92" y="876" font-weight="700">Estudos incluídos na revisão (n = 60)</text>
+<text x="92" y="876" font-weight="700">Estudos incluídos na revisão (n = 28)</text>
 <rect x="16" y="807" width="44" height="124" rx="8" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text transform="translate(45,869) rotate(-90)" text-anchor="middle" font-weight="700">Inclusão</text>
 </svg>

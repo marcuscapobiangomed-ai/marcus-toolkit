@@ -65,6 +65,20 @@
             <option value="fora-da-tela">Fora da tela (continua sendo um Chrome real)</option>
           </select>
         </div>
+
+        <div class="card-uso-tokens" id="box-uso-tokens">
+          <div class="topo-uso">
+            <h3>Saldo & Consumo OpenRouter</h3>
+            <button type="button" class="btn fantasma pequeno" id="btn-atualizar-uso">↻ Atualizar saldo</button>
+          </div>
+          <div class="grade-uso" id="dados-uso-tokens">
+            <!-- preenchido dinamicamente via JS -->
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span class="pequeno" id="uso-status-msg"></span>
+            <a href="https://openrouter.ai/activity" target="_blank" rel="noopener" class="pequeno">Ver extrato por modelo no OpenRouter ↗</a>
+          </div>
+        </div>
       </div>
       <div class="rodape">
         <button class="btn" value="cancelar" type="submit">Cancelar</button>

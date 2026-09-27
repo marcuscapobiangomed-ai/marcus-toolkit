@@ -50,7 +50,7 @@ export const PADROES = {
   idiomas: ['pt', 'en', 'es'],
   bases: ['pubmed', 'scielo', 'lilacs'],
   min_referencias: 25,
-  max_incluidos: 60,
+  max_incluidos: 30,
   limite_por_base: 400,
   exigir_texto_completo: true,
   excluir_relatos: true,
@@ -68,6 +68,12 @@ export class Trabalho extends EventEmitter {
   constructor(estado) {
     super();
     this.estado = estado;
+    if (!this.estado.llm) this.estado.llm = { chamadas: 0, modelos: [] };
+    if (this.estado.llm.tokens_entrada === undefined) this.estado.llm.tokens_entrada = 0;
+    if (this.estado.llm.tokens_saida === undefined) this.estado.llm.tokens_saida = 0;
+    if (this.estado.llm.tokens_total === undefined) this.estado.llm.tokens_total = 0;
+    if (this.estado.llm.custo_usd === undefined) this.estado.llm.custo_usd = 0;
+    if (!this.estado.llm.chamadas_detalhe) this.estado.llm.chamadas_detalhe = [];
     this.dir = path.join(JOBS_DIR, estado.id);
     this.cancelar = false;
     fs.mkdirSync(path.join(this.dir, 'evidencias'), { recursive: true });
@@ -87,7 +93,15 @@ export class Trabalho extends EventEmitter {
       status: 'na_fila',
       etapas: Object.fromEntries(ETAPAS.map(([k, agente, titulo]) => [k, { agente, titulo, status: 'pendente' }])),
       log: [],
-      llm: { chamadas: 0, modelos: [] },
+      llm: {
+        chamadas: 0,
+        modelos: [],
+        tokens_entrada: 0,
+        tokens_saida: 0,
+        tokens_total: 0,
+        custo_usd: 0,
+        chamadas_detalhe: [],
+      },
     };
     const t = new Trabalho(estado);
     t.salvar();
@@ -158,10 +172,34 @@ export class Trabalho extends EventEmitter {
       throw e;
     }
     if (r.parcial) this.log('Resposta da IA veio truncada; aproveitados os itens completos.', 'aviso');
+    const u = r.usage || {};
+    const pTokens = u.prompt_tokens || 0;
+    const cTokens = u.completion_tokens || 0;
+    const tTokens = u.total_tokens || (pTokens + cTokens);
+    const custo = r.custo_usd || 0;
+
     this.estado.llm.chamadas++;
     this.estado.llm.provedor = r.provedor;
+    this.estado.llm.tokens_entrada = (this.estado.llm.tokens_entrada || 0) + pTokens;
+    this.estado.llm.tokens_saida = (this.estado.llm.tokens_saida || 0) + cTokens;
+    this.estado.llm.tokens_total = (this.estado.llm.tokens_total || 0) + tTokens;
+    this.estado.llm.custo_usd = Number(((this.estado.llm.custo_usd || 0) + custo).toFixed(6));
     if (!this.estado.llm.modelos.includes(r.modelo)) this.estado.llm.modelos.push(r.modelo);
+    if (!this.estado.llm.chamadas_detalhe) this.estado.llm.chamadas_detalhe = [];
+    this.estado.llm.chamadas_detalhe.push({
+      t: new Date().toISOString(),
+      modelo: r.modelo,
+      provedor: r.provedor,
+      tokens_entrada: pTokens,
+      tokens_saida: cTokens,
+      tokens_total: tTokens,
+      custo_usd: custo,
+    });
+    if (this.estado.llm.chamadas_detalhe.length > 100) {
+      this.estado.llm.chamadas_detalhe.splice(0, this.estado.llm.chamadas_detalhe.length - 100);
+    }
     this.salvar();
+    this.emit('estado');
     return r;
   }
 
@@ -418,7 +456,8 @@ export class Trabalho extends EventEmitter {
       if (d.incluir) incluidos.push(c);
       else excluidos[d.motivo || 'fora_do_tema'] = (excluidos[d.motivo || 'fora_do_tema'] || 0) + 1;
     }
-    if (incluidos.length > params.max_incluidos) {
+    const maxPermitido = Math.min(Number(params.max_incluidos) || 30, 30);
+    if (incluidos.length > maxPermitido) {
       // Ordem do corte: estudos das bases latino-americanas primeiro (exigencia do modelo e minoria no
       // conjunto), depois relevancia, forca do delineamento e ano mais recente. Sem isso, empates de
       // relevancia eram resolvidos pela ordem de busca e cortavam justamente os estudos regionais.
@@ -428,11 +467,11 @@ export class Trabalho extends EventEmitter {
         ((b.decisao.relevancia || 0) - (a.decisao.relevancia || 0)) ||
         (forca(b.decisao.delineamento || '') - forca(a.decisao.delineamento || '')) ||
         ((Number(b.ano) || 0) - (Number(a.ano) || 0)));
-      for (const c of incluidos.slice(params.max_incluidos)) {
+      for (const c of incluidos.slice(maxPermitido)) {
         c.decisao = { ...c.decisao, incluir: false, motivo: 'limite_escopo' };
         excluidos.limite_escopo = (excluidos.limite_escopo || 0) + 1;
       }
-      incluidos = incluidos.slice(0, params.max_incluidos);
+      incluidos = incluidos.slice(0, maxPermitido);
     }
     this.estado.prisma.excluidos_triagem = excluidos;
     this.estado.prisma.verificados = incluidos.length;

@@ -33,6 +33,12 @@ const MOTIVOS = {
 };
 const dataHora = (iso) => (iso ? new Date(iso).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '');
 const selo = (status, texto) => el('span', { class: `selo ${status}` }, texto || STATUS[status] || status);
+const formatarTokens = (n) => (!n ? '0' : n >= 1000 ? (n / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'k' : Number(n).toLocaleString('pt-BR'));
+const formatarUsd = (v) => (v === undefined || v === null ? '$0,00' : '$' + Number(v).toFixed(v < 0.01 && v > 0 ? 4 : 2));
+
+function abrirConfig() {
+  $('#btn-config').click();
+}
 
 let estadoGlobal = null;
 let fonteEventos = null;
@@ -57,6 +63,22 @@ async function carregarStatus(forcar = false) {
   } else {
     chips.push(el('span', { class: 'chip erro' }, 'IA: nenhum motor disponível'));
   }
+  if (estadoGlobal.uso?.openrouter?.ativo) {
+    const or = estadoGlobal.uso.openrouter;
+    if (or.is_free_tier && or.gratis_restantes !== null) {
+      chips.push(el('span', {
+        class: 'chip custo',
+        title: `OpenRouter: ${or.gratis_usadas} usadas de ${or.gratis_limite} hoje (${or.gratis_restantes} restantes). Clique para detalhes.`,
+        onclick: abrirConfig,
+      }, `⚡ ${or.gratis_restantes}/${or.gratis_limite} req. grátis hoje`));
+    } else {
+      chips.push(el('span', {
+        class: 'chip custo',
+        title: `OpenRouter: Créditos comprados $${or.total_creditos_usd.toFixed(2)}, uso total $${or.total_gasto_usd.toFixed(4)}. Clique para detalhes.`,
+        onclick: abrirConfig,
+      }, `💰 Saldo: $${or.saldo_restante_usd.toFixed(2)}`));
+    }
+  }
   chips.push(el('span', { class: 'chip ok', title: 'SciELO e LILACS são pesquisados em um Chrome real (Playwright), pois bloqueiam acesso automatizado simples.' }, 'Navegador: Chrome real'));
   chips.push(el('span', { class: 'chip ok' }, 'PubMed API · SciELO · LILACS'));
   chips.push(el('span', { class: 'chip ok', title: (estadoGlobal.etapas || []).map((e) => e[1]).join(' · ') }, `${(estadoGlobal.etapas || []).length} agentes`));
@@ -75,7 +97,13 @@ async function carregarLista() {
   $('#lista').replaceChildren(...(lista.length ? lista.map((t) => el('li', {},
     el('a', { class: `item-lista ${t.id === idAtual ? 'ativo' : ''}`, href: `#t/${t.id}` },
       el('div', { class: 't' }, t.titulo || t.tema),
-      el('div', { class: 'm' }, selo(t.status), el('span', {}, dataHora(t.criado_em)), t.referencias ? el('span', {}, `${t.referencias} ref.`) : null, t.checklist ? el('span', {}, `checklist ${t.checklist}`) : null),
+      el('div', { class: 'm' },
+        selo(t.status),
+        el('span', {}, dataHora(t.criado_em)),
+        t.referencias ? el('span', {}, `${t.referencias} ref.`) : null,
+        t.checklist ? el('span', {}, `checklist ${t.checklist}`) : null,
+        t.llm?.tokens_total ? el('span', { title: `${t.llm.tokens_total.toLocaleString('pt-BR')} tokens · Custo est.: ${formatarUsd(t.llm.custo_usd)}` }, `${formatarTokens(t.llm.tokens_total)} tokens`) : null
+      ),
       el('div', { class: 'barra-mini' }, ...t.etapas.map((s) => el('span', { class: s || '' })))))) : [el('li', { class: 'pequeno' }, 'Nenhum trabalho ainda.')]));
 }
 
@@ -245,6 +273,8 @@ function renderizarTrabalho(t, preservarRolagem = false) {
           el('span', {}, `Criado em ${dataHora(t.criado_em)}`),
           t.data_busca ? el('span', {}, `Busca em ${dataHora(t.data_busca)}`) : null,
           el('span', {}, `IA: ${t.llm?.provedor || '—'} (${t.llm?.chamadas || 0} chamadas)`),
+          el('span', {}, `Tokens: ${formatarTokens(t.llm?.tokens_total || 0)} (${formatarTokens(t.llm?.tokens_entrada || 0)} ent. · ${formatarTokens(t.llm?.tokens_saida || 0)} saí.)`),
+          el('span', {}, `Custo est.: ${t.llm?.custo_usd > 0 ? formatarUsd(t.llm.custo_usd) : '$0,00 (grátis)'}`),
           el('span', {}, `Revisão ${t.params.tipo_revisao}`)),
         t.erro ? el('p', { class: 'nota aviso' }, `Erro: ${t.erro}`) : null),
       el('div', { class: 'acoes' },
@@ -267,6 +297,7 @@ function renderizarTrabalho(t, preservarRolagem = false) {
   const abas = [
     ['progresso', 'Progresso'], ['artigo', 'Artigo'], ['fontes', `Fontes verificadas${t.aprovados_detalhe?.length ? ` (${t.aprovados_detalhe.length})` : ''}`],
     ['triagem', `Triagem${t.candidatos?.length ? ` (${t.candidatos.length})` : ''}`], ['busca', 'Estratégias de busca'], ['checklist', `Checklist${chkTexto}`],
+    ['tokens', `Tokens & Custos${t.llm?.tokens_total ? ` (${formatarTokens(t.llm.tokens_total)})` : ''}`],
   ];
   if (!t.arquivos && abaAtual === 'artigo') abaAtual = 'progresso';
   const conteudo = el('div', { id: 'conteudo-aba' });
@@ -276,7 +307,7 @@ function renderizarTrabalho(t, preservarRolagem = false) {
     disabled: k === 'artigo' && !t.arquivos ? true : null,
   }, rot)));
   $('#principal').replaceChildren(cab, el('div', { class: 'cartao' }, barra, conteudo));
-  ({ progresso: abaProgresso, artigo: abaArtigo, fontes: abaFontes, triagem: abaTriagem, busca: abaBusca, checklist: abaChecklist })[abaAtual](t, conteudo);
+  ({ progresso: abaProgresso, artigo: abaArtigo, fontes: abaFontes, triagem: abaTriagem, busca: abaBusca, checklist: abaChecklist, tokens: abaTokens })[abaAtual](t, conteudo);
   if (preservarRolagem) window.scrollTo(0, y);
 }
 
@@ -410,6 +441,116 @@ function abaChecklist(t, alvo) {
     (t.auditoria?.rodadas || []).length ? el('p', { class: 'pequeno' }, `Auditoria: ${t.auditoria.rodadas.map((r) => `rodada ${r.rodada} — ${r.problemas.length} problema(s), ${r.corrigidos} corrigido(s), ${r.removidos} removido(s)`).join(' · ')}`) : null);
 }
 
+function abaTokens(t, alvo) {
+  const llm = t.llm || {};
+  const chamadas = llm.chamadas_detalhe || [];
+  const modelos = llm.modelos || [];
+
+  alvo.append(
+    el('div', { class: 'cartao-metricas-grid' },
+      el('div', { class: 'cartao-kpi' },
+        el('span', { class: 'rotulo-kpi' }, 'Tokens de Entrada (Prompt)'),
+        el('span', { class: 'valor-kpi' }, (llm.tokens_entrada || 0).toLocaleString('pt-BR')),
+        el('span', { class: 'sub-kpi' }, 'Contexto, prompts e literatura enviada')),
+      el('div', { class: 'cartao-kpi' },
+        el('span', { class: 'rotulo-kpi' }, 'Tokens de Saída (Geração)'),
+        el('span', { class: 'valor-kpi' }, (llm.tokens_saida || 0).toLocaleString('pt-BR')),
+        el('span', { class: 'sub-kpi' }, 'Triagem, síntese e redação produzida')),
+      el('div', { class: 'cartao-kpi' },
+        el('span', { class: 'rotulo-kpi' }, 'Total de Tokens'),
+        el('span', { class: 'valor-kpi' }, (llm.tokens_total || 0).toLocaleString('pt-BR')),
+        el('span', { class: 'sub-kpi' }, `${llm.chamadas || 0} chamada(s) à IA no total`)),
+      el('div', { class: 'cartao-kpi' },
+        el('span', { class: 'rotulo-kpi' }, 'Custo Estimado'),
+        el('span', { class: 'valor-kpi', style: 'color: var(--ok);' }, formatarUsd(llm.custo_usd || 0)),
+        el('span', { class: 'sub-kpi' }, llm.custo_usd > 0 ? 'Faturado via provedor' : 'Nível gratuito / sem custo adicional'))),
+  );
+
+  alvo.append(
+    el('div', { style: 'margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;' },
+      el('b', {}, 'Modelos empregados: '),
+      ...(modelos.length ? modelos.map((m) => el('span', { class: 'chip' }, m)) : [el('span', { class: 'pequeno' }, 'Nenhum ainda.')]))
+  );
+
+  if (chamadas.length) {
+    const linhas = chamadas.slice().reverse().map((c, i) => el('tr', {},
+      el('td', {}, chamadas.length - i),
+      el('td', { class: 'pequeno' }, dataHora(c.t)),
+      el('td', {}, el('span', { class: 'mono' }, c.modelo?.split('/').pop() || c.modelo || '—')),
+      el('td', {}, c.provedor || '—'),
+      el('td', { style: 'text-align: right;' }, (c.tokens_entrada || 0).toLocaleString('pt-BR')),
+      el('td', { style: 'text-align: right;' }, (c.tokens_saida || 0).toLocaleString('pt-BR')),
+      el('td', { style: 'text-align: right; font-weight: 600;' }, (c.tokens_total || 0).toLocaleString('pt-BR')),
+      el('td', { style: 'text-align: right;' }, formatarUsd(c.custo_usd || 0))
+    ));
+
+    alvo.append(
+      el('h3', { style: 'margin: 18px 0 8px; font-size: 14px;' }, 'Histórico de Chamadas e Consumo de Tokens'),
+      el('div', { class: 'tabela-rolagem' },
+        el('table', { class: 'dados' },
+          el('thead', {},
+            el('tr', {},
+              el('th', {}, '#'),
+              el('th', {}, 'Horário'),
+              el('th', {}, 'Modelo'),
+              el('th', {}, 'Provedor'),
+              el('th', { style: 'text-align: right;' }, 'Entrada'),
+              el('th', { style: 'text-align: right;' }, 'Saída'),
+              el('th', { style: 'text-align: right;' }, 'Total'),
+              el('th', { style: 'text-align: right;' }, 'Custo')
+            )),
+          el('tbody', {}, ...linhas))));
+  } else {
+    alvo.append(el('p', { class: 'pequeno' }, 'O detalhamento de chamadas e tokens aparecerá à medida que os agentes forem acionados.'));
+  }
+}
+
+function renderizarUsoOpenRouter(uso) {
+  const container = $('#dados-uso-tokens');
+  if (!container) return;
+  const or = uso?.openrouter;
+  if (!or || !or.ativo) {
+    container.replaceChildren(el('p', { class: 'pequeno' }, 'Nenhuma chave OpenRouter ativa configurada.'));
+    return;
+  }
+  const itens = [];
+  if (or.is_free_tier && or.gratis_limite !== null) {
+    const pct = or.gratis_limite > 0 ? Math.round((or.gratis_usadas / or.gratis_limite) * 100) : 0;
+    itens.push(el('div', { class: 'item-uso', style: 'grid-column: 1 / -1; text-align: left;' },
+      el('div', { style: 'display: flex; justify-content: space-between; align-items: baseline;' },
+        el('span', { class: 'desc', style: 'font-weight: 600;' }, 'Cota Diária de Modelos Gratuitos (:free)'),
+        el('span', { class: 'val', style: 'font-size: 15px;' }, `${or.gratis_usadas} de ${or.gratis_limite} usadas hoje (${or.gratis_restantes} restantes)`)),
+      el('div', { class: 'barra-progresso-trilha' },
+        el('div', { class: 'barra-progresso-preenchimento', style: `width: ${pct}%; background: ${pct > 80 ? 'var(--aviso)' : 'var(--primaria)'}` })),
+      el('span', { class: 'pequeno', style: 'margin-top: 4px; display: block;' }, 'Reseta automaticamente à meia-noite UTC.')
+    ));
+  }
+  itens.push(el('div', { class: 'item-uso' },
+    el('div', { class: 'val' }, `$${or.total_creditos_usd.toFixed(2)}`),
+    el('div', { class: 'desc' }, 'Créditos comprados')));
+  itens.push(el('div', { class: 'item-uso' },
+    el('div', { class: 'val' }, `$${or.total_gasto_usd.toFixed(4)}`),
+    el('div', { class: 'desc' }, 'Gasto total (pago)')));
+  itens.push(el('div', { class: 'item-uso' },
+    el('div', { class: 'val', style: 'color: var(--ok);' }, `$${or.saldo_restante_usd.toFixed(2)}`),
+    el('div', { class: 'desc' }, 'Saldo disponível')));
+
+  container.replaceChildren(...itens);
+}
+
+async function atualizarUsoPainel() {
+  const statusMsg = $('#uso-status-msg');
+  if (statusMsg) statusMsg.textContent = 'Consultando OpenRouter…';
+  try {
+    const uso = await api('/api/uso');
+    if (estadoGlobal) estadoGlobal.uso = uso;
+    renderizarUsoOpenRouter(uso);
+    if (statusMsg) statusMsg.textContent = `Atualizado às ${new Date().toLocaleTimeString('pt-BR')}`;
+  } catch (e) {
+    if (statusMsg) statusMsg.textContent = `Erro ao consultar: ${e.message}`;
+  }
+}
+
 // ------------------------------------------------------------------ configuracoes
 $('#btn-config').addEventListener('click', async () => {
   await carregarStatus();
@@ -421,7 +562,15 @@ $('#btn-config').addEventListener('click', async () => {
   $('#cfg-modelo').value = c.modelo_openrouter || '';
   $('#cfg-email').value = c.contato_email || '';
   $('#cfg-janela').value = c.janela_navegador || 'visivel';
+  renderizarUsoOpenRouter(estadoGlobal?.uso);
+  const statusMsg = $('#uso-status-msg');
+  if (statusMsg) statusMsg.textContent = '';
   $('#dlg-config').showModal();
+});
+
+$('#btn-atualizar-uso')?.addEventListener('click', (ev) => {
+  ev.preventDefault();
+  atualizarUsoPainel();
 });
 
 $('#dlg-config').addEventListener('close', async () => {

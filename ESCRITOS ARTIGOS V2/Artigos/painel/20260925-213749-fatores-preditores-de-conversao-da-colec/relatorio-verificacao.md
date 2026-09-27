@@ -63,11 +63,11 @@ Tabela 1 re-extraída para 60 estudos; 38 correção(ões) confirmada(s) por ver
 - [x] Data exata da busca declarada
 - [x] Estratégias com descritores e operadores booleanos (AND/OR)
 - [x] Introdução termina com o objetivo (último parágrafo contém "objetivo")
-- [x] Introdução dentro do limite (600–800 palavras ideal; ≤ 3 páginas) — 821 palavras
+- [x] Introdução dentro do limite (600–800 palavras ideal; ≤ 3 páginas) — 685 palavras
 - [x] Fluxograma de seleção (PRISMA) no corpo do texto
 - [x] Tabela de resultados com título no topo e notas no rodapé
 - [x] Tabela 1 completa (no máximo 10% de linhas sem achados) — 0 linha(s) sem dados
-- [x] Mínimo de 25 referências — 61 no total
+- [x] Mínimo de 25 referências — 29 no total
 - [x] Todas as referências na mesma norma (Vancouver, geradas por código)
 - [x] Todas as referências com existência conferida na fonte original
 - [x] Nenhuma citação para fonte inexistente
