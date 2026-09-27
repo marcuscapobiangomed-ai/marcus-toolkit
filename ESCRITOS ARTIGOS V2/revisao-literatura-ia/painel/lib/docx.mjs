@@ -30,7 +30,11 @@ function runs(texto, { tamanho, negrito = false } = {}) {
   if (ultimo < texto.length) partes.push({ t: texto.slice(ultimo) });
   return partes.map((p) => {
     const rpr = [p.b || negrito ? '<w:b/>' : '', p.i ? '<w:i/>' : '', tamanho ? `<w:sz w:val="${tamanho}"/><w:szCs w:val="${tamanho}"/>` : ''].join('');
-    return `<w:r>${rpr ? `<w:rPr>${rpr}</w:rPr>` : ''}<w:t xml:space="preserve">${esc(p.t.replace(/\u0003/g, '*'))}</w:t></w:r>`;
+    const frags = p.t.split(/<br\s*\/?>/i);
+    return frags.map((frag, idx) => {
+      const br = idx > 0 ? '<w:r><w:br/></w:r>' : '';
+      return `${br}<w:r>${rpr ? `<w:rPr>${rpr}</w:rPr>` : ''}<w:t xml:space="preserve">${esc(frag.replace(/\u0003/g, '*'))}</w:t></w:r>`;
+    }).join('');
   }).join('');
 }
 
@@ -54,7 +58,7 @@ function larguras(linhas, total) {
   }
   // 2. Quadro 1 (Estratégias de busca - 4 colunas em Retrato)
   if (cabecalhos.includes('base') && cabecalhos.some((h) => h.includes('estratégia') || h.includes('estrategia'))) {
-    return [Math.round(total * 0.16), Math.round(total * 0.46), Math.round(total * 0.26), Math.round(total * 0.12)];
+    return [Math.round(total * 0.16), Math.round(total * 0.46), Math.round(total * 0.28), Math.round(total * 0.10)];
   }
   // 3. Tabela 1 (Caracterização dos estudos - 6 colunas em Paisagem)
   if (cabecalhos.some((h) => h.includes('autor')) && cabecalhos.some((h) => h.includes('achados'))) {

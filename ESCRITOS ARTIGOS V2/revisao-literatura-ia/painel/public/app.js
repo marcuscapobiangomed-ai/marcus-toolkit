@@ -54,14 +54,22 @@ async function carregarStatus(forcar = false) {
     return;
   }
   const p = estadoGlobal.provedores;
-  const nomeProv = { claude_cli: 'Claude (assinatura)', anthropic: 'Anthropic API', openrouter: 'OpenRouter' };
+  const nomeProv = { deepseek: 'DeepSeek API', omniroute: 'OmniRoute', claude_cli: 'Claude (assinatura)', anthropic: 'Anthropic API', openrouter: 'OpenRouter' };
   const chips = [];
   if (p.escolhido) {
     const modelo = p[p.escolhido].modelo;
-    const gratis = /free/.test(p[p.escolhido].detalhe) || /:free$/.test(modelo);
-    chips.push(el('span', { class: `chip ${gratis ? 'aviso' : 'ok'}`, title: p[p.escolhido].detalhe }, `IA: ${nomeProv[p.escolhido]} · ${modelo.split('/').pop()}${gratis ? ' (grátis, 50/dia)' : ''}`));
+    const gratis = /free/.test(p[p.escolhido].detalhe) || /:free$/.test(modelo) || p.escolhido === 'omniroute';
+    chips.push(el('span', { class: `chip ${gratis ? 'aviso' : 'ok'}`, title: p[p.escolhido].detalhe }, `IA: ${nomeProv[p.escolhido] || p.escolhido} · ${modelo.split('/').pop()}${gratis ? ' (grátis)' : ''}`));
   } else {
     chips.push(el('span', { class: 'chip erro' }, 'IA: nenhum motor disponível'));
+  }
+  if (estadoGlobal.uso?.deepseek?.ativo && estadoGlobal.uso?.deepseek?.saldo_total !== null) {
+    const ds = estadoGlobal.uso.deepseek;
+    chips.push(el('span', {
+      class: 'chip custo',
+      title: `DeepSeek: Saldo total ${ds.moeda} $${ds.saldo_total.toFixed(2)}. Clique para detalhes.`,
+      onclick: abrirConfig,
+    }, `💎 DeepSeek: $${ds.saldo_total.toFixed(2)}`));
   }
   if (estadoGlobal.uso?.openrouter?.ativo) {
     const or = estadoGlobal.uso.openrouter;
@@ -187,10 +195,12 @@ function telaNovo() {
     el('div', { class: 'campo' },
       el('label', { for: 'provedor' }, 'Motor de IA'),
       el('select', { id: 'provedor', name: 'provedor' },
-        el('option', { value: 'auto' }, 'Automático (melhor disponível)'),
+        el('option', { value: 'auto' }, 'Automático (DeepSeek > OmniRoute > OpenRouter > Claude)'),
+        el('option', { value: 'deepseek' }, 'DeepSeek API Direta (Recomendado — Ultrabarato & Caching)'),
+        el('option', { value: 'omniroute' }, 'OmniRoute (Gateway Local Gratuito :20128)'),
+        el('option', { value: 'openrouter' }, 'OpenRouter (Escada de Modelos 2026 / :free)'),
         el('option', { value: 'claude_cli' }, 'Claude — assinatura (exige "claude auth login")'),
-        el('option', { value: 'anthropic' }, 'Anthropic API'),
-        el('option', { value: 'openrouter' }, 'OpenRouter'))),
+        el('option', { value: 'anthropic' }, 'Anthropic API'))),
     el('div', { class: 'acoes' }, el('button', { class: 'btn primario', type: 'submit' }, 'Gerar artigo'), el('span', { class: 'pequeno', id: 'msg-novo' })));
   $('#principal').replaceChildren(f);
 }
@@ -509,38 +519,53 @@ function renderizarUsoOpenRouter(uso) {
   const container = $('#dados-uso-tokens');
   if (!container) return;
   const or = uso?.openrouter;
-  if (!or || !or.ativo) {
-    container.replaceChildren(el('p', { class: 'pequeno' }, 'Nenhuma chave OpenRouter ativa configurada.'));
+  const ds = uso?.deepseek;
+  if ((!or || !or.ativo) && (!ds || !ds.ativo)) {
+    container.replaceChildren(el('p', { class: 'pequeno' }, 'Nenhuma chave DeepSeek ou OpenRouter configurada.'));
     return;
   }
   const itens = [];
-  if (or.is_free_tier && or.gratis_limite !== null) {
-    const pct = or.gratis_limite > 0 ? Math.round((or.gratis_usadas / or.gratis_limite) * 100) : 0;
-    itens.push(el('div', { class: 'item-uso', style: 'grid-column: 1 / -1; text-align: left;' },
+  if (ds && ds.ativo) {
+    const temSaldo = ds.saldo_total !== null;
+    itens.push(el('div', { class: 'item-uso', style: 'grid-column: 1 / -1; text-align: left; background: rgba(59, 130, 246, 0.08); padding: 12px; border-radius: 8px;' },
       el('div', { style: 'display: flex; justify-content: space-between; align-items: baseline;' },
-        el('span', { class: 'desc', style: 'font-weight: 600;' }, 'Cota Diária de Modelos Gratuitos (:free)'),
-        el('span', { class: 'val', style: 'font-size: 15px;' }, `${or.gratis_usadas} de ${or.gratis_limite} usadas hoje (${or.gratis_restantes} restantes)`)),
-      el('div', { class: 'barra-progresso-trilha' },
-        el('div', { class: 'barra-progresso-preenchimento', style: `width: ${pct}%; background: ${pct > 80 ? 'var(--aviso)' : 'var(--primaria)'}` })),
-      el('span', { class: 'pequeno', style: 'margin-top: 4px; display: block;' }, 'Reseta automaticamente à meia-noite UTC.')
+        el('span', { class: 'desc', style: 'font-weight: 700; color: var(--primaria);' }, 'DeepSeek API Oficial (Mais rápida & econômica)'),
+        el('span', { class: 'val', style: 'font-size: 16px; color: var(--ok); font-weight: 700;' }, temSaldo ? `${ds.moeda} $${ds.saldo_total.toFixed(2)}` : 'Chave ativa')),
+      el('span', { class: 'pequeno', style: 'display: block; margin-top: 4px;' },
+        temSaldo
+          ? `Origem: ${ds.origem} · Recarregado: $${ds.saldo_recarregado.toFixed(2)} · Concedido: $${ds.saldo_concedido.toFixed(2)} · Cache Hit: $0.014/M`
+          : `Origem: ${ds.origem} · Não foi possível obter o saldo da conta.`)
     ));
   }
-  itens.push(el('div', { class: 'item-uso' },
-    el('div', { class: 'val' }, `$${or.total_creditos_usd.toFixed(2)}`),
-    el('div', { class: 'desc' }, 'Créditos comprados')));
-  itens.push(el('div', { class: 'item-uso' },
-    el('div', { class: 'val' }, `$${or.total_gasto_usd.toFixed(4)}`),
-    el('div', { class: 'desc' }, 'Gasto total (pago)')));
-  itens.push(el('div', { class: 'item-uso' },
-    el('div', { class: 'val', style: 'color: var(--ok);' }, `$${or.saldo_restante_usd.toFixed(2)}`),
-    el('div', { class: 'desc' }, 'Saldo disponível')));
+  if (or && or.ativo) {
+    if (or.is_free_tier && or.gratis_limite !== null) {
+      const pct = or.gratis_limite > 0 ? Math.round((or.gratis_usadas / or.gratis_limite) * 100) : 0;
+      itens.push(el('div', { class: 'item-uso', style: 'grid-column: 1 / -1; text-align: left;' },
+        el('div', { style: 'display: flex; justify-content: space-between; align-items: baseline;' },
+          el('span', { class: 'desc', style: 'font-weight: 600;' }, 'OpenRouter: Cota Diária de Modelos Gratuitos (:free)'),
+          el('span', { class: 'val', style: 'font-size: 15px;' }, `${or.gratis_usadas} de ${or.gratis_limite} usadas hoje (${or.gratis_restantes} restantes)`)),
+        el('div', { class: 'barra-progresso-trilha' },
+          el('div', { class: 'barra-progresso-preenchimento', style: `width: ${pct}%; background: ${pct > 80 ? 'var(--aviso)' : 'var(--primaria)'}` })),
+        el('span', { class: 'pequeno', style: 'margin-top: 4px; display: block;' }, 'Reseta automaticamente à meia-noite UTC.')
+      ));
+    }
+    itens.push(el('div', { class: 'item-uso' },
+      el('div', { class: 'val' }, `$${or.total_creditos_usd.toFixed(2)}`),
+      el('div', { class: 'desc' }, 'Créditos OpenRouter')));
+    itens.push(el('div', { class: 'item-uso' },
+      el('div', { class: 'val' }, `$${or.total_gasto_usd.toFixed(4)}`),
+      el('div', { class: 'desc' }, 'Gasto total OpenRouter')));
+    itens.push(el('div', { class: 'item-uso' },
+      el('div', { class: 'val', style: 'color: var(--ok);' }, `$${or.saldo_restante_usd.toFixed(2)}`),
+      el('div', { class: 'desc' }, 'Saldo disponível')));
+  }
 
   container.replaceChildren(...itens);
 }
 
 async function atualizarUsoPainel() {
   const statusMsg = $('#uso-status-msg');
-  if (statusMsg) statusMsg.textContent = 'Consultando OpenRouter…';
+  if (statusMsg) statusMsg.textContent = 'Consultando provedores…';
   try {
     const uso = await api('/api/uso');
     if (estadoGlobal) estadoGlobal.uso = uso;
@@ -555,6 +580,12 @@ async function atualizarUsoPainel() {
 $('#btn-config').addEventListener('click', async () => {
   await carregarStatus();
   const c = estadoGlobal?.config || {};
+  $('#cfg-deepseek').value = '';
+  $('#cfg-deepseek-origem').textContent = c.tem_deepseek ? `Chave configurada (${c.origem_deepseek}).` : 'Nenhuma chave configurada.';
+  $('#cfg-modelo-deepseek').value = c.modelo_deepseek || 'deepseek-chat';
+  $('#cfg-modelo-deepseek-reasoner').value = c.modelo_deepseek_reasoner || 'deepseek-reasoner';
+  $('#cfg-omniroute').value = c.omniroute_url || 'http://localhost:20128/v1';
+
   $('#cfg-openrouter').value = '';
   $('#cfg-anthropic').value = '';
   $('#cfg-ncbi').value = '';
@@ -576,11 +607,19 @@ $('#btn-atualizar-uso')?.addEventListener('click', (ev) => {
 $('#dlg-config').addEventListener('close', async () => {
   if ($('#dlg-config').returnValue !== 'salvar') return;
   const corpo = {
+    modelo_deepseek: $('#cfg-modelo-deepseek').value.trim(),
+    modelo_deepseek_reasoner: $('#cfg-modelo-deepseek-reasoner').value.trim(),
+    omniroute_url: $('#cfg-omniroute').value.trim(),
     modelo_openrouter: $('#cfg-modelo').value.trim(),
     contato_email: $('#cfg-email').value.trim(),
     janela_navegador: $('#cfg-janela').value,
   };
-  for (const [id, k] of [['#cfg-openrouter', 'openrouter_api_key'], ['#cfg-anthropic', 'anthropic_api_key'], ['#cfg-ncbi', 'ncbi_api_key']]) {
+  for (const [id, k] of [
+    ['#cfg-deepseek', 'deepseek_api_key'],
+    ['#cfg-openrouter', 'openrouter_api_key'],
+    ['#cfg-anthropic', 'anthropic_api_key'],
+    ['#cfg-ncbi', 'ncbi_api_key']
+  ]) {
     if ($(id).value.trim()) corpo[k] = $(id).value.trim();
   }
   try {

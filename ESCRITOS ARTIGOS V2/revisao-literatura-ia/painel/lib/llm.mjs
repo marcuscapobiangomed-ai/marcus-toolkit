@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import os from 'node:os';
-import { chaveAnthropic, chaveOpenRouter, lerConfig } from './config.mjs';
+import { chaveAnthropic, chaveDeepSeek, chaveOpenRouter, lerConfig, omnirouteConfig } from './config.mjs';
 import { esperar } from './texto.mjs';
 
 // Modelos gratuitos podem demorar varios minutos em lotes grandes, mas nunca indefinidamente.
@@ -48,17 +48,40 @@ export async function statusProvedores(forcar = false) {
   if (cacheStatus && !forcar && Date.now() - cacheStatus.em < 60000) return cacheStatus.valor;
   const cfg = lerConfig();
   const valor = {
+    deepseek: { disponivel: false, modelo: cfg.modelo_deepseek, detalhe: '' },
+    omniroute: { disponivel: false, modelo: cfg.modelo_omniroute || 'auto', detalhe: '' },
+    openrouter: { disponivel: false, modelo: cfg.modelo_openrouter, detalhe: '' },
     claude_cli: { disponivel: false, modelo: cfg.modelo_claude, detalhe: '' },
     anthropic: { disponivel: Boolean(chaveAnthropic(cfg)), modelo: cfg.modelo_anthropic, detalhe: '' },
-    openrouter: { disponivel: false, modelo: cfg.modelo_openrouter, detalhe: '' },
   };
+
+  const ds = chaveDeepSeek(cfg);
+  if (ds) {
+    valor.deepseek.disponivel = true;
+    valor.deepseek.detalhe = `chave de ${ds.origem}`;
+  } else {
+    valor.deepseek.detalhe = 'sem DEEPSEEK_API_KEY configurada';
+  }
+
+  const omni = omnirouteConfig(cfg);
+  try {
+    const resOmni = await fetch(`${omni.url}/models`, { signal: AbortSignal.timeout(1200) });
+    if (resOmni.ok) {
+      valor.omniroute.disponivel = true;
+      valor.omniroute.detalhe = `gateway ativo em ${omni.url}`;
+    } else {
+      valor.omniroute.detalhe = `gateway respondeu status ${resOmni.status}`;
+    }
+  } catch {
+    valor.omniroute.detalhe = `gateway não detectado em ${omni.url}`;
+  }
+
   try {
     const r = await rodar('claude', ['auth', 'status'], { limiteMs: 20000 });
     const j = JSON.parse(r.out);
     if (!j.loggedIn) {
       valor.claude_cli.detalhe = 'CLI instalado, mas sem login — rode "claude auth login" no Terminal';
     } else {
-      // "logado" nao basta: confirma com uma chamada minima real.
       try {
         await viaClaudeCli({ sistema: 'Responda apenas OK.', prompt: 'OK?', modelo: cfg.modelo_claude, limiteMs: 60000 });
         valor.claude_cli.disponivel = true;
@@ -70,6 +93,7 @@ export async function statusProvedores(forcar = false) {
   } catch {
     valor.claude_cli.detalhe = 'Claude Code CLI nao encontrado';
   }
+
   const or = chaveOpenRouter(cfg);
   if (or) {
     valor.openrouter.disponivel = true;
@@ -80,19 +104,37 @@ export async function statusProvedores(forcar = false) {
       if (d) valor.openrouter.detalhe += d.is_free_tier ? ' — nivel gratuito (so modelos :free)' : ' — com creditos';
       if (!r.ok) valor.openrouter.disponivel = false;
     } catch {
-      // mantem disponivel; a chamada real dira se falhar
+      // mantem disponivel
     }
   } else {
     valor.openrouter.detalhe = 'sem chave OpenRouter configurada';
   }
+
   valor.anthropic.detalhe = valor.anthropic.disponivel ? 'chave configurada' : 'sem ANTHROPIC_API_KEY';
-  valor.escolhido = valor.claude_cli.disponivel ? 'claude_cli' : valor.anthropic.disponivel ? 'anthropic' : valor.openrouter.disponivel ? 'openrouter' : null;
+  valor.escolhido = valor.deepseek.disponivel ? 'deepseek' :
+                    valor.omniroute.disponivel ? 'omniroute' :
+                    valor.openrouter.disponivel ? 'openrouter' :
+                    valor.claude_cli.disponivel ? 'claude_cli' :
+                    valor.anthropic.disponivel ? 'anthropic' : null;
   cacheStatus = { em: Date.now(), valor };
   return valor;
 }
 
-export function estimarCusto({ provedor, modelo, prompt_tokens = 0, completion_tokens = 0 }) {
+export function estimarCusto({ provedor, modelo, prompt_tokens = 0, completion_tokens = 0, cache_hit = 0, cache_miss = 0 }) {
   if (modelo?.endsWith(':free')) return 0;
+  if (provedor === 'omniroute') return 0;
+  if (provedor === 'deepseek' || modelo?.includes('deepseek')) {
+    const isReasoner = (modelo || '').includes('reasoner');
+    if (cache_hit > 0 || cache_miss > 0) {
+      const hitPrice = isReasoner ? 0.14 : 0.014;
+      const missPrice = isReasoner ? 0.55 : 0.14;
+      const cPrice = isReasoner ? 2.19 : 0.28;
+      return Number(((cache_hit * hitPrice + cache_miss * missPrice + completion_tokens * cPrice) / 1_000_000).toFixed(6));
+    }
+    const pPrice = isReasoner ? 0.55 : 0.14;
+    const cPrice = isReasoner ? 2.19 : 0.28;
+    return Number(((prompt_tokens * pPrice + completion_tokens * cPrice) / 1_000_000).toFixed(6));
+  }
   if (provedor === 'anthropic' || provedor === 'claude_cli' || modelo?.includes('claude')) {
     if (modelo?.includes('opus')) {
       return Number(((prompt_tokens * 15 + completion_tokens * 75) / 1_000_000).toFixed(6));
@@ -100,23 +142,46 @@ export function estimarCusto({ provedor, modelo, prompt_tokens = 0, completion_t
     if (modelo?.includes('haiku')) {
       return Number(((prompt_tokens * 0.25 + completion_tokens * 1.25) / 1_000_000).toFixed(6));
     }
-    return Number(((prompt_tokens * 3 + completion_tokens * 15) / 1_000_000).toFixed(6));
+    return Number(((prompt_tokens * 2 + completion_tokens * 10) / 1_000_000).toFixed(6));
   }
-  if (modelo?.includes('glm')) {
-    return Number(((prompt_tokens * 0.5 + completion_tokens * 1.0) / 1_000_000).toFixed(6));
-  }
-  if (modelo?.includes('deepseek')) {
-    return Number(((prompt_tokens * 0.14 + completion_tokens * 0.28) / 1_000_000).toFixed(6));
-  }
-  return Number(((prompt_tokens * 1.0 + completion_tokens * 2.0) / 1_000_000).toFixed(6));
+  return Number(((prompt_tokens * 0.10 + completion_tokens * 0.30) / 1_000_000).toFixed(6));
 }
 
 export async function consultarUsoProvedores() {
   const cfg = lerConfig();
   const or = chaveOpenRouter(cfg);
+  const ds = chaveDeepSeek(cfg);
   const resultado = {
     openrouter: null,
+    deepseek: null,
   };
+  if (ds) {
+    try {
+      const rBalance = await fetch('https://api.deepseek.com/user/balance', {
+        headers: { Authorization: `Bearer ${ds.chave}` },
+        signal: AbortSignal.timeout(6000),
+      }).then((res) => (res.ok ? res.json() : null)).catch(() => null);
+      if (rBalance?.is_available) {
+        const info = rBalance.balance_infos?.[0] || {};
+        resultado.deepseek = {
+          ativo: true,
+          origem: ds.origem,
+          moeda: info.currency || 'USD',
+          saldo_total: Number(info.total_balance || 0),
+          saldo_concedido: Number(info.granted_balance || 0),
+          saldo_recarregado: Number(info.topped_up_balance || 0),
+        };
+      } else {
+        resultado.deepseek = {
+          ativo: true,
+          origem: ds.origem,
+          saldo_total: null,
+        };
+      }
+    } catch {
+      // falha silenciosa
+    }
+  }
   if (or) {
     try {
       const [rCred, rKey] = await Promise.all([
@@ -200,6 +265,94 @@ async function viaAnthropic({ sistema, prompt, modelo, maxTokens, temperatura })
   };
 }
 
+async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) {
+  const ds = chaveDeepSeek();
+  if (!ds?.chave) throw new Error('Sem chave DeepSeek configurada');
+  const mod = modelo || 'deepseek-chat';
+  const isReasoner = mod.includes('reasoner');
+  const payload = {
+    model: mod,
+    messages: [
+      { role: 'system', content: sistema },
+      { role: 'user', content: prompt },
+    ],
+    max_tokens: maxTokens,
+  };
+  if (!isReasoner && typeof temperatura === 'number') {
+    payload.temperature = temperatura;
+  }
+  const r = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
+    headers: {
+      Authorization: `Bearer ${ds.chave}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) {
+    throw Object.assign(new Error(`DeepSeek ${mod} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
+  }
+  const msg = j.choices?.[0]?.message || {};
+  const texto = msg.content || '';
+  const reasoning = msg.reasoning_content || null;
+  if (!texto.trim() && !reasoning) {
+    throw Object.assign(new Error(`DeepSeek ${mod} devolveu resposta vazia`), { status: 502 });
+  }
+  const u = j.usage || {};
+  const cache_hit = u.prompt_cache_hit_tokens || 0;
+  const cache_miss = u.prompt_cache_miss_tokens || u.prompt_tokens || 0;
+  const prompt_tokens = u.prompt_tokens || (cache_hit + cache_miss);
+  const completion_tokens = u.completion_tokens || 0;
+  const total_tokens = u.total_tokens || (prompt_tokens + completion_tokens);
+  const custo = estimarCusto({ provedor: 'deepseek', modelo: mod, prompt_tokens, completion_tokens, cache_hit, cache_miss });
+  return {
+    texto: texto || reasoning,
+    reasoning,
+    modelo: j.model || mod,
+    usage: { prompt_tokens, completion_tokens, total_tokens, cache_hit, cache_miss },
+    custo_usd: custo,
+  };
+}
+
+async function viaOmniRoute({ sistema, prompt, modelo, maxTokens, temperatura }) {
+  const omni = omnirouteConfig();
+  const mod = modelo || 'auto';
+  const r = await fetch(`${omni.url}/chat/completions`, {
+    method: 'POST',
+    signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
+    headers: {
+      Authorization: 'Bearer omniroute',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: mod,
+      messages: [
+        { role: 'system', content: sistema },
+        { role: 'user', content: prompt },
+      ],
+      max_tokens: maxTokens,
+      temperature: temperatura,
+    }),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) {
+    throw Object.assign(new Error(`OmniRoute ${mod} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
+  }
+  const texto = j.choices?.[0]?.message?.content || '';
+  if (!texto.trim()) throw Object.assign(new Error(`OmniRoute ${mod} devolveu resposta vazia`), { status: 502 });
+  const prompt_tokens = j.usage?.prompt_tokens || 0;
+  const completion_tokens = j.usage?.completion_tokens || 0;
+  const total_tokens = j.usage?.total_tokens || (prompt_tokens + completion_tokens);
+  return {
+    texto,
+    modelo: j.model || mod,
+    usage: { prompt_tokens, completion_tokens, total_tokens },
+    custo_usd: 0,
+  };
+}
+
 async function viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura }) {
   const { chave } = chaveOpenRouter() || {};
   if (!chave) throw new Error('Sem chave OpenRouter');
@@ -238,12 +391,54 @@ async function viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura }
   };
 }
 
-// Chamada unica com re-tentativas e troca de modelo (so no OpenRouter, onde modelos gratuitos oscilam).
-export async function gerar({ sistema, prompt, provedor = 'auto', maxTokens = 8000, temperatura = 0.3, aoTentar }) {
+// Chamada única com re-tentativas, escada por papel e chaveamento de provedores.
+export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redacao', maxTokens = 8000, temperatura = 0.3, aoTentar }) {
   const cfg = lerConfig();
   const status = await statusProvedores();
   const qual = provedor === 'auto' ? status.escolhido : provedor;
-  if (!qual) throw new Error('Nenhum motor de IA disponivel. Configure OpenRouter, Anthropic ou faca login no Claude CLI.');
+  if (!qual) throw new Error('Nenhum motor de IA disponível. Configure DeepSeek, OmniRoute, OpenRouter, Anthropic ou faça login no Claude CLI.');
+
+  if (qual === 'deepseek') {
+    const modelo = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-chat');
+    for (let t = 0; t < 3; t++) {
+      try {
+        aoTentar?.(modelo, t);
+        return { ...(await viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura })), provedor: 'deepseek' };
+      } catch (e) {
+        if (e.status === 401) throw e;
+        if (t === 2) {
+          if (status.omniroute?.disponivel) {
+            return { ...(await viaOmniRoute({ sistema, prompt, modelo: cfg.modelo_omniroute || 'auto', maxTokens, temperatura })), provedor: 'omniroute' };
+          }
+          if (status.openrouter?.disponivel) {
+            break;
+          }
+          throw e;
+        }
+        await esperar(2000 * (t + 1));
+      }
+    }
+  }
+
+  if (qual === 'omniroute') {
+    for (let t = 0; t < 2; t++) {
+      try {
+        aoTentar?.('omniroute', t);
+        return { ...(await viaOmniRoute({ sistema, prompt, modelo: cfg.modelo_omniroute || 'auto', maxTokens, temperatura })), provedor: 'omniroute' };
+      } catch (e) {
+        if (t === 1) {
+          if (status.deepseek?.disponivel) {
+            return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
+          }
+          if (status.openrouter?.disponivel) {
+            break;
+          }
+          throw e;
+        }
+        await esperar(3000);
+      }
+    }
+  }
 
   if (qual === 'claude_cli') return { ...(await viaClaudeCli({ sistema, prompt, modelo: cfg.modelo_claude })), provedor: qual };
   if (qual === 'anthropic') {
@@ -257,21 +452,22 @@ export async function gerar({ sistema, prompt, provedor = 'auto', maxTokens = 80
     }
   }
 
-  const modelos = [cfg.modelo_openrouter, ...cfg.modelos_openrouter_reserva];
+  // OpenRouter (ou fallback de DeepSeek/OmniRoute)
+  const modelos = (cfg.escada_agentes && cfg.escada_agentes[papel]) || [cfg.modelo_openrouter, ...cfg.modelos_openrouter_reserva];
   const erros = [];
   for (const modelo of modelos) {
     for (let t = 0; t < 2; t++) {
       try {
         aoTentar?.(modelo, t);
-        return { ...(await viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura })), provedor: qual };
+        return { ...(await viaOpenRouter({ sistema, prompt, modelo, maxTokens, temperatura })), provedor: 'openrouter' };
       } catch (e) {
         erros.push(e.message);
         if (e.status === 401 || e.status === 402) throw e;
-        await esperar(t === 0 ? 4000 : 8000);
+        await esperar(t === 0 ? 3000 : 6000);
       }
     }
   }
-  throw new Error(`Todos os modelos OpenRouter falharam: ${erros.slice(-3).join(' || ')}`);
+  throw new Error(`Todos os modelos OpenRouter falharam para o papel "${papel}": ${erros.slice(-3).join(' || ')}`);
 }
 
 export function extrairJson(texto) {

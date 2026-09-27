@@ -34,14 +34,36 @@
         <h2>Configurações</h2>
         <div class="nota">As chaves ficam só nesta máquina, em <span class="mono">painel/config.local.json</span> (fora do git). Deixe em branco para manter a atual.</div>
         <div class="campo">
+          <label for="cfg-deepseek">Chave DeepSeek API (Oficial - Direta & Econômica)</label>
+          <input type="password" id="cfg-deepseek" autocomplete="off" placeholder="sk-…">
+          <span class="ajuda" id="cfg-deepseek-origem"></span>
+        </div>
+        <div class="grade-2">
+          <div class="campo">
+            <label for="cfg-modelo-deepseek">Modelo DeepSeek Padrão</label>
+            <input type="text" id="cfg-modelo-deepseek" placeholder="deepseek-chat">
+          </div>
+          <div class="campo">
+            <label for="cfg-modelo-deepseek-reasoner">Modelo Auditor (Raciocínio)</label>
+            <input type="text" id="cfg-modelo-deepseek-reasoner" placeholder="deepseek-reasoner">
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="cfg-omniroute">URL do OmniRoute (Gateway Local Gratuito)</label>
+          <input type="text" id="cfg-omniroute" placeholder="http://localhost:20128/v1">
+          <span class="ajuda">Roteador local open-source que agrega cotas gratuitas de múltiplos provedores.</span>
+        </div>
+
+        <div class="campo">
           <label for="cfg-openrouter">Chave OpenRouter</label>
           <input type="password" id="cfg-openrouter" autocomplete="off" placeholder="sk-or-…">
           <span class="ajuda" id="cfg-openrouter-origem"></span>
         </div>
         <div class="campo">
-          <label for="cfg-modelo">Modelo OpenRouter</label>
+          <label for="cfg-modelo">Modelo OpenRouter Principal</label>
           <input type="text" id="cfg-modelo">
-          <span class="ajuda">Com chave gratuita, use modelos terminados em <span class="mono">:free</span> (limite de 50 chamadas/dia).</span>
+          <span class="ajuda">Roteamento em escada ativo por papel (Gemini 3.8, Claude Sonnet 5, DeepSeek V4.1, GPT-6 Luna, :free).</span>
         </div>
         <div class="campo">
           <label for="cfg-anthropic">Chave Anthropic (opcional)</label>

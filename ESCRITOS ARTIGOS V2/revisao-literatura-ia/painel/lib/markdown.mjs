@@ -4,6 +4,7 @@ import { escaparHtml } from './texto.mjs';
 function inline(s) {
   // "\\*" e asterisco literal (ex.: truncagem "predictor*" nas estrategias de busca)
   let t = escaparHtml(s).replace(/\\\*/g, '\u0003');
+  t = t.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
   t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, txt, url) => `<a href="${url}" target="_blank" rel="noopener">${txt}</a>`);
   t = t.replace(/(^|[\s(])(https?:\/\/[^\s<)]+[^\s<).,;])/g, (_, pre, url) => `${pre}<a href="${url}" target="_blank" rel="noopener">${url}</a>`);
   t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -18,6 +19,8 @@ export function markdownParaHtml(md, opcoes = {}) {
   const linhas = String(md || '').split('\n');
   let lista = null;
   let paragrafo = [];
+  let tabelaAtual = null;
+
   const fecharParagrafo = () => {
     if (paragrafo.length) {
       const texto = paragrafo.join(' ');
@@ -39,12 +42,65 @@ export function markdownParaHtml(md, opcoes = {}) {
     }
     paragrafo = [];
   };
+
   const fecharLista = () => {
     if (lista) html.push(`</${lista}>`);
     lista = null;
   };
+
+  const fecharTabela = () => {
+    if (!tabelaAtual || !tabelaAtual.length) return;
+    const n = tabelaAtual[0].length;
+    const cabs = tabelaAtual[0].map((h) => h.toLowerCase().trim().replace(/[*_]/g, ''));
+    let larguras = [];
+    let alinhamentos = [];
+
+    if (cabs.some((h) => h.includes('eixo')) && cabs.some((h) => h.includes('referência') || h.includes('referencia'))) {
+      larguras = ['50%', '12%', '13%', '25%'];
+      alinhamentos = ['left', 'center', 'center', 'center'];
+    } else if (cabs.includes('base') && cabs.some((h) => h.includes('estratégia') || h.includes('estrategia'))) {
+      larguras = ['16%', '46%', '28%', '10%'];
+      alinhamentos = ['left', 'left', 'left', 'center'];
+    } else if (cabs.some((h) => h.includes('autor')) && cabs.some((h) => h.includes('achados'))) {
+      larguras = ['15%', '9%', '20%', '18%', '15%', '23%'];
+      alinhamentos = ['left', 'center', 'left', 'left', 'left', 'left'];
+    } else {
+      const eq = (100 / n).toFixed(1) + '%';
+      larguras = Array(n).fill(eq);
+      alinhamentos = Array(n).fill('left');
+    }
+
+    const colgroup = larguras.length
+      ? `<colgroup>${larguras.map((w) => `<col style="width:${w}">`).join('')}</colgroup>`
+      : '';
+
+    const trs = tabelaAtual.map((linha, idx) => {
+      const isCab = idx === 0;
+      const celulas = linha.map((c, colIdx) => {
+        const align = alinhamentos[colIdx];
+        const style = align === 'center' ? ' style="text-align:center;"' : '';
+        return `<td${style}>${inline(c)}</td>`;
+      }).join('');
+      return `<tr>${celulas}</tr>`;
+    }).join('');
+
+    html.push(`<table class="tabela-ibge">${colgroup}${trs}</table>`);
+    tabelaAtual = null;
+  };
+
   for (const linha of linhas) {
-    const img = linha.trim().match(/^!\[([^\]]*)\]\(([\w./-]+\.(?:png|jpg|jpeg|svg))\)$/i);
+    const ltrim = linha.trim();
+    if (ltrim.startsWith('|')) {
+      fecharParagrafo();
+      fecharLista();
+      if (/^\|[\s:|-]+\|$/.test(ltrim)) continue;
+      const celulas = ltrim.replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+      (tabelaAtual ||= []).push(celulas);
+      continue;
+    }
+    if (tabelaAtual) fecharTabela();
+
+    const img = ltrim.match(/^!\[([^\]]*)\]\(([\w./-]+\.(?:png|jpg|jpeg|svg))\)$/i);
     if (img) {
       fecharParagrafo();
       fecharLista();
@@ -72,12 +128,6 @@ export function markdownParaHtml(md, opcoes = {}) {
     } else if (!linha.trim()) {
       fecharParagrafo();
       fecharLista();
-    } else if (/^\|/.test(linha.trim())) {
-      fecharParagrafo();
-      fecharLista();
-      if (/^\|[\s:|-]+\|$/.test(linha.trim())) continue;
-      const celulas = linha.trim().replace(/^\||\|$/g, '').split('|').map((c) => `<td>${inline(c.trim())}</td>`);
-      html.push(`<table class="tabela-ibge"><tr>${celulas.join('')}</tr></table>`);
     } else {
       fecharLista();
       paragrafo.push(linha.trim());
@@ -85,7 +135,9 @@ export function markdownParaHtml(md, opcoes = {}) {
   }
   fecharParagrafo();
   fecharLista();
-  return html.join('\n').replace(/<\/table>\n<table class="tabela-ibge">/g, '');
+  if (tabelaAtual) fecharTabela();
+
+  return html.join('\n');
 }
 
 export function documentoHtml(titulo, corpoHtml) {
@@ -106,9 +158,9 @@ p.referencia{text-align:left;text-indent:-1.5em;padding-left:1.5em;font-size:10.
 sup.cit{font-size:0.75em}
 a{color:#1a4e8a;word-break:break-all}
 ol li,ul li{margin-bottom:.4em}
-table.tabela-ibge{border-collapse:collapse;width:100%;font-size:9.5pt;margin:0.8em 0 0.3em 0;border-top:2px solid #000;border-bottom:2px solid #000}
+table.tabela-ibge{border-collapse:collapse;width:100%;table-layout:fixed;font-size:9.5pt;margin:0.8em 0 0.3em 0;border-top:2px solid #000;border-bottom:2px solid #000;word-wrap:break-word;overflow-wrap:break-word}
 table.tabela-ibge tr:first-child td{border-bottom:1px solid #000;font-weight:bold}
-table.tabela-ibge td{border-left:none;border-right:none;border-top:none;border-bottom:none;padding:5px 6px;vertical-align:top}
+table.tabela-ibge td{border-left:none;border-right:none;border-top:none;border-bottom:none;padding:5px 6px;vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}
 figure{margin:1.8em 0;text-align:center}
 figure img{max-width:100%;height:auto}
 figcaption{font-size:10pt;font-weight:bold;margin-top:0.4em}

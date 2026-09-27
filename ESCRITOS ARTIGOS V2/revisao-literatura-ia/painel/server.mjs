@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
-import { JOBS_DIR, PAINEL_DIR, chaveAnthropic, chaveOpenRouter, lerConfig, salvarConfig } from './lib/config.mjs';
+import { JOBS_DIR, PAINEL_DIR, chaveAnthropic, chaveDeepSeek, chaveOpenRouter, lerConfig, omnirouteConfig, salvarConfig } from './lib/config.mjs';
 import { statusProvedores, consultarUsoProvedores } from './lib/llm.mjs';
 import { exportarArtigo } from './lib/exportar.mjs';
 import { markdownParaHtml } from './lib/markdown.mjs';
@@ -125,8 +125,14 @@ function listar() {
 function configPublica() {
   const c = lerConfig();
   const or = chaveOpenRouter(c);
+  const ds = chaveDeepSeek(c);
+  const omni = omnirouteConfig(c);
   return {
     janela_navegador: c.janela_navegador, contato_email: c.contato_email,
+    modelo_deepseek: c.modelo_deepseek, modelo_deepseek_reasoner: c.modelo_deepseek_reasoner,
+    tem_deepseek: Boolean(ds), origem_deepseek: ds?.origem || '',
+    omniroute_url: c.omniroute_url, modelo_omniroute: c.modelo_omniroute,
+    tem_omniroute: Boolean(omni.url),
     modelo_openrouter: c.modelo_openrouter, modelo_claude: c.modelo_claude, modelo_anthropic: c.modelo_anthropic,
     tem_openrouter: Boolean(or), origem_openrouter: or?.origem || '',
     tem_anthropic: Boolean(chaveAnthropic(c)), tem_ncbi: Boolean(c.ncbi_api_key),
@@ -194,7 +200,12 @@ const servidor = http.createServer(async (req, res) => {
     }
     if (url.pathname === '/api/config' && req.method === 'POST') {
       const corpo = await lerCorpo(req);
-      const permitido = ['janela_navegador', 'contato_email', 'modelo_openrouter', 'openrouter_api_key', 'anthropic_api_key', 'ncbi_api_key'];
+      const permitido = [
+        'janela_navegador', 'contato_email',
+        'deepseek_api_key', 'modelo_deepseek', 'modelo_deepseek_reasoner',
+        'omniroute_url', 'modelo_omniroute',
+        'modelo_openrouter', 'openrouter_api_key', 'anthropic_api_key', 'ncbi_api_key'
+      ];
       salvarConfig(Object.fromEntries(Object.entries(corpo).filter(([k, v]) => permitido.includes(k) && typeof v === 'string')));
       await statusProvedores(true);
       return responder(res, 200, configPublica());
@@ -212,7 +223,7 @@ const servidor = http.createServer(async (req, res) => {
         params.bases = (Array.isArray(params.bases) ? params.bases : PADROES.bases).filter((b) => ['pubmed', 'scielo', 'lilacs'].includes(b));
         params.idiomas = (Array.isArray(params.idiomas) ? params.idiomas : PADROES.idiomas).filter((l) => ['pt', 'en', 'es'].includes(l));
         if (!['integrativa', 'sistematica', 'narrativa'].includes(params.tipo_revisao)) params.tipo_revisao = 'integrativa';
-        if (!['auto', 'openrouter', 'claude_cli', 'anthropic'].includes(params.provedor)) params.provedor = 'auto';
+        if (!['auto', 'deepseek', 'omniroute', 'openrouter', 'claude_cli', 'anthropic'].includes(params.provedor)) params.provedor = 'auto';
         if (!['nenhuma', 'breve', 'completa'].includes(params.declaracao_ia)) params.declaracao_ia = 'nenhuma';
         if (!params.bases.length) return responder(res, 400, { erro: 'Escolha ao menos uma base.' });
         let t;

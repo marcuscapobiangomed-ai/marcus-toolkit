@@ -14,17 +14,32 @@ const PADRAO = {
   porta: 4777,
   janela_navegador: 'visivel',
   contato_email: '',
+  deepseek_api_key: '',
+  modelo_deepseek: 'deepseek-chat',
+  modelo_deepseek_reasoner: 'deepseek-reasoner',
+  omniroute_url: 'http://localhost:20128/v1',
+  modelo_omniroute: 'auto',
   openrouter_api_key: '',
   anthropic_api_key: '',
   ncbi_api_key: '',
-  modelo_openrouter: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+  modelo_openrouter: 'deepseek/deepseek-v4.1-flash',
   modelos_openrouter_reserva: [
+    'google/gemini-3.8-flash',
+    'openai/gpt-6-luna',
+    'google/gemma-4-31b-it:free',
     'qwen/qwen3.8-27b:free',
-    'nvidia/nemotron-3-super-120b-a12b:free',
-    'thinkingmachines/inkling:free',
   ],
   modelo_claude: 'claude-sonnet-5',
   modelo_anthropic: 'claude-sonnet-5',
+  escada_agentes: {
+    triagem: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'google/gemma-4-31b-it:free', 'qwen/qwen3.8-27b:free'],
+    extracao: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'qwen/qwen3.8-27b:free'],
+    redacao: ['deepseek/deepseek-v4.1-flash', 'anthropic/claude-sonnet-5', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
+    auditoria: ['deepseek/deepseek-v4.1-flash', 'deepseek/deepseek-v4-pro', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
+    estilo: ['deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
+    fechamento: ['deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
+    busca: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash'],
+  },
 };
 
 export function lerConfig() {
@@ -46,6 +61,17 @@ export function salvarConfig(parcial) {
   }
   fs.writeFileSync(CONFIG_LOCAL, JSON.stringify(novo, null, 2), { mode: 0o600 });
   return novo;
+}
+
+export function chaveDeepSeek(cfg = lerConfig()) {
+  if (cfg.deepseek_api_key) return { chave: cfg.deepseek_api_key, origem: 'config.local.json' };
+  if (process.env.DEEPSEEK_API_KEY) return { chave: process.env.DEEPSEEK_API_KEY, origem: 'env DEEPSEEK_API_KEY' };
+  return null;
+}
+
+export function omnirouteConfig(cfg = lerConfig()) {
+  const url = cfg.omniroute_url || process.env.OMNIROUTE_URL || 'http://localhost:20128/v1';
+  return { url: url.replace(/\/+$/, '') };
 }
 
 // A chave OpenRouter pode vir do config local, de variavel de ambiente, ou do

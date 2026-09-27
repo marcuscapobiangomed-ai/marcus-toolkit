@@ -188,6 +188,7 @@ export class Trabalho extends EventEmitter {
     if (!this.estado.llm.chamadas_detalhe) this.estado.llm.chamadas_detalhe = [];
     this.estado.llm.chamadas_detalhe.push({
       t: new Date().toISOString(),
+      papel: opcoes.papel || 'geral',
       modelo: r.modelo,
       provedor: r.provedor,
       tokens_entrada: pTokens,
@@ -250,6 +251,7 @@ export class Trabalho extends EventEmitter {
     let plano;
     for (let tentativa = 0; tentativa < 3; tentativa++) {
       const r = await this.ia({
+        papel: 'busca',
         sistema: P.SISTEMA_BIBLIOTECARIO,
         prompt: P.promptPlanejamento({ tema: params.tema, pergunta: params.pergunta, tipoRevisao: params.tipo_revisao, anoInicial: this.estado.ano_inicial, refinamento }),
         maxTokens: 12000,
@@ -314,16 +316,16 @@ export class Trabalho extends EventEmitter {
     if (params.bases.includes('pubmed')) {
       const estrategia = this.estrategiaPubmed(plano.pubmed);
       const r = await pubmed.buscar(estrategia, { max: params.limite_por_base });
-      guardar('pubmed', { ...r, estrategia_relatada: estrategia, filtros: 'Descritos na própria estratégia (período, idiomas, texto completo gratuito e tipos de publicação excluídos).' });
+      guardar('pubmed', { ...r, estrategia_relatada: estrategia, filtros: `• **Período:** ${this.estado.ano_inicial} a ${anoFinal}<br>• **Idiomas:** ${idiomas}<br>• **Texto:** completo gratuito<br>• **Exclusão:** revisões e relatos de caso (na sintaxe)` });
     }
     this.checarCancelamento();
 
     const latinas = [
       ['scielo', () => scielo.buscar(plano.scielo, { anoInicial: this.estado.ano_inicial, idiomas: params.idiomas, max: params.limite_por_base }),
-        `Ano de publicação: ${this.estado.ano_inicial} a ${anoFinal}; idiomas: ${idiomas}. Todos os artigos da rede SciELO são de acesso aberto.`,
+        `• **Período:** ${this.estado.ano_inicial} a ${anoFinal}<br>• **Idiomas:** ${idiomas}<br>• **Texto:** acesso aberto<br>• **Exclusão:** revisões e relatos de caso (na triagem)`,
         'AND, OR, aspas e parênteses, sem prefixos de campo; termos compostos entre aspas; no máximo 2 blocos conceituais ligados por AND'],
       ['lilacs', () => bvs.buscar(plano.lilacs, { anoInicial: this.estado.ano_inicial, idiomas: params.idiomas, base: 'LILACS', textoCompleto: params.exigir_texto_completo, max: params.limite_por_base }),
-        `Base de dados: LILACS; ano de publicação: ${this.estado.ano_inicial} a ${anoFinal}; idiomas: ${idiomas}${params.exigir_texto_completo ? '; texto completo disponível' : ''}.`,
+        `• **Período:** ${this.estado.ano_inicial} a ${anoFinal}<br>• **Idiomas:** ${idiomas}<br>• **Texto:** ${params.exigir_texto_completo ? 'completo disponível' : 'livre'}<br>• **Exclusão:** revisões e relatos de caso (na triagem)`,
         'AND, OR, aspas e parênteses, sem prefixos de campo; termos compostos entre aspas; no máximo 2 blocos conceituais ligados por AND'],
     ];
     for (const [base, executar, filtros, sintaxe] of latinas) {
@@ -333,6 +335,7 @@ export class Trabalho extends EventEmitter {
         if (r.total === 0) {
           this.log(`${NOMES_BASE[base]}: 0 resultados; pedindo estratégia mais abrangente.`, 'aviso');
           const ref = await this.ia({
+            papel: 'busca',
             sistema: P.SISTEMA_BIBLIOTECARIO,
             prompt: P.promptRefinarString({ base: NOMES_BASE[base], sintaxe, string: plano[base], problema: 'retornou 0 resultados com os filtros aplicados; torne-a mais abrangente', tema: params.tema }),
             maxTokens: 800,
@@ -435,7 +438,7 @@ export class Trabalho extends EventEmitter {
       if (regionais.length) {
         this.log(`Segunda opinião: reavaliando ${regionais.length} registros de SciELO/LILACS excluídos na primeira triagem…`);
         const lote = regionais.map((c) => ({ ...regs[c.uid], cid: c.cid, base: NOMES_BASE[c.base], motivo_anterior: decisoes[c.cid].motivo }));
-        const r = await this.ia({ sistema: P.SISTEMA_AVALIADOR, prompt: P.promptSegundaOpiniao({ plano, lote }), maxTokens: 12000, temperatura: 0, chaveLista: 'decisoes' }, true);
+        const r = await this.ia({ papel: 'triagem', sistema: P.SISTEMA_AVALIADOR, prompt: P.promptSegundaOpiniao({ plano, lote }), maxTokens: 12000, temperatura: 0, chaveLista: 'decisoes' }, true);
         for (const d of listaDe(r.dados, 'decisoes')) {
           const cid = String(d.id || '').trim().toUpperCase();
           if (!regionais.some((c) => c.cid === cid) || !(d.incluir === true || d.incluir === 'true')) continue;
@@ -484,7 +487,7 @@ export class Trabalho extends EventEmitter {
   }
 
   async triarLote(lote, decisoes, plano) {
-    const r = await this.ia({ sistema: P.SISTEMA_AVALIADOR, prompt: P.promptTriagem({ plano, lote }), maxTokens: 16000, temperatura: 0, chaveLista: 'decisoes' }, true);
+    const r = await this.ia({ papel: 'triagem', sistema: P.SISTEMA_AVALIADOR, prompt: P.promptTriagem({ plano, lote }), maxTokens: 16000, temperatura: 0, chaveLista: 'decisoes' }, true);
     const validos = new Set(lote.map((x) => x.cid));
     for (const d of listaDe(r.dados, 'decisoes')) {
       const cid = String(d.id || '').trim().toUpperCase();
@@ -615,7 +618,7 @@ export class Trabalho extends EventEmitter {
     lote = lote.map((r, i) => ({ ...r, eid: `E${i + 1}` }));
     let prompt = P.promptExtracao({ plano, lote });
     if (semNumeros) prompt += '\n\nIMPORTANTE: nesta resposta, NÃO use nenhum número nos campos "achados" e "amostra" (descreva qualitativamente).';
-    const r = await this.ia({ sistema: P.SISTEMA_AVALIADOR, prompt, maxTokens: 16000, temperatura: 0, chaveLista: 'estudos' }, true);
+    const r = await this.ia({ papel: 'extracao', sistema: P.SISTEMA_AVALIADOR, prompt, maxTokens: 16000, temperatura: 0, chaveLista: 'estudos' }, true);
     for (const [i, e] of listaDe(r.dados, 'estudos').entries()) {
       const id = String(e.id || e.eid || '').trim().toUpperCase();
       const reg = lote.find((x) => x.eid === id) || (!id && lote[i]);
@@ -650,13 +653,14 @@ export class Trabalho extends EventEmitter {
     const fontes = this.fontesNumeradas();
     if (!this.estado.introducao) {
       this.log('Redigindo a introdução…');
-      const r = await this.ia({ sistema: P.SISTEMA_REDATOR, prompt: P.promptIntroducao({ plano, fontes, tipoRevisao: params.tipo_revisao }), maxTokens: 16000, temperatura: 0.4 });
+      const r = await this.ia({ papel: 'redacao', sistema: P.SISTEMA_REDATOR, prompt: P.promptIntroducao({ plano, fontes, tipoRevisao: params.tipo_revisao }), maxTokens: 16000, temperatura: 0.4 });
       this.estado.introducao = normalizarCorpo(r.texto, true);
       this.salvar();
     }
     if (!this.estado.discussao) {
       this.log('Redigindo a discussão…');
       const r = await this.ia({
+        papel: 'redacao',
         sistema: P.SISTEMA_REDATOR,
         prompt: P.promptDiscussao({ plano, fontes, sinteseResultados: this.sinteseResultadosFatos(fontes), limitacoesFatos: this.limitacoesFatos() }),
         maxTokens: 24000,
@@ -733,6 +737,7 @@ export class Trabalho extends EventEmitter {
       const lote = frases.slice(i, i + LOTE_AUDITORIA).map((frase, j) => ({ i: i + j + 1, frase }));
       const nums = [...new Set(lote.flatMap((f) => citacoesDoTexto(f.frase)))].filter((n) => n >= 1 && n <= fontes.length);
       const r = await this.ia({
+        papel: 'auditoria',
         sistema: P.SISTEMA_AVALIADOR,
         prompt: P.promptAuditoria({ fontes: nums.map((n) => fontes[n - 1]), frases: lote }),
         maxTokens: 14000,
@@ -790,7 +795,7 @@ export class Trabalho extends EventEmitter {
         problema: p.detalhe,
         fontes: [...new Set(citacoesDoTexto(p.trecho))].filter((n) => n >= 1 && n <= fontes.length).map((n) => fontes[n - 1]),
       }));
-      const r = await this.ia({ sistema: P.SISTEMA_REDATOR, prompt: P.promptCorrecao({ itens }), maxTokens: 12000, temperatura: 0.2, chaveLista: 'correcoes' }, true);
+      const r = await this.ia({ papel: 'redacao', sistema: P.SISTEMA_REDATOR, prompt: P.promptCorrecao({ itens }), maxTokens: 12000, temperatura: 0.2, chaveLista: 'correcoes' }, true);
       for (const c of listaDe(r.dados, 'correcoes')) {
         const alvo = lote[Number(c.item) - 1];
         if (!alvo) continue;
@@ -838,7 +843,7 @@ export class Trabalho extends EventEmitter {
       for (let k = 0; k < alvos.length; k += 6) {
         const lote = alvos.slice(k, k + 6).map(({ b, i }) => ({ id: `P${i}`, texto: b, i }));
         this.log(`Estilo (${secao === 'introducao' ? 'Introdução' : 'Discussão'}): parágrafos ${k + 1}–${Math.min(k + 6, alvos.length)} de ${alvos.length}…`);
-        const r = await this.ia({ sistema: P.SISTEMA_EDITOR, prompt: P.promptEstilo({ paragrafos: lote }), maxTokens: 14000, temperatura: 0.5, chaveLista: 'paragrafos' }, true);
+        const r = await this.ia({ papel: 'estilo', sistema: P.SISTEMA_EDITOR, prompt: P.promptEstilo({ paragrafos: lote }), maxTokens: 14000, temperatura: 0.5, chaveLista: 'paragrafos' }, true);
         for (const p of listaDe(r.dados, 'paragrafos')) {
           const alvo = lote.find((x) => x.id === String(p.id || '').trim());
           if (!alvo) continue;
@@ -878,6 +883,7 @@ export class Trabalho extends EventEmitter {
     if (!this.estado.fechamento) {
       this.log('Redigindo título, resumo, abstract e conclusão…');
       const r = await this.ia({
+        papel: 'fechamento',
         sistema: P.SISTEMA_REDATOR,
         prompt: P.promptResumoConclusao({ plano, fatos, introducao: this.estado.introducao, discussao: this.estado.discussao, tipoRevisao: params.tipo_revisao }),
         maxTokens: 12000,
@@ -926,7 +932,7 @@ export class Trabalho extends EventEmitter {
     }
     for (const f of dividirFrases(fe.conclusao || '')) if (RE_PT.test(f)) novaFrase('Conclusão', 'conclusao', f);
 
-    const r = await this.ia({ sistema: P.SISTEMA_EDITOR, prompt: P.promptLimitacoes({ fatos: this.limitacoesFatos(), atual, frases }), maxTokens: 10000, temperatura: 0.3, chaveLista: 'frases' }, true);
+    const r = await this.ia({ papel: 'estilo', sistema: P.SISTEMA_EDITOR, prompt: P.promptLimitacoes({ fatos: this.limitacoesFatos(), atual, frases }), maxTokens: 10000, temperatura: 0.3, chaveLista: 'frases' }, true);
     const rel = { paragrafo_unico: false, reescritas: 0, removidas: 0, mantidas: 0 };
 
     const novoLim = String(r.dados?.limitacoes || '').replace(/\s*\n\s*/g, ' ').trim();
