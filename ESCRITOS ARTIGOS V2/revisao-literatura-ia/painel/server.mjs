@@ -178,7 +178,7 @@ const servidor = http.createServer(async (req, res) => {
   const partes = url.pathname.split('/').filter(Boolean);
   try {
     // Toda escrita exige um cabecalho proprio: sites externos nao conseguem envia-lo (CORS), o que bloqueia CSRF.
-    if (req.method !== 'GET' && req.headers['x-painel'] !== '1') return responder(res, 403, { erro: 'Requisição recusada' });
+    if (!['GET', 'HEAD'].includes(req.method) && req.headers['x-painel'] !== '1') return responder(res, 403, { erro: 'Requisição recusada' });
 
     if (url.pathname === '/' || url.pathname === '/index.html') return servirArquivo(res, PUBLICO, 'index.html');
     if (partes[0] === 'static') return servirArquivo(res, PUBLICO, partes.slice(1).join('/'));
