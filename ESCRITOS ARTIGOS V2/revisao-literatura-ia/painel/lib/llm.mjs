@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import os from 'node:os';
-import { chaveAnthropic, chaveDeepSeek, chaveOpenRouter, lerConfig, omnirouteConfig } from './config.mjs';
+import { chaveAnthropic, chaveDeepSeek, chaveGemini, chaveOpenRouter, lerConfig, omnirouteConfig } from './config.mjs';
 import { esperar } from './texto.mjs';
 
 // Modelos gratuitos podem demorar varios minutos em lotes grandes, mas nunca indefinidamente.
@@ -49,6 +49,7 @@ export async function statusProvedores(forcar = false) {
   const cfg = lerConfig();
   const valor = {
     deepseek: { disponivel: false, modelo: cfg.modelo_deepseek, detalhe: '' },
+    gemini: { disponivel: false, modelo: cfg.modelo_gemini || 'gemini-2.5-flash', detalhe: '' },
     omniroute: { disponivel: false, modelo: cfg.modelo_omniroute || 'auto', detalhe: '' },
     openrouter: { disponivel: false, modelo: cfg.modelo_openrouter, detalhe: '' },
     claude_cli: { disponivel: false, modelo: cfg.modelo_claude, detalhe: '' },
@@ -61,6 +62,14 @@ export async function statusProvedores(forcar = false) {
     valor.deepseek.detalhe = `chave de ${ds.origem}`;
   } else {
     valor.deepseek.detalhe = 'sem DEEPSEEK_API_KEY configurada';
+  }
+
+  const gem = chaveGemini(cfg);
+  if (gem) {
+    valor.gemini.disponivel = true;
+    valor.gemini.detalhe = `chave de ${gem.origem}`;
+  } else {
+    valor.gemini.detalhe = 'sem GEMINI_API_KEY configurada';
   }
 
   const omni = omnirouteConfig(cfg);
@@ -111,7 +120,10 @@ export async function statusProvedores(forcar = false) {
   }
 
   valor.anthropic.detalhe = valor.anthropic.disponivel ? 'chave configurada' : 'sem ANTHROPIC_API_KEY';
-  valor.escolhido = valor.deepseek.disponivel ? 'deepseek' :
+  valor.dupla_ativa = valor.deepseek.disponivel && valor.gemini.disponivel;
+  valor.escolhido = (valor.deepseek.disponivel && valor.gemini.disponivel) ? 'dupla' :
+                    valor.deepseek.disponivel ? 'deepseek' :
+                    valor.gemini.disponivel ? 'gemini' :
                     valor.omniroute.disponivel ? 'omniroute' :
                     valor.openrouter.disponivel ? 'openrouter' :
                     valor.claude_cli.disponivel ? 'claude_cli' :
@@ -123,6 +135,9 @@ export async function statusProvedores(forcar = false) {
 export function estimarCusto({ provedor, modelo, prompt_tokens = 0, completion_tokens = 0, cache_hit = 0, cache_miss = 0 }) {
   if (modelo?.endsWith(':free')) return 0;
   if (provedor === 'omniroute') return 0;
+  if (provedor === 'gemini' || modelo?.includes('gemini')) {
+    return Number(((prompt_tokens * 0.10 + completion_tokens * 0.40) / 1_000_000).toFixed(6));
+  }
   if (provedor === 'deepseek' || modelo?.includes('deepseek')) {
     const isReasoner = (modelo || '').includes('reasoner');
     if (cache_hit > 0 || cache_miss > 0) {
@@ -316,6 +331,47 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
   };
 }
 
+async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
+  const gem = chaveGemini();
+  if (!gem?.chave) throw new Error('Sem chave Gemini configurada');
+  const mod = modelo || 'gemini-2.5-flash';
+  const payload = {
+    model: mod,
+    messages: [
+      { role: 'system', content: sistema },
+      { role: 'user', content: prompt },
+    ],
+    max_tokens: maxTokens,
+  };
+  if (typeof temperatura === 'number') payload.temperature = temperatura;
+  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+    method: 'POST',
+    signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
+    headers: {
+      Authorization: `Bearer ${gem.chave}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) {
+    throw Object.assign(new Error(`Gemini ${mod} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
+  }
+  const msg = j.choices?.[0]?.message || {};
+  const texto = msg.content || '';
+  if (!texto.trim()) throw Object.assign(new Error(`Gemini ${mod} devolveu resposta vazia`), { status: 502 });
+  const prompt_tokens = j.usage?.prompt_tokens || 0;
+  const completion_tokens = j.usage?.completion_tokens || 0;
+  const total_tokens = j.usage?.total_tokens || (prompt_tokens + completion_tokens);
+  const custo = estimarCusto({ provedor: 'gemini', modelo: mod, prompt_tokens, completion_tokens });
+  return {
+    texto,
+    modelo: j.model || mod,
+    usage: { prompt_tokens, completion_tokens, total_tokens },
+    custo_usd: custo,
+  };
+}
+
 async function viaOmniRoute({ sistema, prompt, modelo, maxTokens, temperatura }) {
   const omni = omnirouteConfig();
   const mod = modelo || 'auto';
@@ -396,7 +452,72 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
   const cfg = lerConfig();
   const status = await statusProvedores();
   const qual = provedor === 'auto' ? status.escolhido : provedor;
-  if (!qual) throw new Error('Nenhum motor de IA disponível. Configure DeepSeek, OmniRoute, OpenRouter, Anthropic ou faça login no Claude CLI.');
+  if (!qual) throw new Error('Nenhum motor de IA disponível. Configure Gemini, DeepSeek, OmniRoute, OpenRouter, Anthropic ou faça login no Claude CLI.');
+
+  const papeisGemini = ['busca', 'redacao_intro', 'estilo', 'fechamento', 'limitacoes'];
+  const prefereGemini = papeisGemini.includes(papel);
+
+  // Modo Sinergético Dupla Híbrida (DeepSeek + Gemini)
+  if (qual === 'dupla' || (provedor === 'auto' && status.dupla_ativa)) {
+    if (prefereGemini) {
+      // 1. Tenta Gemini (estilístico/narrativo)
+      for (let t = 0; t < 2; t++) {
+        try {
+          aoTentar?.(cfg.modelo_gemini || 'gemini-2.5-flash', t);
+          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+        } catch (e) {
+          if (e.status === 401) throw e;
+          if (t === 1 && status.deepseek?.disponivel) break;
+          await esperar(2000);
+        }
+      }
+      if (status.deepseek?.disponivel) {
+        try {
+          aoTentar?.(cfg.modelo_deepseek, 0);
+          return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
+        } catch {}
+      }
+    } else {
+      // 1. Tenta DeepSeek (técnico/dados/auditoria)
+      const modDs = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-chat');
+      for (let t = 0; t < 2; t++) {
+        try {
+          aoTentar?.(modDs, t);
+          return { ...(await viaDeepSeek({ sistema, prompt, modelo: modDs, maxTokens, temperatura })), provedor: 'deepseek' };
+        } catch (e) {
+          if (e.status === 401) throw e;
+          if (t === 1 && status.gemini?.disponivel) break;
+          await esperar(2000);
+        }
+      }
+      if (status.gemini?.disponivel) {
+        try {
+          aoTentar?.(cfg.modelo_gemini, 0);
+          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+        } catch {}
+      }
+    }
+  }
+
+  if (qual === 'gemini') {
+    const modelo = cfg.modelo_gemini || 'gemini-2.5-flash';
+    for (let t = 0; t < 3; t++) {
+      try {
+        aoTentar?.(modelo, t);
+        return { ...(await viaGemini({ sistema, prompt, modelo, maxTokens, temperatura })), provedor: 'gemini' };
+      } catch (e) {
+        if (e.status === 401) throw e;
+        if (t === 2) {
+          if (status.deepseek?.disponivel) {
+            return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
+          }
+          if (status.openrouter?.disponivel) break;
+          throw e;
+        }
+        await esperar(2000 * (t + 1));
+      }
+    }
+  }
 
   if (qual === 'deepseek') {
     const modelo = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-chat');
@@ -407,12 +528,13 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
       } catch (e) {
         if (e.status === 401) throw e;
         if (t === 2) {
+          if (status.gemini?.disponivel) {
+            return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+          }
           if (status.omniroute?.disponivel) {
             return { ...(await viaOmniRoute({ sistema, prompt, modelo: cfg.modelo_omniroute || 'auto', maxTokens, temperatura })), provedor: 'omniroute' };
           }
-          if (status.openrouter?.disponivel) {
-            break;
-          }
+          if (status.openrouter?.disponivel) break;
           throw e;
         }
         await esperar(2000 * (t + 1));
@@ -430,9 +552,10 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
           if (status.deepseek?.disponivel) {
             return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
           }
-          if (status.openrouter?.disponivel) {
-            break;
+          if (status.gemini?.disponivel) {
+            return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
           }
+          if (status.openrouter?.disponivel) break;
           throw e;
         }
         await esperar(3000);

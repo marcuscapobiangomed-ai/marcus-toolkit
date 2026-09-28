@@ -54,11 +54,13 @@ async function carregarStatus(forcar = false) {
     return;
   }
   const p = estadoGlobal.provedores;
-  const nomeProv = { deepseek: 'DeepSeek API', omniroute: 'OmniRoute', claude_cli: 'Claude (assinatura)', anthropic: 'Anthropic API', openrouter: 'OpenRouter' };
+  const nomeProv = { dupla: '🔥 Dupla Híbrida (DeepSeek + Gemini)', deepseek: 'DeepSeek API', gemini: 'Google Gemini API', omniroute: 'OmniRoute', claude_cli: 'Claude (assinatura)', anthropic: 'Anthropic API', openrouter: 'OpenRouter' };
   const chips = [];
-  if (p.escolhido) {
+  if (p.escolhido === 'dupla') {
+    chips.push(el('span', { class: 'chip ok', title: 'DeepSeek para dados/auditoria e Gemini para texto/estilo' }, 'IA: 🔥 Dupla Híbrida (DeepSeek + Gemini)'));
+  } else if (p.escolhido) {
     const modelo = p[p.escolhido].modelo;
-    const gratis = /free/.test(p[p.escolhido].detalhe) || /:free$/.test(modelo) || p.escolhido === 'omniroute';
+    const gratis = /free/.test(p[p.escolhido].detalhe) || /:free$/.test(modelo) || p.escolhido === 'omniroute' || p.escolhido === 'gemini';
     chips.push(el('span', { class: `chip ${gratis ? 'aviso' : 'ok'}`, title: p[p.escolhido].detalhe }, `IA: ${nomeProv[p.escolhido] || p.escolhido} · ${modelo.split('/').pop()}${gratis ? ' (grátis)' : ''}`));
   } else {
     chips.push(el('span', { class: 'chip erro' }, 'IA: nenhum motor disponível'));
@@ -195,8 +197,10 @@ function telaNovo() {
     el('div', { class: 'campo' },
       el('label', { for: 'provedor' }, 'Motor de IA'),
       el('select', { id: 'provedor', name: 'provedor' },
-        el('option', { value: 'auto' }, 'Automático (DeepSeek > OmniRoute > OpenRouter > Claude)'),
-        el('option', { value: 'deepseek' }, 'DeepSeek API Direta (Recomendado — Ultrabarato & Caching)'),
+        el('option', { value: 'auto' }, 'Automático (Melhor disponível)'),
+        el('option', { value: 'dupla' }, '🔥 Dupla Híbrida (DeepSeek Dados/Auditoria + Gemini Texto/Estilo)'),
+        el('option', { value: 'deepseek' }, 'DeepSeek API Direta (Ultrabarato & Caching)'),
+        el('option', { value: 'gemini' }, 'Google Gemini API Direta (Google AI Studio)'),
         el('option', { value: 'omniroute' }, 'OmniRoute (Gateway Local Gratuito :20128)'),
         el('option', { value: 'openrouter' }, 'OpenRouter (Escada de Modelos 2026 / :free)'),
         el('option', { value: 'claude_cli' }, 'Claude — assinatura (exige "claude auth login")'),
@@ -584,6 +588,9 @@ $('#btn-config').addEventListener('click', async () => {
   $('#cfg-deepseek-origem').textContent = c.tem_deepseek ? `Chave configurada (${c.origem_deepseek}).` : 'Nenhuma chave configurada.';
   $('#cfg-modelo-deepseek').value = c.modelo_deepseek || 'deepseek-chat';
   $('#cfg-modelo-deepseek-reasoner').value = c.modelo_deepseek_reasoner || 'deepseek-reasoner';
+  $('#cfg-gemini').value = '';
+  $('#cfg-gemini-origem').textContent = c.tem_gemini ? `Chave configurada (${c.origem_gemini}).` : 'Nenhuma chave configurada.';
+  $('#cfg-modelo-gemini').value = c.modelo_gemini || 'gemini-2.5-flash';
   $('#cfg-omniroute').value = c.omniroute_url || 'http://localhost:20128/v1';
 
   $('#cfg-openrouter').value = '';
@@ -609,6 +616,7 @@ $('#dlg-config').addEventListener('close', async () => {
   const corpo = {
     modelo_deepseek: $('#cfg-modelo-deepseek').value.trim(),
     modelo_deepseek_reasoner: $('#cfg-modelo-deepseek-reasoner').value.trim(),
+    modelo_gemini: $('#cfg-modelo-gemini').value.trim(),
     omniroute_url: $('#cfg-omniroute').value.trim(),
     modelo_openrouter: $('#cfg-modelo').value.trim(),
     contato_email: $('#cfg-email').value.trim(),
@@ -616,6 +624,7 @@ $('#dlg-config').addEventListener('close', async () => {
   };
   for (const [id, k] of [
     ['#cfg-deepseek', 'deepseek_api_key'],
+    ['#cfg-gemini', 'gemini_api_key'],
     ['#cfg-openrouter', 'openrouter_api_key'],
     ['#cfg-anthropic', 'anthropic_api_key'],
     ['#cfg-ncbi', 'ncbi_api_key']

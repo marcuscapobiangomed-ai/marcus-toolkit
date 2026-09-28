@@ -653,14 +653,14 @@ export class Trabalho extends EventEmitter {
     const fontes = this.fontesNumeradas();
     if (!this.estado.introducao) {
       this.log('Redigindo a introdução…');
-      const r = await this.ia({ papel: 'redacao', sistema: P.SISTEMA_REDATOR, prompt: P.promptIntroducao({ plano, fontes, tipoRevisao: params.tipo_revisao }), maxTokens: 16000, temperatura: 0.4 });
+      const r = await this.ia({ papel: 'redacao_intro', sistema: P.SISTEMA_REDATOR, prompt: P.promptIntroducao({ plano, fontes, tipoRevisao: params.tipo_revisao }), maxTokens: 16000, temperatura: 0.4 });
       this.estado.introducao = normalizarCorpo(r.texto, true);
       this.salvar();
     }
     if (!this.estado.discussao) {
       this.log('Redigindo a discussão…');
       const r = await this.ia({
-        papel: 'redacao',
+        papel: 'redacao_discussao',
         sistema: P.SISTEMA_REDATOR,
         prompt: P.promptDiscussao({ plano, fontes, sinteseResultados: this.sinteseResultadosFatos(fontes), limitacoesFatos: this.limitacoesFatos() }),
         maxTokens: 24000,
@@ -932,7 +932,7 @@ export class Trabalho extends EventEmitter {
     }
     for (const f of dividirFrases(fe.conclusao || '')) if (RE_PT.test(f)) novaFrase('Conclusão', 'conclusao', f);
 
-    const r = await this.ia({ papel: 'estilo', sistema: P.SISTEMA_EDITOR, prompt: P.promptLimitacoes({ fatos: this.limitacoesFatos(), atual, frases }), maxTokens: 10000, temperatura: 0.3, chaveLista: 'frases' }, true);
+    const r = await this.ia({ papel: 'limitacoes', sistema: P.SISTEMA_EDITOR, prompt: P.promptLimitacoes({ fatos: this.limitacoesFatos(), atual, frases }), maxTokens: 10000, temperatura: 0.3, chaveLista: 'frases' }, true);
     const rel = { paragrafo_unico: false, reescritas: 0, removidas: 0, mantidas: 0 };
 
     const novoLim = String(r.dados?.limitacoes || '').replace(/\s*\n\s*/g, ' ').trim();

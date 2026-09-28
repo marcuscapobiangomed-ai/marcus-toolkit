@@ -14,6 +14,8 @@ const PADRAO = {
   porta: 4777,
   janela_navegador: 'visivel',
   contato_email: '',
+  gemini_api_key: '',
+  modelo_gemini: 'gemini-2.5-flash',
   deepseek_api_key: '',
   modelo_deepseek: 'deepseek-chat',
   modelo_deepseek_reasoner: 'deepseek-reasoner',
@@ -32,13 +34,17 @@ const PADRAO = {
   modelo_claude: 'claude-sonnet-5',
   modelo_anthropic: 'claude-sonnet-5',
   escada_agentes: {
+    busca: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash'],
     triagem: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'google/gemma-4-31b-it:free', 'qwen/qwen3.8-27b:free'],
     extracao: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'qwen/qwen3.8-27b:free'],
-    redacao: ['deepseek/deepseek-v4.1-flash', 'anthropic/claude-sonnet-5', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
+    redacao_intro: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash', 'anthropic/claude-sonnet-5'],
+    redacao_discussao: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'anthropic/claude-sonnet-5'],
+    redacao: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash', 'anthropic/claude-sonnet-5'],
     auditoria: ['deepseek/deepseek-v4.1-flash', 'deepseek/deepseek-v4-pro', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
-    estilo: ['deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
-    fechamento: ['deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
-    busca: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash'],
+    estilo: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
+    fechamento: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
+    limitacoes: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash'],
+    tabelas: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash'],
   },
 };
 
@@ -61,6 +67,12 @@ export function salvarConfig(parcial) {
   }
   fs.writeFileSync(CONFIG_LOCAL, JSON.stringify(novo, null, 2), { mode: 0o600 });
   return novo;
+}
+
+export function chaveGemini(cfg = lerConfig()) {
+  if (cfg.gemini_api_key) return { chave: cfg.gemini_api_key, origem: 'config.local.json' };
+  if (process.env.GEMINI_API_KEY) return { chave: process.env.GEMINI_API_KEY, origem: 'env GEMINI_API_KEY' };
+  return null;
 }
 
 export function chaveDeepSeek(cfg = lerConfig()) {
