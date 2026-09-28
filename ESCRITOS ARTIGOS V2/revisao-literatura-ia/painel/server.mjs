@@ -201,6 +201,16 @@ const servidor = http.createServer(async (req, res) => {
     if (url.pathname === '/api/uso') {
       return responder(res, 200, await consultarUsoProvedores());
     }
+    if (url.pathname === '/api/desligar' && req.method === 'POST') {
+      responder(res, 200, { ok: true, mensagem: 'Servidor encerrando...' });
+      setTimeout(async () => {
+        try {
+          await fecharNavegador();
+        } catch {}
+        process.exit(0);
+      }, 500);
+      return;
+    }
     if (url.pathname === '/api/config' && req.method === 'POST') {
       const corpo = await lerCorpo(req);
       const permitido = [

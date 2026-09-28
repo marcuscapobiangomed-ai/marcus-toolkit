@@ -639,6 +639,23 @@ $('#dlg-config').addEventListener('close', async () => {
   }
 });
 
+$('#btn-desligar')?.addEventListener('click', async () => {
+  if (!confirm('Deseja realmente desligar o servidor do painel?\n\nPara iniciá-lo novamente, basta clicar duas vezes no ícone "Revisão Literatura IA" na sua Área de Trabalho.')) return;
+  try {
+    await fetch('/api/desligar', { method: 'POST' });
+    document.body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:system-ui,-apple-system,sans-serif;color:#e2e8f0;background:#0b0f17;text-align:center;padding:24px;">
+        <div style="font-size:48px;margin-bottom:16px;">🛑</div>
+        <h1 style="font-size:24px;font-weight:600;margin-bottom:8px;">Servidor Encerrado</h1>
+        <p style="font-size:16px;color:#94a3b8;max-width:440px;line-height:1.5;">O painel foi desligado com sucesso e todos os recursos foram liberados.</p>
+        <p style="font-size:14px;color:#64748b;margin-top:20px;">Para reabrir quando quiser, dê dois cliques no ícone <strong>Revisão Literatura IA</strong> na sua Área de Trabalho.</p>
+      </div>
+    `;
+  } catch (e) {
+    alert('Erro ao desligar: ' + e.message);
+  }
+});
+
 window.addEventListener('hashchange', navegar);
 await carregarStatus();
 navegar();
