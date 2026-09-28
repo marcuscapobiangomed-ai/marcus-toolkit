@@ -586,11 +586,11 @@ $('#btn-config').addEventListener('click', async () => {
   const c = estadoGlobal?.config || {};
   $('#cfg-deepseek').value = '';
   $('#cfg-deepseek-origem').textContent = c.tem_deepseek ? `Chave configurada (${c.origem_deepseek}).` : 'Nenhuma chave configurada.';
-  $('#cfg-modelo-deepseek').value = c.modelo_deepseek || 'deepseek-chat';
-  $('#cfg-modelo-deepseek-reasoner').value = c.modelo_deepseek_reasoner || 'deepseek-reasoner';
+  $('#cfg-modelo-deepseek').value = c.modelo_deepseek || 'deepseek-v4.1-flash';
+  $('#cfg-modelo-deepseek-reasoner').value = c.modelo_deepseek_reasoner || 'deepseek-v4-reasoner';
   $('#cfg-gemini').value = '';
   $('#cfg-gemini-origem').textContent = c.tem_gemini ? `Chave configurada (${c.origem_gemini}).` : 'Nenhuma chave configurada.';
-  $('#cfg-modelo-gemini').value = c.modelo_gemini || 'gemini-2.5-flash';
+  $('#cfg-modelo-gemini').value = c.modelo_gemini || 'gemini-3.8-flash';
   $('#cfg-omniroute').value = c.omniroute_url || 'http://localhost:20128/v1';
 
   $('#cfg-openrouter').value = '';

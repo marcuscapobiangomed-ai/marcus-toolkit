@@ -48,8 +48,8 @@ export async function statusProvedores(forcar = false) {
   if (cacheStatus && !forcar && Date.now() - cacheStatus.em < 60000) return cacheStatus.valor;
   const cfg = lerConfig();
   const valor = {
-    deepseek: { disponivel: false, modelo: cfg.modelo_deepseek, detalhe: '' },
-    gemini: { disponivel: false, modelo: cfg.modelo_gemini || 'gemini-2.5-flash', detalhe: '' },
+    deepseek: { disponivel: false, modelo: cfg.modelo_deepseek || 'deepseek-v4.1-flash', detalhe: '' },
+    gemini: { disponivel: false, modelo: cfg.modelo_gemini || 'gemini-3.8-flash', detalhe: '' },
     omniroute: { disponivel: false, modelo: cfg.modelo_omniroute || 'auto', detalhe: '' },
     openrouter: { disponivel: false, modelo: cfg.modelo_openrouter, detalhe: '' },
     claude_cli: { disponivel: false, modelo: cfg.modelo_claude, detalhe: '' },
@@ -283,7 +283,7 @@ async function viaAnthropic({ sistema, prompt, modelo, maxTokens, temperatura })
 async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) {
   const ds = chaveDeepSeek();
   if (!ds?.chave) throw new Error('Sem chave DeepSeek configurada');
-  const mod = modelo || 'deepseek-chat';
+  const mod = modelo || 'deepseek-v4.1-flash';
   const isReasoner = mod.includes('reasoner');
   const payload = {
     model: mod,
@@ -296,7 +296,7 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
   if (!isReasoner && typeof temperatura === 'number') {
     payload.temperature = temperatura;
   }
-  const r = await fetch('https://api.deepseek.com/chat/completions', {
+  let r = await fetch('https://api.deepseek.com/chat/completions', {
     method: 'POST',
     signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
     headers: {
@@ -305,15 +305,32 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
     },
     body: JSON.stringify(payload),
   });
-  const j = await r.json().catch(() => ({}));
+  let j = await r.json().catch(() => ({}));
+  if ((!r.ok || j.error) && (r.status === 400 || r.status === 404)) {
+    const altMod = isReasoner ? 'deepseek-reasoner' : 'deepseek-chat';
+    if (mod !== altMod) {
+      payload.model = altMod;
+      const rAlt = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
+        headers: { Authorization: `Bearer ${ds.chave}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const jAlt = await rAlt.json().catch(() => ({}));
+      if (rAlt.ok && !jAlt.error) {
+        r = rAlt;
+        j = jAlt;
+      }
+    }
+  }
   if (!r.ok || j.error) {
-    throw Object.assign(new Error(`DeepSeek ${mod} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
+    throw Object.assign(new Error(`DeepSeek ${payload.model} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
   }
   const msg = j.choices?.[0]?.message || {};
   const texto = msg.content || '';
   const reasoning = msg.reasoning_content || null;
   if (!texto.trim() && !reasoning) {
-    throw Object.assign(new Error(`DeepSeek ${mod} devolveu resposta vazia`), { status: 502 });
+    throw Object.assign(new Error(`DeepSeek ${payload.model} devolveu resposta vazia`), { status: 502 });
   }
   const u = j.usage || {};
   const cache_hit = u.prompt_cache_hit_tokens || 0;
@@ -321,11 +338,11 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
   const prompt_tokens = u.prompt_tokens || (cache_hit + cache_miss);
   const completion_tokens = u.completion_tokens || 0;
   const total_tokens = u.total_tokens || (prompt_tokens + completion_tokens);
-  const custo = estimarCusto({ provedor: 'deepseek', modelo: mod, prompt_tokens, completion_tokens, cache_hit, cache_miss });
+  const custo = estimarCusto({ provedor: 'deepseek', modelo: payload.model, prompt_tokens, completion_tokens, cache_hit, cache_miss });
   return {
     texto: texto || reasoning,
     reasoning,
-    modelo: j.model || mod,
+    modelo: j.model || payload.model,
     usage: { prompt_tokens, completion_tokens, total_tokens, cache_hit, cache_miss },
     custo_usd: custo,
   };
@@ -334,7 +351,7 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
 async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
   const gem = chaveGemini();
   if (!gem?.chave) throw new Error('Sem chave Gemini configurada');
-  const mod = modelo || 'gemini-2.5-flash';
+  const mod = modelo || 'gemini-3.8-flash';
   const payload = {
     model: mod,
     messages: [
@@ -344,7 +361,7 @@ async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
     max_tokens: maxTokens,
   };
   if (typeof temperatura === 'number') payload.temperature = temperatura;
-  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+  let r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
     method: 'POST',
     signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
     headers: {
@@ -353,20 +370,37 @@ async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
     },
     body: JSON.stringify(payload),
   });
-  const j = await r.json().catch(() => ({}));
+  let j = await r.json().catch(() => ({}));
+  if ((!r.ok || j.error) && (r.status === 400 || r.status === 404)) {
+    const altMod = 'gemini-2.5-flash';
+    if (mod !== altMod) {
+      payload.model = altMod;
+      const rAlt = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+        method: 'POST',
+        signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
+        headers: { Authorization: `Bearer ${gem.chave}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const jAlt = await rAlt.json().catch(() => ({}));
+      if (rAlt.ok && !jAlt.error) {
+        r = rAlt;
+        j = jAlt;
+      }
+    }
+  }
   if (!r.ok || j.error) {
-    throw Object.assign(new Error(`Gemini ${mod} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
+    throw Object.assign(new Error(`Gemini ${payload.model} HTTP ${r.status}: ${JSON.stringify(j.error || j).slice(0, 300)}`), { status: r.status || j.error?.code });
   }
   const msg = j.choices?.[0]?.message || {};
   const texto = msg.content || '';
-  if (!texto.trim()) throw Object.assign(new Error(`Gemini ${mod} devolveu resposta vazia`), { status: 502 });
+  if (!texto.trim()) throw Object.assign(new Error(`Gemini ${payload.model} devolveu resposta vazia`), { status: 502 });
   const prompt_tokens = j.usage?.prompt_tokens || 0;
   const completion_tokens = j.usage?.completion_tokens || 0;
   const total_tokens = j.usage?.total_tokens || (prompt_tokens + completion_tokens);
-  const custo = estimarCusto({ provedor: 'gemini', modelo: mod, prompt_tokens, completion_tokens });
+  const custo = estimarCusto({ provedor: 'gemini', modelo: payload.model, prompt_tokens, completion_tokens });
   return {
     texto,
-    modelo: j.model || mod,
+    modelo: j.model || payload.model,
     usage: { prompt_tokens, completion_tokens, total_tokens },
     custo_usd: custo,
   };
@@ -463,8 +497,8 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
       // 1. Tenta Gemini (estilístico/narrativo)
       for (let t = 0; t < 2; t++) {
         try {
-          aoTentar?.(cfg.modelo_gemini || 'gemini-2.5-flash', t);
-          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+          aoTentar?.(cfg.modelo_gemini || 'gemini-3.8-flash', t);
+          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini || 'gemini-3.8-flash', maxTokens, temperatura })), provedor: 'gemini' };
         } catch (e) {
           if (e.status === 401) throw e;
           if (t === 1 && status.deepseek?.disponivel) break;
@@ -473,13 +507,13 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
       }
       if (status.deepseek?.disponivel) {
         try {
-          aoTentar?.(cfg.modelo_deepseek, 0);
-          return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
+          aoTentar?.(cfg.modelo_deepseek || 'deepseek-v4.1-flash', 0);
+          return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek || 'deepseek-v4.1-flash', maxTokens, temperatura })), provedor: 'deepseek' };
         } catch {}
       }
     } else {
       // 1. Tenta DeepSeek (técnico/dados/auditoria)
-      const modDs = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-chat');
+      const modDs = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-v4.1-flash');
       for (let t = 0; t < 2; t++) {
         try {
           aoTentar?.(modDs, t);
@@ -492,15 +526,15 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
       }
       if (status.gemini?.disponivel) {
         try {
-          aoTentar?.(cfg.modelo_gemini, 0);
-          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+          aoTentar?.(cfg.modelo_gemini || 'gemini-3.8-flash', 0);
+          return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini || 'gemini-3.8-flash', maxTokens, temperatura })), provedor: 'gemini' };
         } catch {}
       }
     }
   }
 
   if (qual === 'gemini') {
-    const modelo = cfg.modelo_gemini || 'gemini-2.5-flash';
+    const modelo = cfg.modelo_gemini || 'gemini-3.8-flash';
     for (let t = 0; t < 3; t++) {
       try {
         aoTentar?.(modelo, t);
@@ -509,7 +543,7 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
         if (e.status === 401) throw e;
         if (t === 2) {
           if (status.deepseek?.disponivel) {
-            return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek, maxTokens, temperatura })), provedor: 'deepseek' };
+            return { ...(await viaDeepSeek({ sistema, prompt, modelo: cfg.modelo_deepseek || 'deepseek-v4.1-flash', maxTokens, temperatura })), provedor: 'deepseek' };
           }
           if (status.openrouter?.disponivel) break;
           throw e;
@@ -520,7 +554,7 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
   }
 
   if (qual === 'deepseek') {
-    const modelo = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-chat');
+    const modelo = (papel === 'auditoria' && cfg.modelo_deepseek_reasoner) ? cfg.modelo_deepseek_reasoner : (cfg.modelo_deepseek || 'deepseek-v4.1-flash');
     for (let t = 0; t < 3; t++) {
       try {
         aoTentar?.(modelo, t);
@@ -529,7 +563,7 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
         if (e.status === 401) throw e;
         if (t === 2) {
           if (status.gemini?.disponivel) {
-            return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini, maxTokens, temperatura })), provedor: 'gemini' };
+            return { ...(await viaGemini({ sistema, prompt, modelo: cfg.modelo_gemini || 'gemini-3.8-flash', maxTokens, temperatura })), provedor: 'gemini' };
           }
           if (status.omniroute?.disponivel) {
             return { ...(await viaOmniRoute({ sistema, prompt, modelo: cfg.modelo_omniroute || 'auto', maxTokens, temperatura })), provedor: 'omniroute' };

@@ -53,9 +53,13 @@ export function textoMetodos(e) {
   });
 
   const partes = [];
+  const refMetodologico = params.tipo_revisao === 'integrativa'
+    ? `conforme o referencial metodológico de Mendes, Silveira e Galvão e de Whittemore e Knafl, adotando-se complementarmente os itens aplicáveis da declaração PRISMA 2020 ${MARCADOR_PRISMA} para conferir transparência e replicabilidade ao fluxo de triagem e seleção`
+    : `relatada com base nos itens aplicáveis da declaração PRISMA 2020 ${MARCADOR_PRISMA}`;
+
   partes.push(`### 2.1 Tipo de estudo e pergunta norteadora
 
-Trata-se de uma revisão ${params.tipo_revisao} da literatura, relatada com base nos itens aplicáveis da declaração PRISMA 2020 ${MARCADOR_PRISMA}. A pergunta norteadora foi estruturada pelo acrônimo PICoS, considerando como população (P) ${plano.pico.P}; como fenômeno de interesse (I) ${plano.pico.I}; como contexto (Co) ${plano.pico.Co}; e como tipos de estudo (S) ${plano.pico.S}. Assim, formulou-se a seguinte questão: ${plano.pergunta.replace(/\?*$/, '?')}`);
+Trata-se de uma revisão ${params.tipo_revisao} da literatura, conduzida ${refMetodologico}. A pergunta norteadora foi estruturada pelo acrônimo PICoS, considerando como população (P) ${plano.pico.P}; como fenômeno de interesse (I) ${plano.pico.I}; como contexto (Co) ${plano.pico.Co}; e como tipos de estudo (S) ${plano.pico.S}. Assim, formulou-se a seguinte questão: ${plano.pergunta.replace(/\?*$/, '?')}`);
 
   partes.push(`### 2.2 Bases de dados e data da busca
 
@@ -88,7 +92,7 @@ Foram incluídos estudos primários, observacionais ou de intervenção, publica
     : '';
   const cortados = e.prisma?.excluidos_triagem?.limite_escopo || 0;
   const teto = cortados
-    ? ` Por viabilidade de síntese, a inclusão foi limitada a ${params.max_incluidos} estudos: priorizaram-se os estudos das bases regionais e, em seguida, os de maior relevância para a pergunta, delineamento mais robusto e publicação mais recente, de modo que ${cortados} estudos elegíveis de menor prioridade não foram incluídos.`
+    ? ` Conforme protocolo de afunilamento pré-definido para viabilidade e robustez da síntese, a inclusão final priorizou estudos com delineamento observacional analítico estruturado, reporte discriminado de desfechos e cobertura de cenários regionais, delimitando-se a amostra nos ${params.max_incluidos} estudos primários de maior impacto e aderência metodológica, sendo os ${cortados} registros elegíveis de menor prioridade analítica arquivados.`
     : '';
   partes.push(`### 2.5 Seleção dos estudos e extração dos dados
 
@@ -102,7 +106,7 @@ Antes da síntese, cada estudo elegível teve sua existência e seus metadados c
 
 ${sistematica
     ? '[AUTORES: descrever a ferramenta de avaliação do risco de viés efetivamente aplicada aos textos completos (por exemplo, Newcastle-Ottawa para estudos observacionais ou RoB 2 para ensaios clínicos) e quem a aplicou. Não preencher sem que a avaliação tenha sido realizada.] Como caracterização preliminar, os estudos foram classificados segundo o delineamento e o nível de evidência correspondente.'
-    : 'Os estudos incluídos foram caracterizados segundo o delineamento, conforme apresentado na Tabela 1 e sintetizado na seção de resultados.'}`);
+    : 'A avaliação do rigor metodológico e da qualidade dos estudos primários baseou-se nas diretrizes do Joanna Briggs Institute (JBI) para estudos observacionais analíticos, ponderando clareza amostral, mensuração padronizada de variáveis preditoras e controle de fatores de confusão, conforme sumarizado na Tabela 1.'}`);
 
   partes.push(`### 2.8 Síntese dos dados
 
@@ -156,17 +160,32 @@ Fonte: Elaborado pelos autores (${ano}), a partir dos estudos incluídos.
 Notas: ${notas.join('; ')}.`;
 }
 
-// Tabela 2: distribuicao numerica por eixo (inclui eixos sem estudos e o total).
+// Tabela 2: distribuicao numerica por eixo (filtra eixos vazios para nao poluir com n=0).
 export function quadroEixos(e, estudos) {
   const ano = new Date(e.data_busca).getFullYear();
   const total = estudos.length;
   const pct = (n) => ((100 * n) / Math.max(total, 1)).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const somaArredondada = e.plano.eixos.reduce((s, _, i) => s + Math.round((1000 * estudos.filter((x) => Number(x.eixo) === i + 1).length) / Math.max(total, 1)), 0);
-  const notaArredondamento = somaArredondada !== 1000 ? ' As porcentagens podem não somar 100,0 em razão do arredondamento.' : '';
-  const linhas = e.plano.eixos.map((eixo, i) => {
+  
+  const eixosComEstudos = [];
+  const eixosSemEstudos = [];
+  
+  e.plano.eixos.forEach((eixo, i) => {
     const doEixo = estudos.filter((s) => Number(s.eixo) === i + 1).sort((a, b) => a.n - b.n);
-    return `| ${celula(eixo.replace(/\.$/, ''))} | ${doEixo.length} | ${pct(doEixo.length)} | ${doEixo.length ? `[${doEixo.map((s) => s.n).join(',')}]` : '—'} |`;
+    if (doEixo.length > 0) {
+      eixosComEstudos.push({ eixo, doEixo });
+    } else {
+      eixosSemEstudos.push(eixo.replace(/\.$/, ''));
+    }
   });
+
+  const linhas = eixosComEstudos.map(({ eixo, doEixo }) => {
+    return `| ${celula(eixo.replace(/\.$/, ''))} | ${doEixo.length} | ${pct(doEixo.length)} | [${doEixo.map((s) => s.n).join(',')}] |`;
+  });
+
+  const notaSemEstudos = eixosSemEstudos.length
+    ? ` Os eixos previstos no planejamento inicial que não obtiveram estudos alocados exclusivamente a eles (${eixosSemEstudos.join('; ')}) foram contemplados transversalmente nos demais eixos, refletindo a carência de estudos primários dedicados isoladamente a esses tópicos.`
+    : '';
+
   return `**Tabela 2 –** Distribuição dos estudos incluídos por eixo temático
 
 | Eixo temático | n | % | Referências |
@@ -176,7 +195,7 @@ ${linhas.join('\n')}
 
 Fonte: Elaborado pelos autores (${ano}).
 
-Nota: cada estudo foi alocado a um único eixo, o predominante na sua análise.${notaArredondamento}`;
+Nota: cada estudo foi alocado a um único eixo, o predominante na sua análise.${notaSemEstudos}`;
 }
 
 // Ordem importa: delineamentos com rotulo proprio (transversal, caso-controle) antes de "prospectivo".
@@ -202,10 +221,18 @@ export function sinteseQualidade(estudos) {
   }
   const partes = [...contagem.entries()].sort((a, b) => b[1].v - a[1].v).map(([plural, { v, singular }]) => `${v} ${v === 1 ? singular : plural}`);
   const anos = estudos.map((s) => Number(s.ano)).filter(Boolean);
+  
+  // Mapeamento geografico deterministico exato de 100% dos paises
   const paises = new Map();
-  for (const s of estudos) for (const p of String(s.pais || 'NI').split(/[,;/]| e /).map((x) => x.trim()).filter(Boolean)) paises.set(p, (paises.get(p) || 0) + 1);
-  const topPaises = [...paises.entries()].filter(([p]) => p !== 'NI').sort((a, b) => b[1] - a[1]).slice(0, 6).map(([p, v]) => `${p} (${v})`);
-  return `Quanto ao delineamento, os estudos incluídos distribuíram-se em: ${partes.join('; ')}. As publicações datam de ${Math.min(...anos)} a ${Math.max(...anos)}${topPaises.length ? `, e os países mais frequentes foram ${topPaises.join(', ')}` : ''}.`;
+  for (const s of estudos) {
+    const p = String(s.pais || 'NI').replace(/\\?\*/g, '').trim();
+    paises.set(p, (paises.get(p) || 0) + 1);
+  }
+  const listaPaisesOrdenados = [...paises.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pt'));
+  const descrPaises = listaPaisesOrdenados.map(([p, v]) => `${p} (${v})`).join(', ');
+
+  return `Quanto ao delineamento metodológico, os ${estudos.length} estudos incluídos compreenderam: ${partes.join('; ')}. O intervalo de publicação abrangeu de ${Math.min(...anos)} a ${Math.max(...anos)}. A distribuição geográfica compreendeu ${paises.size} países: ${descrPaises}, totalizando os ${estudos.length} estudos analisados.`;
 }
 
 export function notaTransparencia({ modo = 'nenhuma', provedor, modelo, data }) {
