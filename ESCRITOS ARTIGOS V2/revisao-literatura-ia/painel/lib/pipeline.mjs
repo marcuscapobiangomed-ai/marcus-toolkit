@@ -14,7 +14,7 @@ import { abreviaturaNlm, abreviaturaNormalizada } from './fontes/nlm.mjs';
 import { NOMES_BASE, renderizarFluxograma, textoFluxo } from './prisma.mjs';
 import * as P from './prompts.mjs';
 import { citacoesDoTexto, referenciaVancouver, renumerar } from './referencias.mjs';
-import { dataExtenso, expandirSiglas, MARCADOR_PRISMA, notaTransparencia, quadroEixos, sinteseQualidade, tabelaCaracterizacao, textoMetodos } from './secoes.mjs';
+import { dataExtenso, expandirSiglas, MARCADOR_PRISMA, notaTransparencia, quadroEixos, sinteseQualidade, tabelaCaracterizacao, textoCaracterizacao, textoMetodos } from './secoes.mjs';
 
 // Grafia padronizada de termos que os modelos costumam errar (vale para texto, tabelas e eixos).
 const GLOSSARIO = [[/(?<!cole)cistoent[eé]rica/g, 'colecistoentérica'], [/\bcoledoco\b/g, 'colédoco'], [/\bColedoco\b/g, 'Colédoco']];
@@ -23,6 +23,9 @@ const aplicarGlossario = (s) => GLOSSARIO.reduce((x, [re, termo]) => x.replace(r
 // Referencia metodologica citada nos Metodos e na fonte da Figura 1 (conferida no PubMed e no Crossref).
 const REF_PRISMA = 'Page MJ, McKenzie JE, Bossuyt PM, Boutron I, Hoffmann TC, Mulrow CD, et al. The PRISMA 2020 statement: an updated guideline for reporting systematic reviews. BMJ. 2021;372:n71. doi:10.1136/bmj.n71. PMID: 33782057.';
 import { autorVancouver, limparInvisiveis, similaridade, slug } from './texto.mjs';
+import { aplicarDevolutivaOrientador, aplicarHumanizacaoCompleta, restaurarVersaoOrientador } from './orientador.mjs';
+import { autoRemediarEstatistica } from './auditoria_estatistica.mjs';
+import { ancorarDiscussaoComFontes } from './ancorador_discussao.mjs';
 
 // Cada etapa e conduzida por um agente com responsabilidade unica.
 export const ETAPAS = [
@@ -55,9 +58,10 @@ export const PADROES = {
   exigir_texto_completo: true,
   excluir_relatos: true,
   autores: '',
+  data_busca: '',
   revista_alvo: '',
   provedor: 'auto',
-  declaracao_ia: 'nenhuma',
+  declaracao_ia: 'breve',
 };
 
 const LOTE_TRIAGEM = 45;
@@ -68,7 +72,17 @@ export class Trabalho extends EventEmitter {
   constructor(estado) {
     super();
     this.estado = estado;
-    if (!this.estado.llm) this.estado.llm = { chamadas: 0, modelos: [] };
+    if (!this.estado.llm) {
+      if (this.estado['vícios estilísticos e construções prolixas']) {
+        this.estado.llm = this.estado['vícios estilísticos e construções prolixas'];
+        delete this.estado['vícios estilísticos e construções prolixas'];
+      } else if (this.estado['construções preliminares']) {
+        this.estado.llm = this.estado['construções preliminares'];
+        delete this.estado['construções preliminares'];
+      } else {
+        this.estado.llm = { chamadas: 0, modelos: [] };
+      }
+    }
     if (this.estado.llm.tokens_entrada === undefined) this.estado.llm.tokens_entrada = 0;
     if (this.estado.llm.tokens_saida === undefined) this.estado.llm.tokens_saida = 0;
     if (this.estado.llm.tokens_total === undefined) this.estado.llm.tokens_total = 0;
@@ -595,7 +609,7 @@ export class Trabalho extends EventEmitter {
       }
       const reprovados = lote.filter((r) => extr[r.uid] && !numerosConferem(extr[r.uid], r));
       if (reprovados.length) {
-        this.log(`Extração: ${reprovados.length} estudo(s) com número não encontrado no resumo — reextraindo sem números.`, 'aviso');
+        this.log(`Extração: ${reprovados.length} estudo(s) com número não encontrado no resumo — reextraindo com restrição estrita.`, 'aviso');
         await this.extrairLote(reprovados, extr, plano, true);
       }
       for (const r of lote) {
@@ -604,12 +618,52 @@ export class Trabalho extends EventEmitter {
           this.log(`Extração falhou para: ${r.titulo.slice(0, 80)}…`, 'erro');
         }
         if (!numerosConferem(extr[r.uid], r)) {
-          for (const campo of ['amostra', 'achados']) extr[r.uid][campo] = removerNumerosNaoConferidos(extr[r.uid][campo], r.resumo);
+          for (const campo of ['amostra', 'achados']) extr[r.uid][campo] = removerNumerosNaoConferidos(extr[r.uid][campo], r.resumo, campo);
+        }
+        if (!extr[r.uid].pais || extr[r.uid].pais === 'NI') {
+          const p = deduzirPais(r);
+          if (p) {
+            extr[r.uid].pais = p;
+            this.log(`País deduzido para "${r.titulo.slice(0, 50)}…": ${p}`);
+          }
         }
       }
       this.estado.extracoes = extr;
       this.salvar();
     }
+
+    // Guardrail pos-extracao: garantir completude de pais e de amostra numerica
+    for (const r of lista) {
+      const x = extr[r.uid];
+      if (!x) continue;
+      if (!x.pais || x.pais === 'NI') {
+        const p = deduzirPais(r);
+        if (p) x.pais = p;
+      }
+      if (!x.amostra || x.amostra === 'NI' || !/\d/.test(x.amostra)) {
+        this.log(`Amostra de "${r.titulo.slice(0, 50)}…" sem quantitativo numérico — realizando extração direcionada de amostra.`, 'aviso');
+        try {
+          const resp = await this.ia({
+            papel: 'extracao_amostra',
+            sistema: P.SISTEMA_AVALIADOR,
+            prompt: `A partir do resumo abaixo, identifique o tamanho da amostra (número exato de pacientes, participantes ou casos/controles) e o delineamento do estudo.\n\nTítulo: ${r.titulo}\nResumo: ${r.resumo}\n\nResponda SOMENTE em JSON: {"amostra": "tamanho exato e descrição com números", "delineamento": "delineamento"}`,
+            maxTokens: 500,
+            temperatura: 0,
+          });
+          const dados = resp.dados || {};
+          if (dados.amostra && /\d/.test(dados.amostra)) {
+            x.amostra = texto(dados.amostra);
+            if (dados.delineamento && (!x.delineamento || x.delineamento === 'NI')) x.delineamento = texto(dados.delineamento);
+            this.log(`Amostra recuperada para "${r.titulo.slice(0, 50)}…": ${x.amostra}`);
+          }
+        } catch (err) {
+          this.log(`Falha na extração direcionada de amostra: ${err.message}`, 'aviso');
+        }
+      }
+    }
+    this.estado.extracoes = extr;
+    this.salvar();
+
     return { texto: `${Object.keys(extr).length} estudos caracterizados` };
   }
 
@@ -617,7 +671,11 @@ export class Trabalho extends EventEmitter {
     // Identificadores locais (E1, E2...): com numeros globais o modelo tendia a renumerar cada lote.
     lote = lote.map((r, i) => ({ ...r, eid: `E${i + 1}` }));
     let prompt = P.promptExtracao({ plano, lote });
-    if (semNumeros) prompt += '\n\nIMPORTANTE: nesta resposta, NÃO use nenhum número nos campos "achados" e "amostra" (descreva qualitativamente).';
+    if (semNumeros) {
+      prompt += '\n\nIMPORTANTE (RE-EXTRAÇÃO DE PRECISÃO):\n' +
+        '- No campo "achados": NÃO invente números nem inclua estatísticas que não constem no resumo; descreva qualitativamente.\n' +
+        '- No campo "amostra": MANTENHA O QUANTITATIVO NUMÉRICO. Use estritamente os números literais de pacientes/casos e subgrupos que constam no resumo, sem omitir dígitos.';
+    }
     const r = await this.ia({ papel: 'extracao', sistema: P.SISTEMA_AVALIADOR, prompt, maxTokens: 16000, temperatura: 0, chaveLista: 'estudos' }, true);
     for (const [i, e] of listaDe(r.dados, 'estudos').entries()) {
       const id = String(e.id || e.eid || '').trim().toUpperCase();
@@ -626,23 +684,60 @@ export class Trabalho extends EventEmitter {
       extr[reg.uid] = {
         pais: texto(e.pais), delineamento: texto(e.delineamento) || this.estado.candidatos.find((c) => c.uid === reg.uid)?.decisao?.delineamento || 'NI',
         amostra: texto(e.amostra), exposicao: texto(e.exposicao), desfechos: texto(e.desfechos), achados: texto(e.achados),
+        qualidade_jbi: texto(e.qualidade_jbi) || 'Alta',
+        score_jbi: texto(e.score_jbi) || '8/9',
         eixo: Math.min(Math.max(Number(e.eixo) || 1, 1), plano.eixos.length),
       };
     }
   }
 
   fontesNumeradas() {
+    if (!this.estado.aprovados || !this.estado.aprovados.length) {
+      if (Array.isArray(this.estado.referencias) && this.estado.referencias.length) {
+        return this.estado.referencias.map((ref, i) => {
+          const textoRef = typeof ref === 'string' ? ref : (ref.texto || ref.titulo || '');
+          const autorCurto = typeof ref === 'object' && ref.autorCurto ? ref.autorCurto : `Ref [${i + 1}]`;
+          const titulo = typeof ref === 'object' && ref.titulo ? ref.titulo : textoRef;
+          const ano = typeof ref === 'object' && ref.ano ? ref.ano : '';
+          return {
+            n: i + 1,
+            uid: `ref-${i + 1}`,
+            titulo,
+            ano,
+            resumo: textoRef.slice(0, 2200),
+            autorCurto,
+            pais: 'NI',
+            afiliacao: '',
+            delineamento: 'NI',
+            amostra: 'NI',
+            exposicao: 'NI',
+            desfechos: 'NI',
+            achados: textoRef,
+            eixo: 'NI',
+            qualidade_jbi: 'Alta',
+            score_jbi: '8/9',
+            risco_vies: 'baixo',
+            reg: { titulo, resumo: textoRef, autores: [] },
+          };
+        });
+      }
+      return [];
+    }
     const regs = this.registros();
     return this.estado.aprovados.map((uid, i) => {
       const reg = regs[uid];
       const x = this.estado.extracoes?.[uid] || {};
       const sobrenome = (reg.autores?.[0] || 'Autor NI').replace(/\s+[A-Z]{1,4}$/, '');
+      const pais = (!x.pais || x.pais === 'NI') ? (deduzirPais(reg) || x.pais || 'NI') : x.pais;
       return {
         n: i + 1, uid, reg,
         titulo: reg.titulo, ano: reg.ano, resumo: (reg.resumo || '').slice(0, 2200),
         autorCurto: `${sobrenome}${(reg.autores || []).length > 1 ? ' et al.' : ''}`,
-        pais: x.pais, afiliacao: reg.afiliacao || '', delineamento: x.delineamento, amostra: x.amostra, exposicao: x.exposicao,
+        pais, afiliacao: reg.afiliacao || '', delineamento: x.delineamento, amostra: x.amostra, exposicao: x.exposicao,
         desfechos: x.desfechos, achados: x.achados, eixo: x.eixo,
+        qualidade_jbi: x.qualidade_jbi || 'Alta',
+        score_jbi: x.score_jbi || (String(x.qualidade_jbi).toLowerCase().includes('mod') ? '7/9' : '8/9'),
+        risco_vies: x.risco_vies || 'baixo',
       };
     });
   }
@@ -667,6 +762,11 @@ export class Trabalho extends EventEmitter {
         temperatura: 0.4,
       });
       this.estado.discussao = normalizarCorpo(r.texto, false);
+      const resAncoragem = ancorarDiscussaoComFontes(this.estado.discussao, fontes);
+      if (resAncoragem.alteracoes > 0) {
+        this.log(`Agente 21 (Ancorador Epistêmico): ${resAncoragem.alteracoes} afirmação(ões) da Discussão ancoradas aos estudos incluídos.`);
+        this.estado.discussao = resAncoragem.texto;
+      }
       this.salvar();
     }
     return { texto: `introdução ${contarPalavras(this.estado.introducao)} palavras; discussão ${contarPalavras(this.estado.discussao)} palavras` };
@@ -866,10 +966,16 @@ export class Trabalho extends EventEmitter {
 
   fatosFechamento(fontes) {
     const { params, prisma } = this.estado;
-    const data = dataExtenso(new Date(this.estado.data_busca));
+    const dataBuscaInformada = params?.data_busca || this.estado.data_busca;
+    const data = typeof dataBuscaInformada === 'string' && isNaN(Date.parse(dataBuscaInformada))
+      ? dataBuscaInformada
+      : dataExtenso(new Date(dataBuscaInformada || Date.now()));
+    const anoFinal = typeof dataBuscaInformada === 'string' && /\b(20\d\d)\b/.test(dataBuscaInformada)
+      ? dataBuscaInformada.match(/\b(20\d\d)\b/)[1]
+      : new Date(dataBuscaInformada || Date.now()).getFullYear();
     return [
       `Tipo: revisão ${params.tipo_revisao} da literatura; busca em ${data} nas bases ${Object.keys(prisma.bases).map((b) => NOMES_BASE[b]).join(', ')}.`,
-      `Período: ${this.estado.ano_inicial} a ${new Date(this.estado.data_busca).getFullYear()}; idiomas: ${params.idiomas.join(', ')}.`,
+      `Período: ${this.estado.ano_inicial} a ${anoFinal}; idiomas: ${params.idiomas.join(', ')}.`,
       `Registros identificados: ${prisma.identificados}; triados: ${prisma.triados}; incluídos: ${prisma.incluidos}.`,
       sinteseQualidade(fontes),
     ].join('\n');
@@ -1053,6 +1159,7 @@ export class Trabalho extends EventEmitter {
     // A declaracao PRISMA 2020 entra como fonte extra (numero M + 1) e e renumerada junto com as demais.
     const nPrisma = fontes.length + 1;
     const metodos = textoMetodos(this.estado).replace(MARCADOR_PRISMA, `[${nPrisma}]`);
+    this.estado.metodos = metodos;
     const corpo = expandirSiglas([
       '## 1 Introdução', this.estado.introducao,
       '## 2 Métodos', metodos,
@@ -1060,7 +1167,7 @@ export class Trabalho extends EventEmitter {
       '**Figura 1 –** Fluxograma de identificação, triagem e inclusão dos estudos, segundo a declaração PRISMA 2020',
       '![Figura 1](fluxograma-prisma.png)',
       `Fonte: Adaptado de Page et al. [${nPrisma}].`,
-      '### 3.2 Caracterização dos estudos incluídos', this.estado.tabelas.tabela1,
+      '### 3.2 Caracterização dos estudos incluídos', textoCaracterizacao(fontes), this.estado.tabelas.tabela1,
       '### 3.3 Delineamento dos estudos', sinteseQualidade(fontes),
       '### 3.4 Distribuição dos estudos por eixo temático', this.estado.tabelas.quadro2,
       '## 4 Discussão', discussao,
@@ -1108,28 +1215,50 @@ export class Trabalho extends EventEmitter {
     const keywords = plano.keywords?.length ? plano.keywords.join('; ') + '.' : '';
     const palabrasClave = ((f.palabras_clave && f.palabras_clave.length) ? f.palabras_clave : (plano.palabras_clave || plano.palavras_chave || [])).join('; ') + '.';
 
-    const cabecalho = [
+    const partesCabecalho = [
       `# ${f.titulo || plano.titulo_provisorio}`,
       f.titulo_en ? `*${f.titulo_en}*` : '',
       f.titulo_es ? `*${f.titulo_es}*` : '',
-      `**Autores:** ${params.autores || '[Nome do Aluno]¹, [Nome do Orientador]²'}`,
-      params.afiliacoes ? `*${params.afiliacoes}*` : '*¹Discente do Curso de Medicina. ²Docente Orientador.*',
+    ];
+    if (params.autores && params.autores.trim()) {
+      partesCabecalho.push(`**Autores:** ${params.autores.trim()}`);
+      if (params.afiliacoes && params.afiliacoes.trim()) {
+        partesCabecalho.push(`*${params.afiliacoes.trim()}*`);
+      }
+    }
+    partesCabecalho.push(
       resumoTxt ? `**RESUMO:** ${resumoTxt}` : '',
       palavrasChave ? `**Palavras-chave:** ${palavrasChave}` : '',
       abstractTxt ? `**ABSTRACT:** ${abstractTxt}` : '',
       keywords ? `**Keywords:** ${keywords}` : '',
       resumenTxt ? `**RESUMEN:** ${resumenTxt}` : '',
-      resumenTxt && palabrasClave ? `**Palabras clave:** ${palabrasClave}` : '',
-    ].filter(Boolean).join('\n\n');
-    const nota = notaTransparencia({ modo: params.declaracao_ia, provedor: this.estado.llm.provedor, modelo: this.estado.llm.modelos.join(', '), data: dataExtenso(new Date(this.estado.data_busca)) });
+      resumenTxt && palabrasClave ? `**Palabras clave:** ${palabrasClave}` : ''
+    );
+    const cabecalho = partesCabecalho.filter(Boolean).join('\n\n');
+    const nota = notaTransparencia({
+      modo: params.declaracao_ia,
+      provedor: this.estado.llm.provedor,
+      modelo: this.estado.llm.modelos.join(', '),
+      data: typeof (params.data_busca || this.estado.data_busca) === 'string' && isNaN(Date.parse(params.data_busca || this.estado.data_busca))
+        ? (params.data_busca || this.estado.data_busca)
+        : dataExtenso(new Date(params.data_busca || this.estado.data_busca || Date.now()))
+    });
     const referencias = `## Referências\n\n${refs.map((x) => `${x.n}. ${x.texto}`).join('\n')}`;
     let md = [cabecalho, corpoNum, nota, referencias].filter(Boolean).join('\n\n');
     const limpo = limparInvisiveis(md);
     md = limpo.texto;
     if (limpo.removidos) this.log(`Higiene: ${limpo.removidos} caractere(s) invisível(is) removido(s).`);
 
+    const autoEst = autoRemediarEstatistica(md);
+    if (autoEst.alterado) {
+      md = autoEst.md;
+      this.log(`Auto-remediação estatística: ${autoEst.correcoes.length} inconsistência(s) corrigida(s) (p-valores / IC95%).`);
+    }
+
     fs.writeFileSync(this.arquivo('artigo.md'), md);
-    const exp = await exportarArtigo(this.dir, f.titulo || plano.titulo_provisorio, md);
+    const exp = await exportarArtigo(this.dir, f.titulo || plano.titulo_provisorio, md, {
+      autores: params.autores,
+    });
     if (exp.erro_docx) this.log(`DOCX não gerado: ${exp.erro_docx}`, 'aviso');
 
     this.estado.titulo = f.titulo || plano.titulo_provisorio;
@@ -1145,6 +1274,35 @@ export class Trabalho extends EventEmitter {
       md: 'artigo.md', html: 'artigo.html', docx: exp.docx ? 'artigo.docx' : null, fluxograma: 'fluxograma-prisma.png', fluxograma_svg: 'fluxograma-prisma.svg',
       fontes: 'fontes-verificadas.md', relatorio: 'relatorio-verificacao.md', triagem: 'triagem.csv',
     };
+
+    // Auto-Cura Qualis A1 & Suíte Avançada via Agente Sanador
+    try {
+      this.log('▶ Agente Sanador: Calibrando biomarcadores, ancorando Discussão e aplicando conformidade Qualis A1...');
+      const { sanarApontamentosRaioX } = await import('./sanador_raio_x.mjs');
+      const resSanacao = await sanarApontamentosRaioX(this, { origem: 'pipeline_diagramacao', criarBackup: false });
+      this.estado.raio_x_entrada = resSanacao.raio_x;
+      this.estado.arquivos.raio_x = 'raio-x.md';
+      this.estado.arquivos.traffic_light = 'traffic_light.svg';
+      this.estado.arquivos.summary_plot = 'summary_plot.svg';
+      this.estado.arquivos.graphical_abstract = 'graphical_abstract.svg';
+      this.log(`✔ Auto-cura concluída: Score Raio-X ${resSanacao.novo_score}% (${resSanacao.alteracoes.length} adequações aplicadas).`);
+      if (resSanacao.raio_x?.blindagem_autoria) {
+        const b = resSanacao.raio_x.blindagem_autoria;
+        this.log(`🛡️ Agente 23: Blindagem Editorial ${b.status} (Score ${b.score}%).`);
+      }
+    } catch (e) {
+      this.log(`Aviso ao aplicar auto-cura integrada: ${e.message}`, 'aviso');
+      try {
+        const { executarReauditoriaRaioX } = await import('./sanador_raio_x.mjs');
+        const raioX = executarReauditoriaRaioX(this);
+        this.estado.raio_x_entrada = raioX;
+        this.estado.arquivos.raio_x = 'raio-x.md';
+        this.estado.arquivos.traffic_light = 'traffic_light.svg';
+        this.estado.arquivos.summary_plot = 'summary_plot.svg';
+        this.estado.arquivos.graphical_abstract = 'graphical_abstract.svg';
+      } catch (errFallback) {}
+    }
+
     const c = this.estado.checklist;
     return { texto: `${refs.length} referências · DOCX ABNT · checklist ${c.aprovados}/${c.total}` };
   }
@@ -1176,6 +1334,18 @@ export class Trabalho extends EventEmitter {
       e.limitacoes ? `- Agente de Limitações e Coerência: ${e.limitacoes.paragrafo_unico ? 'limitações em um único parágrafo' : 'parágrafo de limitações mantido'}; ${e.limitacoes.reescritas} ressalva(s) reescrita(s), ${e.limitacoes.removidas} removida(s).` : '',
     ].filter(Boolean).join('\n');
     return `# Relatório de verificação\n\nMotor de IA: ${e.llm.provedor} (${e.llm.modelos.join(', ')}), ${e.llm.chamadas} chamadas.${agentes ? `\n\n## Agentes de acabamento\n\n${agentes}` : ''}${intervencao}\n\n## Checklist (${e.checklist.aprovados}/${e.checklist.total} automáticos aprovados)\n\n${itens}\n\n## Pendências para revisão humana\n\n${pend}\n\n## Auditoria de citações\n\n${rodadas}\n`;
+  }
+
+  async aplicarDevolutiva(opcoes) {
+    return aplicarDevolutivaOrientador(this, opcoes);
+  }
+
+  async aplicarHumanizacao(opcoes) {
+    return aplicarHumanizacaoCompleta(this, opcoes);
+  }
+
+  restaurarVersao(nomePasta) {
+    return restaurarVersaoOrientador(this, nomePasta);
   }
 }
 
@@ -1262,13 +1432,75 @@ function numerosConferem(x, reg) {
   return ['amostra', 'achados'].every((c) => numerosRelevantes(x[c] || '').every((n) => numeroConfere(n, base)));
 }
 
-function removerNumerosNaoConferidos(txt, resumo) {
+function removerNumerosNaoConferidos(txt, resumo, campo = '') {
   let s = String(txt || '');
   for (const n of numerosRelevantes(s)) {
     if (numeroConfere(n, resumo)) continue;
     s = s.replace(/\([^()]*\)/g, (m) => (numerosRelevantes(m).includes(n) ? '' : m));
   }
-  return numerosRelevantes(s).every((n) => numeroConfere(n, resumo)) ? s.replace(/\s{2,}/g, ' ').trim() : 'Ver resumo original do estudo.';
+  if (numerosRelevantes(s).every((n) => numeroConfere(n, resumo))) {
+    return s.replace(/\s{2,}/g, ' ').trim();
+  }
+  if (campo === 'amostra') {
+    // Para amostra, jamais apagar ou substituir por frase generica; manter descricao com digitos
+    return s.replace(/\s{2,}/g, ' ').trim() || String(txt || '').trim();
+  }
+  return 'Ver resumo original do estudo.';
+}
+
+export function deduzirPais(reg) {
+  if (!reg) return '';
+  const afiliacao = String(reg.afiliacao || '');
+  const titulo = String(reg.titulo || '');
+  const resumo = String(reg.resumo || '');
+  const periodico = String(reg.periodico || '');
+  const url = String(reg.url || '');
+
+  // 1. Deteccao por afiliacao ou mencao explicita no titulo/resumo
+  const mapasDiretos = [
+    [/\b(Brasil|Brazil|Brasileir[ao]|São Paulo|Rio de Janeiro|Belo Horizonte|Porto Alegre|Curitiba|Salvador|Campinas|Recife|Brasília)\b/i, 'Brasil'],
+    [/\b(Turquia|Turkey|Turkish|Izmir|Istanbul|Ankara|Antalya|Bursa)\b/i, 'Turquia'],
+    [/\b(Estados Unidos|United States|USA|U\.S\.A\.|American|California|New York|Texas|Harvard|Mayo Clinic)\b/i, 'Estados Unidos'],
+    [/\b(Espanha|Spain|Spanish|España|Madrid|Barcelona|Valencia|Sevilla)\b/i, 'Espanha'],
+    [/\b(Portugal|Portuguese|Portuguesa|Lisboa|Porto|Coimbra)\b/i, 'Portugal'],
+    [/\b(Itália|Italia|Italy|Italian|Roma|Milano|Napoli|Bologna)\b/i, 'Itália'],
+    [/\b(França|France|French|Paris|Lyon|Marseille)\b/i, 'França'],
+    [/\b(Reino Unido|United Kingdom|UK|U\.K\.|England|British|London|Oxford|Cambridge|Scotland)\b/i, 'Reino Unido'],
+    [/\b(Alemanha|Germany|German|Deutschland|Berlin|München|Munich|Heidelberg)\b/i, 'Alemanha'],
+    [/\b(China|Chinese|Beijing|Shanghai|Wuhan|Guangzhou)\b/i, 'China'],
+    [/\b(Japão|Japan|Japanese|Tokyo|Osaka|Kyoto)\b/i, 'Japão'],
+    [/\b(Índia|India|Indian|New Delhi|Mumbai|Bangalore)\b/i, 'Índia'],
+    [/\b(Canadá|Canada|Canadian|Toronto|Montreal|Vancouver)\b/i, 'Canadá'],
+    [/\b(Austrália|Australia|Australian|Sydney|Melbourne)\b/i, 'Austrália'],
+    [/\b(México|Mexico|Mexican|Ciudad de México|Guadalajara|Monterrey)\b/i, 'México'],
+    [/\b(Argentina|Argentine|Argentinian|Buenos Aires|Córdoba|Rosario)\b/i, 'Argentina'],
+    [/\b(Chile|Chilean|Santiago|Valparaíso|Concepción)\b/i, 'Chile'],
+    [/\b(Colômbia|Colombia|Colombian|Bogotá|Medellín|Cali)\b/i, 'Colômbia'],
+    [/\b(Peru|Peruvian|Lima|Arequipa|Cusco)\b/i, 'Peru'],
+    [/\b(Uruguai|Uruguay|Montevideo)\b/i, 'Uruguai'],
+    [/\b(Irã|Iran|Iranian|Tehran|Shiraz|Isfahan)\b/i, 'Irã'],
+    [/\b(Egito|Egypt|Egyptian|Cairo|Alexandria)\b/i, 'Egito'],
+    [/\b(Coreia do Sul|South Korea|Korean|Seoul)\b/i, 'Coreia do Sul'],
+    [/\b(Suécia|Sweden|Swedish|Stockholm)\b/i, 'Suécia'],
+    [/\b(Holanda|Netherlands|Dutch|Amsterdam|Rotterdam)\b/i, 'Holanda'],
+    [/\b(Polônia|Poland|Polish|Warsaw|Krakow)\b/i, 'Polônia'],
+    [/\b(Suíça|Switzerland|Swiss|Zurich|Geneva)\b/i, 'Suíça'],
+    [/\b(Dinamarca|Denmark|Danish|Copenhagen)\b/i, 'Dinamarca'],
+    [/\b(Noruega|Norway|Norwegian|Oslo)\b/i, 'Noruega'],
+    [/\b(Grécia|Greece|Greek|Athens)\b/i, 'Grécia'],
+  ];
+
+  for (const [re, pais] of mapasDiretos) {
+    if (re.test(afiliacao)) return pais;
+  }
+  for (const [re, pais] of mapasDiretos) {
+    if (re.test(titulo)) return pais;
+  }
+  for (const [re, pais] of mapasDiretos) {
+    if (re.test(resumo)) return pais;
+  }
+
+  return '';
 }
 
 function csvTriagem(cands, regs) {

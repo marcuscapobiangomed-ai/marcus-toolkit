@@ -182,6 +182,8 @@ export async function conferir(reg, arquivoEvidencia) {
       resultado.doi_api = j.doi || '';
       resultado.ano_api = j.publication_year || '';
       resultado.url_api = j.fulltexts?.html?.pt || j.fulltexts?.html?.en || Object.values(j.fulltexts?.html || {})[0] || '';
+      const afs = (j?.article?.v70 || []).map((a) => [a._, a.c, a.p].filter(Boolean).join(', ')).filter(Boolean);
+      if (afs.length && !reg.afiliacao) reg.afiliacao = afs.join('; ').slice(0, 300);
     }
   } catch (e) {
     resultado.erro_api = e.message;

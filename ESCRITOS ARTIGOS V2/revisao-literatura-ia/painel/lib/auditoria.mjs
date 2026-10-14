@@ -23,9 +23,39 @@ export function trechosCopiados(md, fontes) {
 }
 
 const MANEIRISMOS = [
-  /é importante (ressaltar|destacar|salientar|mencionar)/i, /vale (ressaltar|destacar|salientar|mencionar)/i,
-  /cabe (ressaltar|destacar|salientar)/i, /no cenário atual/i, /desempenha um papel (crucial|fundamental|essencial)/i,
-  /em suma/i, /em última análise/i, /nesse sentido, é/i, /torna-se (imprescindível|fundamental)/i, /\bfaz-se necessário\b/i,
+  /é importante (ressaltar|destacar|salientar|mencionar)/i,
+  /vale (ressaltar|destacar|salientar|mencionar|ponderar)/i,
+  /cabe (ressaltar|destacar|salientar|pontuar)/i,
+  /cumpre (destacar|ressaltar|salientar)/i,
+  /convém (destacar|ressaltar|salientar)/i,
+  /no cenário (atual|contemporâneo|hodierno)/i,
+  /no contexto (atual|contemporâneo|hodierno)/i,
+  /no panorama (atual|contemporâneo)/i,
+  /desempenha(?:m)? um papel (crucial|fundamental|essencial|vital|preponderante)/i,
+  /\bem suma\b/i,
+  /\bem última análise\b/i,
+  /\bem síntese\b/i,
+  /\bnesse sentido, é\b/i,
+  /torna-se (imprescindível|fundamental|imperativo)/i,
+  /\bfaz-se necessário\b/i,
+  /\bfaz-se mister\b/i,
+  /\bmister se faz\b/i,
+  /é imperioso (destacar|ressaltar|lembrar|notar)/i,
+  /é de suma importância\b/i,
+  /\bno plano\s+[a-zçãõ]+/i,
+  /\bno espectro\s+[a-zçãõ]+/i,
+  /\bno domínio\s+[a-zçãõ]+/i,
+  /\bno âmbito\s+[a-zçãõ]+/i,
+  /\bademais,\b/i,
+  /\boutrossim,\b/i,
+  /\bdestarte,\b/i,
+  /\bpor conseguinte,\b/i,
+  /\bnesse diapasão\b/i,
+  /\bsob essa ótica\b/i,
+  /\bnessa perspectiva\b/i,
+  /divisor de águas/i,
+  /mola mestra/i,
+  /resta evidente que/i,
 ];
 export function maneirismos(md) {
   const achados = [];
@@ -86,7 +116,38 @@ const cacheValores = new Map();
 function valoresDoTexto(texto) {
   if (cacheValores.has(texto)) return cacheValores.get(texto);
   const vals = [];
-  for (const m of texto.matchAll(RE_TOKEN)) for (const l of leiturasNumero(m[0])) vals.push(l.v);
+  const inteiros = new Set();
+  for (const m of texto.matchAll(RE_TOKEN)) {
+    for (const l of leiturasNumero(m[0])) {
+      vals.push(l.v);
+      if (Number.isInteger(l.v) && l.v > 0 && l.v < 100000 && !(l.v >= 1900 && l.v <= 2099)) {
+        inteiros.add(l.v);
+      }
+    }
+  }
+  // Permitir somas de subgrupos (ex.: 116 + 125 = 241) comuns em resumos médicos que detalham grupos sem explicitar o total
+  const arrInt = [...inteiros];
+  if (arrInt.length <= 30) {
+    for (let i = 0; i < arrInt.length; i++) {
+      for (let j = i + 1; j < arrInt.length; j++) {
+        vals.push(arrInt[i] + arrInt[j]);
+        for (let k = j + 1; k < arrInt.length; k++) {
+          vals.push(arrInt[i] + arrInt[j] + arrInt[k]);
+        }
+      }
+    }
+  }
+  if (arrInt.length <= 15) {
+    for (let i = 0; i < arrInt.length; i++) {
+      for (let j = i + 1; j < arrInt.length; j++) {
+        for (let k = j + 1; k < arrInt.length; k++) {
+          for (let l = k + 1; l < arrInt.length; l++) {
+            vals.push(arrInt[i] + arrInt[j] + arrInt[k] + arrInt[l]);
+          }
+        }
+      }
+    }
+  }
   if (cacheValores.size > 500) cacheValores.clear();
   cacheValores.set(texto, vals);
   return vals;

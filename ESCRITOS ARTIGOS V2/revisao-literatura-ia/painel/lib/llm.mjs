@@ -1,6 +1,8 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { spawn } from 'node:child_process';
 import os from 'node:os';
-import { chaveAnthropic, chaveDeepSeek, chaveGemini, chaveOpenRouter, lerConfig, omnirouteConfig } from './config.mjs';
+import { chaveAnthropic, chaveDeepSeek, chaveGemini, chaveOpenRouter, lerConfig, omnirouteConfig, JOBS_DIR } from './config.mjs';
 import { esperar } from './texto.mjs';
 
 // Modelos gratuitos podem demorar varios minutos em lotes grandes, mas nunca indefinidamente.
@@ -166,9 +168,11 @@ export async function consultarUsoProvedores() {
   const cfg = lerConfig();
   const or = chaveOpenRouter(cfg);
   const ds = chaveDeepSeek(cfg);
+  const gem = chaveGemini(cfg);
   const resultado = {
     openrouter: null,
     deepseek: null,
+    gemini: null,
   };
   if (ds) {
     try {
@@ -176,11 +180,12 @@ export async function consultarUsoProvedores() {
         headers: { Authorization: `Bearer ${ds.chave}` },
         signal: AbortSignal.timeout(6000),
       }).then((res) => (res.ok ? res.json() : null)).catch(() => null);
-      if (rBalance?.is_available) {
-        const info = rBalance.balance_infos?.[0] || {};
+      if (rBalance?.balance_infos?.length) {
+        const info = rBalance.balance_infos[0] || {};
         resultado.deepseek = {
           ativo: true,
           origem: ds.origem,
+          is_available: Boolean(rBalance.is_available),
           moeda: info.currency || 'USD',
           saldo_total: Number(info.total_balance || 0),
           saldo_concedido: Number(info.granted_balance || 0),
@@ -193,6 +198,79 @@ export async function consultarUsoProvedores() {
           saldo_total: null,
         };
       }
+    } catch {
+      // falha silenciosa
+    }
+  }
+  if (gem) {
+    try {
+      const pingPromise = fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${gem.chave}`, {
+        signal: AbortSignal.timeout(5000),
+      }).then((res) => (res.ok ? res.json() : null)).catch(() => null);
+
+      let chamadas = 0;
+      let tokensEntrada = 0;
+      let tokensSaida = 0;
+      let tokensTotal = 0;
+      let custoAcumulado = 0;
+
+      try {
+        if (fs.existsSync(JOBS_DIR)) {
+          const dirs = fs.readdirSync(JOBS_DIR);
+          for (const d of dirs) {
+            const stPath = path.join(JOBS_DIR, d, 'estado.json');
+            if (fs.existsSync(stPath)) {
+              const st = JSON.parse(fs.readFileSync(stPath, 'utf8'));
+              const llmObj = (st.llm && (st.llm.tokens_total > 0 || st.llm.custo_usd > 0 || st.llm.chamadas_detalhe?.length > 0))
+                ? st.llm
+                : (st['vícios estilísticos e construções prolixas'] || st['construções preliminares'] || st.llm || {});
+              const detalhes = llmObj.chamadas_detalhe || [];
+              for (const ch of detalhes) {
+                if (ch.provedor === 'gemini') {
+                  chamadas++;
+                  tokensEntrada += (ch.tokens_entrada || 0);
+                  tokensSaida += (ch.tokens_saida || 0);
+                  tokensTotal += (ch.tokens_total || ((ch.tokens_entrada || 0) + (ch.tokens_saida || 0)));
+                  custoAcumulado += (ch.custo_usd || 0);
+                }
+              }
+              if (llmObj.provedor === 'gemini' && detalhes.length === 0 && llmObj.custo_usd) {
+                chamadas += (llmObj.requisicoes || llmObj.chamadas || 1);
+                custoAcumulado += (llmObj.custo_usd || 0);
+                tokensTotal += (llmObj.tokens_total || 0);
+              }
+            }
+          }
+        }
+      } catch {
+        // leitura silenciosa
+      }
+
+      const rPing = await pingPromise;
+      const creditosConfig = (cfg.gemini_creditos_usd !== undefined && cfg.gemini_creditos_usd !== null && cfg.gemini_creditos_usd !== '')
+        ? Number(cfg.gemini_creditos_usd)
+        : null;
+      const temSaldoDefinido = creditosConfig !== null && !isNaN(creditosConfig);
+      const saldoRestante = temSaldoDefinido
+        ? Math.max(0, Number((creditosConfig - custoAcumulado).toFixed(2)))
+        : null;
+
+      resultado.gemini = {
+        ativo: true,
+        conectado: Boolean(rPing),
+        origem: gem.origem,
+        tier: temSaldoDefinido ? `Créditos Informados ($${creditosConfig.toFixed(2)})` : 'Standard / Pay-As-You-Go',
+        modelo: cfg.modelo_gemini || 'gemini-3.8-flash',
+        total_chamadas: chamadas,
+        tokens_entrada: tokensEntrada,
+        tokens_saida: tokensSaida,
+        tokens_total: tokensTotal,
+        total_gasto_usd: Number(custoAcumulado.toFixed(4)),
+        creditos_iniciais_usd: creditosConfig,
+        saldo_restante_usd: saldoRestante,
+        tem_saldo_definido: temSaldoDefinido,
+        formato_saldo: temSaldoDefinido ? 'pre_pago' : 'pay_as_you_go',
+      };
     } catch {
       // falha silenciosa
     }
@@ -285,12 +363,14 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
   if (!ds?.chave) throw new Error('Sem chave DeepSeek configurada');
   const mod = modelo || 'deepseek-v4.1-flash';
   const isReasoner = mod.includes('reasoner');
+  const messages = [];
+  if (sistema && String(sistema).trim()) {
+    messages.push({ role: 'system', content: String(sistema) });
+  }
+  messages.push({ role: 'user', content: String(prompt ?? '') });
   const payload = {
     model: mod,
-    messages: [
-      { role: 'system', content: sistema },
-      { role: 'user', content: prompt },
-    ],
+    messages,
     max_tokens: maxTokens,
   };
   if (!isReasoner && typeof temperatura === 'number') {
@@ -348,19 +428,25 @@ async function viaDeepSeek({ sistema, prompt, modelo, maxTokens, temperatura }) 
   };
 }
 
-async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
+async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura: _temperatura, thinkingLevel }) {
   const gem = chaveGemini();
   if (!gem?.chave) throw new Error('Sem chave Gemini configurada');
   const mod = modelo || 'gemini-3.8-flash';
+  const messages = [];
+  if (sistema && String(sistema).trim()) {
+    messages.push({ role: 'system', content: String(sistema) });
+  }
+  messages.push({ role: 'user', content: String(prompt ?? '') });
   const payload = {
     model: mod,
-    messages: [
-      { role: 'system', content: sistema },
-      { role: 'user', content: prompt },
-    ],
-    max_tokens: maxTokens,
+    messages,
+    max_tokens: Math.max(Number(maxTokens) || 2000, 1000),
   };
-  if (typeof temperatura === 'number') payload.temperature = temperatura;
+  // Os modelos mais recentes do Gemini no Google AI Studio calculam dinamicamente a amostragem
+  // ideal e rejeitam temperature/top_p/top_k com HTTP 400 INVALID_ARGUMENT. Omitimos parâmetros legados.
+  if (thinkingLevel && ['minimal', 'low', 'medium', 'high'].includes(thinkingLevel)) {
+    payload.thinking_level = thinkingLevel;
+  }
   let r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
     method: 'POST',
     signal: AbortSignal.timeout(LIMITE_CHAMADA_MS),
@@ -372,7 +458,11 @@ async function viaGemini({ sistema, prompt, modelo, maxTokens, temperatura }) {
   });
   let j = await r.json().catch(() => ({}));
   if ((!r.ok || j.error) && (r.status === 400 || r.status === 404)) {
-    const altMod = 'gemini-2.5-flash';
+    delete payload.temperature;
+    delete payload.top_p;
+    delete payload.top_k;
+    delete payload.thinking_budget;
+    const altMod = 'gemini-flash-latest';
     if (mod !== altMod) {
       payload.model = altMod;
       const rAlt = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
@@ -488,7 +578,7 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
   const qual = provedor === 'auto' ? status.escolhido : provedor;
   if (!qual) throw new Error('Nenhum motor de IA disponível. Configure Gemini, DeepSeek, OmniRoute, OpenRouter, Anthropic ou faça login no Claude CLI.');
 
-  const papeisGemini = ['busca', 'redacao_intro', 'estilo', 'fechamento', 'limitacoes'];
+  const papeisGemini = ['busca', 'redacao_intro', 'estilo', 'fechamento', 'limitacoes', 'revisao_orientador', 'humanizacao_qualis_a1'];
   const prefereGemini = papeisGemini.includes(papel);
 
   // Modo Sinergético Dupla Híbrida (DeepSeek + Gemini)
@@ -627,6 +717,69 @@ export async function gerar({ sistema, prompt, provedor = 'auto', papel = 'redac
   throw new Error(`Todos os modelos OpenRouter falharam para o papel "${papel}": ${erros.slice(-3).join(' || ')}`);
 }
 
+/**
+ * Reconstrói e repara deterministicamente um JSON truncado por limite de tokens,
+ * fechando strings, arrays e objetos pendentes para resgatar dados parciais válidos.
+ */
+export function repararJsonTruncado(texto) {
+  const limpo = String(texto || '').replace(/```(?:json)?/gi, '').trim();
+  const inicio = limpo.search(/[[{]/);
+  if (inicio < 0) return null;
+  const sub = limpo.slice(inicio);
+
+  const pilha = [];
+  let emString = false;
+  let escape = false;
+
+  for (let i = 0; i < sub.length; i++) {
+    const c = sub[i];
+    if (escape) {
+      escape = false;
+      continue;
+    }
+    if (c === '\\') {
+      escape = true;
+      continue;
+    }
+    if (c === '"') {
+      emString = !emString;
+      continue;
+    }
+    if (emString) continue;
+
+    if (c === '{' || c === '[') {
+      pilha.push(c === '{' ? '}' : ']');
+    } else if (c === '}' || c === ']') {
+      if (pilha.length && pilha[pilha.length - 1] === c) {
+        pilha.pop();
+      }
+    }
+  }
+
+  let consertado = sub;
+  if (emString) {
+    if (consertado.endsWith('\\')) consertado = consertado.slice(0, -1);
+    consertado += '"';
+  }
+  // Remove vírgulas órfãs no final antes do fechamento
+  consertado = consertado.replace(/,\s*$/, '');
+  while (pilha.length > 0) {
+    consertado += pilha.pop();
+  }
+
+  try {
+    return JSON.parse(consertado);
+  } catch {
+    // Tenta poda cirúrgica da última chave ou valor quebrado
+    const poda = consertado.replace(/,\s*"[^"]*":?\s*[^,}]*$/, '') + '}';
+    try {
+      return JSON.parse(poda);
+    } catch {
+      return null;
+    }
+  }
+}
+
 export function extrairJson(texto) {
   const limpo = String(texto || '').replace(/```(?:json)?/gi, '').trim();
   const inicio = limpo.search(/[[{]/);
@@ -646,6 +799,13 @@ export function extrairJson(texto) {
     else if (c === abre) nivel++;
     else if (c === fecha && --nivel === 0) return JSON.parse(limpo.slice(inicio, i + 1));
   }
+
+  // Se o JSON foi cortado antes de fechar delimitadores, tenta auto-reparo resiliente
+  const reparado = repararJsonTruncado(texto);
+  if (reparado && typeof reparado === 'object') {
+    return reparado;
+  }
+
   throw new Error('JSON incompleto na resposta');
 }
 

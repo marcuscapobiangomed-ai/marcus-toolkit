@@ -23,10 +23,21 @@ estratégias exatas para replicar a busca e o checklist de entrega. No fim: **Ba
 
 ```bash
 node painel/cli.mjs gerar "tema" --tipo integrativa --anos 5 --min 25
-node painel/cli.mjs retomar <id>          # continua de onde parou, sem refazer etapas
-node painel/cli.mjs buscar scielo "estratégia"   # busca avulsa (JSON), usada pelos agentes
-node painel/cli.mjs status                # qual motor de IA está disponível
+node painel/cli.mjs retomar <id>                    # continua de onde parou, sem refazer etapas
+node painel/cli.mjs orientador <id> "parecer..."    # aplica correções da devolutiva do orientador
+node painel/cli.mjs importar artigo.docx            # importa artigo pronto (.docx/.pdf) e aplica modelo de escrita
+node painel/cli.mjs importar artigo.pdf --orientacoes "parecer..." # importa e revisa com base na banca/orientador
+node painel/cli.mjs buscar scielo "estratégia"     # busca avulsa (JSON), usada pelos agentes
+node painel/cli.mjs status                          # qual motor de IA está disponível
 ```
+
+### Ingestão de Artigos Prontos (.docx / .pdf)
+Você pode submeter artigos e manuscritos já prontos em formato Word (`.docx`) ou Adobe PDF (`.pdf`):
+1. **Pelo Painel Web**: Clique no botão lateral **📥 Importar .docx / .pdf** (ou acerte `#importar`). Arraste ou selecione o arquivo, cole opcionalmente as orientações do professor/banca e marque a opção para aplicar imediatamente o **Modelo de Escrita Científica Qualis A1**.
+2. **Pela Linha de Comando**: Execute `node painel/cli.mjs importar artigo.docx --orientacoes "apontamentos do professor..."`.
+3. O sistema extrai e estrutura o texto em normas ABNT (Título, Resumo, Abstract, 1 Introdução, 2 Métodos, 3 Resultados, 4 Discussão, 5 Conclusão e Referências Vancouver), gera o novo Word (.docx) diagramado e aciona o **Agente Revisor do Orientador** e o **Agente de Estilo Acadêmico** para aplicar as correções e polir a escrita.
+
+No painel visual: ao abrir qualquer artigo (gerado ou importado), acesse a aba **✍ Devolutiva do Orientador**. Cole as considerações do orientador e clique em **Aplicar Correções do Orientador**. A IA reescreve com precisão cirúrgica apenas as partes solicitadas, preserva a integridade de todas as fontes/citações, cria backup da versão anterior e gera um novo Word (.docx) diagramado.
 
 No Claude Code, a skill `/revisao-literatura` chama o painel e resume o resultado.
 

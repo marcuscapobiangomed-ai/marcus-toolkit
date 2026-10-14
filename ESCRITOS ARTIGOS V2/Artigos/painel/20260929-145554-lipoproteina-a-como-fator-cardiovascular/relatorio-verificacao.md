@@ -1,0 +1,28 @@
+# Relatório de verificação Motor de vícios estilísticos e construções prolixas: gemini (gemini-3.8-flash, deepseek-flash), 27 chamadas. ## vícios estilísticos e construções prolixas de acabamento - vícios estilísticos e construções prolixas de Estilo Acadêmico: 7 parágrafo(s) revisado(s), 7 mantido(s) pela trava de segurança; expressões típicas de vícios estilísticos e construções prolixas 0 → 0.
+- vícios estilísticos e construções prolixas de Limitações e Coerência: limitações em um único parágrafo; 1 ressalva(s) reescrita(s), 0 removida(s). ## Checklist (22/22 automáticos aprovados) - [x] PubMed consta nominalmente nos Métodos
+- [x] SciELO e/ou LILACS constam nos Métodos
+- [x] Data exata da busca declarada
+- [x] Estratégias com descritores e operadores booleanos (AND/OR)
+- [x] Introdução termina com o objetivo (último parágrafo contém "objetivo")
+- [x] Introdução dentro do limite (600–800 palavras ideal; ≤ 3 páginas) — 886 palavras
+- [x] Fluxograma de seleção (PRISMA) no corpo do texto
+- [x] Tabela de resultados com título no topo e notas no rodapé
+- [x] Tabela 1 completa (no máximo 10% de linhas sem achados) — 0 linha(s) sem dados
+- [x] Mínimo de 25 referências — 31 no total
+- [x] Todas as referências na mesma norma (Vancouver, geradas por código)
+- [x] Todas as referências com existência conferida na fonte original
+- [x] Nenhuma citação para fonte inexistente
+- [x] Nenhum número sem correspondência no resumo citado
+- [x] Nenhuma afirmação reprovada pela auditoria de sustentação
+- [x] Paráfrase ativa: nenhum trecho de 8+ palavras copiado de resumo
+- [x] Sem seção de declaração de vícios estilísticos e construções prolixas (escolha dos autores)
+- [x] Limitações concentradas na subseção própria — 1 ressalva(s) fora dela
+- [x] DOCX diagramado nas normas (Times 12, entrelinha 1,5, margens 3/2 cm, paginação)
+- [x] Tabela 1 com integridade amostral (zero "NI" no campo amostra)
+- [x] Tabela 2 consistente (nenhum eixo com n=0)
+- [x] Referencial clássico de revisão integrativa citado nos Métodos
+- [ ] Autoria e orientador preenchidos *(manual)*
+- [x] Revista-alvo definida (normas anexadas na entrega) *(manual)* ## Pendências para revisão humana Nenhuma. ## Auditoria de citações ### Rodada 1 4 problema(s); 1 corrigido(s); 1 removido(s). - **numero_sem_fonte** (introducao): "Em pacientes com infarto agudo do miocárdio de início precoce, teores séricos ≥ 50 mg/dL associaram-se a acometimento coronariano multivascular (r = 0,303; p = 0,0001) e menor idade no evento primário [3]." — O número "0,0001" não aparece no título/resumo da(s) fonte(s) citada(s) [3].
+- **numero_sem_fonte** (discussao): "Em coortes de prevenção primária, a elevação da Lp(a) associou-se a risco incidente de doença cardiovascular aterosclerótica de forma consistente: em 11.319 participantes norte-americanos sem doença estabelecida, valores" — O número "374.099" não aparece no título/resumo da(s) fonte(s) citada(s) [6][23][17].
+- **numero_sem_fonte** (discussao): "Em coortes de prevenção primária, a elevação da Lp(a) associou-se a risco incidente de doença cardiovascular aterosclerótica de forma consistente: em 11.319 participantes norte-americanos sem doença estabelecida, valores" — O número "26" não aparece no título/resumo da(s) fonte(s) citada(s) [6][23][17].
+- **numero_sem_fonte** (discussao): "A coorte de 731.983 indivíduos analisada por aprendizado de vícios estilísticos e construções prolixas reforça a contribuição da Lp(a) para predição de curto prazo, com incremento de 7,2% no risco de eventos ateroscleróticos por aumento de 50 nmol/L [27]." — O número "7,2" não aparece no título/resumo da(s) fonte(s) citada(s) [27]. ### Rodada 2 1 problema(s); 1 corrigido(s); 0 removido(s). - **numero_sem_fonte** (discussao): "A coorte de 731.983 indivíduos analisada por aprendizado de vícios estilísticos e construções prolixas reforça a contribuição da Lp(a) para predição de curto prazo, com incremento de 7,2% no risco de eventos ateroscleróticos por aumento de 50 nmol/L [27]." — O número "7,2" não aparece no título/resumo da(s) fonte(s) citada(s) [27].

@@ -1,0 +1,49 @@
+# resolveLengthPx
+
+> 20 nodes · cohesion 0.14
+
+## Key Concepts
+
+- **resolveLengthPx()** (11 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **collectKickerCandidates()** (7 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **collectNumberedSectionLabelCandidates()** (7 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkElementHeroEyebrow()** (5 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkKickerAboveHeadingDOM()** (5 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkNumberedSectionLabelsDOM()** (5 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkElementHeroEyebrowDOM()** (4 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkHeroEyebrow()** (4 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkKickerAboveHeadingFromDoc()** (4 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkNumberedSectionLabelsFromDoc()** (4 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkKickerAboveHeading()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **checkNumberedSectionLabels()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **cleanInlineText()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **isAccentColor()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **isKickerCardContext()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **isNumberedSectionLabelCandidate()** (3 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **isKickerCandidate()** (2 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **kickerHeadingLevel()** (2 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **parseNumberedLabelText()** (2 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+- **resolveHeroHeadingSizePx()** (2 connections) — `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+
+## Relationships
+
+- [detect-antipatterns-browser.js](detect-antipatterns-browser.js.md) (22 shared connections)
+- [collectBrowserFindings](collectBrowserFindings.md) (3 shared connections)
+- [checkQuality](checkQuality.md) (2 shared connections)
+- [scanCssTextForPulsingDot](scanCssTextForPulsingDot.md) (1 shared connections)
+- [parseAnyColor](parseAnyColor.md) (1 shared connections)
+- [isScreenReaderOnlyTextStyle](isScreenReaderOnlyTextStyle.md) (1 shared connections)
+
+## Source Files
+
+- `skills/impeccable/scripts/detector/detect-antipatterns-browser.js`
+
+## Audit Trail
+
+- EXTRACTED: 56 (100%)
+- INFERRED: 0 (0%)
+- AMBIGUOUS: 0 (0%)
+
+---
+
+*Part of the graphify knowledge wiki. See [index](index.md) to navigate.*

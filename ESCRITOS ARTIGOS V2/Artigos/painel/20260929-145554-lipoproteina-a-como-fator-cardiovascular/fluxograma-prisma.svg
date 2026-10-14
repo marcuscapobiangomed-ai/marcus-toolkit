@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="990" height="972" viewBox="0 0 990 972" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#000">
+<defs><marker id="seta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="78" y="16" width="896" height="40" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text x="526" y="43" text-anchor="middle" font-weight="700">Identificação de estudos por meio de bases de dados</text>
+<rect x="78" y="76" width="420" height="186" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="92" y="138.5" font-weight="700">Registros identificados (n = 209):</text><text x="112" y="163.5">PubMed/MEDLINE (n = 112)</text><text x="112" y="188.5">SciELO (n = 26)</text><text x="112" y="213.5">LILACS (n = 71)</text>
+<rect x="554" y="76" width="420" height="186" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="568" y="138.5" font-weight="700">Registros removidos antes da triagem</text><text x="568" y="163.5" font-weight="700">(n = 30):</text><text x="588" y="188.5">duplicados (n = 25)</text><text x="588" y="213.5">sem resumo disponível (n = 5)</text>
+<line x1="498" y1="169" x2="554" y2="169" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="16" y="76" width="44" height="186" rx="8" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text transform="translate(45,169) rotate(-90)" text-anchor="middle" font-weight="700">Identificação</text>
+<line x1="288" y1="262" x2="288" y2="306" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="78" y="306" width="420" height="198" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="92" y="362" font-weight="700">Registros triados por título e resumo</text><text x="92" y="387" font-weight="700">(n = 179)</text><text x="112" y="412" font-style="italic">4 reincluídos após segunda</text><text x="124" y="437" font-style="italic">avaliação de 51 registros</text><text x="124" y="462" font-style="italic">regionais</text>
+<rect x="554" y="306" width="420" height="198" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="568" y="337" font-weight="700">Registros excluídos (n = 113):</text><text x="588" y="362">fora do tema (n = 56)</text><text x="588" y="387">sem dados de desfecho (n = 30)</text><text x="588" y="412">estudo não primário (n = 19)</text><text x="588" y="437">população inadequada (n = 4)</text><text x="588" y="462">relato de caso (n = 3)</text><text x="588" y="487">resumo de congresso (n = 1)</text>
+<line x1="498" y1="405" x2="554" y2="405" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<line x1="288" y1="504" x2="288" y2="548" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="78" y="548" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="92" y="604" font-weight="700">Registros elegíveis (n = 66)</text>
+<rect x="554" y="548" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="568" y="579" font-weight="700">Não incluídos por limite de síntese</text><text x="568" y="604" font-weight="700">(n = 36):</text><text x="588" y="629">menor relevância para a pergunta</text>
+<line x1="498" y1="597" x2="554" y2="597" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<line x1="288" y1="646" x2="288" y2="690" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="78" y="690" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="92" y="721" font-weight="700">Registros com existência e metadados</text><text x="92" y="746" font-weight="700">verificados na fonte original</text><text x="92" y="771" font-weight="700">(n = 30)</text>
+<rect x="554" y="690" width="420" height="98" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+<text x="568" y="733.5" font-weight="700">Registros excluídos na verificação</text><text x="568" y="758.5" font-weight="700">(n = 0)</text>
+<line x1="498" y1="739" x2="554" y2="739" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="16" y="306" width="44" height="482" rx="8" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text transform="translate(45,547) rotate(-90)" text-anchor="middle" font-weight="700">Triagem</text>
+<line x1="288" y1="788" x2="288" y2="832" stroke="#000" stroke-width="1.5" marker-end="url(#seta)"/>
+<rect x="78" y="832" width="420" height="124" fill="#eeeeee" stroke="#000" stroke-width="1.5"/>
+<text x="92" y="901" font-weight="700">Estudos incluídos na revisão (n = 30)</text>
+<rect x="16" y="832" width="44" height="124" rx="8" fill="#d9d9d9" stroke="#000" stroke-width="1.2"/><text transform="translate(45,894) rotate(-90)" text-anchor="middle" font-weight="700">Inclusão</text>
+</svg>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERO-HUNTER | Radar Soberano de Passagens & Travel Hacking</title>
+  <meta name="description" content="Sistema inteligente de busca e monitoramento de passagens aéreas saindo do Rio de Janeiro e São Paulo para Europa, EUA, Nordeste, Sul e América do Sul.">
+  
+  <!-- Fontes Google Modernas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Global Header -->
+  <header class="app-header" id="appHeader">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">✈️</div>
+        <div>
+          <h1 class="brand-title">AERO<span>HUNTER</span></h1>
+          <p class="brand-subtitle">Radar Soberano de Passagens & Travel Hacking Inteligente</p>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span class="status-text">Backend Ativo • SQLite • 5 Prompts Integrados</span>
+        </div>
+        
+        <div class="header-actions">
+          <button class="btn btn-secondary btn-sm" id="btnOpenAlternatives">
+            🔄 Matriz Aeroportos
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btnOpenSeasonality">
+            📅 Sazonalidade
+          </button>
+          <button class="btn btn-primary btn-sm" id="btnOpenAlerts">
+            🔔 Alertas Salvos (<span id="alertCountBadge">0</span>)
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- Search & Control Panel -->
+    <section class="control-panel glass-card" id="controlPanel">
+      <div class="control-grid">
+        
+        <!-- Origem -->
+        <div class="control-group">
+          <label for="selectOrigin" class="control-label">
+            📍 Origem (RJ ou SP):
+          </label>
+          <div class="select-wrapper">
+            <select id="selectOrigin" class="custom-select">
+              <optgroup label="🌟 Rio de Janeiro (Todos ou Específico)">
+                <option value="RIO" selected>Rio de Janeiro (Todos: GIG + SDU)</option>
+                <option value="GIG">Rio de Janeiro - Galeão (GIG)</option>
+                <option value="SDU">Rio de Janeiro - Santos Dumont (SDU)</option>
+              </optgroup>
+              <optgroup label="🌟 São Paulo (Todos ou Específico)">
+                <option value="SAO">São Paulo (Todos: GRU + CGH + VCP)</option>
+                <option value="GRU">São Paulo - Guarulhos (GRU)</option>
+                <option value="CGH">São Paulo - Congonhas (CGH)</option>
+                <option value="VCP">São Paulo / Campinas - Viracopos (VCP)</option>
+              </optgroup>
+            </select>
+          </div>
+          <p class="field-hint" id="originHint">Busca unificada em todos os aeroportos para achar a tarifa mais barata.</p>
+        </div>
+
+        <!-- Data Ida -->
+        <div class="control-group">
+          <label for="inputDepDate" class="control-label">
+            🛫 Data de Ida:
+          </label>
+          <input type="date" id="inputDepDate" class="custom-input">
+          <p class="field-hint">Dica: Terças e quartas costumam ser até 30% mais baratas.</p>
+        </div>
+
+        <!-- Data Volta -->
+        <div class="control-group" id="groupReturnDate">
+          <label for="inputRetDate" class="control-label">
+            🛬 Data de Volta:
+          </label>
+          <input type="date" id="inputRetDate" class="custom-input">
+          <p class="field-hint">Evite retornos no domingo à noite.</p>
+        </div>
+
+        <!-- Tipo de Viagem & Ação -->
+        <div class="control-group search-actions-group">
+          <div class="trip-type-toggle">
+            <label class="radio-label">
+              <input type="radio" name="tripType" value="roundtrip" checked id="radioRoundtrip">
+              Ida e Volta
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="tripType" value="oneway" id="radioOneway">
+              Só Ida
+            </label>
+          </div>
+          
+          <button class="btn btn-accent btn-block" id="btnExploreGoogle">
+            🌍 Mapa Geral de Tarifas
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= LIVE RADAR & MONITORAMENTO DE MADRUGADÕES ================= -->
+    <section class="live-radar-hud glass-card" id="liveRadarHud">
+      <div class="hud-top-bar">
+        <div class="hud-status-group">
+          <div class="hud-live-tag">
+            <span class="live-pulse-dot"></span>
+            <span class="hud-live-label">LIVE RADAR 24/7</span>
+          </div>
+          <span class="madrugadao-badge" id="hudMadrugadaoBadge">
+            🔥 VERIFICANDO MADRUGADÃO...
+          </span>
+          <span class="hud-auto-refresh-text" id="hudAutoRefreshText">
+            🔄 Auto-refresh a cada 10s
+          </span>
+        </div>
+
+        <div class="hud-actions-group">
+          <button class="btn btn-secondary btn-sm" id="btnToggleMadrugadaoTurbo" title="Força a simulação contínua do modo Madrugadão das companhias">
+            ⚡ Modo Madrugadão Turbo: <span id="turboStatusText">OFF</span>
+          </button>
+          <button class="btn btn-primary btn-sm" id="btnRefreshRadarNow">
+            📡 Atualizar Agora
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticker / Letreiro em Tempo Real dos Eventos -->
+      <div class="live-ticker-container">
+        <span class="ticker-label">📡 AO VIVO:</span>
+        <div class="ticker-content" id="liveTickerContent">
+          <span class="ticker-item">Conectando ao feed de cotações em tempo real...</span>
+        </div>
+      </div>
+
+      <!-- Gaveta de Ofertas Relâmpago do Madrugadão -->
+      <div class="madrugadao-deals-section" id="madrugadaoDealsSection">
+        <div class="deals-section-header">
+          <h3 class="deals-section-title">
+            ⚡ OFERTAS RELÂMPAGO DO MADRUGADÃO (Descontos de até 50%)
+          </h3>
+          <span class="deals-section-subtitle">
+            Tarifas mapeadas nos buscadores Google Flights, Skyscanner, Decolar e Kiwi neste instante:
+          </span>
+        </div>
+
+        <div class="madrugadao-deals-grid" id="madrugadaoDealsGrid">
+          <!-- Inserido dinamicamente via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Region Tabs Bar -->
+    <section class="region-tabs-container" id="regionTabsContainer">
+      <div class="region-tabs">
+        <button class="tab-btn active" data-region="europa" id="tabEuropa">
+          <span class="tab-flag">🇪🇺</span>
+          <span class="tab-text">Europa</span>
+          <span class="tab-counter" id="countEuropa">0</span>
+        </button>
+
+        <button class="tab-btn" data-region="eua" id="tabEua">
+          <span class="tab-flag">🇺🇸</span>
+          <span class="tab-text">Estados Unidos</span>
+          <span class="tab-counter" id="countEua">0</span>
+        </button>
+
+        <button class="tab-btn" data-region="nordeste" id="tabNordeste">
+          <span class="tab-flag">🏖️</span>
+          <span class="tab-text">Nordeste</span>
+          <span class="tab-counter" id="countNordeste">0</span>
+        </button>
+
+        <button class="tab-btn" data-region="sul" id="tabSul">
+          <span class="tab-flag">🏔️</span>
+          <span class="tab-text">Sul</span>
+          <span class="tab-counter" id="countSul">0</span>
+        </button>
+
+        <button class="tab-btn" data-region="america_do_sul" id="tabAmericaDoSul">
+          <span class="tab-flag">🌎</span>
+          <span class="tab-text">América do Sul</span>
+          <span class="tab-counter" id="countAmericaDoSul">0</span>
+        </button>
+      </div>
+
+      <!-- Quick Search Filter -->
+      <div class="filter-box">
+        <input type="text" id="inputSearchFilter" class="filter-input" placeholder="🔍 Filtrar por cidade, país ou sigla IATA (ex: Lisboa, MIA, FLN)...">
+      </div>
+    </section>
+
+    <!-- Active Region Info Header -->
+    <section class="region-info-banner glass-card" id="regionInfoBanner">
+      <div class="banner-content">
+        <div class="banner-title-area">
+          <span class="banner-flag" id="bannerFlag">🇪🇺</span>
+          <div>
+            <h2 class="banner-title" id="bannerTitle">Destinos na Europa</h2>
+            <p class="banner-desc" id="bannerDesc">Rotas diretas e conexões estratégicas com saídas de Rio e São Paulo.</p>
+          </div>
+        </div>
+
+        <div class="banner-benchmarks">
+          <div class="bench-item bench-opp">
+            <span class="bench-label">🔥 Preço Oportunidade</span>
+            <span class="bench-val" id="benchOpp">R$ 3.100 - R$ 3.800</span>
+          </div>
+          <div class="bench-item bench-fair">
+            <span class="bench-label">✅ Preço Médio Justo</span>
+            <span class="bench-val" id="benchFair">R$ 4.200 - R$ 5.500</span>
+          </div>
+          <div class="bench-item bench-exp">
+            <span class="bench-label">⚠️ Tarifa Cara</span>
+            <span class="bench-val" id="benchExp">> R$ 6.200</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Destination Cards Grid -->
+    <section class="destinations-grid" id="destinationsGrid">
+      <!-- Inserido dinamicamente via app.js -->
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL: CENTRAL TRAVEL HACKER (5 PROMPTS) ================= -->
+  <div class="modal-overlay" id="modalTravelHacker">
+    <div class="modal-window glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-tag">TRAVEL HACKER ENGINE</span>
+          <h3 class="modal-title" id="modalHackerTitle">Central de Inteligência: Rota RIO ➔ LIS</h3>
+        </div>
+        <button class="modal-close" id="btnCloseHackerModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Sub-tabs dos 5 Prompts -->
+        <div class="hacker-tabs">
+          <button class="hacker-tab-btn active" data-prompt-id="1" id="hTab1">
+            <span class="h-num">#1</span>
+            <span class="h-text">Ofertas Ocultas</span>
+          </button>
+          <button class="hacker-tab-btn" data-prompt-id="2" id="hTab2">
+            <span class="h-num">#2</span>
+            <span class="h-text">Alertas Inteligentes</span>
+          </button>
+          <button class="hacker-tab-btn" data-prompt-id="3" id="hTab3">
+            <span class="h-num">#3</span>
+            <span class="h-text">Datas Estratégicas</span>
+          </button>
+          <button class="hacker-tab-btn" data-prompt-id="4" id="hTab4">
+            <span class="h-num">#4</span>
+            <span class="h-text">Insider Secrets</span>
+          </button>
+          <button class="hacker-tab-btn" data-prompt-id="5" id="hTab5">
+            <span class="h-num">#5</span>
+            <span class="h-text">Aeroportos Alt.</span>
+          </button>
+        </div>
+
+        <!-- Prompt Content Display -->
+        <div class="hacker-content-area" id="hackerContentArea">
+          <!-- Inserido dinamicamente pelo JavaScript com base na aba ativa -->
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <div class="footer-links-quick" id="hackerQuickLinks">
+          <!-- Botões rápidos para abrir a busca no Google Flights / Skyscanner -->
+        </div>
+        <button class="btn btn-secondary" id="btnDismissHacker">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ALERTAS DE PREÇO SALVOS ================= -->
+  <div class="modal-overlay" id="modalAlerts">
+    <div class="modal-window glass-card modal-md">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-tag">SQLITE MONITOR</span>
+          <h3 class="modal-title">Alertas de Preço & Monitoramento</h3>
+        </div>
+        <button class="modal-close" id="btnCloseAlertsModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alerts-controls">
+          <p class="text-muted">Seus alertas são salvos localmente e checados periodicamente pelo backend Python.</p>
+          <button class="btn btn-accent btn-sm" id="btnCheckAlertsNow">
+            ⚡ Checar Todos os Preços Agora
+          </button>
+        </div>
+
+        <div class="alerts-list" id="alertsList">
+          <!-- Carregado via app.js -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnDismissAlerts">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CRIAR NOVO ALERTA ================= -->
+  <div class="modal-overlay" id="modalCreateAlert">
+    <div class="modal-window glass-card modal-sm">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-tag">NOVO ALERTA</span>
+          <h3 class="modal-title" id="createAlertTitle">Monitorar Rota</h3>
+        </div>
+        <button class="modal-close" id="btnCloseCreateAlertModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="formCreateAlert">
+          <div class="form-group">
+            <label class="control-label">Preço Teto Alvo (R$):</label>
+            <input type="number" id="alertTargetPrice" class="custom-input" placeholder="Ex: 3500" required>
+            <p class="field-hint" id="alertTargetHint">Recomendamos definir o valor da faixa 'Oportunidade'.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Observações (opcional):</label>
+            <input type="text" id="alertNotes" class="custom-input" placeholder="Ex: Férias de fim de ano ou stopover">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block" id="btnSaveAlert">
+              Salvar Alerta no Banco
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: MATRIZ DE AEROPORTOS ALTERNATIVOS ================= -->
+  <div class="modal-overlay" id="modalAlternatives">
+    <div class="modal-window glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-tag">ANÁLISE DE CUSTO & TEMPO</span>
+          <h3 class="modal-title">Matriz de Aeroportos Alternativos & Calculadora de Translado</h3>
+        </div>
+        <button class="modal-close" id="btnCloseAlternativesModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Calculadora de Trade-off -->
+        <div class="calculator-box glass-card">
+          <h4 class="calc-title">🧮 Calculadora de Viabilidade Financeira (Aeroporto Secundário)</h4>
+          <p class="calc-desc">Descubra se o desconto na passagem compensa o Uber/transfer e o tempo extra de deslocamento.</p>
+
+          <div class="calc-grid">
+            <div class="calc-field">
+              <label>Economia na Passagem por Pessoa (R$):</label>
+              <input type="number" id="calcDiffPassagem" class="custom-input" value="400" placeholder="Ex: 400">
+            </div>
+            <div class="calc-field">
+              <label>Quantidade de Passageiros:</label>
+              <input type="number" id="calcNumPessoas" class="custom-input" value="2" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Custo Extra de Transporte Ida e Volta (R$):</label>
+              <input type="number" id="calcCustoTransporte" class="custom-input" value="120" placeholder="Ex: Uber extra ou ônibus">
+            </div>
+          </div>
+
+          <div class="calc-result" id="calcResultBox">
+            <div class="result-number" id="calcSaldoReal">Economia Líquida: +R$ 680,00</div>
+            <p class="result-verdict" id="calcVeredito">🚀 ALTAMENTE VANTAJOSO! Vale a pena optar pelo aeroporto alternativo.</p>
+          </div>
+        </div>
+
+        <!-- Matriz de Hubs -->
+        <div class="matrix-list" id="matrixListContent">
+          <!-- Carregado via JS -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnDismissAlternatives">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: SAZONALIDADE ================= -->
+  <div class="modal-overlay" id="modalSeasonality">
+    <div class="modal-window glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-tag">GUIA DE COMPRA INTELIGENTE</span>
+          <h3 class="modal-title">Calendário de Sazonalidade & Dias Estratégicos</h3>
+        </div>
+        <button class="modal-close" id="btnCloseSeasonalityModal">&times;</button>
+      </div>
+
+      <div class="modal-body" id="seasonalityBody">
+        <!-- Carregado via JS -->
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnDismissSeasonality">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification" id="toastNotification">
+    <span class="toast-icon" id="toastIcon">📋</span>
+    <span class="toast-message" id="toastMessage">Prompt copiado com sucesso!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

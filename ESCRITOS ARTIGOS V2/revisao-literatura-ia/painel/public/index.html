@@ -17,6 +17,7 @@
     </div>
     <div id="chips" class="chips"></div>
     <div style="display: flex; gap: 8px;">
+      <a href="/jarvis" class="btn primario" style="text-decoration:none; background: linear-gradient(135deg, #0ea5e9, #0284c7); display:inline-flex; align-items:center; gap:6px; font-weight:600;">⚡ Modo JARVIS</a>
       <button id="btn-config" class="btn fantasma" type="button">⚙ Configurações</button>
       <button id="btn-desligar" class="btn fantasma" type="button" title="Encerrar servidor local e liberar recursos">⏻ Desligar</button>
     </div>
@@ -24,7 +25,10 @@
 
   <div class="layout">
     <aside class="lateral">
-      <a href="#novo" class="btn primario largo">+ Novo artigo</a>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+        <a href="#novo" class="btn primario largo">+ Novo artigo</a>
+        <a href="#importar" class="btn fantasma largo" style="border: 1px dashed var(--borda, #cbd5e1); text-align: center; font-weight: 500;">📥 Importar .docx / .pdf</a>
+      </div>
       <h2 class="rotulo">Trabalhos</h2>
       <ul id="lista"></ul>
     </aside>
@@ -61,6 +65,11 @@
           <label for="cfg-modelo-gemini">Modelo Gemini Padrão</label>
           <input type="text" id="cfg-modelo-gemini" placeholder="gemini-3.8-flash">
           <span class="ajuda">Usado para fluidez textual, busca MeSH/DeCS, estilo acadêmico e abstract.</span>
+        </div>
+        <div class="campo">
+          <label for="cfg-gemini-creditos">Crédito / Saldo em Conta Gemini (USD)</label>
+          <input type="number" step="0.01" min="0" id="cfg-gemini-creditos" placeholder="Ex: 50.00 (deixe em branco para Pay-as-you-go)">
+          <span class="ajuda">Valor total de créditos que você possui na conta Gemini. O painel deduz os gastos e exibe o saldo restante.</span>
         </div>
 
         <div class="campo">

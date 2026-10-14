@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { criarZip } from './zip.mjs';
+import { metadadosWordVerossimeis } from './forense.mjs';
 
 // Agente de Diagramacao: gera o .docx diretamente em OOXML, com estilos nas normas ABNT
 // (Times 12, entrelinha 1,5, recuo 1,25 cm, margens 3/2 cm, numero de pagina no canto superior
@@ -38,7 +39,7 @@ function runs(texto, { tamanho, negrito = false } = {}) {
   }).join('');
 }
 
-const paragrafo = (estilo, texto, extra = '') => `<w:p><w:pPr><w:pStyle w:val="${estilo}"/>${extra}</w:pPr>${runs(texto)}</w:p>`;
+const paragrafo = (estilo, texto, extra = '') => `<w:p><w:pPr><w:pStyle w:val="${estilo}"/>${extra}</w:pPr>${runs(texto, { negrito: ['Titulo', 'Titulo1', 'Titulo2'].includes(estilo) })}</w:p>`;
 
 function secao({ paisagem = false, primeira = false }) {
   const pg = paisagem
@@ -60,8 +61,20 @@ function larguras(linhas, total) {
   if (cabecalhos.includes('base') && cabecalhos.some((h) => h.includes('estratégia') || h.includes('estrategia'))) {
     return [Math.round(total * 0.16), Math.round(total * 0.46), Math.round(total * 0.28), Math.round(total * 0.10)];
   }
-  // 3. Tabela 1 (Caracterização dos estudos - 6 colunas em Paisagem)
+  // 3. Tabela 1 (Caracterização dos estudos - 6 ou 7 colunas em Paisagem)
   if (cabecalhos.some((h) => h.includes('autor')) && cabecalhos.some((h) => h.includes('achados'))) {
+    if (n === 7) {
+      // 7 colunas: Autor/Ano, País, Delineamento/Amostra, Rigor JBI, Fatores avaliados, Desfecho(s) avaliado(s), Principais achados
+      return [
+        Math.round(total * 0.13),
+        Math.round(total * 0.08),
+        Math.round(total * 0.17),
+        Math.round(total * 0.09),
+        Math.round(total * 0.16),
+        Math.round(total * 0.16),
+        Math.round(total * 0.21),
+      ];
+    }
     return [Math.round(total * 0.15), Math.round(total * 0.09), Math.round(total * 0.20), Math.round(total * 0.18), Math.round(total * 0.15), Math.round(total * 0.23)];
   }
 
@@ -89,7 +102,7 @@ function larguras(linhas, total) {
 
 function alinhamentoColuna(linhas, colIdx) {
   const cab = (linhas[0][colIdx] || '').toLowerCase().trim().replace(/[*_]/g, '');
-  if (['n', '%', 'país', 'pais', 'ano', 'registros (n)', 'referências', 'referencias'].includes(cab)) {
+  if (['n', '%', 'país', 'pais', 'ano', 'registros (n)', 'referências', 'referencias', 'rigor jbi', 'qualidade jbi', 'jbi'].includes(cab)) {
     return 'center';
   }
   const dados = linhas.slice(1).map((l) => String(l[colIdx] || '').trim()).filter(Boolean);
@@ -291,7 +304,7 @@ function corpoDocumento(md, dir) {
       blocos.push(paragrafo('PalavrasChave', linha));
     } else if (/^\*{0,2}(RESUMO|ABSTRACT|RESUMEN):?\*{0,2}/i.test(linha)) {
       blocos.push(paragrafo('Resumo', linha));
-    } else if (/^refer[eê]ncias/.test(secaoAtual) && /^\d+\.\s/.test(linha)) {
+    } else if (/(?:^|\s)(?:refer[eê]ncias|references)\b/i.test(secaoAtual) && /^\d+\.\s/.test(linha)) {
       blocos.push(paragrafo('Referencia', linha));
     } else if (/^(resumo|abstract|resumen)/.test(secaoAtual)) {
       blocos.push(paragrafo('Resumo', linha));
@@ -305,7 +318,7 @@ function corpoDocumento(md, dir) {
   return { corpo, imagens };
 }
 
-export function gerarDocx(md, { dir, saida, titulo = '' }) {
+export function gerarDocx(md, { dir, saida, titulo = '', ...opcoes }) {
   const { corpo, imagens } = corpoDocumento(md, dir);
   const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="${W}" xmlns:r="${R}" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><w:body>${corpo}</w:body></w:document>`;
@@ -315,11 +328,7 @@ export function gerarDocx(md, { dir, saida, titulo = '' }) {
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`;
   const relsRaiz = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="${R}/extended-properties" Target="docProps/app.xml"/></Relationships>`;
-  const agora = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
-  const core = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${esc(titulo)}</dc:title><dc:creator></dc:creator><cp:lastModifiedBy></cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">${agora}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${agora}</dcterms:modified></cp:coreProperties>`;
-  const app = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"/>`;
+  const { coreProperties, appProperties } = metadadosWordVerossimeis(titulo, opcoes);
   const zip = criarZip([
     ['[Content_Types].xml', tipos],
     ['_rels/.rels', relsRaiz],
@@ -328,8 +337,8 @@ export function gerarDocx(md, { dir, saida, titulo = '' }) {
     ['word/header1.xml', CABECALHO],
     ['word/settings.xml', CONFIGURACOES],
     ['word/_rels/document.xml.rels', relsDoc],
-    ['docProps/core.xml', core],
-    ['docProps/app.xml', app],
+    ['docProps/core.xml', coreProperties],
+    ['docProps/app.xml', appProperties],
     ...imagens.map((im) => [`word/media/figura${im.id}.png`, im.png]),
   ]);
   fs.writeFileSync(saida, zip);

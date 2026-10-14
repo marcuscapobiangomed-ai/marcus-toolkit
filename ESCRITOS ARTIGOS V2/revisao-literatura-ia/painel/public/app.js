@@ -73,6 +73,14 @@ async function carregarStatus(forcar = false) {
       onclick: abrirConfig,
     }, `💎 DeepSeek: $${ds.saldo_total.toFixed(2)}`));
   }
+  if (estadoGlobal.uso?.gemini?.ativo) {
+    const gem = estadoGlobal.uso.gemini;
+    chips.push(el('span', {
+      class: 'chip custo',
+      title: `Google Gemini: ${gem.tier} (${gem.modelo}). Custo acumulado real: $${gem.total_gasto_usd?.toFixed(4) || '0.0000'} USD (${Math.round((gem.tokens_total || 0) / 1000)}k tokens).`,
+      onclick: abrirConfig,
+    }, `⚡ Gemini: ${gem.total_gasto_usd > 0 ? `$${gem.total_gasto_usd.toFixed(2)}` : 'Ativo'}`));
+  }
   if (estadoGlobal.uso?.openrouter?.ativo) {
     const or = estadoGlobal.uso.openrouter;
     if (or.is_free_tier && or.gratis_restantes !== null) {
@@ -109,6 +117,8 @@ async function carregarLista() {
       el('div', { class: 't' }, t.titulo || t.tema),
       el('div', { class: 'm' },
         selo(t.status),
+        t.origem === 'importado' ? el('span', { class: 'selo selo-importado', title: `Importado de: ${t.arquivo_importado || 'externo'}` }, '📥 IMPORTADO') : null,
+        t.revisoes_orientador ? el('span', { class: 'selo chip-orientador-sidebar', title: `Artigo revisado com parecer do orientador (Rodada ${t.revisoes_orientador})` }, `✨ ATUALIZADO (R${t.revisoes_orientador})`) : null,
         el('span', {}, dataHora(t.criado_em)),
         t.referencias ? el('span', {}, `${t.referencias} ref.`) : null,
         t.checklist ? el('span', {}, `checklist ${t.checklist}`) : null,
@@ -122,6 +132,7 @@ function rotaAtual() {
   const h = location.hash.slice(1);
   if (h.startsWith('t/')) return { tela: 'trabalho', id: h.slice(2) };
   if (h === 'novo') return { tela: 'novo' };
+  if (h === 'importar') return { tela: 'importar' };
   return { tela: 'inicio' };
 }
 
@@ -132,17 +143,48 @@ async function navegar() {
   const r = rotaAtual();
   carregarLista();
   if (r.tela === 'novo') return telaNovo();
+  if (r.tela === 'importar') return telaImportar();
   if (r.tela === 'trabalho') return telaTrabalho(r.id);
   return telaInicio();
 }
 
 // ------------------------------------------------------------------ telas
-function telaInicio() {
-  $('#principal').replaceChildren(el('div', { class: 'cartao vazio' },
-    el('h2', {}, 'Revisões de literatura com fontes reais e conferidas'),
-    el('p', {}, 'Informe um tema. O painel planeja a busca (MeSH/DeCS), pesquisa no PubMed pela API oficial e no SciELO e LILACS num Chrome real, faz a triagem, reabre cada fonte na origem para confirmar que existe, redige no padrão do modelo e audita cada citação duas vezes.'),
-    el('p', {}, el('a', { class: 'btn primario', href: '#novo' }, '+ Criar novo artigo')),
-    el('p', { class: 'pequeno' }, 'Ou escolha um trabalho na lista ao lado.')));
+async function telaInicio() {
+  let lista = [];
+  try {
+    lista = await api('/api/trabalhos');
+  } catch {}
+  const atualizados = (lista || []).filter((t) => t.revisoes_orientador > 0);
+  const cardAtualizado = atualizados.length ? el('div', { class: 'banner-orientador', style: 'margin-bottom: 24px;' },
+    el('div', { class: 'titulo-box' },
+      el('div', { class: 'titulo-tag' }, `✨ ARTIGO ATUALIZADO — PRONTO PARA DOWNLOAD`),
+      el('h3', { style: 'margin: 4px 0 6px; font-size: 15px; color: #065f46;' }, atualizados[0].titulo || atualizados[0].tema),
+      el('div', { class: 'sub-tag' }, `Versão revisada conforme as orientações do orientador e modelo de escrita (Rodada ${atualizados[0].revisoes_orientador}):`),
+      el('div', { class: 'banner-tags-ajustes' },
+        el('span', { class: 'tag-ajuste' }, '✓ Unidades PCR calibradas (mg/L vs mg/dL)'),
+        el('span', { class: 'tag-ajuste' }, '✓ Rigor metodológico JBI na Tabela 1'),
+        el('span', { class: 'tag-ajuste' }, '✓ Desfechos diretos vs indiretos'),
+        el('span', { class: 'tag-ajuste' }, '✓ Modelo de Escrita Científica Qualis A1')
+      )
+    ),
+    el('div', { style: 'display: flex; flex-direction: column; gap: 8px;' },
+      el('a', { class: 'btn-destaque-orientador pulsante', href: `/api/trabalhos/${atualizados[0].id}/artigo.docx?baixar=1&_t=${Date.now()}` }, `📥 Baixar .docx Atualizado (R${atualizados[0].revisoes_orientador})`),
+      el('a', { class: 'btn fantasma', href: `#t/${atualizados[0].id}` }, 'Abrir no Painel →')
+    )
+  ) : null;
+
+  $('#principal').replaceChildren(...[
+    cardAtualizado,
+    el('div', { class: 'cartao vazio' },
+      el('h2', {}, 'Revisões de literatura com fontes reais e conferidas'),
+      el('p', {}, 'Informe um tema para pesquisar nas bases ou envie arquivos já prontos (.docx ou .pdf) para aplicar nosso Modelo de Escrita Científica Qualis A1 e as orientações dos professores.'),
+      el('div', { style: 'display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px;' },
+        el('a', { class: 'btn primario', href: '#novo' }, '+ Criar novo artigo'),
+        el('a', { class: 'btn fantasma', href: '#importar', style: 'border: 1px solid var(--borda); font-weight: 500;' }, '📥 Importar artigo pronto (.docx / .pdf)')
+      ),
+      el('p', { class: 'pequeno', style: 'margin-top: 16px;' }, 'Ou escolha um trabalho na lista ao lado.')
+    )
+  ].filter(Boolean));
 }
 
 function telaNovo() {
@@ -190,10 +232,10 @@ function telaNovo() {
     el('div', { class: 'campo' },
       el('label', { for: 'declaracao' }, 'Declaração de uso de IA no artigo'),
       el('select', { id: 'declaracao', name: 'declaracao_ia' },
-        el('option', { value: 'nenhuma' }, 'Nenhuma (padrão)'),
-        el('option', { value: 'breve' }, 'Breve — uma linha discreta'),
-        el('option', { value: 'completa' }, 'Completa — detalha cada etapa')),
-      el('span', { class: 'ajuda' }, 'Decisão dos autores. Confira a política do periódico ou da disciplina.')),
+        el('option', { value: 'breve', selected: true }, 'Breve (Recomendada ICMJE/COPE) — transparência de apoio'),
+        el('option', { value: 'completa' }, 'Completa — detalha cada etapa do pipeline'),
+        el('option', { value: 'nenhuma' }, 'Nenhuma — sem declaração explícita')),
+      el('span', { class: 'ajuda' }, 'Transparência ética recomendada pelas diretrizes internacionais (ICMJE/COPE).')),
     el('div', { class: 'campo' },
       el('label', { for: 'provedor' }, 'Motor de IA'),
       el('select', { id: 'provedor', name: 'provedor' },
@@ -226,6 +268,186 @@ async function enviarNovo(ev) {
     $('#msg-novo').textContent = e.message;
     botao.disabled = false;
   }
+}
+
+function telaImportar() {
+  let arquivoSelecionado = null;
+  let arquivoBase64 = null;
+
+  const inputArquivo = el('input', {
+    type: 'file',
+    accept: '.docx,.pdf',
+    style: 'display: none;',
+    onchange: async (e) => {
+      const f = e.target.files?.[0];
+      if (f) carregarArquivo(f);
+    },
+  });
+
+  const areaUpload = el('div', {
+    class: 'area-upload',
+    onclick: () => inputArquivo.click(),
+    ondragover: (e) => { e.preventDefault(); areaUpload.classList.add('arrastando'); },
+    ondragleave: () => areaUpload.classList.remove('arrastando'),
+    ondrop: (e) => {
+      e.preventDefault();
+      areaUpload.classList.remove('arrastando');
+      const f = e.dataTransfer.files?.[0];
+      if (f) carregarArquivo(f);
+    },
+  },
+    el('div', { class: 'icone-upload' }, '📄'),
+    el('div', { class: 'texto-principal' }, 'Arraste o arquivo .docx ou .pdf aqui, ou clique para selecionar'),
+    el('div', { class: 'texto-secundario' }, 'Manuscritos em Word (.docx) ou PDF (.pdf) com texto completo, seções e referências')
+  );
+
+  const containerArquivo = el('div', { style: 'display: none;' });
+  const inputTema = el('input', { type: 'text', placeholder: 'Detectado automaticamente do documento se deixar em branco' });
+  const inputAutores = el('input', { type: 'text', placeholder: 'Ex: Silva JA, Santos M, Oliveira R (opcional)' });
+  const txtOrientacoes = el('textarea', {
+    rows: 5,
+    placeholder: 'Cole aqui os apontamentos, críticas, e-mails ou anotações do orientador/banca.\n\nExemplo: "O orientador solicitou aprofundar a discussão sobre complicações cirúrgicas, ajustar o objetivo na introdução e reescrever a conclusão destacando o papel da estratificação de risco..."\n\n(Deixe em branco se desejar apenas importar e aplicar o nosso Modelo de Escrita Científica Qualis A1)',
+  });
+  const chkAplicar = el('input', { type: 'checkbox', checked: false });
+  const selDeclaracao = el('select', {},
+    el('option', { value: 'breve', selected: true }, 'Breve (Recomendada ICMJE/COPE) — transparência de apoio'),
+    el('option', { value: 'completa' }, 'Completa — detalha metodologia de apoio por IA'),
+    el('option', { value: 'nenhuma' }, 'Nenhuma — sem declaração explícita')
+  );
+  const msgStatus = el('div', { style: 'margin-top: 14px; font-size: 13.5px; line-height: 1.5;' });
+  const btnProcessar = el('button', { class: 'btn primario', type: 'submit' }, '📥 Ingerir, Auditar e Gerar Raio-X Diagnóstico');
+
+  chkAplicar.addEventListener('change', () => {
+    btnProcessar.textContent = chkAplicar.checked
+      ? '🚀 Ingerir, Auditar e Aprimorar com Qualis A1'
+      : '📥 Ingerir, Auditar e Gerar Raio-X Diagnóstico';
+  });
+
+  function carregarArquivo(f) {
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!['docx', 'pdf'].includes(ext)) {
+      alert('Selecione um arquivo .docx ou .pdf válido.');
+      return;
+    }
+    arquivoSelecionado = f;
+    const reader = new FileReader();
+    reader.onload = () => {
+      arquivoBase64 = reader.result.split(',')[1];
+    };
+    reader.readAsDataURL(f);
+
+    const tamKb = Math.round(f.size / 1024);
+    const tamStr = tamKb > 1024 ? `${(tamKb / 1024).toFixed(1)} MB` : `${tamKb} KB`;
+
+    containerArquivo.replaceChildren(
+      el('div', { class: 'arquivo-selecionado' },
+        el('div', { class: 'arquivo-selecionado-info' },
+          el('span', { class: 'arquivo-selecionado-icone' }, ext === 'pdf' ? '📕' : '📘'),
+          el('div', {},
+            el('div', { class: 'arquivo-selecionado-nome' }, f.name),
+            el('div', { class: 'arquivo-selecionado-tamanho' }, `${tamStr} · Formato ${ext.toUpperCase()}`)
+          )
+        ),
+        el('button', {
+          class: 'btn fantasma pequeno',
+          type: 'button',
+          onclick: (e) => {
+            e.stopPropagation();
+            arquivoSelecionado = null;
+            arquivoBase64 = null;
+            containerArquivo.style.display = 'none';
+            areaUpload.style.display = 'block';
+            inputArquivo.value = '';
+          },
+        }, '✕ Trocar arquivo')
+      )
+    );
+    containerArquivo.style.display = 'block';
+    areaUpload.style.display = 'none';
+  }
+
+  async function submeter(e) {
+    e.preventDefault();
+    if (!arquivoSelecionado || !arquivoBase64) {
+      alert('Por favor, selecione um arquivo .docx ou .pdf antes de continuar.');
+      return;
+    }
+
+    btnProcessar.disabled = true;
+    btnProcessar.textContent = '⏳ Processando e estruturando documento...';
+    msgStatus.innerHTML = '<span style="color:var(--primaria);">⏳ Extraindo texto, seções e tabelas do documento...</span>';
+
+    try {
+      const res = await api('/api/trabalhos/importar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome_arquivo: arquivoSelecionado.name,
+          conteudo_base64: arquivoBase64,
+          tema: inputTema.value.trim(),
+          autores: inputAutores.value.trim(),
+          orientacoes: txtOrientacoes.value.trim(),
+          aplicar_revisao: chkAplicar.checked,
+          declaracao_ia: selDeclaracao.value,
+        }),
+      });
+
+      msgStatus.innerHTML = '<span style="color:var(--ok); font-weight:600;">✔ Artigo importado e estruturado com sucesso! Redirecionando...</span>';
+      setTimeout(() => {
+        location.hash = `#t/${res.id}`;
+      }, 700);
+    } catch (err) {
+      btnProcessar.disabled = false;
+      btnProcessar.textContent = '🚀 Processar, Estruturar e Corrigir Artigo';
+      msgStatus.innerHTML = `<span style="color:var(--erro); font-weight:600;">Erro ao importar: ${err.message}</span>`;
+    }
+  }
+
+  const f = el('form', { class: 'form cartao', onsubmit: submeter },
+    el('div', { class: 'banner-importacao' },
+      el('h2', {}, '📥 Importar Artigo Pronto (.docx ou .pdf)'),
+      el('p', {}, 'Submeta um manuscrito ou trabalho acadêmico já escrito. O sistema extrai e estrutura as seções no padrão ABNT (Título, Resumo, Introdução, Métodos, Resultados, Discussão, Conclusão e Referências Vancouver), gera o Word (.docx) diagramado e aciona nossos agentes e skills para revisar o texto com base nas orientações do professor e no nosso modelo de escrita científica Qualis A1.')
+    ),
+    inputArquivo,
+    areaUpload,
+    containerArquivo,
+    el('div', { class: 'campo' },
+      el('label', {}, 'Título / Tema do Trabalho (opcional)'),
+      inputTema,
+      el('span', { class: 'ajuda' }, 'Se deixar em branco, o sistema detecta o título diretamente do arquivo.')
+    ),
+    el('div', { class: 'campo' },
+      el('label', {}, 'Autores do Manuscrito (opcional)'),
+      inputAutores,
+      el('span', { class: 'ajuda' }, 'Nomes dos pesquisadores (ex: Silva JA, Santos M) para taxonomia CRediT real e metadados OpenXML honestos.')
+    ),
+    el('div', { class: 'campo' },
+      el('label', {}, 'Orientações do Professor / Devolutiva da Banca (opcional)'),
+      txtOrientacoes,
+      el('span', { class: 'ajuda' }, 'Cole aqui feedbacks, e-mails ou anotações do orientador. Se omitido, o sistema executará o aprimoramento acadêmico com base no nosso Modelo de Escrita Científica Qualis A1.')
+    ),
+    el('div', { class: 'campo' },
+      el('label', {}, 'Declaração de uso de IA no manuscrito'),
+      selDeclaracao,
+      el('span', { class: 'ajuda' }, 'Transparência ética recomendada por ICMJE/COPE caso correções ou humanização por IA sejam executadas.')
+    ),
+    el('div', { class: 'campo-check', style: 'margin: 14px 0; background: var(--fundo-destaque, #f8fafc); padding: 12px; border-radius: 8px; border: 1px solid var(--borda, #e2e8f0);' },
+      el('label', { style: 'display: flex; align-items: flex-start; gap: 10px; cursor: pointer;' },
+        chkAplicar,
+        el('div', {},
+          el('strong', { style: 'display: block; margin-bottom: 2px;' }, 'Aplicar Reescrita e Humanização Qualis A1 Imediatamente'),
+          el('span', { class: 'ajuda', style: 'margin: 0; line-height: 1.4;' }, 'Recomendamos manter desmarcado no primeiro envio para inspecionar o Laudo de Raio-X e a confiança da extração estrutural. Após validar, você poderá disparar a suíte com 1 clique diretamente no painel.')
+        )
+      )
+    ),
+    el('div', { style: 'display: flex; gap: 10px; align-items: center; margin-top: 18px;' },
+      btnProcessar,
+      el('a', { class: 'btn fantasma', href: '#inicio' }, 'Cancelar')
+    ),
+    msgStatus
+  );
+
+  $('#principal').replaceChildren(f);
 }
 
 async function telaTrabalho(id) {
@@ -278,12 +500,17 @@ function renderizarTrabalho(t, preservarRolagem = false) {
   const y = window.scrollY;
   const ativo = ['executando', 'na_fila'].includes(t.status);
   const podeRetomar = ['erro', 'cancelado', 'interrompido'].includes(t.status);
+  const qtdRevisoes = (t.revisoes_orientador || []).length;
+  const ultimaRev = qtdRevisoes ? t.revisoes_orientador[qtdRevisoes - 1] : null;
+
   const cab = el('div', { class: 'cartao' },
     el('div', { class: 'cabecalho-trab' },
       el('div', { class: 'info' },
-        el('h2', {}, t.titulo || t.params.tema),
+        el('h2', {}, t.titulo || t.params.tema, qtdRevisoes ? el('span', { class: 'selo-atualizado-inline' }, `✓ ATUALIZADO (R${qtdRevisoes})`) : null),
         el('div', { class: 'meta' },
           selo(t.status),
+          t.origem === 'importado' ? el('span', { class: 'selo selo-importado', title: `Importado de: ${t.arquivo_importado || 'externo'}` }, `📥 IMPORTADO${t.arquivo_importado ? ` (${t.arquivo_importado})` : ''}`) : null,
+          qtdRevisoes ? el('span', { class: 'chip ok', style: 'font-weight: 700;' }, `Versão Pós-Orientador (R${qtdRevisoes})`) : null,
           el('span', {}, `Criado em ${dataHora(t.criado_em)}`),
           t.data_busca ? el('span', {}, `Busca em ${dataHora(t.data_busca)}`) : null,
           el('span', {}, `IA: ${t.llm?.provedor || '—'} (${t.llm?.chamadas || 0} chamadas)`),
@@ -294,9 +521,11 @@ function renderizarTrabalho(t, preservarRolagem = false) {
       el('div', { class: 'acoes' },
         ativo && t.em_execucao_aqui ? el('button', { class: 'btn perigo', onclick: () => acao(t.id, 'cancelar') }, 'Cancelar') : null,
         podeRetomar ? el('button', { class: 'btn primario', onclick: () => acao(t.id, 'retomar') }, 'Retomar de onde parou') : null,
-        t.arquivos?.docx ? el('a', { class: 'btn primario', href: `/api/trabalhos/${t.id}/arquivos/artigo.docx?baixar=1` }, 'Baixar .docx') : null,
+        t.arquivos?.original ? el('a', { class: 'btn fantasma', href: `/api/trabalhos/${t.id}/arquivos/${t.arquivos.original}?baixar=1`, title: 'Baixar arquivo original enviado' }, '📄 Original') : null,
+        t.arquivos?.md ? el('button', { class: 'btn primario', style: 'background: linear-gradient(135deg, #1f5fa8, #0e7490);', onclick: () => { abaAtual = 'orientador'; renderizarTrabalho(t); } }, '✍ Devolutiva do Orientador') : null,
+        t.arquivos?.docx ? el('a', { class: qtdRevisoes ? 'btn-destaque-orientador pulsante' : 'btn primario', href: `/api/trabalhos/${t.id}/artigo.docx?baixar=1&_t=${Date.now()}`, title: 'Baixar arquivo Word (.docx) formatado para submissão' }, qtdRevisoes ? `📥 Baixar .docx Atualizado (R${qtdRevisoes})` : 'Baixar .docx') : null,
         t.arquivos?.md ? el('a', { class: 'btn', href: `/api/trabalhos/${t.id}/arquivos/artigo.md?baixar=1` }, '.md') : null,
-        t.arquivos?.html ? el('a', { class: 'btn', href: `/api/trabalhos/${t.id}/arquivos/artigo.html`, target: '_blank' }, 'Versão para imprimir') : null,
+        t.arquivos?.html ? el('a', { class: 'btn', href: `/api/trabalhos/${t.id}/arquivos/artigo.html`, target: '_blank' }, qtdRevisoes ? 'Versão para imprimir (atualizada)' : 'Versão para imprimir') : null,
         t.arquivos?.docx ? el('button', { class: 'btn fantasma', onclick: async () => { await acao(t.id, 'reexportar'); alert('Word (.docx) e versão HTML regenerados com sucesso!'); } }, 'Regenerar .docx') : null)),
     el('div', { class: 'etapas' }, ...(estadoGlobal?.etapas || []).map(([k, agente, titulo], i) => {
       const e = t.etapas[k] || {};
@@ -308,9 +537,33 @@ function renderizarTrabalho(t, preservarRolagem = false) {
     el('p', { class: 'pequeno' }, 'Pasta do trabalho: ', el('span', { class: 'mono' }, t.pasta)));
 
   const chkTexto = t.checklist ? ` (${t.checklist.aprovados}/${t.checklist.total})` : '';
+  const bannerOrientador = qtdRevisoes ? el('div', { class: 'banner-orientador' },
+    el('div', { class: 'titulo-box' },
+      el('div', { class: 'titulo-tag' }, `✨ ARTIGO ATUALIZADO — PÓS-DEVOLUTIVA DO ORIENTADOR (RODADA ${qtdRevisoes})`),
+      el('div', { class: 'sub-tag' },
+        `Modificações incorporadas em ${dataHora(ultimaRev?.data)}. Todas as correções e ressalvas do orientador foram aplicadas com sucesso:`
+      ),
+      el('div', { class: 'banner-tags-ajustes' },
+        el('span', { class: 'tag-ajuste' }, '✓ Escala PCR 10 mg/dL = 100 mg/L'),
+        el('span', { class: 'tag-ajuste' }, '✓ Rigor metodológico JBI na Tabela 1'),
+        el('span', { class: 'tag-ajuste' }, '✓ Desfechos diretos vs substitutos discriminados'),
+        el('span', { class: 'tag-ajuste' }, '✓ PRISMA 2020 critérios metodológicos')
+      )
+    ),
+    el('div', { class: 'acoes', style: 'display: flex; gap: 8px; flex-wrap: wrap; align-items: center;' },
+      el('a', { class: 'btn-destaque-orientador pulsante', href: `/api/trabalhos/${t.id}/artigo.docx?baixar=1&_t=${Date.now()}` }, `📥 Baixar .docx Atualizado (Rodada ${qtdRevisoes})`),
+      el('button', { class: 'btn fantasma', onclick: () => { abaAtual = 'orientador'; renderizarTrabalho(t); } }, 'Ver Detalhes do Parecer')
+    )
+  ) : null;
+
   const abas = [
-    ['progresso', 'Progresso'], ['artigo', 'Artigo'], ['fontes', `Fontes verificadas${t.aprovados_detalhe?.length ? ` (${t.aprovados_detalhe.length})` : ''}`],
-    ['triagem', `Triagem${t.candidatos?.length ? ` (${t.candidatos.length})` : ''}`], ['busca', 'Estratégias de busca'], ['checklist', `Checklist${chkTexto}`],
+    ['progresso', 'Progresso'],
+    ['artigo', `Artigo${qtdRevisoes ? ' (Atualizado)' : ''}`],
+    ['orientador', `Devolutiva do Orientador${qtdRevisoes ? ` (${qtdRevisoes})` : ''}`],
+    ['fontes', `Fontes verificadas${t.aprovados_detalhe?.length ? ` (${t.aprovados_detalhe.length})` : ''}`],
+    ['triagem', `Triagem${t.candidatos?.length ? ` (${t.candidatos.length})` : ''}`],
+    ['busca', 'Estratégias de busca'],
+    ['checklist', `Checklist${chkTexto}`],
     ['tokens', `Tokens & Custos${t.llm?.tokens_total ? ` (${formatarTokens(t.llm.tokens_total)})` : ''}`],
   ];
   if (!t.arquivos && abaAtual === 'artigo') abaAtual = 'progresso';
@@ -320,8 +573,9 @@ function renderizarTrabalho(t, preservarRolagem = false) {
     onclick: () => { abaAtual = k; renderizarTrabalho(t); },
     disabled: k === 'artigo' && !t.arquivos ? true : null,
   }, rot)));
-  $('#principal').replaceChildren(cab, el('div', { class: 'cartao' }, barra, conteudo));
-  ({ progresso: abaProgresso, artigo: abaArtigo, fontes: abaFontes, triagem: abaTriagem, busca: abaBusca, checklist: abaChecklist, tokens: abaTokens })[abaAtual](t, conteudo);
+
+  $('#principal').replaceChildren(...[bannerOrientador, cab, el('div', { class: 'cartao' }, barra, conteudo)].filter(Boolean));
+  ({ progresso: abaProgresso, artigo: abaArtigo, orientador: abaOrientador, fontes: abaFontes, triagem: abaTriagem, busca: abaBusca, checklist: abaChecklist, tokens: abaTokens })[abaAtual](t, conteudo);
   if (preservarRolagem) window.scrollTo(0, y);
 }
 
@@ -338,6 +592,23 @@ async function acao(id, qual) {
 function abaProgresso(t, alvo) {
   const p = t.prisma || {};
   const soma = (o) => Object.values(o || {}).reduce((a, b) => a + b, 0);
+  const qtdRevisoes = (t.revisoes_orientador || []).length;
+
+  if (qtdRevisoes > 0) {
+    alvo.append(el('div', { class: 'alerta-versao-atualizada' },
+      el('div', {},
+        el('div', { style: 'font-weight: 700; color: #065f46; display: flex; align-items: center; gap: 6px; font-size: 14px;' },
+          `✨ Artigo Atualizado — Versão Pós-Orientador Disponível (Rodada ${qtdRevisoes})`
+        ),
+        el('p', { class: 'pequeno', style: 'margin: 4px 0 0; color: var(--texto-2);' },
+          'Todas as solicitações do parecer foram atendidas. Baixe o documento definitivo em Word (.docx):'
+        )
+      ),
+      el('a', { class: 'btn-destaque-orientador pulsante', href: `/api/trabalhos/${t.id}/arquivos/artigo.docx?baixar=1` },
+        `📥 Baixar .docx Atualizado (Rodada ${qtdRevisoes})`
+      )
+    ));
+  }
   alvo.append(
     el('div', { class: 'numeros' },
       ...[
@@ -366,10 +637,223 @@ async function abaArtigo(t, alvo) {
   alvo.append(el('p', { class: 'pequeno' }, 'Carregando…'));
   try {
     const html = await api(`/api/trabalhos/${t.id}/artigo`);
-    alvo.replaceChildren(el('div', { class: 'artigo', html }));
+    const qtd = (t.revisoes_orientador || []).length;
+    const banner = qtd ? el('div', { class: 'banner-orientador', style: 'margin-bottom: 20px;' },
+      el('div', { class: 'titulo-box' },
+        el('div', { class: 'titulo-tag' }, `📄 Versão Atualizada pós-Orientador (Rodada ${qtd})`),
+        el('div', { class: 'sub-tag' }, 'Todas as observações do parecer do orientador foram incorporadas ao manuscrito. Baixe a versão Word (.docx) formatada nas normas ABNT:')
+      ),
+      el('a', { class: 'btn-destaque-orientador', href: `/api/trabalhos/${t.id}/arquivos/artigo.docx?baixar=1` }, `📥 Baixar Word (.docx) Atualizado (Rodada ${qtd})`)
+    ) : null;
+    alvo.replaceChildren(...[banner, el('div', { class: 'artigo', html })].filter(Boolean));
   } catch (e) {
     alvo.replaceChildren(el('p', {}, e.message));
   }
+}
+
+function abaOrientador(t, alvo) {
+  const semArtigo = !t.arquivos?.md;
+  if (semArtigo) {
+    alvo.append(
+      el('div', { class: 'nota aviso' },
+        el('b', {}, 'Artigo ainda não gerado: '),
+        'A funcionalidade de devolutiva do orientador fica disponível assim que o artigo estiver pronto (após a etapa de Diagramação).'
+      )
+    );
+    return;
+  }
+
+  const historico = t.revisoes_orientador || [];
+
+  // 1. Banner explicativo
+  const banner = el('div', { class: 'card-orientador-banner' },
+    el('div', { class: 'icone-banner' }, '🎓'),
+    el('div', {},
+      el('h3', {}, 'Devolutiva e Correções do Orientador'),
+      el('p', { class: 'pequeno' },
+        'Após enviar o artigo ao seu orientador e receber críticas ou sugestões, lance o parecer dele abaixo. ',
+        'A IA analisa os pontos apontados, reescreve com precisão apenas as seções afetadas (Introdução, Discussão, Conclusão, Resumo, etc.), ',
+        'mantém todas as fontes científicas e referências Vancouver intactas, e gera uma nova versão em Word (.docx) nas normas ABNT com histórico completo.'
+      )
+    )
+  );
+
+  // 2. Formulário de envio da devolutiva
+  const txtDevolutiva = el('textarea', {
+    id: 'txt-devolutiva',
+    rows: 6,
+    placeholder: 'Exemplo de devolutiva do orientador:\n1. Na Introdução: enfatizar mais o cenário clínico no Brasil e ajustar o objetivo no último parágrafo para focar no risco residual.\n2. Na Discussão: no tópico de interpretação, suavizar a afirmação do parágrafo 3 pois os estudos são observacionais.\n3. Na Conclusão: ressaltar que os dados são de revisões observacionais e sugerir ensaios clínicos futuros.',
+    required: true,
+  });
+
+  const txtInstrucoes = el('input', {
+    type: 'text',
+    id: 'txt-instrucoes-orientador',
+    placeholder: 'Ex: Priorizar tom formal Qualis A1, manter o estilo conciso...',
+  });
+
+  const chkBackup = el('input', {
+    type: 'checkbox',
+    id: 'chk-backup-orientador',
+    checked: true,
+  });
+
+  const msgStatus = el('div', { class: 'pequeno status-orientador', style: 'margin-top: 8px;' });
+
+  const btnEnviar = el('button', {
+    type: 'submit',
+    class: 'btn primario',
+    style: 'display: inline-flex; align-items: center; gap: 6px;',
+  }, '🚀 Aplicar Correções do Orientador');
+
+  const form = el('form', {
+    class: 'form-orientador cartao-sub',
+    onsubmit: async (ev) => {
+      ev.preventDefault();
+      const devolutiva = txtDevolutiva.value.trim();
+      if (!devolutiva) return;
+
+      if (!confirm(`Deseja aplicar as correções da devolutiva no artigo?\n\nUma nova versão (.docx e .md) será gerada mantendo um backup da versão atual.`)) {
+        return;
+      }
+
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = '⏳ Processando correções com a IA...';
+      msgStatus.innerHTML = '<span class="pulso-loading">Analisando parecer do orientador e aplicando modificações cirúrgicas... Por favor, aguarde alguns instantes.</span>';
+
+      try {
+        const res = await api(`/api/trabalhos/${t.id}/orientador`, {
+          method: 'POST',
+          body: JSON.stringify({
+            devolutiva,
+            instrucoes_adicionais: txtInstrucoes.value.trim(),
+            criar_backup: chkBackup.checked,
+            modo: 'cirurgico',
+          }),
+        });
+
+        msgStatus.innerHTML = `<span style="color:var(--ok);font-weight:600;">✔ Rodada ${res.rodada} concluída! Word (.docx) atualizado.</span>`;
+        txtDevolutiva.value = '';
+        setTimeout(() => telaTrabalho(t.id), 800);
+      } catch (err) {
+        msgStatus.innerHTML = `<span style="color:var(--erro);font-weight:600;">Erro: ${err.message}</span>`;
+        btnEnviar.disabled = false;
+        btnEnviar.textContent = '🚀 Aplicar Correções do Orientador';
+      }
+    }
+  },
+    el('div', { class: 'campo' },
+      el('label', { for: 'txt-devolutiva' }, el('b', {}, 'Parecer / Devolutiva de correções do orientador *')),
+      txtDevolutiva,
+      el('span', { class: 'ajuda' }, 'Cole o texto do e-mail, apontamentos, áudio transcrito ou lista de alterações pedidas pelo professor.')
+    ),
+    el('div', { class: 'campo' },
+      el('label', { for: 'txt-instrucoes-orientador' }, 'Instruções adicionais suas para a IA (opcional)'),
+      txtInstrucoes
+    ),
+    el('div', { style: 'display: flex; align-items: center; gap: 8px; margin: 10px 0;' },
+      chkBackup,
+      el('label', { for: 'chk-backup-orientador', style: 'margin: 0; cursor: pointer;' },
+        'Salvar backup da versão atual em ', el('code', {}, 'versoes/'), ' antes de aplicar (permite restaurar a qualquer momento)'
+      )
+    ),
+    el('div', { class: 'acoes' }, btnEnviar),
+    msgStatus
+  );
+
+  // 3. Histórico de rodadas
+  const containerHistorico = el('div', { class: 'historico-orientador' });
+
+  if (historico.length) {
+    containerHistorico.append(
+      el('h3', { style: 'margin: 24px 0 12px; font-size: 16px; display: flex; align-items: center; gap: 8px;' },
+        'Histórico de Rodadas Aplicadas',
+        el('span', { class: 'selo ok' }, `${historico.length} rodada${historico.length > 1 ? 's' : ''}`)
+      )
+    );
+
+    const cards = historico.slice().reverse().map((r) => {
+      const secoesPills = (r.secoes_alteradas || []).map((alt) =>
+        el('span', { class: 'chip ok' }, alt.secao)
+      );
+
+      const detalhesItens = (r.secoes_alteradas || []).map((alt) =>
+        el('div', { class: 'item-detalhe-secao' },
+          el('h4', { style: 'margin: 8px 0 4px; font-size: 14px; color: var(--primaria);' }, `📍 ${alt.secao}`),
+          el('p', { class: 'pequeno', style: 'margin: 0 0 6px;' }, alt.resumo_mudancas),
+          alt.detalhes?.length ? el('ul', { style: 'margin: 0; padding-left: 20px;' },
+            ...alt.detalhes.map((d) => el('li', { class: 'pequeno' },
+              el('b', {}, `${d.pedido_orientador || 'Pedido'}: `),
+              d.como_foi_atendido || ''
+            ))
+          ) : null
+        )
+      );
+
+      const isUltima = (idx === 0);
+      const linkDocx = isUltima
+        ? `/api/trabalhos/${t.id}/artigo.docx?baixar=1&_t=${Date.now()}`
+        : (r.pasta_resultado
+            ? `/api/trabalhos/${t.id}/arquivos/versoes/${r.pasta_resultado}/artigo.docx?baixar=1&_t=${Date.now()}`
+            : (r.backup
+                ? `/api/trabalhos/${t.id}/arquivos/versoes/${r.backup}/artigo.docx?baixar=1&_t=${Date.now()}`
+                : `/api/trabalhos/${t.id}/artigo.docx?baixar=1&_t=${Date.now()}`));
+
+      return el('div', { class: 'card-rodada cartao-sub' },
+        el('div', { class: 'topo-rodada' },
+          el('div', { style: 'display:flex; align-items:center; gap:10px;' },
+            el('b', { style: 'font-size: 15px;' }, `Rodada ${r.rodada}`),
+            el('span', { class: 'pequeno' }, dataHora(r.data)),
+            r.modelo ? el('span', { class: 'chip' }, r.modelo) : null
+          ),
+          el('div', { style: 'display: flex; gap: 8px; flex-wrap: wrap;' },
+            el('a', { class: 'btn primario pequeno', href: linkDocx, target: '_blank' }, `📥 Baixar .docx (R${r.rodada})`),
+            r.backup ? el('button', {
+              class: 'btn fantasma pequeno',
+              onclick: async () => {
+                if (!confirm(`Deseja restaurar a versão do backup "${r.backup}"?\n\nOs arquivos atuais serão substituídos pelo estado salvo nesta rodada.`)) return;
+                try {
+                  await api(`/api/trabalhos/${t.id}/orientador-restaurar`, {
+                    method: 'POST',
+                    body: JSON.stringify({ pasta: r.backup }),
+                  });
+                  alert('Versão restaurada com sucesso!');
+                  telaTrabalho(t.id);
+                } catch (e) {
+                  alert(e.message);
+                }
+              }
+            }, '↺ Restaurar esta versão') : null
+          )
+        ),
+        el('div', { class: 'bloco-devolutiva-original' },
+          el('span', { class: 'rotulo-pequeno' }, 'Devolutiva do orientador:'),
+          el('blockquote', { class: 'citacao-devolutiva' }, r.devolutiva)
+        ),
+        r.resumo_parecer ? el('p', { class: 'pequeno', style: 'margin: 8px 0;' },
+          el('b', {}, 'Síntese da IA: '), r.resumo_parecer
+        ) : null,
+        el('div', { style: 'display: flex; gap: 6px; align-items: center; margin: 10px 0; flex-wrap: wrap;' },
+          el('span', { class: 'pequeno', style: 'font-weight: 600;' }, 'Seções alteradas:'),
+          ...secoesPills
+        ),
+        detalhesItens.length ? el('details', { style: 'margin-top: 10px;' },
+          el('summary', { style: 'cursor: pointer; font-size: 13px; color: var(--primaria);' }, 'Ver detalhamento das alterações por seção'),
+          el('div', { style: 'padding: 8px 0;' }, ...detalhesItens)
+        ) : null
+      );
+    });
+
+    containerHistorico.append(...cards);
+  } else {
+    containerHistorico.append(
+      el('p', { class: 'pequeno', style: 'margin-top: 20px;' },
+        'Nenhuma devolutiva lançada ainda. Quando seu orientador revisar o artigo, cole as correções acima para atualizar o trabalho.'
+      )
+    );
+  }
+
+  alvo.append(banner, form, containerHistorico);
 }
 
 function abaFontes(t, alvo) {
@@ -445,14 +929,16 @@ function abaBusca(t, alvo) {
 function abaChecklist(t, alvo) {
   const c = t.checklist;
   if (!c) return alvo.append(el('p', { class: 'pequeno' }, 'O checklist é avaliado ao final da geração.'));
-  alvo.append(
+  const elementos = [
     el('p', {}, el('b', {}, `${c.aprovados} de ${c.total} itens automáticos aprovados.`), ' Itens marcados como manuais dependem de vocês.'),
     el('ul', { class: 'check' }, ...c.itens.map((i) => el('li', { class: i.manual && !i.ok ? 'man' : i.ok ? 'sim' : 'nao' },
       el('span', { class: 'ic' }, i.ok ? '✓' : i.manual ? '!' : '✗'), el('span', {}, i.item, i.manual ? el('span', { class: 'pequeno' }, ' (manual)') : null)))),
     t.auditoria?.pendentes?.length ? el('h3', { style: 'margin:20px 0 8px;font-size:14px' }, 'Pendências para revisão humana') : null,
     t.auditoria?.pendentes?.length ? el('ul', { class: 'check' }, ...t.auditoria.pendentes.map((p) => el('li', { class: 'nao' }, el('span', { class: 'ic' }, '!'),
       el('span', {}, el('b', {}, `${p.secao}: `), p.detalhe, el('div', { class: 'pequeno' }, `“${String(p.trecho).slice(0, 240)}”`))))) : null,
-    (t.auditoria?.rodadas || []).length ? el('p', { class: 'pequeno' }, `Auditoria: ${t.auditoria.rodadas.map((r) => `rodada ${r.rodada} — ${r.problemas.length} problema(s), ${r.corrigidos} corrigido(s), ${r.removidos} removido(s)`).join(' · ')}`) : null);
+    (t.auditoria?.rodadas || []).length ? el('p', { class: 'pequeno' }, `Auditoria: ${t.auditoria.rodadas.map((r) => `rodada ${r.rodada} — ${r.problemas.length} problema(s), ${r.corrigidos} corrigido(s), ${r.removidos} removido(s)`).join(' · ')}`) : null,
+  ].filter(Boolean);
+  alvo.append(...elementos);
 }
 
 function abaTokens(t, alvo) {
@@ -524,8 +1010,9 @@ function renderizarUsoOpenRouter(uso) {
   if (!container) return;
   const or = uso?.openrouter;
   const ds = uso?.deepseek;
-  if ((!or || !or.ativo) && (!ds || !ds.ativo)) {
-    container.replaceChildren(el('p', { class: 'pequeno' }, 'Nenhuma chave DeepSeek ou OpenRouter configurada.'));
+  const gem = uso?.gemini;
+  if ((!or || !or.ativo) && (!ds || !ds.ativo) && (!gem || !gem.ativo)) {
+    container.replaceChildren(el('p', { class: 'pequeno' }, 'Nenhuma chave DeepSeek, Gemini ou OpenRouter configurada.'));
     return;
   }
   const itens = [];
@@ -539,6 +1026,15 @@ function renderizarUsoOpenRouter(uso) {
         temSaldo
           ? `Origem: ${ds.origem} · Recarregado: $${ds.saldo_recarregado.toFixed(2)} · Concedido: $${ds.saldo_concedido.toFixed(2)} · Cache Hit: $0.014/M`
           : `Origem: ${ds.origem} · Não foi possível obter o saldo da conta.`)
+    ));
+  }
+  if (gem && gem.ativo) {
+    itens.push(el('div', { class: 'item-uso', style: 'grid-column: 1 / -1; text-align: left; background: rgba(16, 185, 129, 0.08); padding: 12px; border-radius: 8px;' },
+      el('div', { style: 'display: flex; justify-content: space-between; align-items: baseline;' },
+        el('span', { class: 'desc', style: 'font-weight: 700; color: #10b981;' }, `Google Gemini API (${gem.modelo || 'gemini-3.8-flash'})`),
+        el('span', { class: 'val', style: 'font-size: 16px; color: var(--ok); font-weight: 700;' }, gem.total_gasto_usd > 0 ? `$${gem.total_gasto_usd.toFixed(2)} USD` : 'Ativo (Standard)')),
+      el('span', { class: 'pequeno', style: 'display: block; margin-top: 4px;' },
+        `Origem: ${gem.origem} · Tier: ${gem.tier} · Tokens: ${gem.tokens_total.toLocaleString('pt-BR')} · Custo real acumulado: $${gem.total_gasto_usd.toFixed(4)} USD`)
     ));
   }
   if (or && or.ativo) {
@@ -591,6 +1087,7 @@ $('#btn-config').addEventListener('click', async () => {
   $('#cfg-gemini').value = '';
   $('#cfg-gemini-origem').textContent = c.tem_gemini ? `Chave configurada (${c.origem_gemini}).` : 'Nenhuma chave configurada.';
   $('#cfg-modelo-gemini').value = c.modelo_gemini || 'gemini-3.8-flash';
+  if ($('#cfg-gemini-creditos')) $('#cfg-gemini-creditos').value = c.gemini_creditos_usd != null ? c.gemini_creditos_usd : '';
   $('#cfg-omniroute').value = c.omniroute_url || 'http://localhost:20128/v1';
 
   $('#cfg-openrouter').value = '';
@@ -617,6 +1114,7 @@ $('#dlg-config').addEventListener('close', async () => {
     modelo_deepseek: $('#cfg-modelo-deepseek').value.trim(),
     modelo_deepseek_reasoner: $('#cfg-modelo-deepseek-reasoner').value.trim(),
     modelo_gemini: $('#cfg-modelo-gemini').value.trim(),
+    gemini_creditos_usd: $('#cfg-gemini-creditos')?.value ? Number($('#cfg-gemini-creditos').value) : null,
     omniroute_url: $('#cfg-omniroute').value.trim(),
     modelo_openrouter: $('#cfg-modelo').value.trim(),
     contato_email: $('#cfg-email').value.trim(),

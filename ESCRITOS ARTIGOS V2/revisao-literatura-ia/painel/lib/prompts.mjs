@@ -92,9 +92,17 @@ Eixos temáticos disponíveis: ${plano.eixos.map((e, i) => `(${i + 1}) ${e}`).jo
 
 ${itens}
 
-Regras: use SOMENTE o que está no título/resumo/afiliação. Se algo não estiver informado, escreva "NI". Escreva TODOS os campos em português do Brasil (inclusive nomes de países), mesmo quando o resumo estiver em inglês ou espanhol. Números devem ser copiados exatamente como aparecem no resumo. "achados" deve ser uma paráfrase (não copie frases), com no máximo 35 palavras. Para "delineamento" use um destes termos: ensaio clínico randomizado, coorte prospectiva, coorte retrospectiva, caso-controle, transversal, série de casos, quase-experimental, qualitativo, outro. Devolva um item para CADA estudo acima, usando exatamente o identificador do cabeçalho (${lote.map((r) => r.eid).join(', ')}).
+Regras:
+1. Amostra (n): OBRIGATÓRIO conter dígitos numéricos. Identifique o quantitativo exato de pacientes/casos avaliados e NUNCA utilize "NI" para a amostra. Se o resumo detalhar subgrupos sem total explícito, descreva os quantitativos exatos dos subgrupos (ex.: "241 pacientes (116 com endometrioma e 125 com cistos benignos)" ou "116 casos e 125 controles").
+2. País: Identifique o país onde o estudo foi conduzido ou a instituição/cidade dos autores (a partir do resumo, título ou do campo "Afiliação/país informado"). PROIBIDO inferir o país da amostra pelo país do periódico de publicação (isso induz a erro geográfico grave). Se não houver identificação clara da localização geográfica ou instituição no resumo ou na afiliação, registre estritamente "NI".
+3. Desfecho Primário Real vs. Desfechos Indiretos/Substitutos: Discrimine com precisão se o estudo mensurou o desfecho clínico principal direto da pergunta (ex.: conversão efetiva para cirurgia aberta) OU indicadores indiretos/substitutos de complexidade técnica (ex.: colecistectomia difícil, tempo operatório prolongado, escore de Parkland adverso, necessidade de colecistectomia subtotal/cirurgia de resgate). No campo "desfechos", inicie especificando a categoria do desfecho principal entre colchetes (ex.: "[Conversão] ...", "[Dificuldade operatória] ...", "[Cirurgia de resgate/subtotal] ..."), seguido dos demais desfechos avaliados.
+4. Idioma: Escreva TODOS os campos em português do Brasil (inclusive nomes de países traduzidos: Turquia, Estados Unidos, Reino Unido, Espanha, etc.), mesmo quando o resumo estiver em inglês ou espanhol.
+5. Achados e Preservação de Unidades de Medida: Paráfrase clínica com no máximo 35 palavras (não copie frases inteiras do abstract). PRESERVE ESTRITAMENTE AS UNIDADES DE MEDIDA laboratoriais em achados e variáveis (ex.: "PCR > 8,2 mg/L", "PCR > 10 mg/dL", "leucócitos > 12.000/mm³"). NUNCA omita a unidade de medida de marcadores inflamatórios ou exames laboratoriais.
+6. Delineamento: Use um destes termos: ensaio clínico randomizado, coorte prospectiva, coorte retrospectiva, caso-controle, transversal, série de casos, quase-experimental, qualitativo, outro.
+7. Rigor Metodológico (JBI): Avalie o estudo com base no Joanna Briggs Institute (JBI Critical Appraisal Tools) para o delineamento correspondente: qualidade "Alta" (≥70% dos critérios atendidos, análise multivariada com controle de fatores de confusão), "Moderada" (50–69%) ou "Baixa" (<50%), e registre o score numérico estimado (ex.: "8/9", "7/9", "6/8").
+Devolva um item para CADA estudo acima, usando exatamente o identificador do cabeçalho (${lote.map((r) => r.eid).join(', ')}).
 Responda SOMENTE com JSON:
-{"estudos": [{"id": "${lote[0].eid}", "pais": "país onde o estudo foi realizado ou NI", "delineamento": "delineamento", "amostra": "tamanho e descrição curta da amostra ou NI", "exposicao": "${plano.coluna_exposicao}: o que foi avaliado", "desfechos": "${plano.coluna_desfecho}", "achados": "principais achados", "eixo": 1}]}`;
+{"estudos": [{"id": "${lote[0].eid}", "pais": "país do estudo ou NI", "delineamento": "delineamento", "qualidade_jbi": "Alta | Moderada | Baixa", "score_jbi": "8/9", "amostra": "tamanho e descrição da amostra (ex: 241 pacientes (116 com endometrioma e 125 controles))", "exposicao": "${plano.coluna_exposicao}: o que foi avaliado", "desfechos": "[Desfecho primário real] desfechos avaliados", "achados": "principais achados com unidades preservadas", "eixo": 1}]}`;
 }
 
 function blocoFontes(fontes) {
@@ -136,8 +144,21 @@ Estrutura obrigatória, com estes quatro subtítulos Markdown (###). As limitaç
 ### Diálogo crítico entre os estudos
 ### Limitações
 ### Implicações para a prática e para a pesquisa
-Em "Diálogo crítico", contraponha estudos que convergem e divergem, explicando diferenças de delineamento, amostra ou contexto (inclusive entre estudos latino-americanos e de outras regiões) quando os resumos permitirem.
-Cada parágrafo deve integrar 2 a 5 estudos (fusão conceitual). Tamanho: 1.200 a 1.800 palavras. Afirmações factuais sempre com citação [n]. Procure citar todas as fontes ao menos uma vez.
+
+DIRETRIZES ESSENCIAIS DE RIGOR CIENTÍFICO E QUALIS A1:
+1. DISCREPÂNCIA DE UNIDADES EM BIOMARCADORES E MARCADORES INFLAMATÓRIOS:
+   Ao cotejar variáveis laboratoriais ou pontos de corte entre estudos (ex.: PCR, procalcitonina, leucócitos, plaquetas):
+   - NUNCA compare diretamente valores numéricos brutos sem verificar e harmonizar a escala de unidades.
+   - Pondere explicitamente ordens de grandeza discrepantes. Exemplo: se um estudo aponta ponto de corte de PCR > 10 mg/dL e outro aponta PCR > 8,2 mg/L, explicite a conversão internacional (10 mg/dL = 100 mg/L), ressalvando que representa um patamar inflamatório consideravelmente mais elevado (cerca de 12 vezes maior) do que o ponto de corte em mg/L.
+   - Discuta essa variação de escala na discussão de viés de mensuração, heterogeneidade analítica e padronização laboratorial entre centros.
+
+2. DIFERENCIAÇÃO ENTRE DESFECHOS DIRETOS E DESFECHOS SUBSTITUTOS:
+   - Diferencie claramente estudos cujo desfecho primário foi o desfecho clínico direto da revisão (ex.: conversão efetiva para cirurgia aberta) daqueles que avaliaram indicadores indiretos ou substitutos (ex.: dificuldade operatória, escore de Parkland, tempo operatório prolongado, necessidade de colecistectomia subtotal/cirurgia de resgate).
+   - Evite tratar desfechos substitutos de dificuldade operatória como equivalentes automáticos de conversão cirúrgica sem a devida qualificação técnica.
+
+3. DIÁLOGO CRÍTICO ENTRE OS ESTUDOS:
+   - Contraponha estudos que convergem e divergem, explicando diferenças de delineamento, amostra, rigor metodológico (qualidade JBI) ou contexto regional quando os dados permitirem.
+   - Cada parágrafo deve integrar 2 a 5 estudos (fusão conceitual). Tamanho: 1.200 a 1.800 palavras. Afirmações factuais sempre com citação [n]. Procure citar todas as fontes ao menos uma vez.
 Responda apenas com o texto da discussão em Markdown.`;
 }
 
@@ -168,7 +189,11 @@ Responda SOMENTE com JSON:
 export function promptAuditoria({ fontes, frases }) {
   return `Confira, uma a uma, se cada frase abaixo é SUSTENTADA pelos resumos das fontes que ela cita entre colchetes.
 Seja cético: se a frase afirma algo que não está no resumo citado (número diferente, conclusão mais forte, relação causal não demonstrada, população ou procedimento diferente), ela NÃO é sustentada. Afirmações genéricas de contexto compatíveis com o resumo citado são sustentadas.
-Atenção especial a atribuições de país ou região ("estudo boliviano", "coorte iraniana", "estudos latino-americanos"): só são sustentadas se o país da fonte citada (informado abaixo) corresponder.
+
+Atenção especial e checagens obrigatórias:
+1. Origem geográfica: Atribuições de país ou região ("estudo boliviano", "coorte iraniana", "estudos latino-americanos") só são sustentadas se o país da fonte citada (informado abaixo) corresponder comprovadamente. NUNCA aceite atribuição geográfica deduzida apenas pelo país do periódico.
+2. Unidades de biomarcadores (PCR, etc.): Se a frase comparar valores com unidades de medidas distintas (ex.: mg/L vs mg/dL) tratando-os como se fossem a mesma escala sem ressalva explicativa da conversão, aponte como problema de consistência de unidades.
+3. Desfecho primário vs indireto: Se a frase atribuir predição de conversão cirúrgica a um estudo cujo desfecho primário foi apenas dificuldade operatória ou cirurgia de resgate/subtotal sem discriminar essa diferença, aponte como parcial.
 
 FONTES (resumos):
 ${fontes.map((f) => `[${f.n}] ${f.titulo} (país: ${f.pais || 'NI'}${f.afiliacao ? `; afiliação: ${f.afiliacao}` : ''}). Resumo: ${f.resumo}`).join('\n\n')}
@@ -207,7 +232,7 @@ export const SISTEMA_EDITOR = `Você é editor de periódico científico brasile
 // Agente de Estilo Academico: remove padroes tipicos de texto gerado por IA sem alterar fatos.
 export function promptEstilo({ paragrafos }) {
   return `Revise o estilo dos parágrafos abaixo, de um artigo de revisão da literatura, para que soem como texto escrito por um pesquisador experiente, com voz autoral própria.
-Corrija, quando houver: aberturas genéricas; conectivos repetidos ("além disso", "nesse sentido", "ademais", "outrossim"); expressões como "é importante ressaltar", "vale destacar", "cabe salientar", "desempenha um papel crucial", "no cenário atual", "em suma"; enumerações sempre em três itens; frases todas do mesmo tamanho; excesso de travessões; "não apenas… mas também"; adjetivos vazios ("robusto", "crucial", "fundamental", "notável") sem necessidade; modalizadores empilhados em toda frase (mantenha um por ideia).
+Corrija, quando houver: aberturas genéricas; conectivos repetidos ("além disso", "nesse sentido", "ademais", "outrossim"); fórmulas mecânicas e repetitivas de transição no início de parágrafos consecutivos (banir o tique de abrir vários parágrafos seguidos com "No plano...", "No espectro...", "No domínio...", "No âmbito...", variando a estrutura e os conectivos); expressões como "é importante ressaltar", "vale destacar", "cabe salientar", "desempenha um papel crucial", "no cenário atual", "em suma"; enumerações sempre em três itens; frases todas do mesmo tamanho; excesso de travessões; "não apenas… mas também"; adjetivos vazios ("robusto", "crucial", "fundamental", "notável") sem necessidade; modalizadores empilhados em toda frase (mantenha um por ideia).
 Varie a extensão e a construção das frases, prefira verbos precisos e mantenha o registro formal do português do Brasil.
 REGRAS INEGOCIÁVEIS: não acrescente nem retire informação; mantenha TODAS as citações entre colchetes exatamente como estão e ligadas às mesmas afirmações; mantenha todos os números exatamente; não crie listas nem subtítulos.
 NÃO mude a força das afirmações: "sugere" não vira "indica" nem "demonstra"; "associou-se" não vira "eleva", "aumenta" ou "causa"; "entre os mais relatados" não vira "os principais"; mantenha os modalizadores existentes. NÃO troque o nome do delineamento de um estudo ("série", "coorte", "transversal", "caso-controle").
@@ -220,7 +245,7 @@ Responda SOMENTE com JSON: {"paragrafos": [{"id": "${paragrafos[0]?.id || 'P1'}"
 // Agente de Limitacoes e Coerencia: um unico paragrafo de limitacoes e texto sem ressalvas repetidas.
 export function promptLimitacoes({ fatos, atual, frases }) {
   return `Você revisa a forma como um artigo de revisão da literatura apresenta suas limitações.
-1. Reescreva a subseção "Limitações" como UM único parágrafo de 60 a 90 palavras, em tom objetivo, profissional e rigoroso, tratando exclusivamente das características intrínsecas da literatura científica disponível e do escopo temporal/geográfico. Jamais deprecie o trabalho dos autores, não sugira ausência de rigor humano, não mencione ferramentas e nunca duplique frases.
+1. Reescreva a subseção "Limitações" como UM único parágrafo de 60 a 110 palavras, em tom objetivo, profissional e rigoroso, tratando exclusivamente das características intrínsecas da literatura científica disponível, do escopo temporal/geográfico e de eventuais vieses metodológicos (como o potencial viés de disponibilidade decorrente do filtro de texto completo gratuito nas buscas, quando aplicável). Jamais deprecie o trabalho dos autores, não sugira ausência de rigor humano, não mencione ferramentas de IA e nunca duplique frases.
 Fatos:
 ${fatos}
 Parágrafo atual:
@@ -236,3 +261,306 @@ ${frases.map((f) => `${f.id} (${f.secao}): ${f.texto}`).join('\n')}
 
 Responda SOMENTE com JSON: {"limitacoes": "novo parágrafo", "frases": [{"id": "${frases[0]?.id || 'F1'}", "acao": "manter | reescrever | remover", "texto": "frase reescrita, se for o caso"}]}`;
 }
+
+// Avaliador de Qualidade Metodologica (JBI)
+export function promptQualidadeMetodologica({ estudos }) {
+  return `Avalie o risco de viés e a qualidade metodológica dos estudos primários abaixo com base no Joanna Briggs Institute (JBI Critical Appraisal Tools).
+Para cada estudo, avalie: (1) clareza amostral e critérios de inclusão; (2) mensuração padronizada da exposição/intervenção; (3) mensuração válida e fidedigna dos desfechos; (4) identificação e controle estatístico de fatores de confusão (análise multivariada).
+
+Estudos:
+${estudos.map((s) => `[${s.n}] ${s.autorCurto} (${s.ano}, ${s.pais}) — ${s.delineamento}. Amostra: ${s.amostra}. Variáveis: ${s.exposicao}. Desfechos: ${s.desfechos}. Achados: ${s.achados}`).join('\n')}
+
+Responda SOMENTE com JSON:
+{"avaliacao": [{"n": ${estudos[0]?.n || 1}, "qualidade_jbi": "Alta | Moderada | Baixa", "score_jbi": "8/9", "risco_vies": "baixo | moderado | alto", "justificativa": "até 15 palavras"}]}`;
+}
+
+// ====================================================================
+// Agente Revisor — Devolutiva e Correções do Orientador
+// ====================================================================
+// ====================================================================
+// Comitê de Agentes Especialistas: Humanização, Qualis A1 e Remoção de Marcas-d'água
+// ====================================================================
+
+export const SISTEMA_HUMANIZADOR_A1 = `Você é o Comitê de Redação Científica de Elite (Qualis A1 em Saúde e Medicina), integrando a atuação sinérgica de três agentes especializados:
+
+1. AGENTE HUMANIZADOR DE VOZ E CADÊNCIA (Burstiness & Ritmo Autoral):
+   - Especialista em métrica e estilo orgânico humano. Quebra a cadência metronômica, simétrica e monótona de textos gerados por computador.
+   - Aplica variação deliberada e expressiva no comprimento das frases: combina períodos curtos e impactantes (4 a 9 palavras) com orações analíticas compostas (20 a 35 palavras).
+   - Elimina paralelismos artificiais: nunca construa três períodos consecutivos com a mesma estrutura sintática (ex.: Sujeito + Verbo + Predicado).
+   - Confere o fôlego, a fluidez, a perplexidade natural e a elegância de um pesquisador humano sênior redigindo do zero.
+
+2. AGENTE DE ESCRITA CIENTÍFICA QUALIS A1 (Densidade & Clareza Cirúrgica):
+   - Especialista em concisão, clareza cirúrgica e assertividade argumentativa.
+   - Elimina gordura verbal, rodeios, pleonasmos acadêmicos e circunlóquios ("tem a finalidade de propiciar", "com vistas a obter", "pode-se inferir que").
+   - Voz ativa preferencial: atribui protagonismo aos pesquisadores e aos fenômenos ("O estudo correlacionou..." e não "Foi realizada a correlação através do estudo...").
+   - Vocabulário biomédico maduro e preciso em português formal do Brasil, sem preciosismos arcaicos nem coloquialismos.
+
+3. AGENTE DE REMOÇÃO DE MARCAS-D'ÁGUA DE IA (Varredura & Erradicação Implacável):
+   - Purgador absoluto de tiques estilísticos, aberturas pasteurizadas, conectivos mecânicos e clichês característicos de modelos de linguagem (ChatGPT, Claude, Gemini).
+   - Banimento terminante de:
+     * Aberturas clichês: "No cenário atual/contemporâneo", "No contexto hodierno", "No que tange a", "Desde os primórdios", "Na era moderna".
+     * Conectivos sintéticos em série: "Ademais,", "Outrossim,", "Destarte,", "Por conseguinte,", "Nesse diapasão,", "Sob essa ótica,", "Nessa perspectiva,", "No plano...", "No espectro...", "No âmbito...", "No domínio...".
+     * Fórmulas de falsa solenidade: "É importante ressaltar/destacar/salientar", "Vale destacar", "Cabe ressaltar/salientar", "É imperioso ressaltar", "Desempenha um papel crucial/vital/essencial", "Faz-se mister", "Torna-se imperativo", "É de suma importância".
+     * Fórmulas de fechamento vazias: "Em suma,", "Em última análise,", "Resta evidente que", "Um divisor de águas", "Mola mestra".
+     * Tríades mecânicas simétricas: banir agrupamentos artificiais de três adjetivos ou substantivos em série ("robusto, abrangente e inovador").
+     * Didatismo e metadiscurso artificial: "Como será demonstrado adiante", "É importante compreender que", "Não apenas... mas também".
+
+★ A NOVA REGRA DE OURO (AUTORIZAÇÃO EXPRESSA DE REMODELAÇÃO):
+Você tem AUTORIZAÇÃO EXPRESSA para alterar profundamente a estrutura do texto. Você NÃO está restrito à contagem de palavras original, nem obrigado a manter as mesmas formulações de orações ou modalizadores idênticos. O objetivo primário é a humanização autêntica, a naturalidade acadêmica e a excelência científica.
+Salvaguardas de integridade factual inegociáveis:
+1. NUNCA invente números empíricos, percentuais, dados de pacientes, anos ou correlações que não existam no texto original ou nas fontes.
+2. PRESERVE com precisão cirúrgica TODAS as citações em colchetes [n] vinculadas às evidências que sustentam, garantindo o padrão Vancouver inalterado.
+3. PRESERVE as unidades de medida laboratoriais exatas (ex: converter expressamente mg/dL para mg/L se necessário, sem confundir).`;
+
+export function promptHumanizacaoCompleta({ secao, tituloSecao, textoAtual, orientacoes, fontes, tema, pergunta }) {
+  return `Atue como o Comitê dos Três Agentes (Humanizador, Qualis A1 e Remoção de Marcas-d'água de IA) para reescrever e humanizar profundamente a seção "${tituloSecao}" abaixo.
+
+Tema da Pesquisa: "${tema || 'Revisão Científica'}"
+Pergunta Norteadora: "${pergunta || tema || 'Investigação das evidências científicas'}"
+
+${orientacoes ? `APONTAMENTOS / DIRETRIZES ESPECÍFICAS (DO ORIENTADOR OU DO AUTOR):\n"""\n${orientacoes}\n"""\n` : ''}
+
+TEXTO ORIGINAL DA SEÇÃO A SER REESCRITO, HUMANIZADO E PURGADO DE VÍCIOS DE IA:
+"""
+${textoAtual}
+"""
+
+${fontes && fontes.length ? `FONTES CIENTÍFICAS DISPONÍVEIS E VERIFICADAS (use estas citações [n] quando referenciar evidências):\n${fontes.slice(0, 35).map((f) => `[${f.n}] ${f.autorCurto || f.titulo} (${f.ano || ''}) — ${f.achados || f.resumo?.slice(0, 160) || ''}`).join('\n')}\n` : ''}
+
+DIRETRIZES DA REESCRITA (APLICAÇÃO DA NOVA REGRA DE OURO):
+1. LIBERDADE DE REESCRITA E VARIAÇÃO DE RITMO (BURSTINESS):
+   - Desmonte períodos robóticos, enfadonhos ou simétricos. Divida sentenças longas em frases curtas e vigorosas, ou funda frases truncadas em períodos compostos elegantes.
+   - Crie cadência viva de leitura: alterne orações breves e assertivas com reflexões metodológicas densas.
+   - Remodele o vocabulário para conferir voz autoral madura, eliminando qualquer sensação de texto gerado por máquina.
+2. BANIMENTO TOTAL DE MARCAS-D'ÁGUA DE IA:
+   - Extirpe sem piedade qualquer ocorrência de: "é importante ressaltar/destacar/salientar", "vale destacar", "no cenário atual/contemporâneo", "desempenha papel crucial/vital", "ademais,", "outrossim,", "destarte,", "por conseguinte,", "no âmbito...", "no plano...", "em suma,", "em última análise,", e listas simétricas de três adjetivos.
+3. ELEVAÇÃO AO PADRÃO QUALIS A1:
+   - Prefira voz ativa e estilo assertivo ("avaliou-se", "constatou-se", "os pesquisadores correlacionaram", "a coorte evidenciou").
+   - Mantenha a distinção entre desfechos primários diretos e substitutos/indiretos.
+   - Se for a Discussão, preserve os subtítulos de conteúdo (###) existentes.
+4. SALVAGUARDAS DE INTEGRIDADE:
+   - Preserve rigorosamente as citações Vancouver [n] associadas aos mesmos fatos ou estudos.
+   - Preserve todos os valores numéricos empíricos, intervalos de confiança e unidades de medida (mg/L vs mg/dL).
+   - Não invente dados ausentes.
+
+Responda SOMENTE com JSON válido no seguinte formato:
+{
+  "novo_texto": "Texto completo reescrito e humanizado da seção em Markdown (sem o título ## principal, mas com subtítulos ### internos se houver)",
+  "resumo_mudancas": "Síntese em linguagem acadêmica tradicional neutra em 1 a 2 frases (ex: 'Aprimoramento da coesão textual, densidade conceitual e precisão terminológica'). NUNCA cite termos como 'inteligência artificial', 'IA', 'prompt' ou 'máquina' nesta síntese",
+  "marcas_removidas": ["Lista concisa dos clichês e conectivos artificiais eliminados"],
+  "melhorias_cadencia": "Breve nota sobre como o ritmo, a voz autoral e o padrão Qualis A1 foram aplicados nesta seção"
+}`;
+}
+
+export function promptHumanizacaoFechamento({ tituloAtual, resumoAtual, abstractAtual, resumenAtual, conclusaoAtual, orientacoes, tema, pergunta, objetivoNovo }) {
+  return `Atue como o Comitê dos Três Agentes (Humanizador, Qualis A1 e Remoção de Marcas-d'água de IA) para purgar marcas de IA e humanizar os elementos de fechamento (resumo, abstract, resumen, conclusão e/ou título).
+
+Tema da Pesquisa: "${tema || 'Revisão Científica'}"
+Pergunta Norteadora: "${pergunta || tema || 'Investigação das evidências científicas'}"
+${objetivoNovo ? `Objetivo formulado na introdução: "${objetivoNovo}"` : ''}
+
+${orientacoes ? `DIRETRIZES / CONSIDERAÇÕES:\n"""\n${orientacoes}\n"""\n` : ''}
+
+ELEMENTOS ATUAIS:
+- Título atual: "${tituloAtual}"
+- Resumo atual: ${JSON.stringify(resumoAtual)}
+- Conclusão atual: """${conclusaoAtual}"""
+
+Regras de Humanização e Fechamento:
+1. Conclusão: deve responder sintética e assertivamente à pergunta norteadora, com voz autoral firme, sem clichês ("em suma", "em última análise", "resta evidente"), sem citações [n], destacando implicações práticas e lacunas reais.
+2. Resumo estruturado (máximo 250 palavras) em 4 seções: Objetivo, Métodos, Resultados e Conclusão. Redação limpa, direta, sem floreios.
+3. Abstract (inglês acadêmico fluido) e Resumen (espanhol acadêmico natural), traduzindo fielmente o resumo revisado sem tradução literal robótica.
+4. Elimine qualquer marca-d'água de IA dos textos de fechamento.
+
+Responda SOMENTE com JSON:
+{
+  "alterou_titulo": false,
+  "titulo": "${tituloAtual}",
+  "titulo_en": "",
+  "titulo_es": "",
+  "alterou_resumo": true,
+  "resumo": {"objetivo": "", "metodos": "", "resultados": "", "conclusao": ""},
+  "abstract": {"objective": "", "methods": "", "results": "", "conclusion": ""},
+  "resumen": {"objetivo": "", "metodos": "", "resultados": "", "conclusion": ""},
+  "alterou_conclusao": true,
+  "conclusao": "Texto completo da conclusão reescrita e humanizada em Markdown",
+  "marcas_removidas": ["Lista de clichês de IA eliminados"],
+  "resumo_mudancas": "Síntese das melhorias de redação aplicadas ao fechamento"
+}`;
+}
+
+export const SISTEMA_ANALISADOR_ORIENTADOR = `Você é um parecerista sênior, metodologista e coordenador de redação científica de periódicos Qualis A1 em saúde (The Lancet, JAMA, Arquivos Brasileiros de Cardiologia, RSP).
+Sua função é realizar a desconstrução crítica e cirúrgica do parecer/devolutiva do orientador, banca ou laudo de IA sobre um manuscrito científico, delimitando com rigor milimétrico o escopo real das correções.
+
+DIRETRIZES FUNDAMENTAIS DE PLANEJAMENTO:
+1. FIDELIDADE ESTRITA AO PARECER: O apontamento enviado é a autoridade central. Se o apontamento é pontual (ex: corrigir p-valor, ajustar objetivo, incluir limitação, alterar unidade de biomarcador ou parágrafo específico), classifique o modo como "cirurgico" e NÃO invente alterações em seções não citadas.
+2. DELIMITAÇÃO REAL DE SEÇÕES: Inclua em "secoes_afetadas" EXCLUSIVAMENTE as seções que realmente necessitam de intervenção direta para atender ao pedido. Se uma seção não foi criticada nem demanda ajuste decorrente, NUNCA a inclua em "secoes_afetadas".
+3. ANÁLISE CONTEXTUALIZADA NO ARTIGO: Utilize o panorama das seções do manuscrito atual fornecido para identificar exatamente em qual seção e em quais parágrafos o problema reside.
+4. MODO DE OPERAÇÃO:
+   - "cirurgico": para correções localizadas, ajustes em parágrafos específicos, complementações pontuais ou consertos estatísticos/metodológicos. Preserva 95%+ do texto existente inalterado.
+   - "amplo": apenas quando o parecer solicitar expressamente reestruturação global profunda ou quando o texto fornecido for uma solicitação explícita de reescrita completa.
+
+Responda sempre e somente com JSON válido.`;
+
+export const SISTEMA_REDATOR_ORIENTADOR = `Você é um comitê de excelência acadêmica (Qualis A1) e coautor sênior especialista em redação científica médica e em saúde, escrevendo em português formal acadêmico do Brasil.
+Sua missão primordial e inegociável é incorporar com exatidão cirúrgica todos os apontamentos solicitados pelo orientador/laudo.
+
+PRIORIDADES MANDATÓRIAS:
+1. SOBERANIA DO APONTAMENTO: O atendimento ao parecer do orientador é a prioridade #1 absoluta. Nada se sobrepõe a resolver o que o usuário solicitou.
+2. PRESERVAÇÃO DE BLOCOS ESTÁVEIS (MODO CIRÚRGICO): Quando em modo cirúrgico, modifique EXCLUSIVAMENTE os períodos ou parágrafos diretamente afetados pelo pedido. Todos os outros parágrafos da seção DEVEM ser preservados exatamente como constam no texto original, sem parafrasear frases boas, sem trocar termos gratuitamente e sem alterar citações [n] existentes.
+3. PRESERVAÇÃO EPISTÊMICA: Preserve com exatidão todas as citações no formato Vancouver [n] associadas aos estudos do texto e todos os dados numéricos verificados.
+4. RIGOR QUALIS A1 NO TRECHO EDITADO: No trecho modificado, aplique voz ativa autoral, evite clichês de IA ("é importante ressaltar", "vale destacar", "no cenário atual"), mantenha a precisão das unidades (ex: PCR mg/L vs mg/dL) e diferencie desfechos substitutos de desfechos duros.`;
+
+export function promptAnaliseOrientador({ devolutiva, instrucoesAdicionais, tema, pergunta, resumoArtigo = '', secoesDisponiveis = [], secoesPermitidas = null, modoPreferido = 'cirurgico' }) {
+  const filtroSecoesAviso = Array.isArray(secoesPermitidas) && secoesPermitidas.length > 0
+    ? `\nATENÇÃO: O usuário restringiu a intervenção EXCLUSIVAMENTE às seguintes seções permitidas: [${secoesPermitidas.join(', ')}]. NÃO inclua nenhuma outra seção fora desta lista em "secoes_afetadas".`
+    : '';
+
+  return `O autor recebeu uma devolutiva/parecer de correções do seu orientador ou apontamentos do Laudo de IA sobre o artigo de revisão científica:
+Tema: "${tema}"
+Pergunta norteadora: "${pergunta || tema}"
+Modo preferencial solicitado: "${modoPreferido}"
+${instrucoesAdicionais ? `Instruções adicionais do aluno: "${instrucoesAdicionais}"` : ''}
+${filtroSecoesAviso}
+
+DEVOLUTIVA / PARECER / LAUDO A SER APLICADO:
+"""
+${devolutiva}
+"""
+
+PANORAMA DO ARTIGO ATUAL (estrutura e seções existentes no documento):
+${resumoArtigo || 'Seções disponíveis: ' + secoesDisponiveis.join(', ')}
+
+SEÇÕES POSSÍVEIS DO ARTIGO E SEUS ESCOPOS:
+- "introducao": contextualização, estado da arte, lacuna epistêmica, justificativa clínica e declaração explícita de objetivo no fechamento.
+- "metodos": elegibilidade estruturada, estratégia em bases indexadas, avaliação crítica e síntese dos dados.
+- "resultados": fluxo de seleção, caracterização dos estudos, tabelas sinópticas e desfechos clínicos.
+- "discussao": interpretação analítica, diálogo dialético entre evidências, mecanismos clínicos/farmacológicos, limitações e implicações.
+- "conclusao": resposta objetiva à pergunta norteadora, sem citações [n], equilibrada e ancorada nos achados.
+- "resumo": resumo estruturado (objetivo, métodos, resultados, conclusão) e abstract em inglês/espanhol.
+- "titulo": título em português, inglês e espanhol.
+
+Analise profundamente o parecer e determine com rigor:
+1. O modo adequado: "cirurgico" (ajustes pontuais, alterando apenas parágrafos necessários) ou "amplo" (reestruturação global da seção).
+2. Quais seções DEVEM ser alteradas para cumprir a devolutiva. Se uma seção não precisa de alteração, NÃO a inclua em "secoes_afetadas".
+3. Para cada seção afetada, determine a ação específica e se a alteração incide em parágrafo pontual ou se requer reestruturação.
+
+Responda SOMENTE com JSON:
+{
+  "modo": "cirurgico",
+  "resumo_parecer": "Síntese dos principais pontos solicitados em 1 a 3 frases densas e objetivas",
+  "secoes_afetadas": ["discussao"],
+  "orientacoes": [
+    {
+      "secao": "discussao",
+      "apontamento_orientador": "O que foi solicitado exatamente para esta seção",
+      "acao_recomendada": "Ação cirúrgica precisa no trecho ou parágrafo relevante",
+      "tipo_intervencao": "pontual_paragrafo",
+      "mecanismos_clinicos": "Mecanismos ou unidades específicas a ajustar (se aplicável)",
+      "confronto_evidencias": "Estudos ou dados a correlacionar no trecho (se aplicável)"
+    }
+  ],
+  "recomendacoes_integridade": "Avisos sobre fontes, termos ou números a preservar rigorosamente"
+}`;
+}
+
+export function promptRevisaoSecao({ secao, tituloSecao, textoAtual, orientacao, fontes = [], tema, pergunta, modo = 'cirurgico', contextoArtigo = null }) {
+  const contextoBloco = contextoArtigo ? `
+CONTEXTO INTEGRAL DO ARTIGO (use para manter perfeita coerência IMRaD):
+${contextoArtigo.introducao ? `--- INTRODUÇÃO / OBJETIVO ---\n${contextoArtigo.introducao.slice(0, 1500)}\n` : ''}
+${contextoArtigo.metodos ? `--- MÉTODOS RESUMIDOS ---\n${contextoArtigo.metodos.slice(0, 1200)}\n` : ''}
+${contextoArtigo.resultados ? `--- ACHADOS DOS RESULTADOS ---\n${contextoArtigo.resultados.slice(0, 2200)}\n` : ''}
+` : '';
+
+  const diretrizesModo = modo === 'cirurgico' ? `
+DIRETRIZES DO MODO CIRÚRGICO ESTRETO (PRESERVAÇÃO DO MANUSCRITO):
+1. ATENDIMENTO CIRÚRGICO: Localize o trecho, parágrafo ou frase exata que demanda o ajuste solicitado pelo orientador/laudo e aplique a correção solicitada com rigor acadêmico.
+2. PRESERVAÇÃO TOTAL DOS PARÁGRAFOS NÃO AFETADOS: Mantenha todos os outros parágrafos da seção EXATAMENTE COMO ESTÃO no texto original. NÃO reformule, NÃO resuma e NÃO reescreva frases que já estavam boas e que não foram criticadas.
+3. INTEGRIDADE DAS CITAÇÕES [n]: Preserve 100% das citações em formato Vancouver [n] presentes no texto original. Nunca suprima citações do manuscrito original fora do trecho explicitamente alterado.
+4. FIDELIDADE NUMÉRICA: Mantenha intactos todos os valores amostrais, p-valores e intervalos de confiança pré-existentes, alterando apenas dados que tenham sido expressamente apontados como incorretos.
+` : `
+DIRETRIZES DO MODO DE REESCRITA AMPLA:
+1. Incorpore integralmente os apontamentos do orientador, garantindo profundidade analítica superior.
+2. Se for a Discussão: CONFRONTE os estudos entre si, explique mecanismos biológicos, pondere desfechos duros vs substitutos e mantenha parágrafo transparente de limitações.
+3. Mantenha os subtítulos temáticos (###) para organização lógica.
+4. Mantenha todas as citações no formato Vancouver [n] alinhadas às fontes numeradas.
+`;
+
+  return `Reescreva a seção "${tituloSecao}" de um artigo científico de alto impacto aplicando as correções da devolutiva no MODO: ${modo.toUpperCase()}.
+
+Tema da pesquisa: "${tema}"
+Pergunta norteadora: "${pergunta}"
+
+ORIENTAÇÕES ESPECÍFICAS DO ORIENTADOR / PARECERISTA:
+"""
+${orientacao}
+"""
+${contextoBloco}
+TEXTO ATUAL DA SEÇÃO (base soberana do manuscrito):
+"""
+${textoAtual}
+"""
+
+FONTES CIENTÍFICAS DISPONÍVEIS E VERIFICADAS (use estas citações [n] quando referenciar evidências):
+${fontes.slice(0, 40).map((f) => {
+  const achadosRicos = f.achados || f.resumo?.slice(0, 450) || '';
+  return `[${f.n}] ${f.autorCurto || f.titulo} (${f.ano || ''}) — ${achadosRicos}`;
+}).join('\n')}
+
+${diretrizesModo}
+
+Devolva o texto da seção completa em Markdown (com subtítulos internos ### se existirem), garantindo que no modo cirúrgico os parágrafos não solicitados permaneçam idênticos ao original.
+
+Responda SOMENTE com JSON:
+{
+  "novo_texto": "Texto da seção em Markdown com as correções incorporadas",
+  "resumo_mudancas": "Síntese acadêmica neutra das intervenções realizadas (ex: 'Ajustada a notação da PCR no terceiro parágrafo da discussão conforme apontado pelo orientador, preservando integralmente o corpo do manuscrito'). NUNCA mencione IA, prompt ou máquina.",
+  "detalhes": [
+    {
+      "pedido_orientador": "O que foi pedido",
+      "como_foi_atendido": "O que foi modificado cirurgicamente ou aprofundado"
+    }
+  ]
+}`;
+}
+
+export function promptRevisaoFechamento({ tituloAtual, resumoAtual, abstractAtual, resumenAtual, conclusaoAtual, orientacao, tema, pergunta, objetivoNovo }) {
+  return `Ajuste os elementos de fechamento (título, resumo estruturado, abstract, resumen e/ou conclusão) conforme a devolutiva do orientador.
+
+Tema: "${tema}"
+Pergunta: "${pergunta}"
+${objetivoNovo ? `Novo objetivo definido na introdução: "${objetivoNovo}"` : ''}
+
+ORIENTAÇÃO DO ORIENTADOR / PONTOS A CONSIDERAR:
+"""
+${orientacao}
+"""
+
+ELEMENTOS ATUAIS:
+- Título atual: "${tituloAtual}"
+- Resumo atual: ${JSON.stringify(resumoAtual)}
+- Conclusão atual: """${conclusaoAtual}"""
+
+Regras:
+1. Resumo estruturado com no máximo 250 palavras (Objetivo, Métodos, Resultados, Conclusão).
+2. Não use citações [n] no resumo nem na conclusão.
+3. Se o orientador não pediu alteração no título, mantenha "alterou_titulo": false e os mesmos títulos.
+4. Se o orientador não pediu alteração na conclusão, mantenha "alterou_conclusao": false e a mesma conclusão.
+5. Traduza fielmente para o Abstract (inglês) e Resumen (espanhol) se o resumo ou conclusão mudar.
+
+Responda SOMENTE com JSON:
+{
+  "alterou_titulo": false,
+  "titulo": "${tituloAtual}",
+  "titulo_en": "",
+  "titulo_es": "",
+  "alterou_resumo": true,
+  "resumo": {"objetivo": "", "metodos": "", "resultados": "", "conclusao": ""},
+  "abstract": {"objective": "", "methods": "", "results": "", "conclusion": ""},
+  "resumen": {"objetivo": "", "metodos": "", "resultados": "", "conclusion": ""},
+  "alterou_conclusao": true,
+  "conclusao": "Texto da conclusão em Markdown",
+  "resumo_mudancas": "Síntese das mudanças em título, resumo ou conclusão"
+}`;
+}
+

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>JARVIS QA & Visual Audit Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(14, 18, 27, 0.75);
+      --border: rgba(0, 240, 255, 0.15);
+      --neon-cyan: #00f0ff;
+      --neon-emerald: #10b981;
+      --neon-rose: #f43f5e;
+      --neon-purple: #a855f7;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      padding: 32px 40px;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { font-size: 32px; filter: drop-shadow(0 0 12px var(--neon-cyan)); }
+    .brand-title { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+    .brand-sub { font-size: 12px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace; }
+    .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); text-align: right; }
+    .kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      backdrop-filter: blur(12px);
+    }
+    .kpi-val { font-size: 32px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+    .kpi-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.8px; font-weight: 600; }
+    .val-pass { color: var(--neon-emerald); }
+    .val-rate { color: var(--neon-cyan); }
+    .val-fail { color: var(--neon-rose); }
+    
+    h2 { font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #fff; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .ss-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .ss-card:hover { transform: translateY(-3px); border-color: var(--neon-cyan); box-shadow: 0 8px 24px rgba(0, 240, 255, 0.15); }
+    .ss-header { padding: 12px 16px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .ss-cat { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(0, 240, 255, 0.15); color: var(--neon-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+    .ss-title { font-size: 12px; font-weight: 600; color: #fff; }
+    .ss-img { width: 100%; height: 260px; object-fit: cover; object-position: top; border-bottom: 1px solid var(--border); display: block; background: #000; cursor: pointer; transition: opacity 0.2s; }
+    .ss-img:hover { opacity: 0.92; }
+    .ss-footer { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; background: rgba(0,0,0,0.2); }
+    .ss-footer code { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); }
+    .btn-zoom { color: var(--neon-cyan); text-decoration: none; font-weight: 600; }
+    .btn-zoom:hover { text-decoration: underline; }
+
+    table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 40px; font-size: 13px; }
+    th { text-align: left; padding: 12px 16px; background: rgba(0,0,0,0.4); color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .cat-pill { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.06); color: #cbd5e1; }
+    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .status-badge.pass { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .status-badge.fail { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .btn-action { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(168, 85, 247, 0.3)); border: 1px solid var(--neon-cyan); border-radius: 6px; color: #fff; text-decoration: none; font-weight: 600; font-size: 13px; }
+    .btn-action:hover { background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(168, 85, 247, 0.4)); box-shadow: 0 0 16px rgba(0, 240, 255, 0.3); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-logo">🤖</div>
+      <div>
+        <div class="brand-title">JARVIS · RELATÓRIO DO AGENTE DE QA & AUDITORIA VISUAL</div>
+        <div class="brand-sub">Suíte de Verificação E2E, Organização de Fluxos & Integridade de Telas</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div>Data da Auditoria: <strong>03/10/2026, 10:21:47</strong></div>
+      <div>Tempo de Execução: <strong>11.82s</strong></div>
+      <div style="margin-top: 6px;"><a class="btn-action" href="/jarvis">🚀 Abrir Painel JARVIS</a></div>
+    </div>
+  </div>
+
+  <div class="kpis-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Índice de Aprovação</div>
+      <div class="kpi-val val-rate">100%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total de Testes</div>
+      <div class="kpi-val" style="color: #fff;">45</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Aprovados</div>
+      <div class="kpi-val val-pass">45</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Reprovados / Falhas</div>
+      <div class="kpi-val val-pass">0</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Telas Capturadas</div>
+      <div class="kpi-val" style="color: var(--neon-purple);">10</div>
+    </div>
+  </div>
+
+  <h2>📸 Galeria de Evidências Visuais (1920x1080)</h2>
+  <div class="gallery">
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Painel Geral do Sistema (Nível 1)</span>
+        </div>
+        <a href="screenshots/01_painel_geral_sistema.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/01_painel_geral_sistema.png" alt="Screenshot: Painel Geral do Sistema (Nível 1)" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>01_painel_geral_sistema.png</code>
+          <a class="btn-zoom" href="screenshots/01_painel_geral_sistema.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Workspace do Artigo com Stepper e Manuscrito</span>
+        </div>
+        <a href="screenshots/02_workspace_artigo_leitor.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/02_workspace_artigo_leitor.png" alt="Screenshot: Workspace do Artigo com Stepper e Manuscrito" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>02_workspace_artigo_leitor.png</code>
+          <a class="btn-zoom" href="screenshots/02_workspace_artigo_leitor.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Tabela 1 ABNT</span>
+        </div>
+        <a href="screenshots/03_tabela_1_abnt.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/03_tabela_1_abnt.png" alt="Screenshot: Tabela 1 ABNT" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>03_tabela_1_abnt.png</code>
+          <a class="btn-zoom" href="screenshots/03_tabela_1_abnt.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Mesa de Triagem</span>
+        </div>
+        <a href="screenshots/04_mesa_triagem.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/04_mesa_triagem.png" alt="Screenshot: Mesa de Triagem" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>04_mesa_triagem.png</code>
+          <a class="btn-zoom" href="screenshots/04_mesa_triagem.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Fluxograma PRISMA 2020</span>
+        </div>
+        <a href="screenshots/05_fluxograma_prisma.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/05_fluxograma_prisma.png" alt="Screenshot: Fluxograma PRISMA 2020" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>05_fluxograma_prisma.png</code>
+          <a class="btn-zoom" href="screenshots/05_fluxograma_prisma.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Devolutiva do Orientador</span>
+        </div>
+        <a href="screenshots/06_devolutiva_orientador.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/06_devolutiva_orientador.png" alt="Screenshot: Devolutiva do Orientador" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>06_devolutiva_orientador.png</code>
+          <a class="btn-zoom" href="screenshots/06_devolutiva_orientador.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Suíte de Agentes Qualis A1 & Síntese Visual</span>
+        </div>
+        <a href="screenshots/06b_agentes_qualis_a1.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/06b_agentes_qualis_a1.png" alt="Screenshot: Suíte de Agentes Qualis A1 & Síntese Visual" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>06b_agentes_qualis_a1.png</code>
+          <a class="btn-zoom" href="screenshots/06b_agentes_qualis_a1.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Cluster Holográfico 3D dos 14 Agentes</span>
+        </div>
+        <a href="screenshots/07_cluster_14_agentes_3d.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/07_cluster_14_agentes_3d.png" alt="Screenshot: Cluster Holográfico 3D dos 14 Agentes" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>07_cluster_14_agentes_3d.png</code>
+          <a class="btn-zoom" href="screenshots/07_cluster_14_agentes_3d.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Modal Novo Artigo</span>
+        </div>
+        <a href="screenshots/08_modal_novo_artigo.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/08_modal_novo_artigo.png" alt="Screenshot: Modal Novo Artigo" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>08_modal_novo_artigo.png</code>
+          <a class="btn-zoom" href="screenshots/08_modal_novo_artigo.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+      <div class="ss-card">
+        <div class="ss-header">
+          <span class="ss-cat">Visual</span>
+          <span class="ss-title">Screenshot: Modal Importar Artigo</span>
+        </div>
+        <a href="screenshots/09_modal_importar_artigo.png" target="_blank" title="Clique para ver em resolução original">
+          <img class="ss-img" src="screenshots/09_modal_importar_artigo.png" alt="Screenshot: Modal Importar Artigo" loading="lazy" />
+        </a>
+        <div class="ss-footer">
+          <code>09_modal_importar_artigo.png</code>
+          <a class="btn-zoom" href="screenshots/09_modal_importar_artigo.png" target="_blank">🔍 Expandir 1920x1080</a>
+        </div>
+      </div>
+    
+  </div>
+
+  <h2>📋 Matriz de Verificações Detalhada</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50px;">ID</th>
+        <th style="width: 130px;">Categoria</th>
+        <th style="width: 320px;">Teste Realizado</th>
+        <th>Detalhes / Dados Observados</th>
+        <th style="width: 120px; text-align: center;">Resultado</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#1</td>
+        <td><span class="cat-pill">Navegação</span></td>
+        <td><strong>Carregamento inicial HTTP 200</strong></td>
+        <td>Status: 200</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#2</td>
+        <td><span class="cat-pill">DOM</span></td>
+        <td><strong>Título da aplicação científica</strong></td>
+        <td>JARVIS · Central de Inteligência Científica & Revisão de Literatura</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#3</td>
+        <td><span class="cat-pill">Layout</span></td>
+        <td><strong>Stepper Metodológico oculto no Modo Sistema (Economia de ~180px verticais)</strong></td>
+        <td>display: none</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#4</td>
+        <td><span class="cat-pill">HUD</span></td>
+        <td><strong>Top HUD ativo no Modo Sistema Global</strong></td>
+        <td>display: flex</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#5</td>
+        <td><span class="cat-pill">HUD</span></td>
+        <td><strong>Top HUD do Artigo oculto no Modo Sistema</strong></td>
+        <td>display: none</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#6</td>
+        <td><span class="cat-pill">KPIs</span></td>
+        <td><strong>KPI de Acervo Científico populado</strong></td>
+        <td>11 artigos carregados</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#7</td>
+        <td><span class="cat-pill">KPIs</span></td>
+        <td><strong>KPI de Mineração Global populado</strong></td>
+        <td>2.650 estudos</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#8</td>
+        <td><span class="cat-pill">KPIs</span></td>
+        <td><strong>KPI FinOps / Custo LLM populado</strong></td>
+        <td>$0.37</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#9</td>
+        <td><span class="cat-pill">Tabela Master</span></td>
+        <td><strong>Tabela de Manuscritos renderizada com dados reais</strong></td>
+        <td>11 artigos listados</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#10</td>
+        <td><span class="cat-pill">Ações</span></td>
+        <td><strong>Botões "🚀 Abrir Workspace" presentes na tabela</strong></td>
+        <td>11 botões encontrados</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#11</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Painel Geral do Sistema (Nível 1)</strong></td>
+        <td>Salvo em 01_painel_geral_sistema.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#12</td>
+        <td><span class="cat-pill">Navegação</span></td>
+        <td><strong>Transição suave para o Leitor Qualis A1</strong></td>
+        <td>screen-redacao ativa</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#13</td>
+        <td><span class="cat-pill">HUD</span></td>
+        <td><strong>Top HUD alternado para Modo Artigo com breadcrumb</strong></td>
+        <td>display: flex</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#14</td>
+        <td><span class="cat-pill">HUD</span></td>
+        <td><strong>Título do Artigo em trabalho exibido no Top HUD</strong></td>
+        <td>Teste Raio-X Diagnóstico</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#15</td>
+        <td><span class="cat-pill">Workflow Stepper</span></td>
+        <td><strong>Stepper Metodológico de 6 Passos ativado no Workspace</strong></td>
+        <td>display: block</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#16</td>
+        <td><span class="cat-pill">Ações Rápidas</span></td>
+        <td><strong>Botão direto de Download DOCX ativo no Top HUD</strong></td>
+        <td>/api/trabalhos/20261001-213045-teste-raio-x-diagnostico/arquivos/artigo.docx?baixar=1</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#17</td>
+        <td><span class="cat-pill">Ações Rápidas</span></td>
+        <td><strong>Botão de Raio-X Diagnóstico configurado no Top HUD</strong></td>
+        <td>Visibilidade: flex</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#18</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Workspace do Artigo com Stepper e Manuscrito</strong></td>
+        <td>Salvo em 02_workspace_artigo_leitor.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#19</td>
+        <td><span class="cat-pill">Leitor Qualis A1</span></td>
+        <td><strong>Manuscrito renderizado com formatação científica</strong></td>
+        <td>55406 caracteres</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#20</td>
+        <td><span class="cat-pill">Leitor Qualis A1</span></td>
+        <td><strong>Citações Vancouver / ABNT interativas detectadas</strong></td>
+        <td>99 citações</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#21</td>
+        <td><span class="cat-pill">Interatividade</span></td>
+        <td><strong>Inspetor lateral de evidência aberto ao clicar na citação</strong></td>
+        <td>Tag: [1-3]</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#22</td>
+        <td><span class="cat-pill">Tabela 1 ABNT</span></td>
+        <td><strong>Navegação para Tabela 1 ABNT NBR 6023</strong></td>
+        <td>0 estudos na tabela</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#23</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Tabela 1 ABNT</strong></td>
+        <td>Salvo em 03_tabela_1_abnt.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#24</td>
+        <td><span class="cat-pill">Mesa de Triagem</span></td>
+        <td><strong>Navegação e Deck de Triagem de Fontes</strong></td>
+        <td>31 evidências mineradas</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#25</td>
+        <td><span class="cat-pill">Filtros</span></td>
+        <td><strong>Campo de busca e filtros dinâmicos na triagem</strong></td>
+        <td>Filtro reativo testado</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#26</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Mesa de Triagem</strong></td>
+        <td>Salvo em 04_mesa_triagem.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#27</td>
+        <td><span class="cat-pill">PRISMA 2020</span></td>
+        <td><strong>Navegação para Fluxograma PRISMA e botões de exportação</strong></td>
+        <td>PNG e SVG disponíveis</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#28</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Fluxograma PRISMA 2020</strong></td>
+        <td>Salvo em 05_fluxograma_prisma.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#29</td>
+        <td><span class="cat-pill">Orientador</span></td>
+        <td><strong>Módulo de Devolutiva do Orientador & Diff Cirúrgico</strong></td>
+        <td>Formulário e Diff operacionais</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#30</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Devolutiva do Orientador</strong></td>
+        <td>Salvo em 06_devolutiva_orientador.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#31</td>
+        <td><span class="cat-pill">Agentes Qualis A1</span></td>
+        <td><strong>Navegação para Suíte de Agentes Especialistas (Agentes 15 a 20)</strong></td>
+        <td>Todos os 6 módulos especialistas operacionais</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#32</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Suíte de Agentes Qualis A1 & Síntese Visual</strong></td>
+        <td>Salvo em 06b_agentes_qualis_a1.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#33</td>
+        <td><span class="cat-pill">14 Agentes 3D</span></td>
+        <td><strong>Cluster Holográfico de Agentes renderizado</strong></td>
+        <td>14/14 nós verificados</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#34</td>
+        <td><span class="cat-pill">UI Mode</span></td>
+        <td><strong>Retorno automático para Modo Sistema no Cluster 3D</strong></td>
+        <td>display: flex</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#35</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Cluster Holográfico 3D dos 14 Agentes</strong></td>
+        <td>Salvo em 07_cluster_14_agentes_3d.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#36</td>
+        <td><span class="cat-pill">Fluxo de Retorno</span></td>
+        <td><strong>Clique em "⬅ Painel Geral" fecha o Workspace e oculta o Stepper</strong></td>
+        <td>Retorno confirmado com sucesso</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#37</td>
+        <td><span class="cat-pill">Modais</span></td>
+        <td><strong>Abertura do Modal de Novo Artigo Autônomo</strong></td>
+        <td>modal-novo-artigo aberto</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#38</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Modal Novo Artigo</strong></td>
+        <td>Salvo em 08_modal_novo_artigo.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#39</td>
+        <td><span class="cat-pill">Modais</span></td>
+        <td><strong>Fechamento do Modal de Novo Artigo</strong></td>
+        <td>Modal fechado</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#40</td>
+        <td><span class="cat-pill">Modais</span></td>
+        <td><strong>Abertura do Modal de Importação com Drag-and-Drop</strong></td>
+        <td>modal-importar-artigo aberto</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#41</td>
+        <td><span class="cat-pill">Visual</span></td>
+        <td><strong>Screenshot: Modal Importar Artigo</strong></td>
+        <td>Salvo em 09_modal_importar_artigo.png</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#42</td>
+        <td><span class="cat-pill">Modais</span></td>
+        <td><strong>Fechamento do Modal de Importação</strong></td>
+        <td>Modal fechado</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#43</td>
+        <td><span class="cat-pill">Qualidade Visual</span></td>
+        <td><strong>Ausência de overflow horizontal quebrado (scrollWidth <= windowWidth)</strong></td>
+        <td>Layout contido</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#44</td>
+        <td><span class="cat-pill">Estabilidade JS</span></td>
+        <td><strong>Zero erros de execução no Console JavaScript</strong></td>
+        <td>0 erro(s)</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+      <tr class="row-pass">
+        <td style="font-family: monospace;">#45</td>
+        <td><span class="cat-pill">Rede & APIs</span></td>
+        <td><strong>Zero requisições de rede falhas (4xx/5xx)</strong></td>
+        <td>0 falha(s)</td>
+        <td style="text-align: center;">
+          <span class="status-badge pass">✔ APROVADO</span>
+        </td>
+      </tr>
+    
+    </tbody>
+  </table>
+</body>
+</html>

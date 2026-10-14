@@ -58,7 +58,46 @@ Leia `relatorio-verificacao.md` e relate ao usuario: numero de referencias, iten
 falharam e pendencias para revisao humana. Nao declare o artigo "pronto para submissao": ele precisa de
 revisao critica dos autores.
 
-## Os 14 agentes do painel
+## Passo 3 — Devolutiva do Orientador (Revisão Pós-Leitura)
+
+Quando o orientador ler o artigo e der sua devolutiva de correções, você pode lançá-la diretamente:
+
+```bash
+node ".../painel/cli.mjs" orientador ID-DO-TRABALHO "parecer de correções do orientador"
+```
+
+Ou no painel web (http://localhost:4777), na aba **✍ Devolutiva do Orientador**. O sistema:
+1. Salva um snapshot de backup da versão atual em `versoes/`.
+2. Analisa cirurgicamente as demandas do orientador e identifica as seções que precisam de alteração (Introdução, Discussão, Conclusão, Resumo, Título, Métodos ou Resultados).
+3. Reescreve as seções afetadas atendendo ao orientador, mantendo o padrão Qualis A1 e preservando 100% das fontes e citações Vancouver válidas.
+4. Regenera o Word (.docx) nas normas ABNT e registra o histórico completo de rodadas.
+
+## Passo 4 — Ingestão e Correção de Artigos Prontos (.docx ou .pdf)
+
+Se o usuário já possuir um manuscrito ou artigo pronto em formato `.docx` ou `.pdf` e desejar revisá-lo com base no parecer do orientador e no modelo de escrita:
+
+```bash
+node ".../painel/cli.mjs" importar caminho/artigo.docx --orientacoes "parecer do orientador..."
+# ou para PDF:
+node ".../painel/cli.mjs" importar caminho/artigo.pdf --orientacoes "parecer do orientador..."
+```
+
+Ou no painel web (http://localhost:4777), clicando em **📥 Importar .docx / .pdf**:
+1. O extrator Python (`pymupdf` e `python-docx`) decompõe o documento, identifica as seções (Título, Resumo, Abstract, 1 Introdução, 2 Métodos, 3 Resultados, 4 Discussão, 5 Conclusão e Referências) e converte tabelas para Markdown.
+2. Gera imediatamente o documento Word (`.docx`) diagramado nas normas ABNT (Times New Roman 12, espaçamento 1,5, margens 3/2 cm, paginação).
+3. Aciona o **Agente Revisor do Orientador** e o **Agente de Estilo Acadêmico** para reescrever as seções aplicando os apontamentos da banca/orientador e o **Modelo de Escrita Científica Qualis A1** (voz autoral, eliminação de clichês de IA, precisão de unidades laboratoriais e diferenciação de desfechos diretos vs substitutos).
+4. Salva a rodada em `versoes/rodada-1-.../` com relatório de alterações e permite novas rodadas de correções subsequentes na aba **✍ Devolutiva do Orientador**.
+
+## Diretrizes Metodológicas Qualis A1 (PRISMA 2020 & JBI)
+
+O sistema incorpora salvaguardas metodológicas obrigatórias:
+1. **Unidades de Marcadores Inflamatórios (PCR e Biomarcadores):** NUNCA comparar diretamente valores nominais com unidades distintas. Ao cotejar mg/dL e mg/L, explicitar a conversão (ex.: 10 mg/dL = 100 mg/L, 12x maior que 8,2 mg/L) e discutir essa variação como viés de mensuração e padronização laboratorial.
+2. **Origem Geográfica Fidedigna:** O país da amostra é obtido estritamente da casuística hospitalar ou afiliação dos autores. É terminantemente proibido inferir o país dos pacientes pela sede ou país do periódico. Se ausente, reportar `NI`.
+3. **Desfechos Primários vs. Indiretos:** Discriminar com clareza nos Resultados, na Tabela 1 e na Discussão os estudos que mensuraram o desfecho clínico primário duro (ex.: conversão para cirurgia aberta) daqueles que avaliaram indicadores indiretos ou substitutos (ex.: dificuldade operatória, escore de Parkland, necessidade de colecistectomia subtotal de resgate).
+4. **Avaliação Crítica do Rigor Metodológico (JBI):** Coluna dedicada na Tabela 1 apresentando o Rigor JBI (Alta, Moderada, Baixa) com pontuação crítica (ex.: 8/9, 7/9) e explicitação da régua metodológica nas notas de rodapé.
+5. **Critérios Hierarquizados no PRISMA 2020:** O afunilamento de registros elegíveis é justificado formalmente por critérios objetivos hierarquizados (priorização de delineamentos observacionais analíticos com estimativas ajustadas e arquivamento de séries puramente descritivas, casuísticas sobrepostas ou dados insuficientes), banindo justificativas vagas de "menor prioridade".
+
+## Os agentes do painel
 
 Planejador → Pesquisador → Deduplicacao → Triagem (com segunda opiniao regional) → Verificador de
 Fontes → Extracao → Redator → Auditor (2 rodadas) → Estilo Academico (tira padroes de escrita de IA,

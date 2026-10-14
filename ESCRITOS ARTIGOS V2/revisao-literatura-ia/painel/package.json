@@ -6,7 +6,9 @@
   "description": "Painel local para gerar revisoes de literatura verificadas (PubMed, SciELO, BVS/LILACS) com navegador real via Playwright.",
   "scripts": {
     "start": "node server.mjs",
-    "cli": "node cli.mjs"
+    "cli": "node cli.mjs",
+    "test:qa": "node scripts/agente_qa_visual.mjs",
+    "test:visual": "node scripts/agente_qa_visual.mjs"
   },
   "engines": {
     "node": ">=20"

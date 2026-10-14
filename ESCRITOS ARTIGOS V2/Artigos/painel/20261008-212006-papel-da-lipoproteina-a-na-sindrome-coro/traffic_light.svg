@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 568 1348" width="100%" height="1348" style="max-width:100%; height:auto; background:#ffffff; border-radius:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); font-family:'Outfit', sans-serif;">
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+  <rect x="0" y="0" width="568" height="1348" fill="#ffffff" rx="8" />
+  
+    <text x="120" y="36" font-family="'Outfit', sans-serif" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">Estudos Primários</text>
+  
+      <g transform="translate(264, 36)">
+        <text font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">D1</text>
+      </g>
+    
+      <g transform="translate(312, 36)">
+        <text font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">D2</text>
+      </g>
+    
+      <g transform="translate(360, 36)">
+        <text font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">D3</text>
+      </g>
+    
+      <g transform="translate(408, 36)">
+        <text font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">D4</text>
+      </g>
+    
+      <g transform="translate(456, 36)">
+        <text font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">D5</text>
+      </g>
+    
+    <text x="504" y="36" font-family="'Outfit', sans-serif" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">Global</text>
+  
+  <rect x="10" y="60" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="84" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Huella Lipídica y Control de Riesgo Residual en Pacientes con Síndrome Coronario Agudo. Colesterol y riesgo residual en prevención secundaria">
+        Cerda et al., 2026
+      </text>
+    
+        <circle cx="264" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="79" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="83.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="98" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="122" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Fibrinólise num Hospital Distrital: Desempenho dos Dois Primeiros Anos">
+        Pastor et al., 2019
+      </text>
+    
+        <circle cx="264" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="117" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="121.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="136" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="160" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Clinical Utility of Lipoprotein(a) and LPA Genetic Risk Score in Risk Prediction of Incident Atherosclerotic Cardiovascular Disease.">
+        Trinder et al., 2021
+      </text>
+    
+        <circle cx="264" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="155" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="159.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="174" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="198" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Demographics of lipoprotein(a) and stroke: The UK biobank.">
+        Kao et al., 2025
+      </text>
+    
+        <circle cx="264" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="193" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="197.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="212" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="236" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Use of Coronary Artery Calcium Scoring in Individuals With Elevated Lipoprotein(a)">
+        Bhatia et al., 2026
+      </text>
+    
+        <circle cx="264" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="231" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="235.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="250" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="274" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a) in Youth and Prediction of Major Cardiovascular Outcomes in Adulthood">
+        Raitakari et al., 2023
+      </text>
+    
+        <circle cx="264" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="269" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="273.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="288" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="312" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoproteína(a) elevada y su asociación con el infarto de miocardio de aparición temprana y la carga coronaria">
+        Namitokov et al., 2025
+      </text>
+    
+        <circle cx="264" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="307" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="311.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="326" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="350" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Impact of Elevated Lipoprotein A on Major Adverse Cardiovascular Events and the Role of Traditional Risk Factors in Patients Undergoing Percutaneous Coronary Intervention">
+        Zemawal et al., 2025
+      </text>
+    
+        <circle cx="264" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="345" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="349.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="364" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="388" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Prognostic Value of Serum Lipoprotein(a) Levels in Japanese Patients With ST-Segment Elevation Myocardial Infarction.">
+        Nishiyama et al., 2026
+      </text>
+    
+        <circle cx="264" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="383" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="387.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="402" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="426" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Prognostic Impact of Lipoprotein(a) on Cardiovascular Outcomes Across Coronary Complexity in Patients Undergoing Coronary Revascularization">
+        Kim et al., 2026
+      </text>
+    
+        <circle cx="264" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="421" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="425.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="440" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="464" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Outcomes after coronary angiography in individuals with elevated lipoprotein(a).">
+        Supriami et al., 2025
+      </text>
+    
+        <circle cx="264" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="459" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="463.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="478" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="502" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a) is associated with large artery atherosclerosis stroke aetiology and stroke recurrence among patients below the age of 60 years: results from the BIOSIGNAL study.">
+        Arnold et al., 2021
+      </text>
+    
+        <circle cx="264" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="497" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="501.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="516" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="540" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a): A Residual Cardiovascular Risk Factor in Statin-Treated Stroke Survivors">
+        Chemello et al., 2023
+      </text>
+    
+        <circle cx="264" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="535" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="539.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="554" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="578" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Evaluación del riesgo cardiovascular mediante un nuevo score en una cohorte con hipercolesterolemia familiar del noroccidente de Colombia">
+        Hernández et al., 2025
+      </text>
+    
+        <circle cx="264" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="573" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="577.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="592" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="616" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a), insulin resistance, and cardiovascular outcomes in metabolic dysfunction-associated steatotic liver disease">
+        Dong et al., 2026
+      </text>
+    
+        <circle cx="264" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="611" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="615.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="630" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="654" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Association of Lipoprotein(a) and Interleukin-6 With Cardiovascular Risk">
+        Bhatia et al., 2025
+      </text>
+    
+        <circle cx="264" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="649" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="653.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="668" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="692" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Synergistic effect of lipoprotein(a) and high-sensitivity C-reactive protein on the risk of all-cause and cardiovascular death in patients with acute myocardial infarction: a large prospective cohort study.">
+        Wang et al., 2024
+      </text>
+    
+        <circle cx="264" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="687" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="691.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="706" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="730" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a), Atherosclerotic Plaque Burden, and Long-term Cardiovascular Outcomes in Patients With Coronary Artery Disease.">
+        de et al., 2026
+      </text>
+    
+        <circle cx="264" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="725" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="729.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="744" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="768" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="The Additive Prognostic Value of Lipoprotein(a) for All-cause and Cardiovascular Mortality Across the Traditional Cardiovascular Risk Continuum: Analysis from NHANES III (1988-1994) with Follow-Up to 2019.">
+        Al-Jarshawi et al., 2026
+      </text>
+    
+        <circle cx="264" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="763" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="767.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="782" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="806" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a) and Low-Molecular-Weight Apo(a) Phenotype as Determinants of New Cardiovascular Events in Patients with Premature Coronary Heart Disease">
+        Afanasieva et al., 2023
+      </text>
+    
+        <circle cx="264" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="801" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="805.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="820" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="844" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Lipoprotein(a) levels and risk of adverse events after myocardial infarction in patients with and without diabetes">
+        Silverio et al., 2022
+      </text>
+    
+        <circle cx="264" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="839" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="843.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="858" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="882" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="The PRISMA 2020 statement: an updated guideline for reporting systematic reviews">
+        Page et al., 2021
+      </text>
+    
+        <circle cx="264" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="877" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="881.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="896" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="920" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Correlation between elevated Lp(a) levels and cardiovascular risk in coronary heart disease patients with different homocysteine concentrations">
+        Sun et al., 2026
+      </text>
+    
+        <circle cx="264" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="915" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="919.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="934" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="958" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Prognostic value of lipoprotein(a) for cardiovascular events after lower limb revascularization in diabetic patients with chronic limb-threatening ischemia">
+        Biscetti et al., 2025
+      </text>
+    
+        <circle cx="264" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="953" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="957.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="972" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="996" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="The nonlinear association between lipoprotein(a) and major adverse cardiovascular events in acute coronary syndrome patients with three-vessel disease.">
+        Li et al., 2025
+      </text>
+    
+        <circle cx="264" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="991" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="995.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1010" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="1034" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Elevated Lipoprotein(a) Independently Increases Risk for Short-Term Atherosclerotic Cardiovascular Events in Machine Learning Predictive Models.">
+        Ward et al., 2025
+      </text>
+    
+        <circle cx="264" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1029" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1033.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1048" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="1072" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="The correlation between lipoprotein(a) and major adverse cardiovascular events in patients with acute myocardial infarction combined with heart failure with preserved ejection fraction">
+        Zhang et al., 2025
+      </text>
+    
+        <circle cx="264" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1067" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1071.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1086" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="1110" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Joint Association of Lipoprotein(a) and a Family History of Coronary Artery Disease with the Cardiovascular Outcomes in Patients with Chronic Coronary Syndrome.">
+        Liu et al., 2024
+      </text>
+    
+        <circle cx="264" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1105" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1109.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1124" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="1148" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="Independent Relationship of Lipoprotein(a) and Carotid Atherosclerosis With Long‐Term Risk of Cardiovascular Disease">
+        Qi et al., 2024
+      </text>
+    
+        <circle cx="264" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1143" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1147.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1162" width="548" height="38" fill="#ffffff" rx="4" />
+      <text x="24" y="1186" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="The Impact of Social Determinants of Health and Lifestyle on the Association of Lipoprotein(a) with Myocardial Infarction and Stroke">
+        Brandt et al., 2023
+      </text>
+    
+        <circle cx="264" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1181" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1185.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    <rect x="10" y="1200" width="548" height="38" fill="#f8fafc" rx="4" />
+      <text x="24" y="1224" font-family="'Outfit', sans-serif" font-size="12" font-weight="600" fill="#1e293b" title="A Synergistic Effect of Lp(a) and GRACE Score on Cardiovascular Risk in Acute Coronary Syndrome Patients Undergoing Percutaneous Coronary Intervention: A Cohort Study From China">
+        Hu et al., 2021
+      </text>
+    
+        <circle cx="264" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="264" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="312" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="312" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="360" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="360" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="408" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="408" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+        <circle cx="456" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
+        <text x="456" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+      
+      <circle cx="504" cy="1219" r="14" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+      <text x="504" y="1223.5" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">+</text>
+    
+  
+    <g transform="translate(24, 1258)">
+      <rect x="0" y="0" width="520" height="76" fill="#f1f5f9" rx="8" stroke="#e2e8f0" stroke-width="1" />
+      
+      <text x="16" y="24" font-family="'Outfit', sans-serif" font-size="11" font-weight="700" fill="#334155">Legenda dos Domínios:</text>
+      <text x="16" y="42" font-family="'Outfit', sans-serif" font-size="10" fill="#64748b">D1: Randomização/Seleção · D2: Desvios de Intervenção · D3: Dados Faltantes (Atrito) · D4: Mensuração do Desfecho · D5: Relato Seletivo</text>
+      
+      <g transform="translate(16, 56)">
+        <circle cx="6" cy="0" r="6" fill="#10b981" />
+        <text x="16" y="3.5" font-family="'Outfit', sans-serif" font-size="10" font-weight="600" fill="#0f172a">Baixo Risco (+)</text>
+
+        <circle cx="130" cy="0" r="6" fill="#f59e0b" />
+        <text x="140" y="3.5" font-family="'Outfit', sans-serif" font-size="10" font-weight="600" fill="#0f172a">Alguma Preocupação (?)</text>
+
+        <circle cx="280" cy="0" r="6" fill="#ef4444" />
+        <text x="290" y="3.5" font-family="'Outfit', sans-serif" font-size="10" font-weight="600" fill="#0f172a">Alto Risco (–)</text>
+
+        <text x="430" y="3.5" font-family="'Outfit', sans-serif" font-size="9.5" fill="#64748b" font-style="italic">Estimativa algorítmica preliminar segundo Cochrane RoB 2 / ROBINS-I</text>
+      </g>
+    </g>
+  
+</svg>

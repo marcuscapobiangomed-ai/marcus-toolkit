@@ -15,6 +15,7 @@ const PADRAO = {
   janela_navegador: 'visivel',
   contato_email: '',
   gemini_api_key: '',
+  gemini_creditos_usd: null,
   modelo_gemini: 'gemini-3.8-flash',
   deepseek_api_key: '',
   modelo_deepseek: 'deepseek-v4.1-flash',
@@ -45,6 +46,8 @@ const PADRAO = {
     fechamento: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash', 'google/gemma-4-31b-it:free'],
     limitacoes: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash'],
     tabelas: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash'],
+    orientador: ['deepseek/deepseek-v4.1-flash', 'google/gemini-3.8-flash'],
+    revisao_orientador: ['google/gemini-3.8-flash', 'deepseek/deepseek-v4.1-flash', 'anthropic/claude-sonnet-5'],
   },
 };
 

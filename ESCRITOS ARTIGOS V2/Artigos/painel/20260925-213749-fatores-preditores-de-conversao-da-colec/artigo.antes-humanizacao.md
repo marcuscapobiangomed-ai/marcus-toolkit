@@ -4,7 +4,7 @@
 
 *Factores asociados a la conversión de la colecistectomía laparoscópica a cirugía abierta: revisión integrativa de la literatura*
 
-**Autores:** [Nome do Aluno]¹, [Nome do Orientador]²
+
 
 *¹Discente do Curso de Medicina. ²Docente Orientador.*
 

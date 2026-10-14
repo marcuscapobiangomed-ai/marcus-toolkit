@@ -1,0 +1,2912 @@
+{
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/.claude-plugin/plugin.json": {
+    "mtime": 1789677263.050747,
+    "seen": 1791334092.506659,
+    "ast_hash": "4fc6b090924ced71da22f879fac1f42a",
+    "semantic_hash": "4fc6b090924ced71da22f879fac1f42a"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/compose-check.sh": {
+    "mtime": 1789677263.0544827,
+    "seen": 1791334092.506659,
+    "ast_hash": "913d3ec352bef48fe24a41a758c94a2a",
+    "semantic_hash": "913d3ec352bef48fe24a41a758c94a2a"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/install-skill.sh": {
+    "mtime": 1789677263.055792,
+    "seen": 1791334092.50666,
+    "ast_hash": "6a5f7a89f7b50d6d0d6a43137dce349d",
+    "semantic_hash": "6a5f7a89f7b50d6d0d6a43137dce349d"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/install_skill.py": {
+    "mtime": 1789677263.0559256,
+    "seen": 1791334092.50666,
+    "ast_hash": "15428518cbda314f0f176ca0b2c269a7",
+    "semantic_hash": "15428518cbda314f0f176ca0b2c269a7"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/audit_dir.py": {
+    "mtime": 1789677263.0577934,
+    "seen": 1791334092.5066612,
+    "ast_hash": "4909d1a03a9d604fed89bff246ce328d",
+    "semantic_hash": "4909d1a03a9d604fed89bff246ce328d"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/audit_lib.py": {
+    "mtime": 1789677263.0579464,
+    "seen": 1791334092.5066612,
+    "ast_hash": "29d71058110bf286109e532805e924b2",
+    "semantic_hash": "29d71058110bf286109e532805e924b2"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/audit_website.py": {
+    "mtime": 1789677263.0581203,
+    "seen": 1791334092.506662,
+    "ast_hash": "9880d5795e6230710ebd5fa23b2fa4e8",
+    "semantic_hash": "9880d5795e6230710ebd5fa23b2fa4e8"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/clean_ctrlregen.py": {
+    "mtime": 1789677263.058264,
+    "seen": 1791334092.506662,
+    "ast_hash": "263d56e9f0ee77f3279ac6e4a7fd5980",
+    "semantic_hash": "263d56e9f0ee77f3279ac6e4a7fd5980"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/clean_file.py": {
+    "mtime": 1789677263.0584033,
+    "seen": 1791334092.5066628,
+    "ast_hash": "e38881e9b954f95186a45a0c87b49845",
+    "semantic_hash": "e38881e9b954f95186a45a0c87b49845"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/clean_image.py": {
+    "mtime": 1789677263.0585492,
+    "seen": 1791334092.506664,
+    "ast_hash": "01d79e6495d29a1c3e8cc92c3be03e6f",
+    "semantic_hash": "01d79e6495d29a1c3e8cc92c3be03e6f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/clean_text.py": {
+    "mtime": 1789677263.0586872,
+    "seen": 1791334092.506664,
+    "ast_hash": "728e36c69c899666c63a58f482dec986",
+    "semantic_hash": "728e36c69c899666c63a58f482dec986"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/common.py": {
+    "mtime": 1789677263.0588667,
+    "seen": 1791334092.506665,
+    "ast_hash": "4dd834a107901448d7f75e7600b3e8ff",
+    "semantic_hash": "4dd834a107901448d7f75e7600b3e8ff"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/container_meta.py": {
+    "mtime": 1789679707.57975,
+    "seen": 1791334092.506665,
+    "ast_hash": "c231fa3d358b18f3ce0dce78016be6af",
+    "semantic_hash": "c231fa3d358b18f3ce0dce78016be6af"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/detect_text_watermark.py": {
+    "mtime": 1789677263.059335,
+    "seen": 1791334092.506666,
+    "ast_hash": "c80cbc31380edc0e02e3e173d0add660",
+    "semantic_hash": "c80cbc31380edc0e02e3e173d0add660"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/format_dispatch.py": {
+    "mtime": 1789677263.0594635,
+    "seen": 1791334092.506667,
+    "ast_hash": "7dc4df664335121966b191b4e29b3d9a",
+    "semantic_hash": "7dc4df664335121966b191b4e29b3d9a"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/image_meta.py": {
+    "mtime": 1789677263.0596988,
+    "seen": 1791334092.506667,
+    "ast_hash": "e37612eb43640e5bdddcf06028ea226f",
+    "semantic_hash": "e37612eb43640e5bdddcf06028ea226f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/inspect_file.py": {
+    "mtime": 1789677263.0598853,
+    "seen": 1791334092.506668,
+    "ast_hash": "14d3ca2510c21cf216162a1c4dbcfb69",
+    "semantic_hash": "14d3ca2510c21cf216162a1c4dbcfb69"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/inspect_image.py": {
+    "mtime": 1789677263.0600424,
+    "seen": 1791334092.506669,
+    "ast_hash": "cce8bc7009a38e12eb9b5920629f9494",
+    "semantic_hash": "cce8bc7009a38e12eb9b5920629f9494"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/inspect_text.py": {
+    "mtime": 1789677263.0601933,
+    "seen": 1791334092.506669,
+    "ast_hash": "2e85f26df99856c9fcbb3726b059f50e",
+    "semantic_hash": "2e85f26df99856c9fcbb3726b059f50e"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/markdiffusion_harness.py": {
+    "mtime": 1789677263.0603786,
+    "seen": 1791334092.50667,
+    "ast_hash": "b655e67ae307a0bc46b694edb7e13666",
+    "semantic_hash": "b655e67ae307a0bc46b694edb7e13666"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/rewrite_text.py": {
+    "mtime": 1789677263.0615065,
+    "seen": 1791334092.50667,
+    "ast_hash": "6f7c6e8ebb0f4f612f9e5084ee08a273",
+    "semantic_hash": "6f7c6e8ebb0f4f612f9e5084ee08a273"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/score_stylometry.py": {
+    "mtime": 1789677263.0617335,
+    "seen": 1791334092.5066712,
+    "ast_hash": "79457d8f89b081c869b97c55477ab68b",
+    "semantic_hash": "79457d8f89b081c869b97c55477ab68b"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/score_synthid.py": {
+    "mtime": 1789677263.0623195,
+    "seen": 1791334092.5066721,
+    "ast_hash": "f92fbe4d39b6019593c4968bb52059dc",
+    "semantic_hash": "f92fbe4d39b6019593c4968bb52059dc"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/server.py": {
+    "mtime": 1789677263.062519,
+    "seen": 1791334092.5066721,
+    "ast_hash": "ea52c8a4fc237cb91709b27d745cc1e3",
+    "semantic_hash": "ea52c8a4fc237cb91709b27d745cc1e3"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_ctrlregen.ps1": {
+    "mtime": 1789677263.0627027,
+    "seen": 1791334092.5066729,
+    "ast_hash": "53c7f7ad41e51e835ded07b0b2f35a92",
+    "semantic_hash": "53c7f7ad41e51e835ded07b0b2f35a92"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_ctrlregen.sh": {
+    "mtime": 1789677263.0628963,
+    "seen": 1791334092.5066729,
+    "ast_hash": "f4ce2b36157b1ad05c925b15ecf4f3a9",
+    "semantic_hash": "f4ce2b36157b1ad05c925b15ecf4f3a9"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_markdiffusion.sh": {
+    "mtime": 1789677263.0630167,
+    "seen": 1791334092.5066738,
+    "ast_hash": "bd384147d5568e1df522a48bed959fcb",
+    "semantic_hash": "bd384147d5568e1df522a48bed959fcb"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_markllm.sh": {
+    "mtime": 1789677263.0631416,
+    "seen": 1791334092.506675,
+    "ast_hash": "ec1e7343a816cc5ccddfc762bfecd426",
+    "semantic_hash": "ec1e7343a816cc5ccddfc762bfecd426"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_synthid.ps1": {
+    "mtime": 1789677263.063302,
+    "seen": 1791334092.506675,
+    "ast_hash": "98050296b6b568af8797b0ae0601ca7f",
+    "semantic_hash": "98050296b6b568af8797b0ae0601ca7f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/setup_synthid.sh": {
+    "mtime": 1789677263.063448,
+    "seen": 1791334092.506676,
+    "ast_hash": "0b12420c9643d51b792e32ceb525cdb0",
+    "semantic_hash": "0b12420c9643d51b792e32ceb525cdb0"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/text_unicode.py": {
+    "mtime": 1789677263.06365,
+    "seen": 1791334092.506676,
+    "ast_hash": "7979f8a10eddd1ccc13f352ca823efd4",
+    "semantic_hash": "7979f8a10eddd1ccc13f352ca823efd4"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/scripts/clean_text.py": {
+    "mtime": 1789677263.06457,
+    "seen": 1791334092.506677,
+    "ast_hash": "6cdfeeacf70d7fd3908faa1d08381a8d",
+    "semantic_hash": "6cdfeeacf70d7fd3908faa1d08381a8d"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/scripts/common.py": {
+    "mtime": 1789677263.0647645,
+    "seen": 1791334092.506678,
+    "ast_hash": "59e51c5518307cbc1cbfef086842a4f2",
+    "semantic_hash": "59e51c5518307cbc1cbfef086842a4f2"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/scripts/inspect_text.py": {
+    "mtime": 1789677263.0648856,
+    "seen": 1791334092.506678,
+    "ast_hash": "b0cc79bb9878c46929e15240a917c7b7",
+    "semantic_hash": "b0cc79bb9878c46929e15240a917c7b7"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/scripts/text_unicode.py": {
+    "mtime": 1789677263.0650625,
+    "seen": 1791334092.506679,
+    "ast_hash": "ec8fc55a439dae5ac06b41b344825eeb",
+    "semantic_hash": "ec8fc55a439dae5ac06b41b344825eeb"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/clean_file.py": {
+    "mtime": 1789678291.8528578,
+    "seen": 1791334092.50668,
+    "ast_hash": "e38881e9b954f95186a45a0c87b49845",
+    "semantic_hash": "e38881e9b954f95186a45a0c87b49845"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/clean_image.py": {
+    "mtime": 1789678291.8569636,
+    "seen": 1791334092.50668,
+    "ast_hash": "01d79e6495d29a1c3e8cc92c3be03e6f",
+    "semantic_hash": "01d79e6495d29a1c3e8cc92c3be03e6f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/clean_text.py": {
+    "mtime": 1789678291.848394,
+    "seen": 1791334092.5066812,
+    "ast_hash": "728e36c69c899666c63a58f482dec986",
+    "semantic_hash": "728e36c69c899666c63a58f482dec986"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/common.py": {
+    "mtime": 1789678291.8324459,
+    "seen": 1791334092.5066822,
+    "ast_hash": "4dd834a107901448d7f75e7600b3e8ff",
+    "semantic_hash": "4dd834a107901448d7f75e7600b3e8ff"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/container_meta.py": {
+    "mtime": 1789678291.843674,
+    "seen": 1791334092.5066822,
+    "ast_hash": "c231fa3d358b18f3ce0dce78016be6af",
+    "semantic_hash": "c231fa3d358b18f3ce0dce78016be6af"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/format_dispatch.py": {
+    "mtime": 1789678291.8380308,
+    "seen": 1791334092.5066829,
+    "ast_hash": "7dc4df664335121966b191b4e29b3d9a",
+    "semantic_hash": "7dc4df664335121966b191b4e29b3d9a"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/image_meta.py": {
+    "mtime": 1789678291.8410425,
+    "seen": 1791334092.5066838,
+    "ast_hash": "e37612eb43640e5bdddcf06028ea226f",
+    "semantic_hash": "e37612eb43640e5bdddcf06028ea226f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/inspect_file.py": {
+    "mtime": 1789678291.8505435,
+    "seen": 1791334092.5066838,
+    "ast_hash": "14d3ca2510c21cf216162a1c4dbcfb69",
+    "semantic_hash": "14d3ca2510c21cf216162a1c4dbcfb69"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/inspect_image.py": {
+    "mtime": 1789678291.8549914,
+    "seen": 1791334092.506685,
+    "ast_hash": "cce8bc7009a38e12eb9b5920629f9494",
+    "semantic_hash": "cce8bc7009a38e12eb9b5920629f9494"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/inspect_text.py": {
+    "mtime": 1789678291.8460257,
+    "seen": 1791334092.506685,
+    "ast_hash": "2e85f26df99856c9fcbb3726b059f50e",
+    "semantic_hash": "2e85f26df99856c9fcbb3726b059f50e"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/rewrite_text.py": {
+    "mtime": 1789678291.8589058,
+    "seen": 1791334092.506686,
+    "ast_hash": "6f7c6e8ebb0f4f612f9e5084ee08a273",
+    "semantic_hash": "6f7c6e8ebb0f4f612f9e5084ee08a273"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/score_stylometry.py": {
+    "mtime": 1789678291.8610287,
+    "seen": 1791334092.506687,
+    "ast_hash": "79457d8f89b081c869b97c55477ab68b",
+    "semantic_hash": "79457d8f89b081c869b97c55477ab68b"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/scripts/text_unicode.py": {
+    "mtime": 1789678291.8353214,
+    "seen": 1791334092.506687,
+    "ast_hash": "7979f8a10eddd1ccc13f352ca823efd4",
+    "semantic_hash": "7979f8a10eddd1ccc13f352ca823efd4"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_audit.py": {
+    "mtime": 1789677263.0696812,
+    "seen": 1791334092.506688,
+    "ast_hash": "535a2cc5ef86e80631e652cad0cabb23",
+    "semantic_hash": "535a2cc5ef86e80631e652cad0cabb23"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_avif_heic.py": {
+    "mtime": 1789677263.069816,
+    "seen": 1791334092.506688,
+    "ast_hash": "6983ba09220c691c31c56ed30a718fa5",
+    "semantic_hash": "6983ba09220c691c31c56ed30a718fa5"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_binary_guard.py": {
+    "mtime": 1789677263.0701065,
+    "seen": 1791334092.506689,
+    "ast_hash": "4138ce842f200a23c9b8d5256d5ff2ac",
+    "semantic_hash": "4138ce842f200a23c9b8d5256d5ff2ac"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_c2patool_report.py": {
+    "mtime": 1789677263.0702446,
+    "seen": 1791334092.50669,
+    "ast_hash": "c38e77290598919860f00b01be50528e",
+    "semantic_hash": "c38e77290598919860f00b01be50528e"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_clean_image.py": {
+    "mtime": 1789677263.0703726,
+    "seen": 1791334092.50669,
+    "ast_hash": "97c2d1e1cfcb426623ecd499025ea7aa",
+    "semantic_hash": "97c2d1e1cfcb426623ecd499025ea7aa"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_clean_text.py": {
+    "mtime": 1789677263.0705483,
+    "seen": 1791334092.506691,
+    "ast_hash": "cac94b96ca8683c1498d903a75ab05af",
+    "semantic_hash": "cac94b96ca8683c1498d903a75ab05af"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_container_meta.py": {
+    "mtime": 1789679683.4239,
+    "seen": 1791334092.506691,
+    "ast_hash": "3960d367a98e7958a3cb998945d9389e",
+    "semantic_hash": "3960d367a98e7958a3cb998945d9389e"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_ctrlregen_clean.py": {
+    "mtime": 1789677263.0708952,
+    "seen": 1791334092.5066922,
+    "ast_hash": "8b70b7100caad3170d7332ac56983c8d",
+    "semantic_hash": "8b70b7100caad3170d7332ac56983c8d"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_http_server.py": {
+    "mtime": 1789677263.0710318,
+    "seen": 1791334092.5066931,
+    "ast_hash": "31647f8d07aeeb00c2e0bf5f332b592d",
+    "semantic_hash": "31647f8d07aeeb00c2e0bf5f332b592d"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_inspect_file.py": {
+    "mtime": 1789677263.0711458,
+    "seen": 1791334092.5066931,
+    "ast_hash": "cb3df9292ca7b0c72eeb4fa98c95e0bf",
+    "semantic_hash": "cb3df9292ca7b0c72eeb4fa98c95e0bf"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_json_exit_code.py": {
+    "mtime": 1789677263.071256,
+    "seen": 1791334092.5066938,
+    "ast_hash": "978f7c5783d6c5c8644e4cc1116cfe08",
+    "semantic_hash": "978f7c5783d6c5c8644e4cc1116cfe08"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_lightweight_skill.py": {
+    "mtime": 1789677263.0713773,
+    "seen": 1791334092.5066938,
+    "ast_hash": "532f04642622fc798ce8550704b5c016",
+    "semantic_hash": "532f04642622fc798ce8550704b5c016"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_markdiffusion_harness.py": {
+    "mtime": 1789677263.0715165,
+    "seen": 1791334092.5066948,
+    "ast_hash": "140fad2f24767ac72967a6ee9d57f663",
+    "semantic_hash": "140fad2f24767ac72967a6ee9d57f663"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_markllm_detect.py": {
+    "mtime": 1789677263.0716677,
+    "seen": 1791334092.5066948,
+    "ast_hash": "a505969b3f86cd737e1d1b5e302988a5",
+    "semantic_hash": "a505969b3f86cd737e1d1b5e302988a5"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_pdf_structural_rewrite.py": {
+    "mtime": 1789677263.0717952,
+    "seen": 1791334092.506696,
+    "ast_hash": "9263140d2318634cb6890698933dc47f",
+    "semantic_hash": "9263140d2318634cb6890698933dc47f"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_rewrite_text.py": {
+    "mtime": 1789677263.0719616,
+    "seen": 1791334092.506697,
+    "ast_hash": "09a65ad55c704c8f132058eebf035143",
+    "semantic_hash": "09a65ad55c704c8f132058eebf035143"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_security_hardening.py": {
+    "mtime": 1789677263.0720975,
+    "seen": 1791334092.506697,
+    "ast_hash": "29ca51360c1b6849443f55fe0a69a7bc",
+    "semantic_hash": "29ca51360c1b6849443f55fe0a69a7bc"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_skill_bundle.py": {
+    "mtime": 1789677263.0722167,
+    "seen": 1791334092.506698,
+    "ast_hash": "ae45efce9fc25189b1bdf1983d7a44e0",
+    "semantic_hash": "ae45efce9fc25189b1bdf1983d7a44e0"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_stylometry.py": {
+    "mtime": 1789677263.0723433,
+    "seen": 1791334092.506699,
+    "ast_hash": "84d5207390dfd1750c0ba03635eb345e",
+    "semantic_hash": "84d5207390dfd1750c0ba03635eb345e"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_synthid_score.py": {
+    "mtime": 1789677263.0724633,
+    "seen": 1791334092.506699,
+    "ast_hash": "dfdd6355dc1e0f502ed3e3de0e684360",
+    "semantic_hash": "dfdd6355dc1e0f502ed3e3de0e684360"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_synthid_stdout_purity.py": {
+    "mtime": 1789677263.0725737,
+    "seen": 1791334092.5067,
+    "ast_hash": "1d6c07b97365e462a7531dcbaef1509a",
+    "semantic_hash": "1d6c07b97365e462a7531dcbaef1509a"
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/test_vendor_coverage.py": {
+    "mtime": 1789677263.0726948,
+    "seen": 1791334092.506701,
+    "ast_hash": "50643e719b77d9e8927c7cd7de5b073a",
+    "semantic_hash": "50643e719b77d9e8927c7cd7de5b073a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/.cache-bibliografia.json": {
+    "mtime": 1791494407.3229167,
+    "seen": 1791494485.8284538,
+    "ast_hash": "9060cb2632806a71b4dbb06a61582838",
+    "semantic_hash": "9060cb2632806a71b4dbb06a61582838"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/cli.mjs": {
+    "mtime": 1791991748.6019003,
+    "seen": 1791992201.72659,
+    "ast_hash": "fe80ad6be27ad363f7e7fd5d3ad75a95",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/adaptador_revista.mjs": {
+    "mtime": 1790949633.9789789,
+    "seen": 1791334092.5067031,
+    "ast_hash": "122ece1115aeef265cb670a685ea0110",
+    "semantic_hash": "122ece1115aeef265cb670a685ea0110"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/ancorador_discussao.mjs": {
+    "mtime": 1791995769.7193744,
+    "seen": 1791995875.609301,
+    "ast_hash": "c902d22ab211e5f85193e420e8134db9",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/auditoria.mjs": {
+    "mtime": 1790764284.3165698,
+    "seen": 1791334092.5067039,
+    "ast_hash": "44bfefed667223d792f1b705bba76e86",
+    "semantic_hash": "44bfefed667223d792f1b705bba76e86"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/auditoria_estatistica.mjs": {
+    "mtime": 1791995520.6822584,
+    "seen": 1791995875.609333,
+    "ast_hash": "ec42f9c4f1abb81d848dca5bf40eee32",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/base_origem.mjs": {
+    "mtime": 1791124378.8574946,
+    "seen": 1791334092.5067048,
+    "ast_hash": "83e1d6d9c1e70339599785cdfb5215ed",
+    "semantic_hash": "83e1d6d9c1e70339599785cdfb5215ed"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/checklist.mjs": {
+    "mtime": 1790717568.6126635,
+    "seen": 1791334092.506706,
+    "ast_hash": "fd9b1e73404b16a09465cead25a927cb",
+    "semantic_hash": "fd9b1e73404b16a09465cead25a927cb"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/compliance_etico.mjs": {
+    "mtime": 1791367781.093953,
+    "seen": 1791548654.188359,
+    "ast_hash": "1515a8032a9bdb240e2531b8eb9bf1ee",
+    "semantic_hash": "1515a8032a9bdb240e2531b8eb9bf1ee"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/config.mjs": {
+    "mtime": 1791144095.8575737,
+    "seen": 1791334092.506707,
+    "ast_hash": "d9b0e5a069fecc4743837b7bd1ac7b04",
+    "semantic_hash": "d9b0e5a069fecc4743837b7bd1ac7b04"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/conformidade.mjs": {
+    "mtime": 1791542840.7674618,
+    "seen": 1791548654.188406,
+    "ast_hash": "5417dff5a0fde367bd47c247d2936878",
+    "semantic_hash": "5417dff5a0fde367bd47c247d2936878"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/docx.mjs": {
+    "mtime": 1791334635.5857034,
+    "seen": 1791548654.188407,
+    "ast_hash": "2b08a40fa3dce70bb15142c4a80cda52",
+    "semantic_hash": "2b08a40fa3dce70bb15142c4a80cda52"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/exportar.mjs": {
+    "mtime": 1791491897.112879,
+    "seen": 1791548654.188407,
+    "ast_hash": "8aa8e657d9eb7b519f8412ecc36a681a",
+    "semantic_hash": "8aa8e657d9eb7b519f8412ecc36a681a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fidelidade.mjs": {
+    "mtime": 1791991118.5604923,
+    "seen": 1791992201.726891,
+    "ast_hash": "36db0a7d707003afb9383a2c7f078b3c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fontes/bvs.mjs": {
+    "mtime": 1790419988.065516,
+    "seen": 1791334092.50671,
+    "ast_hash": "417e4a2ed8c56b992a37b2ec92c2549b",
+    "semantic_hash": "417e4a2ed8c56b992a37b2ec92c2549b"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fontes/crossref.mjs": {
+    "mtime": 1790372764.3097985,
+    "seen": 1791334092.506711,
+    "ast_hash": "6b4adf02212d03170b407d7c27986a33",
+    "semantic_hash": "6b4adf02212d03170b407d7c27986a33"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fontes/nlm.mjs": {
+    "mtime": 1790420895.6791208,
+    "seen": 1791334092.506711,
+    "ast_hash": "6bfcb4ff395967c7f2c7a4407492ae08",
+    "semantic_hash": "6bfcb4ff395967c7f2c7a4407492ae08"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fontes/pubmed.mjs": {
+    "mtime": 1790420665.7217116,
+    "seen": 1791334092.506712,
+    "ast_hash": "b4b88de3b5f5f06f5ca6544837a21d85",
+    "semantic_hash": "b4b88de3b5f5f06f5ca6544837a21d85"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/fontes/scielo.mjs": {
+    "mtime": 1790688452.0258932,
+    "seen": 1791334092.506712,
+    "ast_hash": "4b7e1cf4a9b57d7f3c85de8b17e43ee4",
+    "semantic_hash": "4b7e1cf4a9b57d7f3c85de8b17e43ee4"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/forense.mjs": {
+    "mtime": 1791367212.9809663,
+    "seen": 1791548654.1886568,
+    "ast_hash": "8e7f4947a14242c3d519ecf8f7f8f562",
+    "semantic_hash": "8e7f4947a14242c3d519ecf8f7f8f562"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/grade_sof.mjs": {
+    "mtime": 1791492924.267972,
+    "seen": 1791548654.1886568,
+    "ast_hash": "06c7655d08373da02b0afd113414b036",
+    "semantic_hash": "06c7655d08373da02b0afd113414b036"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/graphical_abstract.mjs": {
+    "mtime": 1791548785.4289253,
+    "seen": 1791548824.7681699,
+    "ast_hash": "2ae477a369369a6e41819a9afc062b6b",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/hidratacao_bibliografica.mjs": {
+    "mtime": 1791124338.2879305,
+    "seen": 1791334092.5067148,
+    "ast_hash": "4bfbca7b4210139ef93516f6715c2a83",
+    "semantic_hash": "4bfbca7b4210139ef93516f6715c2a83"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/importador.mjs": {
+    "mtime": 1791995654.0485833,
+    "seen": 1791995875.6098418,
+    "ast_hash": "8cc096dedb49bb14130b34f5d0f6369f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/llm.mjs": {
+    "mtime": 1791509431.2652264,
+    "seen": 1791548654.1887062,
+    "ast_hash": "b0b23067a60a69a5c20b93495a3afbc2",
+    "semantic_hash": "b0b23067a60a69a5c20b93495a3afbc2"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/markdown.mjs": {
+    "mtime": 1791487108.2300217,
+    "seen": 1791548654.188707,
+    "ast_hash": "803ce16b0fafbe9226a8fd5d709e306b",
+    "semantic_hash": "803ce16b0fafbe9226a8fd5d709e306b"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/navegador.mjs": {
+    "mtime": 1790372860.8220448,
+    "seen": 1791334092.506718,
+    "ast_hash": "1289062a4667d12b90db6faed7bca9fd",
+    "semantic_hash": "1289062a4667d12b90db6faed7bca9fd"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/orientador.mjs": {
+    "mtime": 1791995628.4057326,
+    "seen": 1791995875.609925,
+    "ast_hash": "687439ddefa2e63fcaa75da5838cefc6",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/pais_afiliacao.mjs": {
+    "mtime": 1791124329.596289,
+    "seen": 1791334092.5067189,
+    "ast_hash": "0a3e96cfc4a75e62b3b9d0776d003f6f",
+    "semantic_hash": "0a3e96cfc4a75e62b3b9d0776d003f6f"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/pipeline.mjs": {
+    "mtime": 1791509453.6326199,
+    "seen": 1791548654.188801,
+    "ast_hash": "d2fee6bc7bda588ff24d678d4fbeebe0",
+    "semantic_hash": "d2fee6bc7bda588ff24d678d4fbeebe0"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/prisma.mjs": {
+    "mtime": 1791548809.1036007,
+    "seen": 1791548824.7684312,
+    "ast_hash": "031cc710d35e027923b627807b19078c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/prompts.mjs": {
+    "mtime": 1791991829.7241044,
+    "seen": 1791992201.727318,
+    "ast_hash": "3847161a101f4156583331445614ed87",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/referencias.mjs": {
+    "mtime": 1790419988.065335,
+    "seen": 1791334092.506721,
+    "ast_hash": "23b39e2841ca0e9c08f02334681edc0d",
+    "semantic_hash": "23b39e2841ca0e9c08f02334681edc0d"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/relatorio_executivo.mjs": {
+    "mtime": 1791121093.6997335,
+    "seen": 1791334092.506722,
+    "ast_hash": "9d23db711649b9a3652192e2a29f1eb9",
+    "semantic_hash": "9d23db711649b9a3652192e2a29f1eb9"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/render_raio_x.mjs": {
+    "mtime": 1791995798.461056,
+    "seen": 1791995875.610116,
+    "ast_hash": "7ef4d1b3b0483e255d2f791920dadb91",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/risco_vies.mjs": {
+    "mtime": 1791492874.5171878,
+    "seen": 1791548654.1889431,
+    "ast_hash": "23fc138485405dc3c2cc9c63617a8927",
+    "semantic_hash": "23fc138485405dc3c2cc9c63617a8927"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/sanador_raio_x.mjs": {
+    "mtime": 1791995336.621076,
+    "seen": 1791995875.610143,
+    "ast_hash": "0300e2cdd4a926502cd73dcca7808668",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/secoes.mjs": {
+    "mtime": 1791397935.7231853,
+    "seen": 1791548654.1889448,
+    "ast_hash": "d551a4940fce71603856037ca7213915",
+    "semantic_hash": "d551a4940fce71603856037ca7213915"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/submissao.mjs": {
+    "mtime": 1791499134.0533955,
+    "seen": 1791548654.1889448,
+    "ast_hash": "a7f163613334ec823302ff144d592677",
+    "semantic_hash": "a7f163613334ec823302ff144d592677"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/texto.mjs": {
+    "mtime": 1790420895.6789308,
+    "seen": 1791334092.506725,
+    "ast_hash": "3f88caedca1ba3617ebf6debf54be0a0",
+    "semantic_hash": "3f88caedca1ba3617ebf6debf54be0a0"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/turnitin_shield.mjs": {
+    "mtime": 1791492939.3905241,
+    "seen": 1791548654.188993,
+    "ast_hash": "41e3bd310b4ff3f17c76004a7b2ef5ea",
+    "semantic_hash": "41e3bd310b4ff3f17c76004a7b2ef5ea"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/validacao_bibliografica.mjs": {
+    "mtime": 1790888759.060236,
+    "seen": 1791334092.5067258,
+    "ast_hash": "a55cfa43f9d86e8f3c7d960e8029a49a",
+    "semantic_hash": "a55cfa43f9d86e8f3c7d960e8029a49a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/zip.mjs": {
+    "mtime": 1790418552.2832596,
+    "seen": 1791334092.506727,
+    "ast_hash": "27566e0e6b9c4243220263a7c3f99bc7",
+    "semantic_hash": "27566e0e6b9c4243220263a7c3f99bc7"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/package.json": {
+    "mtime": 1790891097.448373,
+    "seen": 1791334092.506728,
+    "ast_hash": "3f43f0c4cee174fd698f6fe176304f9d",
+    "semantic_hash": "3f43f0c4cee174fd698f6fe176304f9d"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/app.js": {
+    "mtime": 1791991700.833149,
+    "seen": 1791992201.727604,
+    "ast_hash": "2174d14351148bf55d02445224a3b4b6",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/jarvis.js": {
+    "mtime": 1791995256.3691492,
+    "seen": 1791995875.6103659,
+    "ast_hash": "399a186adc31c3fd91f3643756cd70e4",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/agente_qa_visual.mjs": {
+    "mtime": 1790950351.7275543,
+    "seen": 1791334092.506731,
+    "ast_hash": "8164a928f75b6ad2a99859e1e7095fb8",
+    "semantic_hash": "8164a928f75b6ad2a99859e1e7095fb8"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/aplicar-conferencia.mjs": {
+    "mtime": 1790377844.9777367,
+    "seen": 1791334092.506732,
+    "ast_hash": "fbb876f81ed9578e3bc72fb29d925eb9",
+    "semantic_hash": "fbb876f81ed9578e3bc72fb29d925eb9"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/capturar_finops_e_orientador.mjs": {
+    "mtime": 1791145195.6334784,
+    "seen": 1791334092.506732,
+    "ast_hash": "d0635fc3f03c4d122826b73c0f098612",
+    "semantic_hash": "d0635fc3f03c4d122826b73c0f098612"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/capturar_telas_artigo_importado.mjs": {
+    "mtime": 1791126051.181863,
+    "seen": 1791334092.506733,
+    "ast_hash": "e9f9e1ab1a3fd1638bf698cc40d3d892",
+    "semantic_hash": "e9f9e1ab1a3fd1638bf698cc40d3d892"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/e2e_importar_artigo_real.mjs": {
+    "mtime": 1791125806.1153424,
+    "seen": 1791334092.5067341,
+    "ast_hash": "e0bc7fa463226fc9f95e1166f02b97ce",
+    "semantic_hash": "e0bc7fa463226fc9f95e1166f02b97ce"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/extrair_documento.py": {
+    "mtime": 1791499186.5653446,
+    "seen": 1791548654.189429,
+    "ast_hash": "70254fc1b48f068228a372e5409b2a6c",
+    "semantic_hash": "70254fc1b48f068228a372e5409b2a6c"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/migrar_registros_importados.mjs": {
+    "mtime": 1791124416.0290556,
+    "seen": 1791334092.506735,
+    "ast_hash": "24849bc12833be3667ed1137a9af2ee9",
+    "semantic_hash": "24849bc12833be3667ed1137a9af2ee9"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/pacote-auditoria.mjs": {
+    "mtime": 1790377749.8874657,
+    "seen": 1791334092.506735,
+    "ast_hash": "4341cf89f14976ffb93a6ba92fafba1b",
+    "semantic_hash": "4341cf89f14976ffb93a6ba92fafba1b"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/previa-docx.mjs": {
+    "mtime": 1790421097.0851135,
+    "seen": 1791334092.506736,
+    "ast_hash": "b055f74a14a9cc49979a675ec02197b3",
+    "semantic_hash": "b055f74a14a9cc49979a675ec02197b3"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/test_e2e_tabs_reader_laudo.mjs": {
+    "mtime": 1791041534.7976294,
+    "seen": 1791334092.506736,
+    "ast_hash": "a608bdb777c5c1ccac1f1a5b83992533",
+    "semantic_hash": "a608bdb777c5c1ccac1f1a5b83992533"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/test_jarvis_e2e.mjs": {
+    "mtime": 1791494157.354679,
+    "seen": 1791548654.189628,
+    "ast_hash": "19c740cf08952a18675011c34051e6b7",
+    "semantic_hash": "19c740cf08952a18675011c34051e6b7"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/test_pdf_reader_and_stepper.mjs": {
+    "mtime": 1791034519.1899977,
+    "seen": 1791334092.506738,
+    "ast_hash": "9e4a82eb2616ea0877397a0f65ff577a",
+    "semantic_hash": "9e4a82eb2616ea0877397a0f65ff577a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/test_sanar_laudo_action.mjs": {
+    "mtime": 1791041843.3705072,
+    "seen": 1791334092.506738,
+    "ast_hash": "6ca2ede128b56d13e99d3a1c2f929ae4",
+    "semantic_hash": "6ca2ede128b56d13e99d3a1c2f929ae4"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/test_utilidade_ui.mjs": {
+    "mtime": 1791493644.6970356,
+    "seen": 1791548654.1897228,
+    "ast_hash": "24761575b2a7072b57b93ac87f181991",
+    "semantic_hash": "24761575b2a7072b57b93ac87f181991"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_api_importacao.mjs": {
+    "mtime": 1790791067.3244143,
+    "seen": 1791334092.506739,
+    "ast_hash": "a91b3c0a8d38f4e562cf85ac501a0204",
+    "semantic_hash": "a91b3c0a8d38f4e562cf85ac501a0204"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_confianca_extracao.mjs": {
+    "mtime": 1791123427.6184893,
+    "seen": 1791334092.5067399,
+    "ast_hash": "918fd79c355472f66229a22538f3db41",
+    "semantic_hash": "918fd79c355472f66229a22538f3db41"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_consistencia_resumo.mjs": {
+    "mtime": 1791123583.8129535,
+    "seen": 1791334092.5067399,
+    "ast_hash": "8815ba7b0fc4d2622046a955bae5836e",
+    "semantic_hash": "8815ba7b0fc4d2622046a955bae5836e"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_credit_e_diretrizes.mjs": {
+    "mtime": 1791123896.4445539,
+    "seen": 1791334092.506741,
+    "ast_hash": "b0f8af3a3a366c70e13014a1e51f71f5",
+    "semantic_hash": "b0f8af3a3a366c70e13014a1e51f71f5"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_fidelidade.mjs": {
+    "mtime": 1791123124.903593,
+    "seen": 1791334092.506741,
+    "ast_hash": "d224bc0b2eb673ce27ee382b9ab26f9c",
+    "semantic_hash": "d224bc0b2eb673ce27ee382b9ab26f9c"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_importacao_direta_artigo.mjs": {
+    "mtime": 1791125994.9483986,
+    "seen": 1791334092.506742,
+    "ast_hash": "7e5ec0fa9975658939852182a9292402",
+    "semantic_hash": "7e5ec0fa9975658939852182a9292402"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_orientador_puxar_sugestoes.mjs": {
+    "mtime": 1791143052.6813068,
+    "seen": 1791334092.506743,
+    "ast_hash": "3b5c40df43f12e376019540368d9f68e",
+    "semantic_hash": "3b5c40df43f12e376019540368d9f68e"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_pais_e_migracao.mjs": {
+    "mtime": 1791124400.8609097,
+    "seen": 1791334092.506743,
+    "ast_hash": "01abe8e4aac41160088242d81f3d8a76",
+    "semantic_hash": "01abe8e4aac41160088242d81f3d8a76"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_reestruturacao_completa.mjs": {
+    "mtime": 1790890220.0240357,
+    "seen": 1791334092.5067441,
+    "ast_hash": "a6cf4edf3f50bf3da9424e233903ffdd",
+    "semantic_hash": "a6cf4edf3f50bf3da9424e233903ffdd"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_suite_completa.mjs": {
+    "mtime": 1791368124.81022,
+    "seen": 1791548654.19013,
+    "ast_hash": "2b6174286c73309550159cd34b51f6b8",
+    "semantic_hash": "2b6174286c73309550159cd34b51f6b8"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_transparencia_epistemica.mjs": {
+    "mtime": 1791124144.1528232,
+    "seen": 1791334092.506745,
+    "ast_hash": "5c33b8bc9f75dd5c7d767da17e2df9c3",
+    "semantic_hash": "5c33b8bc9f75dd5c7d767da17e2df9c3"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_triagem_fontes.mjs": {
+    "mtime": 1791504177.0093982,
+    "seen": 1791548654.190176,
+    "ast_hash": "4970546ff08872a88036228bf4d00d0a",
+    "semantic_hash": "4970546ff08872a88036228bf4d00d0a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_banner_sanacao.mjs": {
+    "mtime": 1791148128.904486,
+    "seen": 1791334092.506746,
+    "ast_hash": "f4ba3da682885d2be54c9d9b1f89c900",
+    "semantic_hash": "f4ba3da682885d2be54c9d9b1f89c900"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_cards_zoom_auditoria.mjs": {
+    "mtime": 1791146559.0495303,
+    "seen": 1791334092.5067468,
+    "ast_hash": "9ba377eff17ec0ef73606b9f6274e5fa",
+    "semantic_hash": "9ba377eff17ec0ef73606b9f6274e5fa"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_docx_atualizado.mjs": {
+    "mtime": 1791170008.9545143,
+    "seen": 1791334092.5067468,
+    "ast_hash": "043efd64482ee750888873f02927c553",
+    "semantic_hash": "043efd64482ee750888873f02927c553"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_modal_raio_x.mjs": {
+    "mtime": 1791147211.5330403,
+    "seen": 1791334092.506748,
+    "ast_hash": "bf41e4e2107c053369e1fe3bf2087ef2",
+    "semantic_hash": "bf41e4e2107c053369e1fe3bf2087ef2"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_modo_texto_tipografia.mjs": {
+    "mtime": 1791325160.6717277,
+    "seen": 1791334092.506749,
+    "ast_hash": "15054f948189f6c3b2b2b1bce5dfd54a",
+    "semantic_hash": "15054f948189f6c3b2b2b1bce5dfd54a"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_orientador_integrado.mjs": {
+    "mtime": 1791163392.6991928,
+    "seen": 1791334092.506749,
+    "ast_hash": "48e462a5d38915590d98b1c04ef3a785",
+    "semantic_hash": "48e462a5d38915590d98b1c04ef3a785"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_sanacao_modal.mjs": {
+    "mtime": 1791147244.5114744,
+    "seen": 1791334092.5067499,
+    "ast_hash": "9965b2eae5cebdff8f15d1a68029b021",
+    "semantic_hash": "9965b2eae5cebdff8f15d1a68029b021"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_score_100.mjs": {
+    "mtime": 1791148897.8587503,
+    "seen": 1791334092.506751,
+    "ast_hash": "40c05688448e6b994910f215f1e22be3",
+    "semantic_hash": "40c05688448e6b994910f215f1e22be3"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_solucao_completa.mjs": {
+    "mtime": 1791171839.7316804,
+    "seen": 1791334092.506751,
+    "ast_hash": "dece9f3004cb379ef8cd7134bfb3ea9c",
+    "semantic_hash": "dece9f3004cb379ef8cd7134bfb3ea9c"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/validar_ui_docx_jarvis.mjs": {
+    "mtime": 1791170024.304683,
+    "seen": 1791334092.506752,
+    "ast_hash": "bb21dea5890e49784512ff0ed66f4d85",
+    "semantic_hash": "bb21dea5890e49784512ff0ed66f4d85"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/verificar_sem_mocks.mjs": {
+    "mtime": 1791494042.0311415,
+    "seen": 1791548654.190638,
+    "ast_hash": "40cef506fc64541136150024cf8fbb38",
+    "semantic_hash": "40cef506fc64541136150024cf8fbb38"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/server.mjs": {
+    "mtime": 1791547505.4532645,
+    "seen": 1791548654.190638,
+    "ast_hash": "a650219efd23d86dd78bd0df31a43ca9",
+    "semantic_hash": "a650219efd23d86dd78bd0df31a43ca9"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/scripts/scielo_articlemeta.py": {
+    "mtime": 1790369378.2094839,
+    "seen": 1791334092.5067542,
+    "ast_hash": "482c855e226ff3833ee1ac97202ba0a2",
+    "semantic_hash": "482c855e226ff3833ee1ac97202ba0a2"
+  },
+  "estatisticas_banca.json": {
+    "mtime": 1790706148.3295903,
+    "seen": 1791334092.506755,
+    "ast_hash": "0377308f723fa389758fe2874262a835",
+    "semantic_hash": "0377308f723fa389758fe2874262a835"
+  },
+  "install.sh": {
+    "mtime": 1790441608.5928798,
+    "seen": 1791334092.506755,
+    "ast_hash": "eed1b72941c90c00157c9a54b963e9f9",
+    "semantic_hash": "eed1b72941c90c00157c9a54b963e9f9"
+  },
+  "passagens-aereas/backend/app.py": {
+    "mtime": 1791121758.3139224,
+    "seen": 1791334092.506756,
+    "ast_hash": "3e03dc5f410be65287f7cf0d70912e45",
+    "semantic_hash": "3e03dc5f410be65287f7cf0d70912e45"
+  },
+  "passagens-aereas/backend/db.py": {
+    "mtime": 1791044553.449028,
+    "seen": 1791334092.506757,
+    "ast_hash": "e7c2d8c3b9c37fff196722d03961480a",
+    "semantic_hash": "e7c2d8c3b9c37fff196722d03961480a"
+  },
+  "passagens-aereas/backend/deep_links.py": {
+    "mtime": 1791045385.9080637,
+    "seen": 1791334092.506757,
+    "ast_hash": "69a9894965a5439d257b66cca9304f7f",
+    "semantic_hash": "69a9894965a5439d257b66cca9304f7f"
+  },
+  "passagens-aereas/backend/flight_monitor.py": {
+    "mtime": 1791121711.9587817,
+    "seen": 1791334092.506758,
+    "ast_hash": "15bb83ebbd761e0352b64b5132b7ab2a",
+    "semantic_hash": "15bb83ebbd761e0352b64b5132b7ab2a"
+  },
+  "passagens-aereas/backend/real_deals_collector.py": {
+    "mtime": 1791121668.9661384,
+    "seen": 1791334092.506759,
+    "ast_hash": "767c21bae925c587996eea3cbab271db",
+    "semantic_hash": "767c21bae925c587996eea3cbab271db"
+  },
+  "passagens-aereas/backend/real_flight_scraper.py": {
+    "mtime": 1791121608.1379874,
+    "seen": 1791334092.506759,
+    "ast_hash": "7bc61a27c25d0ea7f82f6cd8ad5a023e",
+    "semantic_hash": "7bc61a27c25d0ea7f82f6cd8ad5a023e"
+  },
+  "passagens-aereas/backend/routes_catalog.py": {
+    "mtime": 1791044602.6543646,
+    "seen": 1791334092.50676,
+    "ast_hash": "a332d6a9fea97f5279a90ad944020dea",
+    "semantic_hash": "a332d6a9fea97f5279a90ad944020dea"
+  },
+  "passagens-aereas/backend/scrape_google_flights.mjs": {
+    "mtime": 1791121909.5102913,
+    "seen": 1791334092.50676,
+    "ast_hash": "bc28f52ba2baa2c0c6666c207453b859",
+    "semantic_hash": "bc28f52ba2baa2c0c6666c207453b859"
+  },
+  "passagens-aereas/backend/test_playwright_gf.mjs": {
+    "mtime": 1791121392.8640604,
+    "seen": 1791334092.506761,
+    "ast_hash": "4de9be3a0b36d74f77dd2098ad58c318",
+    "semantic_hash": "4de9be3a0b36d74f77dd2098ad58c318"
+  },
+  "passagens-aereas/backend/travel_hacker_engine.py": {
+    "mtime": 1791044653.231059,
+    "seen": 1791334092.506762,
+    "ast_hash": "8dbe8f48dc0d9f0011af25e154d32838",
+    "semantic_hash": "8dbe8f48dc0d9f0011af25e154d32838"
+  },
+  "passagens-aereas/frontend/app.js": {
+    "mtime": 1791121870.8180234,
+    "seen": 1791334092.506762,
+    "ast_hash": "37f4e623670260cb00dab2a89de4379b",
+    "semantic_hash": "37f4e623670260cb00dab2a89de4379b"
+  },
+  "scripts/build_med_study_platform.py": {
+    "mtime": 1790706110.7368455,
+    "seen": 1791334092.506763,
+    "ast_hash": "b12e8800e893b1355387aa61fa5a6fb1",
+    "semantic_hash": "b12e8800e893b1355387aa61fa5a6fb1"
+  },
+  "skills/impeccable/scripts/command-metadata.json": {
+    "mtime": 1789222414.5819588,
+    "seen": 1791334092.506763,
+    "ast_hash": "86266801588636b11e00372754118529",
+    "semantic_hash": "86266801588636b11e00372754118529"
+  },
+  "skills/impeccable/scripts/concept-seed.mjs": {
+    "mtime": 1789222414.5820873,
+    "seen": 1791334092.506764,
+    "ast_hash": "076bf189d733bf37cfe70e8f25ae32ec",
+    "semantic_hash": "076bf189d733bf37cfe70e8f25ae32ec"
+  },
+  "skills/impeccable/scripts/context-signals.mjs": {
+    "mtime": 1789222414.582211,
+    "seen": 1791334092.506764,
+    "ast_hash": "aa7bf1a2823d42a67b984dc716a48c6e",
+    "semantic_hash": "aa7bf1a2823d42a67b984dc716a48c6e"
+  },
+  "skills/impeccable/scripts/context.mjs": {
+    "mtime": 1789222414.5823739,
+    "seen": 1791334092.5067651,
+    "ast_hash": "e4eec5db78ed6a3cc0bc4bd70fabbe61",
+    "semantic_hash": "e4eec5db78ed6a3cc0bc4bd70fabbe61"
+  },
+  "skills/impeccable/scripts/critique-storage.mjs": {
+    "mtime": 1789222414.5824783,
+    "seen": 1791334092.5067651,
+    "ast_hash": "1e04e63603457bb5fc94cb96b02509a5",
+    "semantic_hash": "1e04e63603457bb5fc94cb96b02509a5"
+  },
+  "skills/impeccable/scripts/detect-csp.mjs": {
+    "mtime": 1789222414.5825624,
+    "seen": 1791334092.506766,
+    "ast_hash": "02c5a9a8ad69f87d23af72bf580fd3f4",
+    "semantic_hash": "02c5a9a8ad69f87d23af72bf580fd3f4"
+  },
+  "skills/impeccable/scripts/detect.mjs": {
+    "mtime": 1789222414.5826406,
+    "seen": 1791334092.506767,
+    "ast_hash": "11dbeb9341477d06d1a24c3ad1f37ac9",
+    "semantic_hash": "11dbeb9341477d06d1a24c3ad1f37ac9"
+  },
+  "skills/impeccable/scripts/detector/browser/injected/index.mjs": {
+    "mtime": 1789222414.5829842,
+    "seen": 1791334092.506767,
+    "ast_hash": "3b096d7ed28bd4be0666bbc36f34f31d",
+    "semantic_hash": "3b096d7ed28bd4be0666bbc36f34f31d"
+  },
+  "skills/impeccable/scripts/detector/cli/main.mjs": {
+    "mtime": 1789222414.5831451,
+    "seen": 1791334092.506768,
+    "ast_hash": "176414bf2d2117966fed86393e2e5112",
+    "semantic_hash": "176414bf2d2117966fed86393e2e5112"
+  },
+  "skills/impeccable/scripts/detector/design-system.mjs": {
+    "mtime": 1789222414.5832949,
+    "seen": 1791334092.506769,
+    "ast_hash": "37cdfacda61b7b665901899f9c9679b2",
+    "semantic_hash": "37cdfacda61b7b665901899f9c9679b2"
+  },
+  "skills/impeccable/scripts/detector/detect-antipatterns-browser.js": {
+    "mtime": 1789222414.5840566,
+    "seen": 1791334092.506769,
+    "ast_hash": "b32b85d806c719624f6a3dc45b08ddf5",
+    "semantic_hash": "b32b85d806c719624f6a3dc45b08ddf5"
+  },
+  "skills/impeccable/scripts/detector/detect-antipatterns.mjs": {
+    "mtime": 1789222414.5841794,
+    "seen": 1791334092.50677,
+    "ast_hash": "c461a90987605eceb0b76779340124ec",
+    "semantic_hash": "c461a90987605eceb0b76779340124ec"
+  },
+  "skills/impeccable/scripts/detector/engines/browser/detect-url.mjs": {
+    "mtime": 1789222414.5843816,
+    "seen": 1791334092.50677,
+    "ast_hash": "e626caa30b88cb649f4cc93c936d75f1",
+    "semantic_hash": "e626caa30b88cb649f4cc93c936d75f1"
+  },
+  "skills/impeccable/scripts/detector/engines/regex/detect-text.mjs": {
+    "mtime": 1789222414.5845757,
+    "seen": 1791334092.5067708,
+    "ast_hash": "4269000d18c53769e0fa43d3ee3bd966",
+    "semantic_hash": "4269000d18c53769e0fa43d3ee3bd966"
+  },
+  "skills/impeccable/scripts/detector/engines/static-html/css-cascade.mjs": {
+    "mtime": 1789222414.5847967,
+    "seen": 1791334092.5067708,
+    "ast_hash": "1b90568067bad41c20def8adc90303ea",
+    "semantic_hash": "1b90568067bad41c20def8adc90303ea"
+  },
+  "skills/impeccable/scripts/detector/engines/static-html/detect-html.mjs": {
+    "mtime": 1789222414.5849264,
+    "seen": 1791334092.506772,
+    "ast_hash": "2415df3f5b5f251b6f5e2548ed403434",
+    "semantic_hash": "2415df3f5b5f251b6f5e2548ed403434"
+  },
+  "skills/impeccable/scripts/detector/engines/visual/screenshot-contrast.mjs": {
+    "mtime": 1789222414.585071,
+    "seen": 1791334092.506772,
+    "ast_hash": "6312c6dbc048c4445f50e69f167a297d",
+    "semantic_hash": "6312c6dbc048c4445f50e69f167a297d"
+  },
+  "skills/impeccable/scripts/detector/findings.mjs": {
+    "mtime": 1789222414.5851486,
+    "seen": 1791334092.506773,
+    "ast_hash": "b90605bc2e93b95e4b73c0ef89cd1b57",
+    "semantic_hash": "b90605bc2e93b95e4b73c0ef89cd1b57"
+  },
+  "skills/impeccable/scripts/detector/node/file-system.mjs": {
+    "mtime": 1789222414.5852895,
+    "seen": 1791334092.506774,
+    "ast_hash": "406a7f74de31be962d589e320c5bd2bd",
+    "semantic_hash": "406a7f74de31be962d589e320c5bd2bd"
+  },
+  "skills/impeccable/scripts/detector/profile/profiler.mjs": {
+    "mtime": 1789222414.5854158,
+    "seen": 1791334092.506774,
+    "ast_hash": "88c5d2027852842be578edf349a0f9c8",
+    "semantic_hash": "88c5d2027852842be578edf349a0f9c8"
+  },
+  "skills/impeccable/scripts/detector/registry/antipatterns.mjs": {
+    "mtime": 1789222414.5855684,
+    "seen": 1791334092.5067751,
+    "ast_hash": "ebed42aacb6ca0772ec7217e8eee4049",
+    "semantic_hash": "ebed42aacb6ca0772ec7217e8eee4049"
+  },
+  "skills/impeccable/scripts/detector/rules/checks.mjs": {
+    "mtime": 1789222414.5860705,
+    "seen": 1791334092.5067751,
+    "ast_hash": "3242c0e726fbdf0cff8d5321852be38b",
+    "semantic_hash": "3242c0e726fbdf0cff8d5321852be38b"
+  },
+  "skills/impeccable/scripts/detector/shared/color.mjs": {
+    "mtime": 1789222414.5862641,
+    "seen": 1791334092.506776,
+    "ast_hash": "0e3879a535a37047c80b084f492036bd",
+    "semantic_hash": "0e3879a535a37047c80b084f492036bd"
+  },
+  "skills/impeccable/scripts/detector/shared/constants.mjs": {
+    "mtime": 1789222414.5863667,
+    "seen": 1791334092.506777,
+    "ast_hash": "0920d754084e96e7590afda3c0ac1a2c",
+    "semantic_hash": "0920d754084e96e7590afda3c0ac1a2c"
+  },
+  "skills/impeccable/scripts/detector/shared/fonts.mjs": {
+    "mtime": 1789222414.5864425,
+    "seen": 1791334092.506777,
+    "ast_hash": "5f06c512cc5316fb3f4f7116e33c7765",
+    "semantic_hash": "5f06c512cc5316fb3f4f7116e33c7765"
+  },
+  "skills/impeccable/scripts/detector/shared/inline-ignores.mjs": {
+    "mtime": 1789222414.5865338,
+    "seen": 1791334092.506778,
+    "ast_hash": "6e3e7e639661186078ea93a849f57c64",
+    "semantic_hash": "6e3e7e639661186078ea93a849f57c64"
+  },
+  "skills/impeccable/scripts/detector/shared/page.mjs": {
+    "mtime": 1789222414.5866091,
+    "seen": 1791334092.506779,
+    "ast_hash": "ab3a243b690b4f70c4ef639cdf970d82",
+    "semantic_hash": "ab3a243b690b4f70c4ef639cdf970d82"
+  },
+  "skills/impeccable/scripts/doctor.mjs": {
+    "mtime": 1789222414.5867078,
+    "seen": 1791334092.506779,
+    "ast_hash": "f9e135d037e3e1f3a920d09f1d6a356e",
+    "semantic_hash": "f9e135d037e3e1f3a920d09f1d6a356e"
+  },
+  "skills/impeccable/scripts/embed-prompt.mjs": {
+    "mtime": 1789222414.5868104,
+    "seen": 1791334092.50678,
+    "ast_hash": "98a19b0249dbe0b6dea7511998bbb3eb",
+    "semantic_hash": "98a19b0249dbe0b6dea7511998bbb3eb"
+  },
+  "skills/impeccable/scripts/generate-image.mjs": {
+    "mtime": 1789222414.5869095,
+    "seen": 1791334092.5067809,
+    "ast_hash": "2545d0fdfd62106891f0b08fe7c0d65b",
+    "semantic_hash": "2545d0fdfd62106891f0b08fe7c0d65b"
+  },
+  "skills/impeccable/scripts/hook-admin.mjs": {
+    "mtime": 1789222414.5870304,
+    "seen": 1791334092.5067809,
+    "ast_hash": "a76a9dddc91ac25469e83ddb6cfc0298",
+    "semantic_hash": "a76a9dddc91ac25469e83ddb6cfc0298"
+  },
+  "skills/impeccable/scripts/hook-before-edit.mjs": {
+    "mtime": 1789222414.5871437,
+    "seen": 1791334092.506782,
+    "ast_hash": "d06004b5096f55d757f4b8e7a7f879dc",
+    "semantic_hash": "d06004b5096f55d757f4b8e7a7f879dc"
+  },
+  "skills/impeccable/scripts/hook-lib.mjs": {
+    "mtime": 1789222414.5873892,
+    "seen": 1791334092.506782,
+    "ast_hash": "8edee8cf27491f159fcb6ecba7835328",
+    "semantic_hash": "8edee8cf27491f159fcb6ecba7835328"
+  },
+  "skills/impeccable/scripts/hook.mjs": {
+    "mtime": 1789222414.5874798,
+    "seen": 1791334092.506783,
+    "ast_hash": "49f048932653bf32ed0b8fc4610924cf",
+    "semantic_hash": "49f048932653bf32ed0b8fc4610924cf"
+  },
+  "skills/impeccable/scripts/lib/artifact-schema.mjs": {
+    "mtime": 1789222414.587639,
+    "seen": 1791334092.506784,
+    "ast_hash": "0ba59a6644319eb1f742f9a5c4d82e0d",
+    "semantic_hash": "0ba59a6644319eb1f742f9a5c4d82e0d"
+  },
+  "skills/impeccable/scripts/lib/composition-catalog.mjs": {
+    "mtime": 1789222414.5877397,
+    "seen": 1791334092.506784,
+    "ast_hash": "2d2bad55657d9b362d1b19e4a94851c2",
+    "semantic_hash": "2d2bad55657d9b362d1b19e4a94851c2"
+  },
+  "skills/impeccable/scripts/lib/concept-catalog.mjs": {
+    "mtime": 1789222414.5878518,
+    "seen": 1791334092.506785,
+    "ast_hash": "bd98e936ba15b93f5849a8a0821e50d4",
+    "semantic_hash": "bd98e936ba15b93f5849a8a0821e50d4"
+  },
+  "skills/impeccable/scripts/lib/design-parser.mjs": {
+    "mtime": 1789222414.5879755,
+    "seen": 1791334092.506785,
+    "ast_hash": "d117cdd6506fd709bd70dcc9e0a0f353",
+    "semantic_hash": "d117cdd6506fd709bd70dcc9e0a0f353"
+  },
+  "skills/impeccable/scripts/lib/impeccable-config.mjs": {
+    "mtime": 1789222414.588253,
+    "seen": 1791334092.506786,
+    "ast_hash": "e7c3a6b483669ea9d32e17288651a065",
+    "semantic_hash": "e7c3a6b483669ea9d32e17288651a065"
+  },
+  "skills/impeccable/scripts/lib/impeccable-paths.mjs": {
+    "mtime": 1789222414.5883574,
+    "seen": 1791334092.506786,
+    "ast_hash": "293c42942d0bb3de172bf8322cc41280",
+    "semantic_hash": "293c42942d0bb3de172bf8322cc41280"
+  },
+  "skills/impeccable/scripts/lib/is-generated.mjs": {
+    "mtime": 1789222414.5884416,
+    "seen": 1791334092.506787,
+    "ast_hash": "75d5d52d2bf56045091d01337e48ecfd",
+    "semantic_hash": "75d5d52d2bf56045091d01337e48ecfd"
+  },
+  "skills/impeccable/scripts/lib/live-path-globs.mjs": {
+    "mtime": 1789222414.5885258,
+    "seen": 1791334092.506788,
+    "ast_hash": "6ba011b436330df50607c58a7322ed99",
+    "semantic_hash": "6ba011b436330df50607c58a7322ed99"
+  },
+  "skills/impeccable/scripts/lib/open-system-browser.mjs": {
+    "mtime": 1789222414.5886154,
+    "seen": 1791334092.506788,
+    "ast_hash": "717c4771ca33eb62aa0aa14f0d99267a",
+    "semantic_hash": "717c4771ca33eb62aa0aa14f0d99267a"
+  },
+  "skills/impeccable/scripts/lib/provider.mjs": {
+    "mtime": 1789222414.5887008,
+    "seen": 1791334092.5067892,
+    "ast_hash": "75465ff9e9c3a091317e2d78a6991083",
+    "semantic_hash": "75465ff9e9c3a091317e2d78a6991083"
+  },
+  "skills/impeccable/scripts/lib/roll-selection.mjs": {
+    "mtime": 1789222414.5888195,
+    "seen": 1791334092.50679,
+    "ast_hash": "ba0bd7ce84f190414659c7e17a98c4e1",
+    "semantic_hash": "ba0bd7ce84f190414659c7e17a98c4e1"
+  },
+  "skills/impeccable/scripts/lib/staleness-deep.mjs": {
+    "mtime": 1789222414.5889585,
+    "seen": 1791334092.50679,
+    "ast_hash": "cb6f28f3c3d123347fb344bf5205bd60",
+    "semantic_hash": "cb6f28f3c3d123347fb344bf5205bd60"
+  },
+  "skills/impeccable/scripts/lib/staleness-notice.mjs": {
+    "mtime": 1789222414.589064,
+    "seen": 1791334092.5067909,
+    "ast_hash": "7ed2e280a62c23321c06f9c65ef80dc2",
+    "semantic_hash": "7ed2e280a62c23321c06f9c65ef80dc2"
+  },
+  "skills/impeccable/scripts/lib/staleness.mjs": {
+    "mtime": 1789222414.5891895,
+    "seen": 1791334092.5067909,
+    "ast_hash": "44be72e8454f1597b78c34b24db76732",
+    "semantic_hash": "44be72e8454f1597b78c34b24db76732"
+  },
+  "skills/impeccable/scripts/lib/surface-briefs.mjs": {
+    "mtime": 1789222414.5892942,
+    "seen": 1791334092.5067918,
+    "ast_hash": "cfc699924224d7169f20d8664404e314",
+    "semantic_hash": "cfc699924224d7169f20d8664404e314"
+  },
+  "skills/impeccable/scripts/lib/target-args.mjs": {
+    "mtime": 1789222414.5893786,
+    "seen": 1791334092.5067918,
+    "ast_hash": "442e04a03b6ba43330a859a537a956b2",
+    "semantic_hash": "442e04a03b6ba43330a859a537a956b2"
+  },
+  "skills/impeccable/scripts/lib/target-slug.mjs": {
+    "mtime": 1789222414.5894682,
+    "seen": 1791334092.506793,
+    "ast_hash": "505068be5e3a4eac97b29e44f8eef611",
+    "semantic_hash": "505068be5e3a4eac97b29e44f8eef611"
+  },
+  "skills/impeccable/scripts/lib/template-extensions.mjs": {
+    "mtime": 1789222414.5895689,
+    "seen": 1791334092.506794,
+    "ast_hash": "bc11a020a962f77681a365694adc5df5",
+    "semantic_hash": "bc11a020a962f77681a365694adc5df5"
+  },
+  "skills/impeccable/scripts/live-accept.mjs": {
+    "mtime": 1789222414.5897038,
+    "seen": 1791334092.506794,
+    "ast_hash": "9c64d92467c56849ebe44df47a43bbd4",
+    "semantic_hash": "9c64d92467c56849ebe44df47a43bbd4"
+  },
+  "skills/impeccable/scripts/live-browser-dom.js": {
+    "mtime": 1789222414.5898259,
+    "seen": 1791334092.506795,
+    "ast_hash": "b96db5b10874366237a40305c5dc72a1",
+    "semantic_hash": "b96db5b10874366237a40305c5dc72a1"
+  },
+  "skills/impeccable/scripts/live-browser-ignores.js": {
+    "mtime": 1789222414.5899317,
+    "seen": 1791334092.5067961,
+    "ast_hash": "dd05503f92e1cf9b3feedbb19070f59e",
+    "semantic_hash": "dd05503f92e1cf9b3feedbb19070f59e"
+  },
+  "skills/impeccable/scripts/live-browser-session.js": {
+    "mtime": 1789222414.590056,
+    "seen": 1791334092.5067961,
+    "ast_hash": "5dec3dae6158050d69762fb79facaf48",
+    "semantic_hash": "5dec3dae6158050d69762fb79facaf48"
+  },
+  "skills/impeccable/scripts/live-browser.js": {
+    "mtime": 1789222414.5909457,
+    "seen": 1791334092.506797,
+    "ast_hash": "392720747d62e7ef5fead8cf47a91a77",
+    "semantic_hash": "392720747d62e7ef5fead8cf47a91a77"
+  },
+  "skills/impeccable/scripts/live-commit-manual-edits.mjs": {
+    "mtime": 1789222414.5911548,
+    "seen": 1791334092.506797,
+    "ast_hash": "39e59aef726ed12b8e78220f6d956bbe",
+    "semantic_hash": "39e59aef726ed12b8e78220f6d956bbe"
+  },
+  "skills/impeccable/scripts/live-complete.mjs": {
+    "mtime": 1789222414.5912967,
+    "seen": 1791334092.506798,
+    "ast_hash": "6246b42faf5f1f966550c9b2167c66a7",
+    "semantic_hash": "6246b42faf5f1f966550c9b2167c66a7"
+  },
+  "skills/impeccable/scripts/live-copy-edit-agent.mjs": {
+    "mtime": 1789222414.591437,
+    "seen": 1791334092.5067992,
+    "ast_hash": "1e4bc3e627a26029bf18258b708f6692",
+    "semantic_hash": "1e4bc3e627a26029bf18258b708f6692"
+  },
+  "skills/impeccable/scripts/live-discard-manual-edits.mjs": {
+    "mtime": 1789222414.592117,
+    "seen": 1791334092.5067992,
+    "ast_hash": "bbd49a16f77178fc8e778759653dd4c5",
+    "semantic_hash": "bbd49a16f77178fc8e778759653dd4c5"
+  },
+  "skills/impeccable/scripts/live-inject.mjs": {
+    "mtime": 1789222414.5922534,
+    "seen": 1791334092.5068002,
+    "ast_hash": "42eff73c809b02667ca124f16f42bd86",
+    "semantic_hash": "42eff73c809b02667ca124f16f42bd86"
+  },
+  "skills/impeccable/scripts/live-insert.mjs": {
+    "mtime": 1789222414.592382,
+    "seen": 1791334092.506801,
+    "ast_hash": "b4cd69efe2020c85877b5b5b38e3f30b",
+    "semantic_hash": "b4cd69efe2020c85877b5b5b38e3f30b"
+  },
+  "skills/impeccable/scripts/live-manual-edit-evidence.mjs": {
+    "mtime": 1789222414.592494,
+    "seen": 1791334092.506801,
+    "ast_hash": "2279d4132eac2ee253829e333e313c6a",
+    "semantic_hash": "2279d4132eac2ee253829e333e313c6a"
+  },
+  "skills/impeccable/scripts/live-poll.mjs": {
+    "mtime": 1789222414.5926106,
+    "seen": 1791334092.5068018,
+    "ast_hash": "2be460a523aabbe31a7b98bb9579ab45",
+    "semantic_hash": "2be460a523aabbe31a7b98bb9579ab45"
+  },
+  "skills/impeccable/scripts/live-resume.mjs": {
+    "mtime": 1789222414.5926998,
+    "seen": 1791334092.5068018,
+    "ast_hash": "ea1f0127ec7fcc8a1f108c31cb4797f9",
+    "semantic_hash": "ea1f0127ec7fcc8a1f108c31cb4797f9"
+  },
+  "skills/impeccable/scripts/live-server.mjs": {
+    "mtime": 1789222414.592874,
+    "seen": 1791334092.506803,
+    "ast_hash": "87262b8d81de820b17190de939e94bd8",
+    "semantic_hash": "87262b8d81de820b17190de939e94bd8"
+  },
+  "skills/impeccable/scripts/live-status.mjs": {
+    "mtime": 1789222414.592971,
+    "seen": 1791334092.506804,
+    "ast_hash": "bcf7b5cf7e8a7ec0e8776595be37b5e7",
+    "semantic_hash": "bcf7b5cf7e8a7ec0e8776595be37b5e7"
+  },
+  "skills/impeccable/scripts/live-target.mjs": {
+    "mtime": 1789222414.5930593,
+    "seen": 1791334092.506805,
+    "ast_hash": "7a25beda7cdc4c5a6eb2a7f135ec50fd",
+    "semantic_hash": "7a25beda7cdc4c5a6eb2a7f135ec50fd"
+  },
+  "skills/impeccable/scripts/live-wrap.mjs": {
+    "mtime": 1789222414.59319,
+    "seen": 1791334092.506805,
+    "ast_hash": "94ae6977e51e295d24b6b3c9cf8466cb",
+    "semantic_hash": "94ae6977e51e295d24b6b3c9cf8466cb"
+  },
+  "skills/impeccable/scripts/live.mjs": {
+    "mtime": 1789222414.5933127,
+    "seen": 1791334092.5068061,
+    "ast_hash": "413b4dbc8d94edfc110b7cb7644d3fdb",
+    "semantic_hash": "413b4dbc8d94edfc110b7cb7644d3fdb"
+  },
+  "skills/impeccable/scripts/live/accept-css.mjs": {
+    "mtime": 1789222414.593481,
+    "seen": 1791334092.506807,
+    "ast_hash": "efeaeeed9a42c9fc37673b8ab64328c6",
+    "semantic_hash": "efeaeeed9a42c9fc37673b8ab64328c6"
+  },
+  "skills/impeccable/scripts/live/accept-verify.mjs": {
+    "mtime": 1789222414.593586,
+    "seen": 1791334092.506807,
+    "ast_hash": "ebe18c2a8c13ef4e249d64553dbe02c4",
+    "semantic_hash": "ebe18c2a8c13ef4e249d64553dbe02c4"
+  },
+  "skills/impeccable/scripts/live/browser-script-parts.mjs": {
+    "mtime": 1789222414.5936663,
+    "seen": 1791334092.506808,
+    "ast_hash": "6be4c377c24c704fbf1f2ffd72641b2f",
+    "semantic_hash": "6be4c377c24c704fbf1f2ffd72641b2f"
+  },
+  "skills/impeccable/scripts/live/completion.mjs": {
+    "mtime": 1789222414.5937424,
+    "seen": 1791334092.506808,
+    "ast_hash": "8f22aa2c6e51f33aa445658462ff4bfb",
+    "semantic_hash": "8f22aa2c6e51f33aa445658462ff4bfb"
+  },
+  "skills/impeccable/scripts/live/event-validation.mjs": {
+    "mtime": 1789222414.593827,
+    "seen": 1791334092.506809,
+    "ast_hash": "2f21d11205a6d3df47181c68673b7b79",
+    "semantic_hash": "2f21d11205a6d3df47181c68673b7b79"
+  },
+  "skills/impeccable/scripts/live/frameworks/astro.mjs": {
+    "mtime": 1789222414.5939512,
+    "seen": 1791334092.5068102,
+    "ast_hash": "a653b6154999b2ae0d7862ca84c7694c",
+    "semantic_hash": "a653b6154999b2ae0d7862ca84c7694c"
+  },
+  "skills/impeccable/scripts/live/frameworks/detect-utils.mjs": {
+    "mtime": 1789222414.5940251,
+    "seen": 1791334092.5068102,
+    "ast_hash": "47f463a20dab50f0eb32c5fa960a62b2",
+    "semantic_hash": "47f463a20dab50f0eb32c5fa960a62b2"
+  },
+  "skills/impeccable/scripts/live/frameworks/index.mjs": {
+    "mtime": 1789222414.5941103,
+    "seen": 1791334092.506811,
+    "ast_hash": "de225d7e3a49cca7e9670a18c658b198",
+    "semantic_hash": "de225d7e3a49cca7e9670a18c658b198"
+  },
+  "skills/impeccable/scripts/live/frameworks/journal.mjs": {
+    "mtime": 1789222414.594194,
+    "seen": 1791334092.5068119,
+    "ast_hash": "5d56933db7b02ff211cfc2e96fc256cc",
+    "semantic_hash": "5d56933db7b02ff211cfc2e96fc256cc"
+  },
+  "skills/impeccable/scripts/live/frameworks/nextjs.mjs": {
+    "mtime": 1789222414.5942743,
+    "seen": 1791334092.5068119,
+    "ast_hash": "50f09c81e65d36ceaa1f7c32906332a3",
+    "semantic_hash": "50f09c81e65d36ceaa1f7c32906332a3"
+  },
+  "skills/impeccable/scripts/live/frameworks/nuxt.mjs": {
+    "mtime": 1789222414.5943599,
+    "seen": 1791334092.5068128,
+    "ast_hash": "d934b76a7674870ecd6e31df0187fea9",
+    "semantic_hash": "d934b76a7674870ecd6e31df0187fea9"
+  },
+  "skills/impeccable/scripts/live/frameworks/script-src.mjs": {
+    "mtime": 1789222414.5944319,
+    "seen": 1791334092.5068128,
+    "ast_hash": "f33803e736cddc2e6e775dda04eb9a09",
+    "semantic_hash": "f33803e736cddc2e6e775dda04eb9a09"
+  },
+  "skills/impeccable/scripts/live/frameworks/static-html.mjs": {
+    "mtime": 1789222414.5944993,
+    "seen": 1791334092.506814,
+    "ast_hash": "14237b5b54b7d10808f443007e607cfa",
+    "semantic_hash": "14237b5b54b7d10808f443007e607cfa"
+  },
+  "skills/impeccable/scripts/live/frameworks/sveltekit.mjs": {
+    "mtime": 1789222414.5945733,
+    "seen": 1791334092.506815,
+    "ast_hash": "e081819582e43bbece47a75558853636",
+    "semantic_hash": "e081819582e43bbece47a75558853636"
+  },
+  "skills/impeccable/scripts/live/frameworks/tag-strategy.mjs": {
+    "mtime": 1789222414.594662,
+    "seen": 1791334092.506815,
+    "ast_hash": "4fd13d488fa69ed28f9b4665682f3f4f",
+    "semantic_hash": "4fd13d488fa69ed28f9b4665682f3f4f"
+  },
+  "skills/impeccable/scripts/live/frameworks/tanstack-start.mjs": {
+    "mtime": 1789222414.5947347,
+    "seen": 1791334092.506816,
+    "ast_hash": "f6d6572bb85bf026d3629e54d9b8072e",
+    "semantic_hash": "f6d6572bb85bf026d3629e54d9b8072e"
+  },
+  "skills/impeccable/scripts/live/frameworks/vite-generic.mjs": {
+    "mtime": 1789222414.594808,
+    "seen": 1791334092.506817,
+    "ast_hash": "277fcfd789e8d8ea438e4697af88fa8d",
+    "semantic_hash": "277fcfd789e8d8ea438e4697af88fa8d"
+  },
+  "skills/impeccable/scripts/live/generation-preflight.mjs": {
+    "mtime": 1789222414.5949013,
+    "seen": 1791334092.506817,
+    "ast_hash": "17ccaa20b79d36e3b6ae782ab6e937d6",
+    "semantic_hash": "17ccaa20b79d36e3b6ae782ab6e937d6"
+  },
+  "skills/impeccable/scripts/live/insert-ui.mjs": {
+    "mtime": 1789222414.5950012,
+    "seen": 1791334092.506818,
+    "ast_hash": "b6c5c82e14218c0c1b1e66f0851bff3f",
+    "semantic_hash": "b6c5c82e14218c0c1b1e66f0851bff3f"
+  },
+  "skills/impeccable/scripts/live/instructions.mjs": {
+    "mtime": 1789222414.5951037,
+    "seen": 1791334092.506818,
+    "ast_hash": "8f21641dcf8f1a9f86b545f20e69b496",
+    "semantic_hash": "8f21641dcf8f1a9f86b545f20e69b496"
+  },
+  "skills/impeccable/scripts/live/manual-apply.mjs": {
+    "mtime": 1789222414.5952227,
+    "seen": 1791334092.506819,
+    "ast_hash": "043d0a1a7a4a373178648502bbe7da81",
+    "semantic_hash": "043d0a1a7a4a373178648502bbe7da81"
+  },
+  "skills/impeccable/scripts/live/manual-edit-routes.mjs": {
+    "mtime": 1789222414.5953379,
+    "seen": 1791334092.506819,
+    "ast_hash": "5f801f9370461d1faa9ae4cde85a96be",
+    "semantic_hash": "5f801f9370461d1faa9ae4cde85a96be"
+  },
+  "skills/impeccable/scripts/live/manual-edits-buffer.mjs": {
+    "mtime": 1789222414.5954413,
+    "seen": 1791334092.5068202,
+    "ast_hash": "a36834f2a77dd6a81ee324ef4f6f8baa",
+    "semantic_hash": "a36834f2a77dd6a81ee324ef4f6f8baa"
+  },
+  "skills/impeccable/scripts/live/poll-lanes.mjs": {
+    "mtime": 1789222414.5955229,
+    "seen": 1791334092.5068212,
+    "ast_hash": "4005c93bf0be4681a805f70e19a9630d",
+    "semantic_hash": "4005c93bf0be4681a805f70e19a9630d"
+  },
+  "skills/impeccable/scripts/live/project-ignores.mjs": {
+    "mtime": 1789222414.5956113,
+    "seen": 1791334092.5068212,
+    "ast_hash": "5399e3ff80646611813c1603c0cfdfc5",
+    "semantic_hash": "5399e3ff80646611813c1603c0cfdfc5"
+  },
+  "skills/impeccable/scripts/live/roots.mjs": {
+    "mtime": 1789222414.595721,
+    "seen": 1791334092.5068219,
+    "ast_hash": "d4fd98561c64f1023eb222584a352d95",
+    "semantic_hash": "d4fd98561c64f1023eb222584a352d95"
+  },
+  "skills/impeccable/scripts/live/session-store.mjs": {
+    "mtime": 1789222414.5958378,
+    "seen": 1791334092.5068219,
+    "ast_hash": "cf715cc2406360c4b8303290a0a6b2c5",
+    "semantic_hash": "cf715cc2406360c4b8303290a0a6b2c5"
+  },
+  "skills/impeccable/scripts/live/source-lock.mjs": {
+    "mtime": 1789222414.595932,
+    "seen": 1791334092.5068228,
+    "ast_hash": "8683d8ae7634519b542fde4c0fd64cb8",
+    "semantic_hash": "8683d8ae7634519b542fde4c0fd64cb8"
+  },
+  "skills/impeccable/scripts/live/source-search.mjs": {
+    "mtime": 1789222414.596028,
+    "seen": 1791334092.506824,
+    "ast_hash": "2cfa4372f6401aa0c367949c7944e389",
+    "semantic_hash": "2cfa4372f6401aa0c367949c7944e389"
+  },
+  "skills/impeccable/scripts/live/svelte-ast.mjs": {
+    "mtime": 1789222414.5961618,
+    "seen": 1791334092.506824,
+    "ast_hash": "bd0395f425344e1625236efc9b57dd3b",
+    "semantic_hash": "bd0395f425344e1625236efc9b57dd3b"
+  },
+  "skills/impeccable/scripts/live/svelte-component.mjs": {
+    "mtime": 1789222414.5963287,
+    "seen": 1791334092.506825,
+    "ast_hash": "e37404c43f41421a4c5ce52d3da1ae02",
+    "semantic_hash": "e37404c43f41421a4c5ce52d3da1ae02"
+  },
+  "skills/impeccable/scripts/live/sveltekit-adapter.mjs": {
+    "mtime": 1789222414.596438,
+    "seen": 1791334092.506825,
+    "ast_hash": "4a5ff2716ccd576ab800bd024ad32eea",
+    "semantic_hash": "4a5ff2716ccd576ab800bd024ad32eea"
+  },
+  "skills/impeccable/scripts/live/tanstack-adapter.mjs": {
+    "mtime": 1789222414.5965326,
+    "seen": 1791334092.506826,
+    "ast_hash": "1f0a5a838a2d92c5daa6b34f365743c8",
+    "semantic_hash": "1f0a5a838a2d92c5daa6b34f365743c8"
+  },
+  "skills/impeccable/scripts/live/ui-surfaces.mjs": {
+    "mtime": 1789222414.5966208,
+    "seen": 1791334092.506827,
+    "ast_hash": "a360b05f1b9143cfe60fd56785165869",
+    "semantic_hash": "a360b05f1b9143cfe60fd56785165869"
+  },
+  "skills/impeccable/scripts/live/vocabulary.mjs": {
+    "mtime": 1789222414.596724,
+    "seen": 1791334092.506827,
+    "ast_hash": "17d8876244a2d527c254030b3939078a",
+    "semantic_hash": "17d8876244a2d527c254030b3939078a"
+  },
+  "skills/impeccable/scripts/palette.mjs": {
+    "mtime": 1789222414.597038,
+    "seen": 1791334092.506828,
+    "ast_hash": "a1811eb32e4c10858a39b0fa680189de",
+    "semantic_hash": "a1811eb32e4c10858a39b0fa680189de"
+  },
+  "skills/impeccable/scripts/pin.mjs": {
+    "mtime": 1789222414.5971484,
+    "seen": 1791334092.506829,
+    "ast_hash": "5f2cb109c74a880e0ceb3c47cd3c1fd6",
+    "semantic_hash": "5f2cb109c74a880e0ceb3c47cd3c1fd6"
+  },
+  "skills/impeccable/scripts/serve-question.mjs": {
+    "mtime": 1789222414.597416,
+    "seen": 1791334092.506829,
+    "ast_hash": "909c1cadbd322f724328a50face3cb4f",
+    "semantic_hash": "909c1cadbd322f724328a50face3cb4f"
+  },
+  "skills/impeccable/scripts/surface-brief.mjs": {
+    "mtime": 1789222414.597514,
+    "seen": 1791334092.50683,
+    "ast_hash": "bd262c22ff8818ae370bafcf99b2ad8a",
+    "semantic_hash": "bd262c22ff8818ae370bafcf99b2ad8a"
+  },
+  "skills/watch/scripts/build-skill.sh": {
+    "mtime": 1789222414.5989714,
+    "seen": 1791334092.50683,
+    "ast_hash": "9c1c323cd2046c186ded70214b0cdccc",
+    "semantic_hash": "9c1c323cd2046c186ded70214b0cdccc"
+  },
+  "skills/watch/scripts/config.py": {
+    "mtime": 1789222414.5990477,
+    "seen": 1791334092.5068312,
+    "ast_hash": "0a2f0b185f4ca327bbd27255d3d994ff",
+    "semantic_hash": "0a2f0b185f4ca327bbd27255d3d994ff"
+  },
+  "skills/watch/scripts/download.py": {
+    "mtime": 1789222414.5991406,
+    "seen": 1791334092.506832,
+    "ast_hash": "f6562afb96b9ecd60c01e9093e8ff422",
+    "semantic_hash": "f6562afb96b9ecd60c01e9093e8ff422"
+  },
+  "skills/watch/scripts/frames.py": {
+    "mtime": 1789222414.5992534,
+    "seen": 1791334092.506832,
+    "ast_hash": "b3c79b06c0f0c58ad744b96876746b02",
+    "semantic_hash": "b3c79b06c0f0c58ad744b96876746b02"
+  },
+  "skills/watch/scripts/setup.py": {
+    "mtime": 1789222414.599365,
+    "seen": 1791334092.5068328,
+    "ast_hash": "a51372b3c3e2e0d311603c822b513f03",
+    "semantic_hash": "a51372b3c3e2e0d311603c822b513f03"
+  },
+  "skills/watch/scripts/transcribe.py": {
+    "mtime": 1789222414.5994532,
+    "seen": 1791334092.506834,
+    "ast_hash": "af84cface79f0567b483177f5eb14292",
+    "semantic_hash": "af84cface79f0567b483177f5eb14292"
+  },
+  "skills/watch/scripts/watch.py": {
+    "mtime": 1789222414.5995452,
+    "seen": 1791334092.506834,
+    "ast_hash": "97f83a88ae695fcfc6d65db928e7f905",
+    "semantic_hash": "97f83a88ae695fcfc6d65db928e7f905"
+  },
+  "skills/watch/scripts/whisper.py": {
+    "mtime": 1789222414.5998006,
+    "seen": 1791334092.506835,
+    "ast_hash": "fc795b85073091bb412e2b7258165666",
+    "semantic_hash": "fc795b85073091bb412e2b7258165666"
+  },
+  ".agents/rules/deep-problem-solver.md": {
+    "mtime": 1790951473.9829543,
+    "seen": 1791333983.875223,
+    "ast_hash": "2b4e9865d2320ae7e6f4d773677f297e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/deep-problem-solver/SKILL.md": {
+    "mtime": 1790951449.8114755,
+    "seen": 1791333983.875224,
+    "ast_hash": "7d266ca9ece7a7cd1f6f49cdbdfde6e5",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/Artigos/Artigo \u00canio - RBMFC - PRONTO_SUBMISSAO.md": {
+    "mtime": 1789837876.2824109,
+    "seen": 1791333983.875225,
+    "ast_hash": "5a5782723c76458035bc59fc2aae9295",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/Artigos/versoes_anteriores/Artigo \u00canio - RBMFC - Vers\u00e3o Final Polida.md": {
+    "mtime": 1789833332.5760686,
+    "seen": 1791333983.875262,
+    "ast_hash": "356cab3f6c3c4537c0edbcf239af5834",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/CHANGELOG.md": {
+    "mtime": 1789677263.0531003,
+    "seen": 1791333983.875262,
+    "ast_hash": "cb53777a28d4ee394ac4cf0911287cab",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/CODE_OF_CONDUCT.md": {
+    "mtime": 1789677263.0532913,
+    "seen": 1791333983.875263,
+    "ast_hash": "9a7bf134a2a122eb3e9b37200f1f6791",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/CONTRIBUTING.md": {
+    "mtime": 1789677263.0534546,
+    "seen": 1791333983.875263,
+    "ast_hash": "ed7da3a49e9b86714a3581e01118c592",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/INSTRUCOES_USO.md": {
+    "mtime": 1789678424.8326406,
+    "seen": 1791333983.875263,
+    "ast_hash": "0fb73562084dd7d2b9fba0a914cddedd",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/README.md": {
+    "mtime": 1789677263.0541623,
+    "seen": 1791333983.875264,
+    "ast_hash": "f1d15f2ae16c8a8b2a893d0b4a7ddc8a",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/SECURITY.md": {
+    "mtime": 1789677263.0543404,
+    "seen": 1791333983.875264,
+    "ast_hash": "ee04abc1343feb69a1f0a4964694e11f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/compose.yaml": {
+    "mtime": 1789677263.0546308,
+    "seen": 1791333983.8752651,
+    "ast_hash": "ea81816c01e4a3174e5469ec51dba94e",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/docs/README.md": {
+    "mtime": 1789677263.0548441,
+    "seen": 1791333983.8752651,
+    "ast_hash": "cf72ce04f2ce2bed3a93c1cf97dfc66f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/docs/faq.md": {
+    "mtime": 1789677263.0550199,
+    "seen": 1791333983.8752651,
+    "ast_hash": "1a9666074d90a610d529ca532f0ad750",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/docs/installation.md": {
+    "mtime": 1789677263.0551624,
+    "seen": 1791333983.875266,
+    "ast_hash": "4e0fb6ed6ccbc540803ac66ea0a75651",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/docs/plans/ideas/deployment-docker-cli-api.md": {
+    "mtime": 1789677263.0555105,
+    "seen": 1791333983.875266,
+    "ast_hash": "8e127a7cdab43823b27676d3407d09a9",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/docs/vendor-coverage.md": {
+    "mtime": 1789677263.055665,
+    "seen": 1791333983.875267,
+    "ast_hash": "88cf211a491a753f498b2ab9214ed0b8",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/llms.txt": {
+    "mtime": 1789677263.0563734,
+    "seen": 1791333983.875267,
+    "ast_hash": "3f1bcf5fda882bff4a9f6fb51927472c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/requirements-dev.txt": {
+    "mtime": 1789677263.056605,
+    "seen": 1791333983.875268,
+    "ast_hash": "e46031ea9c7cee9a4da1cb553754b43f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/requirements-ctrlregen.txt": {
+    "mtime": 1789677263.0606582,
+    "seen": 1791333983.875268,
+    "ast_hash": "fe1659e15a7d19c71e839051ff0868ca",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/requirements-markdiffusion.txt": {
+    "mtime": 1789677263.06082,
+    "seen": 1791333983.875268,
+    "ast_hash": "71c166ed7053200d50e23c8436ccd68d",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/requirements-markllm.txt": {
+    "mtime": 1789677263.0609908,
+    "seen": 1791333983.8752692,
+    "ast_hash": "749fcd7354702ab9a11e77954fa27b32",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/service/scripts/requirements-synthid-scorer.txt": {
+    "mtime": 1789677263.0612442,
+    "seen": 1791333983.8752692,
+    "ast_hash": "1578819769bdcd741ee2283cfc139605",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/SKILL.md": {
+    "mtime": 1789677263.0640006,
+    "seen": 1791333983.87527,
+    "ast_hash": "5b80d8e6ff2a57e0ae6637b9ef6beaac",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/references/responsible-use.md": {
+    "mtime": 1789677263.0642188,
+    "seen": 1791333983.87527,
+    "ast_hash": "69f63354f4e315b8572ef5f4a36d73de",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/clean-user-facing-text/references/watermark-notes.md": {
+    "mtime": 1789677263.0643554,
+    "seen": 1791333983.8752708,
+    "ast_hash": "f591b1d406eb79b3c0bf3eb0c45fc782",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/SKILL.md": {
+    "mtime": 1789677263.0653424,
+    "seen": 1791333983.8752708,
+    "ast_hash": "9a89f631b6fefc4ecc12c761d1c380f3",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/ethics.md": {
+    "mtime": 1789677263.065583,
+    "seen": 1791333983.8752708,
+    "ast_hash": "c709b84ae674e29016c0230677306bdb",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/how-claude-marks.md": {
+    "mtime": 1789677263.0657158,
+    "seen": 1791333983.875272,
+    "ast_hash": "672918a713c2d26dcd4039cd5be1f34f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/mark-classes.md": {
+    "mtime": 1789677263.0658622,
+    "seen": 1791333983.875272,
+    "ast_hash": "ad136addc110786b109d7962ee5191f0",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/markdiffusion.md": {
+    "mtime": 1789677263.066013,
+    "seen": 1791333983.875273,
+    "ast_hash": "4a99a939ad96bc2e6968459f33832a3b",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/removal-matrix.md": {
+    "mtime": 1789677263.0661676,
+    "seen": 1791333983.875273,
+    "ast_hash": "396ba242f95cc378fd2e876fc5cb5fe9",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/skills/remove-claude-marks/references/vendor-notes.md": {
+    "mtime": 1789677263.0663292,
+    "seen": 1791333983.875273,
+    "ast_hash": "3d0badcce2bbf450e20428ecad79e592",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/sample_ai.html": {
+    "mtime": 1789677263.0687091,
+    "seen": 1791333983.875274,
+    "ast_hash": "af475f0869632e48163d024d1aea7c2c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/sample_ai.md": {
+    "mtime": 1789677263.0688226,
+    "seen": 1791333983.875274,
+    "ast_hash": "ac6a1151a97dc4364de9e08cf75d9954",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/sample_watermarked.txt": {
+    "mtime": 1789677263.0692687,
+    "seen": 1791333983.875275,
+    "ast_hash": "9df1e71845a47cf3530f5e8f39ebd105",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/stylometry_ai_sample.txt": {
+    "mtime": 1789677263.0693905,
+    "seen": 1791333983.875275,
+    "ast_hash": "b43836f6a4426ed22b8f97f6b066189c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/stylometry_human_sample.txt": {
+    "mtime": 1789677263.0695105,
+    "seen": 1791333983.875276,
+    "ast_hash": "12c9adfe4d2e8443fbc8082af8e81426",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/README.md": {
+    "mtime": 1790720751.6906438,
+    "seen": 1791333983.875276,
+    "ast_hash": "0135a57d7943879b2fe6d65d6bde8593",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-deduplicacao.md": {
+    "mtime": 1790441557.5218809,
+    "seen": 1791333983.875276,
+    "ast_hash": "317c90fbe3d561b48c42be579619b079",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-editor-fechamento.md": {
+    "mtime": 1790441583.4077249,
+    "seen": 1791333983.875277,
+    "ast_hash": "e146d115677ee2902d20bdd2f770f874",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-estilo-academico.md": {
+    "mtime": 1790419108.5496109,
+    "seen": 1791333983.875277,
+    "ast_hash": "797b64f55ab7c67d2e635beccdc68d6f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-extracao.md": {
+    "mtime": 1790717623.1155195,
+    "seen": 1791333983.875278,
+    "ast_hash": "d7e4e18e3b182b5f51c6f2075918405e",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-formatador-tabelas.md": {
+    "mtime": 1790444030.855385,
+    "seen": 1791333983.875278,
+    "ast_hash": "ee824198742cfb6dea80e50d70e6d7e9",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-planejador.md": {
+    "mtime": 1790441548.8510234,
+    "seen": 1791333983.8752792,
+    "ast_hash": "cd71b30e31d3f6bd5207517979a61684",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-revisor-orientador.md": {
+    "mtime": 1790717638.000476,
+    "seen": 1791333983.8752792,
+    "ast_hash": "261d40c62bedd3e25a4a639e06e2370e",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/agente-triagem.md": {
+    "mtime": 1790441566.1194613,
+    "seen": 1791333983.8752792,
+    "ast_hash": "19b51591a1769a1bf6fbfb79da5fe5d8",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/designer-fluxograma.md": {
+    "mtime": 1790421235.793283,
+    "seen": 1791333983.87528,
+    "ast_hash": "b1889f6b2e1dd9abadf2b5abe3e72a24",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/designer-tabelas.md": {
+    "mtime": 1790717606.732013,
+    "seen": 1791333983.87528,
+    "ast_hash": "4c984f73861754714a72cec990afb7ef",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/diagramador-documento.md": {
+    "mtime": 1790421235.7939239,
+    "seen": 1791333983.8752809,
+    "ast_hash": "aeaf4bb50d15cab77a6df83e8771b673",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/editor-limitacoes.md": {
+    "mtime": 1790419114.187659,
+    "seen": 1791333983.8752809,
+    "ast_hash": "e3dda04299d3cc390bb3942cd765dd83",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/pesquisador-bvs-lilacs.md": {
+    "mtime": 1790372784.3340878,
+    "seen": 1791333983.8752809,
+    "ast_hash": "48a5d4cd46ffca0f59b37ae2b9c6496a",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/pesquisador-pubmed.md": {
+    "mtime": 1790372784.3342545,
+    "seen": 1791333983.8752818,
+    "ast_hash": "28c622e9cfecc6063d396ae5b5ee2c3e",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/pesquisador-scielo.md": {
+    "mtime": 1790372784.3354464,
+    "seen": 1791333983.8752818,
+    "ast_hash": "c5cda539064df199fa85f523df4435b7",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/redator-revisao-literatura.md": {
+    "mtime": 1790419172.8269134,
+    "seen": 1791333983.875283,
+    "ast_hash": "24e18bb05347af8f30e98b42810c6511",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/agents/verificador-citacoes.md": {
+    "mtime": 1790372784.3358152,
+    "seen": 1791333983.875283,
+    "ast_hash": "9edb5b3f1be23ed19354297a7250b205",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/index.html": {
+    "mtime": 1791144757.8086228,
+    "seen": 1791333983.875284,
+    "ast_hash": "444af72f54a4f7732da41a177241427f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/jarvis.html": {
+    "mtime": 1791991541.1133926,
+    "seen": 1791992201.73313,
+    "ast_hash": "d46e348363b614759cac3610c867800f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/index.html": {
+    "mtime": 1791033707.3661141,
+    "seen": 1791333983.875284,
+    "ast_hash": "17946393b8e9b42be77e4cb1016836fc",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/references/ferramentas-github.md": {
+    "mtime": 1790369205.8624918,
+    "seen": 1791333983.875285,
+    "ast_hash": "ad4eaf09da267f2f671f9f0cd5f4723a",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/references/fontes-e-apis.md": {
+    "mtime": 1790373266.1945784,
+    "seen": 1791333983.875285,
+    "ast_hash": "a148eb90320846a137e7aec73e7bbccc",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/skills/revisao-literatura/SKILL.md": {
+    "mtime": 1790720773.1770658,
+    "seen": 1791333983.875286,
+    "ast_hash": "6b89b61db8edd0af0c4b145a61641955",
+    "semantic_hash": ""
+  },
+  "INSTALL.md": {
+    "mtime": 1789222502.182706,
+    "seen": 1791333983.875286,
+    "ast_hash": "0fb30e7387ba7ea3fcd03b501cc5e04f",
+    "semantic_hash": ""
+  },
+  "agents/design-brand-guardian.md": {
+    "mtime": 1789222414.5743525,
+    "seen": 1791333983.875287,
+    "ast_hash": "9d5a846a3a607e4ba48d01819996b913",
+    "semantic_hash": ""
+  },
+  "agents/design-inclusive-visuals-specialist.md": {
+    "mtime": 1789222414.5745153,
+    "seen": 1791333983.875287,
+    "ast_hash": "faeda435941ff55a2c512f388f35822a",
+    "semantic_hash": ""
+  },
+  "agents/design-ui-designer.md": {
+    "mtime": 1789222414.5746467,
+    "seen": 1791333983.875287,
+    "ast_hash": "baf6929043d5b7174c3340b09236e846",
+    "semantic_hash": ""
+  },
+  "agents/design-ux-architect.md": {
+    "mtime": 1789222414.574761,
+    "seen": 1791333983.875288,
+    "ast_hash": "36c5ef151bc97e50886a2924c81f2d7d",
+    "semantic_hash": ""
+  },
+  "agents/design-visual-storyteller.md": {
+    "mtime": 1789222414.5748594,
+    "seen": 1791333983.875288,
+    "ast_hash": "505da900d7143397c2b6cc705b555195",
+    "semantic_hash": ""
+  },
+  "agents/engineering-frontend-developer.md": {
+    "mtime": 1789222414.5749662,
+    "seen": 1791333983.8752892,
+    "ast_hash": "fd0ac0599cec5537f013ba931f555540",
+    "semantic_hash": ""
+  },
+  "agents/engineering-rapid-prototyper.md": {
+    "mtime": 1789222414.5750833,
+    "seen": 1791333983.8752892,
+    "ast_hash": "1bbff91dd37ebbf90633cd44e6b542a9",
+    "semantic_hash": ""
+  },
+  "agents/marketing-content-creator.md": {
+    "mtime": 1789222414.575167,
+    "seen": 1791333983.8752902,
+    "ast_hash": "9e2ade728189a0685228c2a64113c864",
+    "semantic_hash": ""
+  },
+  "agents/marketing-email-strategist.md": {
+    "mtime": 1789222414.575283,
+    "seen": 1791333983.8752902,
+    "ast_hash": "5bd58f64792275d9f564708291679ff3",
+    "semantic_hash": ""
+  },
+  "agents/marketing-growth-hacker.md": {
+    "mtime": 1789222414.575367,
+    "seen": 1791333983.8752902,
+    "ast_hash": "c4b31adcafcc0c3aa49661d1101a2a12",
+    "semantic_hash": ""
+  },
+  "agents/marketing-instagram-curator.md": {
+    "mtime": 1789222414.5754662,
+    "seen": 1791333983.8752909,
+    "ast_hash": "2e9206ba0412844edc5e05c2f3a05509",
+    "semantic_hash": ""
+  },
+  "agents/marketing-pr-communications-manager.md": {
+    "mtime": 1789222414.575594,
+    "seen": 1791333983.8752909,
+    "ast_hash": "3d40e984c3e3e964351bbcbd1cb89abd",
+    "semantic_hash": ""
+  },
+  "agents/marketing-seo-specialist.md": {
+    "mtime": 1789222414.5757308,
+    "seen": 1791333983.8752918,
+    "ast_hash": "350cc0e355e1aabb2acf7851fe7bbc01",
+    "semantic_hash": ""
+  },
+  "agents/marketing-social-media-strategist.md": {
+    "mtime": 1789222414.575839,
+    "seen": 1791333983.8752918,
+    "ast_hash": "681cc9869f74852d38972c106ed88b1d",
+    "semantic_hash": ""
+  },
+  "agents/med-clinical-classifier.md": {
+    "mtime": 1790686630.8887186,
+    "seen": 1791333983.8752918,
+    "ast_hash": "0d5660d7989e814fbed12a669beca1e7",
+    "semantic_hash": ""
+  },
+  "agents/med-exam-parser.md": {
+    "mtime": 1790639303.3374794,
+    "seen": 1791333983.875293,
+    "ast_hash": "2fbb4840034ecda67db958d5747f955a",
+    "semantic_hash": ""
+  },
+  "agents/med-pedagogical-explainer.md": {
+    "mtime": 1790686647.9463627,
+    "seen": 1791333983.875293,
+    "ast_hash": "d5a6ac2feaf0ef78324a03a229a525aa",
+    "semantic_hash": ""
+  },
+  "agents/med-study-synthesizer.md": {
+    "mtime": 1790639328.1115468,
+    "seen": 1791333983.875294,
+    "ast_hash": "a69e8d37cab049bd982b22feaea880f2",
+    "semantic_hash": ""
+  },
+  "agents/paid-media-creative-strategist.md": {
+    "mtime": 1789222414.5759404,
+    "seen": 1791333983.875294,
+    "ast_hash": "d20d9a084b70e273d91076ff9fb75115",
+    "semantic_hash": ""
+  },
+  "agents/paid-media-ppc-strategist.md": {
+    "mtime": 1789222414.5760367,
+    "seen": 1791333983.875295,
+    "ast_hash": "e640f87df467297611a6b0342d14f424",
+    "semantic_hash": ""
+  },
+  "agents/product-feedback-synthesizer.md": {
+    "mtime": 1789222414.576128,
+    "seen": 1791333983.875295,
+    "ast_hash": "ecc3c3cb652f63625579e25773dfa620",
+    "semantic_hash": ""
+  },
+  "agents/product-trend-researcher.md": {
+    "mtime": 1789222414.5762193,
+    "seen": 1791333983.875296,
+    "ast_hash": "ddd713027d92da7198369ed35ce27e09",
+    "semantic_hash": ""
+  },
+  "agents/sales-coach.md": {
+    "mtime": 1789222414.576335,
+    "seen": 1791333983.875296,
+    "ast_hash": "1a8406ab11981d8967c3bf6521e9f022",
+    "semantic_hash": ""
+  },
+  "agents/sales-offer-lead-gen-strategist.md": {
+    "mtime": 1789222414.5764682,
+    "seen": 1791333983.875296,
+    "ast_hash": "d5088e6aaa09d91bd03eb72b945fe129",
+    "semantic_hash": ""
+  },
+  "agents/sales-outbound-strategist.md": {
+    "mtime": 1789222414.576571,
+    "seen": 1791333983.875297,
+    "ast_hash": "5b05b2011dd62fd51c852cc3a7273e9d",
+    "semantic_hash": ""
+  },
+  "claude-skills/build.md": {
+    "mtime": 1789222414.576694,
+    "seen": 1791333983.875297,
+    "ast_hash": "c2fb3b03a36618087ac5532db67f51a1",
+    "semantic_hash": ""
+  },
+  "claude-skills/review.md": {
+    "mtime": 1789222414.576772,
+    "seen": 1791333983.875298,
+    "ast_hash": "ff168d4f38a314af5e14a81c22a61bc6",
+    "semantic_hash": ""
+  },
+  "claude-skills/spec.md": {
+    "mtime": 1789222414.5768483,
+    "seen": 1791333983.875298,
+    "ast_hash": "96c0dc1d0d9bea8c0dcf4ce5e365fa59",
+    "semantic_hash": ""
+  },
+  "painel_estudos_clinica_medica.html": {
+    "mtime": 1790706148.337178,
+    "seen": 1791333983.875299,
+    "ast_hash": "61043a8635f141800bff0f1b19cd44cb",
+    "semantic_hash": ""
+  },
+  "passagens-aereas/README.md": {
+    "mtime": 1791044976.0517333,
+    "seen": 1791333983.875299,
+    "ast_hash": "e1519e7a8ca2d9eb22d501669ee23f04",
+    "semantic_hash": ""
+  },
+  "passagens-aereas/frontend/index.html": {
+    "mtime": 1791120793.4353373,
+    "seen": 1791333983.875299,
+    "ast_hash": "5009f7324ef99fd195e89130f038bbc7",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1791044465.3405895,
+    "seen": 1791333983.8753002,
+    "ast_hash": "1c3e0d4aa4ccf63d0581cd257ce99de3",
+    "semantic_hash": ""
+  },
+  "skills/clinica-medica-analyzer/SKILL.md": {
+    "mtime": 1790639337.1129873,
+    "seen": 1791333983.8753002,
+    "ast_hash": "cba094f1fd7cae6c758e6efcc12552af",
+    "semantic_hash": ""
+  },
+  "skills/find-docs/SKILL.md": {
+    "mtime": 1789222414.5770257,
+    "seen": 1791333983.8753011,
+    "ast_hash": "bf395617a70cd806a4d87888eaa9a701",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-account-diagnostics/SKILL.md": {
+    "mtime": 1789566388.738051,
+    "seen": 1791333983.8753011,
+    "ast_hash": "f2d77fa436f1d8a345284498005f04d8",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-mcp-setup/SKILL.md": {
+    "mtime": 1789566388.741483,
+    "seen": 1791333983.8753018,
+    "ast_hash": "5dc64dc7f26f3aaf90452fd6191258fb",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/SKILL.md": {
+    "mtime": 1789566388.748593,
+    "seen": 1791333983.8753018,
+    "ast_hash": "f5ffa0567b1d5fc9059c5d544c8a4e74",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/dotnet.md": {
+    "mtime": 1789566388.7454994,
+    "seen": 1791333983.875303,
+    "ast_hash": "762b041834bb4d57f70678ff400fc29b",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/java.md": {
+    "mtime": 1789566388.7469642,
+    "seen": 1791333983.875303,
+    "ast_hash": "6b061f1d4da824736d40a03bf155ea6f",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/perl.md": {
+    "mtime": 1789566388.7477703,
+    "seen": 1791333983.875303,
+    "ast_hash": "a10730c3a1940c4ed8268694b07252b6",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/php.md": {
+    "mtime": 1789566388.7464764,
+    "seen": 1791333983.875304,
+    "ast_hash": "94a0c750c47dcecc1f4a34ced67c9372",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/python.md": {
+    "mtime": 1789566388.7448256,
+    "seen": 1791333983.875304,
+    "ast_hash": "6c9539cb6769eb57a5fc4ef91c60c5be",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/rest.md": {
+    "mtime": 1789566388.748092,
+    "seen": 1791333983.875305,
+    "ast_hash": "522490c487dc987798a122483bf20aed",
+    "semantic_hash": ""
+  },
+  "skills/google-ads-api-quickstart/references/ruby.md": {
+    "mtime": 1789566388.7473695,
+    "seen": 1791333983.875305,
+    "ast_hash": "1691ebbf1fd2cb78adec6ca0fdf3b2b6",
+    "semantic_hash": ""
+  },
+  "skills/graft/SKILL.md": {
+    "mtime": 1789222414.5771873,
+    "seen": 1791333983.875305,
+    "ast_hash": "66883b9096b1244ec4240393808dbd6b",
+    "semantic_hash": ""
+  },
+  "skills/headroom/SKILL.md": {
+    "mtime": 1790441464.9275126,
+    "seen": 1791333983.875306,
+    "ast_hash": "7ef3b4727cddafbbf710378a5dd6125e",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/SKILL.md": {
+    "mtime": 1789222414.577459,
+    "seen": 1791333983.875306,
+    "ast_hash": "53c801870cc07025eb5cfc3f5b19f8bc",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/agents/openai.yaml": {
+    "mtime": 1789222414.577941,
+    "seen": 1791333983.875307,
+    "ast_hash": "f6a36117ebc5ff8f67efb518ad1fe775",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/adapt.md": {
+    "mtime": 1789222414.5780876,
+    "seen": 1791333983.875307,
+    "ast_hash": "7526208103aa6586a4c22639a97da724",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/adapt.native.md": {
+    "mtime": 1789222414.578182,
+    "seen": 1791333983.875308,
+    "ast_hash": "d45a12935db7bf28b64dfeb46fca6ab6",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/android.md": {
+    "mtime": 1789222414.5782804,
+    "seen": 1791333983.875308,
+    "ast_hash": "18f5d94b2c51ac3bfede3b209660bbb5",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/animate.md": {
+    "mtime": 1789222414.578382,
+    "seen": 1791333983.875309,
+    "ast_hash": "610f85bc3d6d370810836681204b015d",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/audit.md": {
+    "mtime": 1789222414.5784674,
+    "seen": 1791333983.875309,
+    "ast_hash": "c1d75edbf64f03959f2ea030cc282401",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/audit.native.md": {
+    "mtime": 1789222414.578562,
+    "seen": 1791333983.875309,
+    "ast_hash": "644e5acb6e5eaaac6be52c7989b4dc08",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/bolder.md": {
+    "mtime": 1789222414.5786545,
+    "seen": 1791333983.8753102,
+    "ast_hash": "a084531985d83e34538727961ed51470",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/clarify.md": {
+    "mtime": 1789222414.578738,
+    "seen": 1791333983.8753102,
+    "ast_hash": "413da6eb075a6c3ed05de43f760f3be8",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/colorize.md": {
+    "mtime": 1789222414.5788224,
+    "seen": 1791333983.8753111,
+    "ast_hash": "0bf2887698d75473acd5a5b0ccbe1d3e",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/craft-floor.md": {
+    "mtime": 1789222414.5789104,
+    "seen": 1791333983.8753111,
+    "ast_hash": "2c497f436c7dbf35b008b174161b861a",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/craft.md": {
+    "mtime": 1789222414.5789838,
+    "seen": 1791333983.875312,
+    "ast_hash": "9075911f45c58c15a720f8188b2738f4",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/critique.md": {
+    "mtime": 1789222414.5791304,
+    "seen": 1791333983.875312,
+    "ast_hash": "a456b1533a01d2b0ac16f57ea1543d57",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/degraded/asset-producer.md": {
+    "mtime": 1789222414.5792902,
+    "seen": 1791333983.8753128,
+    "ast_hash": "2427aba8d844247b9616b24a4ea832bd",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/degraded/documenter.md": {
+    "mtime": 1789222414.579371,
+    "seen": 1791333983.8753128,
+    "ast_hash": "401d9dbbedc58caf4bfd1d160c0068a8",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/degraded/finish-reviewer.md": {
+    "mtime": 1789222414.5794697,
+    "seen": 1791333983.8753128,
+    "ast_hash": "3dc7539f36c0a4b794d8b339f057ac5d",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/degraded/manual-edit-applier.md": {
+    "mtime": 1789222414.5795553,
+    "seen": 1791333983.875314,
+    "ast_hash": "b614ab4f15050946af63a4eb6f507133",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/delight.md": {
+    "mtime": 1789222414.5796325,
+    "seen": 1791333983.875314,
+    "ast_hash": "4a4fb8494ddda3d2b4687b938209eb32",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/distill.md": {
+    "mtime": 1789222414.579715,
+    "seen": 1791333983.875315,
+    "ast_hash": "551d826d1e8082ec799f575a40967b41",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/doctor.md": {
+    "mtime": 1789222414.5797985,
+    "seen": 1791333983.875315,
+    "ast_hash": "33444ae788cbfe64654d8250352ba61e",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/document.md": {
+    "mtime": 1789222414.579918,
+    "seen": 1791333983.875316,
+    "ast_hash": "4f2674bdf49244e30841448f9d934c40",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/extract.md": {
+    "mtime": 1789222414.5800073,
+    "seen": 1791333983.875316,
+    "ast_hash": "e51e09c25d06f05b6efabb1fc9228d90",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/harden.md": {
+    "mtime": 1789222414.5800948,
+    "seen": 1791333983.875316,
+    "ast_hash": "2bb1578f38fee280620b14cf9371cadb",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/hooks.md": {
+    "mtime": 1789222414.580196,
+    "seen": 1791333983.875317,
+    "ast_hash": "b72c81c01343f83b36f4e0b41e525c02",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/init.md": {
+    "mtime": 1789222414.580291,
+    "seen": 1791333983.875317,
+    "ast_hash": "338ac35521a49f94dcfb1c53047e6bb2",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/ios.md": {
+    "mtime": 1789222414.5803735,
+    "seen": 1791333983.875318,
+    "ast_hash": "a8f56b5c246ad44e142853ef59a19039",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/layout.md": {
+    "mtime": 1789222414.5804572,
+    "seen": 1791333983.875318,
+    "ast_hash": "bc247cd53f1d14fa1c77e78d567991f7",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/live-setup.md": {
+    "mtime": 1789222414.580553,
+    "seen": 1791333983.875319,
+    "ast_hash": "d6e64fc5f6da5e510fdafcd2db7d6813",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/live.md": {
+    "mtime": 1789222414.5806978,
+    "seen": 1791333983.875319,
+    "ast_hash": "ac965df8021ca8bc72dfaeb9ffb15496",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/new-work.md": {
+    "mtime": 1789222414.580872,
+    "seen": 1791333983.87532,
+    "ast_hash": "7698034e0ba8f999e12eceb5289402c4",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/onboard.md": {
+    "mtime": 1789222414.5809875,
+    "seen": 1791333983.87532,
+    "ast_hash": "e1439e7cb4d19ea29a8990f008aa60f2",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/operate.md": {
+    "mtime": 1789222414.5810876,
+    "seen": 1791333983.87532,
+    "ast_hash": "53a569b985749058f7b178a32e0a157f",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/optimize.md": {
+    "mtime": 1789222414.5811899,
+    "seen": 1791333983.8753211,
+    "ast_hash": "69031dca2a97d199862bc514c68c115d",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/overdrive.md": {
+    "mtime": 1789222414.5812817,
+    "seen": 1791333983.8753211,
+    "ast_hash": "a48f82a5a3dc3cfe974228f8240477ed",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/polish.md": {
+    "mtime": 1789222414.5813627,
+    "seen": 1791333983.875322,
+    "ast_hash": "12239cd77fe952f7bb936dcdfc7da17c",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/quieter.md": {
+    "mtime": 1789222414.5814445,
+    "seen": 1791333983.875322,
+    "ast_hash": "74730b891cd7fa09bc88831c8371d50e",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/routing.md": {
+    "mtime": 1789222414.5815268,
+    "seen": 1791333983.8753228,
+    "ast_hash": "4ce068d7f19d4f85c0de635056bfaa6c",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/shape.md": {
+    "mtime": 1789222414.581614,
+    "seen": 1791333983.8753228,
+    "ast_hash": "ecf5345d56452d10cd2c9203a7512704",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/typeset.md": {
+    "mtime": 1789222414.5817125,
+    "seen": 1791333983.875324,
+    "ast_hash": "4af5657e0fa2c25b9ce28cb1eb854015",
+    "semantic_hash": ""
+  },
+  "skills/impeccable/reference/visualize.md": {
+    "mtime": 1789222414.5818188,
+    "seen": 1791333983.875324,
+    "ast_hash": "d8b60a9ea8ca28cf3eb0f27be68eac5f",
+    "semantic_hash": ""
+  },
+  "skills/ponytail-audit/SKILL.md": {
+    "mtime": 1789222414.5977104,
+    "seen": 1791333983.875325,
+    "ast_hash": "2a757432defa9d63639a3aca3bbbf23a",
+    "semantic_hash": ""
+  },
+  "skills/ponytail-debt/SKILL.md": {
+    "mtime": 1789222414.5978608,
+    "seen": 1791333983.875325,
+    "ast_hash": "33f49652fe513cf08082e9bcf8e2ecf2",
+    "semantic_hash": ""
+  },
+  "skills/ponytail-gain/SKILL.md": {
+    "mtime": 1789222414.5980077,
+    "seen": 1791333983.875325,
+    "ast_hash": "e0090358fafc0a4b01716b88399e8405",
+    "semantic_hash": ""
+  },
+  "skills/ponytail-help/SKILL.md": {
+    "mtime": 1789222414.5981727,
+    "seen": 1791333983.875326,
+    "ast_hash": "a89c89a1fec6a90c3751302574389d47",
+    "semantic_hash": ""
+  },
+  "skills/ponytail-review/SKILL.md": {
+    "mtime": 1789222414.598315,
+    "seen": 1791333983.875326,
+    "ast_hash": "438e2414888145bc0108fa63f64314fd",
+    "semantic_hash": ""
+  },
+  "skills/ponytail/SKILL.md": {
+    "mtime": 1789222414.5984578,
+    "seen": 1791333983.8753269,
+    "ast_hash": "421e40917db6cc732864011799da3235",
+    "semantic_hash": ""
+  },
+  "skills/review/SKILL.md": {
+    "mtime": 1790441497.6023397,
+    "seen": 1791333983.8753269,
+    "ast_hash": "816d561ddaa31621888b0b8e51f743f6",
+    "semantic_hash": ""
+  },
+  "skills/revisao-literatura/SKILL.md": {
+    "mtime": 1790441538.870029,
+    "seen": 1791333983.875328,
+    "ast_hash": "7080d4f27ba4ffb6fe821ab83714f75a",
+    "semantic_hash": ""
+  },
+  "skills/spec/SKILL.md": {
+    "mtime": 1790441509.0233846,
+    "seen": 1791333983.875328,
+    "ast_hash": "a7f7f371903868084eb841e59f0a725e",
+    "semantic_hash": ""
+  },
+  "skills/watch/SKILL.md": {
+    "mtime": 1789222414.598712,
+    "seen": 1791333983.875328,
+    "ast_hash": "ce6f8748db283ce7a8fc6414f07f8826",
+    "semantic_hash": ""
+  },
+  "specs/revisao-literatura-hardening.md": {
+    "mtime": 1790627771.4049554,
+    "seen": 1791333983.875329,
+    "ast_hash": "579175f0836d70c90be412307bb42855",
+    "semantic_hash": ""
+  },
+  "specs/revisao-literatura-plan.md": {
+    "mtime": 1790627784.4320307,
+    "seen": 1791333983.875329,
+    "ast_hash": "cf82263f3ebe6af2e05cbbf44e65cd58",
+    "semantic_hash": ""
+  },
+  "specs/revisao-literatura-review.md": {
+    "mtime": 1790629505.4637866,
+    "seen": 1791333983.87533,
+    "ast_hash": "0e1f7e18fd41faea0462d979cb5dd07a",
+    "semantic_hash": ""
+  },
+  "COMPILADO DE PROVAS CM.pdf": {
+    "mtime": 1790637347.0384498,
+    "seen": 1791333983.87533,
+    "ast_hash": "03a606cb59ed9b777ca416900d099794",
+    "semantic_hash": ""
+  },
+  "GABARITO REVISADO PROVA DE CL\u00cdNICA M\u00c9DICA  2026 1 1.pdf": {
+    "mtime": 1790637343.6545875,
+    "seen": 1791333983.875339,
+    "ast_hash": "189e2e0970692e7ef126372a74011a8c",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/claude-watermark-remover/tests/fixtures/sample_meta.svg": {
+    "mtime": 1789677263.0691607,
+    "seen": 1791333983.8753548,
+    "ast_hash": "b366a0580a73307c9dc76eb14954a681",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/01_artigo_overview.png": {
+    "mtime": 1791126065.8095477,
+    "seen": 1791333983.8753548,
+    "ast_hash": "5d8d82440e44f97ad13fe00f7ddbd3ed",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/01_jarvis_inicio.png": {
+    "mtime": 1791125817.6402674,
+    "seen": 1791333983.875356,
+    "ast_hash": "33803683388acdb32b89e0d43081eb0a",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/02_artigo_leitor_a1.png": {
+    "mtime": 1791126067.4936483,
+    "seen": 1791333983.875356,
+    "ast_hash": "7250d5facd4c7e9f1291cda47779fe67",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/02_modal_importacao_pronto.png": {
+    "mtime": 1791125821.1211395,
+    "seen": 1791333983.875357,
+    "ast_hash": "a902e88bf0e3dcb2aa195caf27d3eeaa",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/04_mesa_evidencias_paises.png": {
+    "mtime": 1791126069.2411294,
+    "seen": 1791333983.875357,
+    "ast_hash": "be8ab3447d4e38af036d2bd05322b0b5",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/05_agentes_especialistas_a1.png": {
+    "mtime": 1791126070.943733,
+    "seen": 1791333983.875357,
+    "ast_hash": "b5a4488ccf78167aa95e18b3c4e514e2",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/07_orientador_com_card_falhas.png": {
+    "mtime": 1791492782.8483734,
+    "seen": 1791494485.842418,
+    "ast_hash": "c1e535fc3917d16c1ecd24bd72c1f8f1",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/08_orientador_consideracoes_preenchidas.png": {
+    "mtime": 1791492784.0587065,
+    "seen": 1791494485.842419,
+    "ast_hash": "7f1ee211e7b151bdb8ccfc97b857c9e2",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/01_painel_geral_sistema.png": {
+    "mtime": 1791033699.9161813,
+    "seen": 1791333983.875359,
+    "ast_hash": "7519e40aa396e2d63e0b76a2aab35e69",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/02_workspace_artigo_leitor.png": {
+    "mtime": 1791033700.527506,
+    "seen": 1791333983.875359,
+    "ast_hash": "4a392da92dc7fd827b7f33abab6291b4",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/03_tabela_1_abnt.png": {
+    "mtime": 1791033701.3423865,
+    "seen": 1791333983.875359,
+    "ast_hash": "392ae608307f41e6b52fc5f3957672c5",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/04_mesa_triagem.png": {
+    "mtime": 1791033702.1469295,
+    "seen": 1791333983.87536,
+    "ast_hash": "4da32267e65ae2151e4d8557de815137",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/05_fluxograma_prisma.png": {
+    "mtime": 1791033702.7109003,
+    "seen": 1791333983.87536,
+    "ast_hash": "d96219c65cde16e44324e070d5020e07",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/06_devolutiva_orientador.png": {
+    "mtime": 1791033703.292698,
+    "seen": 1791333983.875361,
+    "ast_hash": "f2a743a415d085e986aff8ee59eeabbb",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/06b_agentes_qualis_a1.png": {
+    "mtime": 1791033703.8962579,
+    "seen": 1791333983.875361,
+    "ast_hash": "d5496f783505b8b42ab26a3e2ca78304",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/07_cluster_14_agentes_3d.png": {
+    "mtime": 1791033704.5639975,
+    "seen": 1791333983.8753622,
+    "ast_hash": "b1b6c9a8f50b24b9ec599e632e06605f",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/08_modal_novo_artigo.png": {
+    "mtime": 1791033706.0865793,
+    "seen": 1791333983.8753622,
+    "ast_hash": "6d3a8653e30e142f895d3f84ba9b1c22",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/09_modal_importar_artigo.png": {
+    "mtime": 1791033706.9064217,
+    "seen": 1791333983.8753622,
+    "ast_hash": "1c92ba1e440309a094859c8117f96ab9",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/raio_x_novo_visual.png": {
+    "mtime": 1790891802.0721433,
+    "seen": 1791333983.875363,
+    "ast_hash": "ba2104a012e72b84fc8632f9b5bc0643",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/public/qa-reports/screenshots/workspace_utilidade_validada.png": {
+    "mtime": 1791494422.2920835,
+    "seen": 1791494485.842737,
+    "ast_hash": "7954afefa7329c73b6be9a068f72bcb6",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/screenshot_redacao_atual.png": {
+    "mtime": 1791040334.8150074,
+    "seen": 1791333983.875364,
+    "ast_hash": "a8270299eb2af09d4f0bf48c78d9da3d",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/screenshot_sem_mocks.png": {
+    "mtime": 1791509572.201789,
+    "seen": 1791509684.4206522,
+    "ast_hash": "1e896f1c61262c474e254c82fc6491b2",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/higienizar_acervo_completo.mjs": {
+    "mtime": 1791368012.2946856,
+    "seen": 1791548654.18943,
+    "ast_hash": "4db09b02348f7b46ee8e6a86146a438c",
+    "semantic_hash": "4db09b02348f7b46ee8e6a86146a438c"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/blindar_acervo_definitivo.mjs": {
+    "mtime": 1791509376.2080493,
+    "seen": 1791548654.18928,
+    "ast_hash": "87e2decd122a4aea3b9ff98990809295",
+    "semantic_hash": "87e2decd122a4aea3b9ff98990809295"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/blindagem_autoria.mjs": {
+    "mtime": 1791492189.8007317,
+    "seen": 1791548654.188313,
+    "ast_hash": "51499ad275ff83a9ddd6d1c3fc0d1d4b",
+    "semantic_hash": "51499ad275ff83a9ddd6d1c3fc0d1d4b"
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/screenshot_dashboard_kpis_restaurados.png": {
+    "mtime": 1791509652.6999226,
+    "seen": 1791509684.420626,
+    "ast_hash": "f39e0676202047ba31d54fd187d56b27",
+    "semantic_hash": ""
+  },
+  "public/qa-reports/screenshots/workspace_utilidade_validada.png": {
+    "mtime": 1791504044.7541668,
+    "seen": 1791509684.4206522,
+    "ast_hash": "ec09eb93657729482e73d18b6bc92d65",
+    "semantic_hash": ""
+  },
+  "scripts/screenshot_sem_mocks.png": {
+    "mtime": 1791503999.868934,
+    "seen": 1791509684.420653,
+    "ast_hash": "5c2459167d6e97de8cb03ee00ce52917",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/lib/parecerista_critico.mjs": {
+    "mtime": 1791542729.7402744,
+    "seen": 1791548654.1888,
+    "ast_hash": "147cf24eb35ba6f8e6851529f0fe830d",
+    "semantic_hash": "147cf24eb35ba6f8e6851529f0fe830d"
+  },
+  ".agents/rules/deep-code-sweep.md": {
+    "mtime": 1791545873.280818,
+    "seen": 1791545900.5674582,
+    "ast_hash": "b8659f8d84cd3541a824375313634bff",
+    "semantic_hash": ""
+  },
+  ".agents/skills/deep-code-sweep/SKILL.md": {
+    "mtime": 1791545848.931485,
+    "seen": 1791545900.567483,
+    "ast_hash": "186424b97a8bee65bcb1eddcdb07df1e",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_modo_cirurgico_orientador.mjs": {
+    "mtime": 1791992013.8014543,
+    "seen": 1791992201.728147,
+    "ast_hash": "158d237b52eaad14bb5c082549b95108",
+    "semantic_hash": ""
+  },
+  "ESCRITOS ARTIGOS V2/revisao-literatura-ia/painel/scripts/testar_suite_varredura_completa.mjs": {
+    "mtime": 1791995845.2496665,
+    "seen": 1791995875.611113,
+    "ast_hash": "cf3de5aa51a8882453bc3f4b7045d811",
+    "semantic_hash": ""
+  }
+}

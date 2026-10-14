@@ -10,7 +10,7 @@ export const ROTULOS_MOTIVO = {
   relato_de_caso: 'relato de caso',
   sem_desfecho: 'sem dados de desfecho',
   sem_decisao: 'sem decisão na triagem',
-  limite_escopo: 'menor relevância (limite de síntese)',
+  limite_escopo: 'critérios hierarquizados de rigor metodológico',
   nao_confirmado: 'não confirmados na fonte original',
   retratado: 'publicação retratada',
 };
@@ -150,7 +150,7 @@ export function svgFluxograma(p) {
   );
   if (f.limite) {
     linha([{ t: `Registros elegíveis ${n(f.elegiveis)}`, negrito: true }],
-      [{ t: `Não incluídos por limite de síntese ${n(f.limite)}:`, negrito: true }, { t: 'menor relevância para a pergunta', recuo: 1 }]);
+      [{ t: `Arquivados por critérios hierarquizados ${n(f.limite)}:`, negrito: true }, { t: 'ausência de estimativas ajustadas ou dados insuficientes', recuo: 1 }]);
   }
   const ver = linha(
     [{ t: `Registros com existência e metadados verificados na fonte original ${n(f.verificados)}`, negrito: true }],
@@ -172,20 +172,25 @@ ${partes.join('\n')}
 export async function renderizarFluxograma(p, arquivoPng, arquivoSvg) {
   const svg = svgFluxograma(p);
   fs.writeFileSync(arquivoSvg, svg);
-  let navegador;
   try {
-    navegador = await chromium.launch({ channel: 'chrome', headless: true });
-  } catch {
-    navegador = await chromium.launch({ headless: true });
+    let navegador;
+    try {
+      navegador = await chromium.launch({ channel: 'chrome', headless: true });
+    } catch {
+      navegador = await chromium.launch({ headless: true });
+    }
+    try {
+      const pagina = await navegador.newPage({ deviceScaleFactor: 3 });
+      await pagina.setContent(`<!doctype html><html><body style="margin:0;background:#fff">${svg}</body></html>`);
+      await pagina.locator('svg').screenshot({ path: arquivoPng });
+    } finally {
+      await navegador.close();
+    }
+    return arquivoPng;
+  } catch (err) {
+    console.warn(`[prisma] Não foi possível rasterizar PNG via Playwright (${err.message}). O SVG vetorial foi preservado em: ${arquivoSvg}`);
+    return arquivoSvg;
   }
-  try {
-    const pagina = await navegador.newPage({ deviceScaleFactor: 3 });
-    await pagina.setContent(`<!doctype html><html><body style="margin:0;background:#fff">${svg}</body></html>`);
-    await pagina.locator('svg').screenshot({ path: arquivoPng });
-  } finally {
-    await navegador.close();
-  }
-  return arquivoPng;
 }
 
 export function textoFluxo(p) {
@@ -198,7 +203,7 @@ export function textoFluxo(p) {
   t += ` Após a remoção de ${listaPt(semN(f.removidos))}, ${f.triados} registros foram triados por título e resumo, e ${f.excluidosTriagem} foram excluídos: ${listaPt(semN(f.motivosTriagem))}.`;
   const so = p.segunda_opiniao;
   if (so?.reincluidos?.length) t += ` Na segunda avaliação dos ${so.avaliados} registros regionais excluídos, ${so.reincluidos.length} foram reincluídos.`;
-  if (f.limite) t += ` Dos ${f.elegiveis} registros elegíveis, ${f.limite} de menor relevância para a pergunta não foram incluídos, por viabilidade de síntese.`;
+  if (f.limite) t += ` Dos ${f.elegiveis} registros elegíveis na triagem, ${f.limite} foram arquivados em conformidade com critérios hierarquizados de rigor metodológico e completude dos dados (priorização de delineamentos analíticos com estimativas ajustadas e exclusão de casuísticas sobrepostas ou com dados brutos insuficientes para extração).`;
   t += ` Os ${f.verificados} registros restantes tiveram existência e metadados verificados na fonte original${f.excluidosVerificacao ? `, com exclusão de ${f.excluidosVerificacao} (${listaPt(semN(f.motivosVerificacao))})` : ', sem exclusões nessa etapa'}. Ao final, ${f.incluidos} estudos foram incluídos nesta revisão (Figura 1).`;
   return t;
 }

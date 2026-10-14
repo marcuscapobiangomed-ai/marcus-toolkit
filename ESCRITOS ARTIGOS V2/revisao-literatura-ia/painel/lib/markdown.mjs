@@ -62,8 +62,13 @@ export function markdownParaHtml(md, opcoes = {}) {
       larguras = ['16%', '46%', '28%', '10%'];
       alinhamentos = ['left', 'left', 'left', 'center'];
     } else if (cabs.some((h) => h.includes('autor')) && cabs.some((h) => h.includes('achados'))) {
-      larguras = ['15%', '9%', '20%', '18%', '15%', '23%'];
-      alinhamentos = ['left', 'center', 'left', 'left', 'left', 'left'];
+      if (n === 7) {
+        larguras = ['13%', '8%', '17%', '9%', '16%', '16%', '21%'];
+        alinhamentos = ['left', 'center', 'left', 'center', 'left', 'left', 'left'];
+      } else {
+        larguras = ['15%', '9%', '20%', '18%', '15%', '23%'];
+        alinhamentos = ['left', 'center', 'left', 'left', 'left', 'left'];
+      }
     } else {
       const eq = (100 / n).toFixed(1) + '%';
       larguras = Array(n).fill(eq);
@@ -74,19 +79,29 @@ export function markdownParaHtml(md, opcoes = {}) {
       ? `<colgroup>${larguras.map((w) => `<col style="width:${w}">`).join('')}</colgroup>`
       : '';
 
-    const trs = tabelaAtual.map((linha, idx) => {
-      const isCab = idx === 0;
+    const trsCab = tabelaAtual.slice(0, 1).map((linha) => {
       const celulas = linha.map((c, colIdx) => {
-        const align = alinhamentos[colIdx];
+        const align = alinhamentos[colIdx] || 'left';
+        const style = align === 'center' ? ' style="text-align:center;"' : '';
+        return `<th${style}>${inline(c)}</th>`;
+      }).join('');
+      return `<tr>${celulas}</tr>`;
+    }).join('');
+
+    const trsCorpo = tabelaAtual.slice(1).map((linha) => {
+      const celulas = linha.map((c, colIdx) => {
+        const align = alinhamentos[colIdx] || 'left';
         const style = align === 'center' ? ' style="text-align:center;"' : '';
         return `<td${style}>${inline(c)}</td>`;
       }).join('');
       return `<tr>${celulas}</tr>`;
     }).join('');
 
-    html.push(`<table class="tabela-ibge">${colgroup}${trs}</table>`);
+    html.push(`<table class="tabela-ibge">${colgroup}<thead>${trsCab}</thead><tbody>${trsCorpo}</tbody></table>`);
     tabelaAtual = null;
   };
+
+  let secaoAtual = '';
 
   for (const linha of linhas) {
     const ltrim = linha.trim();
@@ -108,23 +123,39 @@ export function markdownParaHtml(md, opcoes = {}) {
       continue;
     }
     const h = linha.match(/^(#{1,6})\s+(.*)$/);
-    const ul = linha.match(/^\s*[-*]\s+(.*)$/);
-    const ol = linha.match(/^\s*(\d+)\.\s+(.*)$/);
     if (h) {
       fecharParagrafo();
       fecharLista();
       const nivel = h[1].length;
       const tit = inline(h[2]);
+      secaoAtual = h[2].toLowerCase().trim();
       html.push(`<h${nivel} class="${nivel === 1 ? 'titulo-principal' : nivel === 2 ? 'secao-primaria' : 'secao-secundaria'}">${tit}</h${nivel}>`);
-    } else if (ul || ol) {
+      continue;
+    }
+
+    // Se estamos na seção de referências ou a linha é uma referência bibliográfica Vancouver (1. Autor...)
+    const ehSecaoRefs = /(?:^|\s)(?:refer[eê]ncias|references)\b/i.test(secaoAtual);
+    const mRefItem = linha.match(/^\s*(\d+)\.\s+([\s\S]+)$/);
+    if ((ehSecaoRefs && mRefItem) || (/^\s*\d+\.\s+[A-ZÁÉÍÓÚÂÊÔÃÕ]/.test(linha) && !lista)) {
+      fecharParagrafo();
+      fecharLista();
+      html.push(`<p class="referencia">${inline(linha.trim())}</p>`);
+      continue;
+    }
+
+    const ul = linha.match(/^\s*[-*]\s+(.*)$/);
+    const ol = linha.match(/^\s*(\d+)\.\s+(.*)$/);
+    if (ul || ol) {
       fecharParagrafo();
       const tipo = ul ? 'ul' : 'ol';
       if (lista !== tipo) {
         fecharLista();
         lista = tipo;
-        html.push(`<${tipo}>`);
+        const startAttr = ol && ol[1] !== '1' ? ` start="${ol[1]}"` : '';
+        html.push(`<${tipo}${startAttr}>`);
       }
-      html.push(`<li>${inline(ul ? ul[1] : ol[2])}</li>`);
+      const valAttr = ol ? ` value="${ol[1]}"` : '';
+      html.push(`<li${valAttr}>${inline(ul ? ul[1] : ol[2])}</li>`);
     } else if (!linha.trim()) {
       fecharParagrafo();
       fecharLista();
@@ -145,24 +176,37 @@ export function documentoHtml(titulo, corpoHtml) {
 <html lang="pt-BR"><head><meta charset="utf-8"><title>${escaparHtml(titulo)}</title>
 <style>
 body{font-family:"Times New Roman",Georgia,serif;font-size:12pt;line-height:1.5;max-width:800px;margin:40px auto;padding:0 30px;color:#111;background:#fff}
-h1.titulo-principal{font-size:15pt;text-align:center;text-transform:uppercase;margin-bottom:0.5em;line-height:1.3}
+@page{size:A4;margin:30mm 20mm 20mm 30mm}
+@media print{
+  body{max-width:none!important;margin:0!important;padding:0!important}
+  h1.titulo-principal,h2.secao-primaria,h3.secao-secundaria{page-break-after:avoid;break-after:avoid}
+  p.legenda{page-break-after:avoid;break-after:avoid}
+  table.tabela-ibge{page-break-inside:auto;break-inside:auto}
+  table.tabela-ibge tr{page-break-inside:avoid;break-inside:avoid}
+  table.tabela-ibge thead{display:table-header-group}
+  figure{page-break-inside:avoid;break-inside:avoid}
+  figure img{max-height:175mm;object-fit:contain}
+  .resumo-bloco,.palavras-chave{page-break-inside:avoid;break-inside:avoid}
+}
+h1.titulo-principal{font-size:15pt;text-align:center;text-transform:uppercase;font-weight:bold;margin-bottom:0.6em;line-height:1.35}
 h2.secao-primaria{font-size:12pt;text-transform:uppercase;margin-top:2em;margin-bottom:0.8em;font-weight:bold}
 h3.secao-secundaria{font-size:12pt;margin-top:1.5em;margin-bottom:0.6em;font-weight:bold}
 p{text-align:justify;text-indent:1.25cm;margin:0 0 0.8em 0}
 p.frontal{text-align:center;text-indent:0;font-size:11pt;line-height:1.3;margin:0.4em 0}
 p.resumo-bloco{text-align:justify;text-indent:0;font-size:10pt;line-height:1.25;margin:0.8em 0 0.4em 0}
 p.palavras-chave{text-align:justify;text-indent:0;font-size:10pt;line-height:1.25;margin:0 0 1.2em 0}
-p.legenda{text-align:left;text-indent:0;font-size:10pt;font-weight:bold;margin:1.5em 0 0.3em 0}
-p.fonte{text-align:justify;text-indent:0;font-size:9.5pt;margin:0.3em 0 1.5em 0}
+p.legenda{text-align:left;text-indent:0;font-size:10pt;font-weight:bold;margin:1.5em 0 0.3em 0;page-break-after:avoid;break-after:avoid}
+p.fonte{text-align:justify;text-indent:0;font-size:9.5pt;margin:0.3em 0 1.5em 0;page-break-before:avoid;break-before:avoid}
 p.referencia{text-align:left;text-indent:-1.5em;padding-left:1.5em;font-size:10.5pt;line-height:1.3;margin:0 0 0.6em 0}
 sup.cit{font-size:0.75em}
 a{color:#1a4e8a;word-break:break-all}
 ol li,ul li{margin-bottom:.4em}
-table.tabela-ibge{border-collapse:collapse;width:100%;table-layout:fixed;font-size:9.5pt;margin:0.8em 0 0.3em 0;border-top:2px solid #000;border-bottom:2px solid #000;word-wrap:break-word;overflow-wrap:break-word}
+table.tabela-ibge{border-collapse:collapse;width:100%;font-size:8.5pt;line-height:1.25;margin:0.8em 0 0.3em 0;border-top:2px solid #000;border-bottom:2px solid #000;word-wrap:break-word;overflow-wrap:break-word}
+table.tabela-ibge thead th{border-bottom:1px solid #000;font-weight:bold;padding:4px 5px;vertical-align:bottom;text-align:left}
 table.tabela-ibge tr:first-child td{border-bottom:1px solid #000;font-weight:bold}
-table.tabela-ibge td{border-left:none;border-right:none;border-top:none;border-bottom:none;padding:5px 6px;vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}
-figure{margin:1.8em 0;text-align:center}
-figure img{max-width:100%;height:auto}
+table.tabela-ibge td{border-left:none;border-right:none;border-top:none;border-bottom:none;padding:4px 5px;vertical-align:top;word-wrap:break-word;overflow-wrap:break-word}
+figure{margin:1.5em auto;text-align:center;page-break-inside:avoid;break-inside:avoid}
+figure img{max-width:100%;max-height:180mm;width:auto;height:auto;object-fit:contain}
 figcaption{font-size:10pt;font-weight:bold;margin-top:0.4em}
 </style></head><body>
 ${corpoHtml}

@@ -1,0 +1,20 @@
+# .graphifyignore — Regras de Exclusão do Grafo de Conhecimento Tool-Kit
+
+# Bibliotecas e Bundles Minificados de Terceiros (Evita poluição de AST com variáveis de 1 letra)
+**/public/vendor/**
+**/*.min.js
+**/*.umd.js
+**/vendor/**
+
+# Histórico de Artigos e Execuções Passadas (Evita duplicação de dezenas de nós "2 Métodos")
+ESCRITOS ARTIGOS V2/Artigos/painel/**
+
+# Grafos Legados e Caches Temporários
+graft/**
+.cache/**
+**/__pycache__/**
+**/.pytest_cache/**
+**/.chrome-profile/**
+**/.impeccable/mocks/**
+**/dist/**
+**/node_modules/**
