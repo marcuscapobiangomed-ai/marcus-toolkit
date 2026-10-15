@@ -3754,7 +3754,9 @@ function openModalRaioX(projId) {
     showToast('Nenhum artigo ativo selecionado para Raio-X.', 'amber');
     return;
   }
+  activeProjectId = id;
   const modal = document.getElementById('modal-raio-x');
+  if (modal) modal.dataset.projectId = id;
   const iframe = document.getElementById('iframe-raio-x');
   const btnAba = document.getElementById('btn-raio-x-nova-aba');
   const url = `/api/trabalhos/${id}/raio-x`;
@@ -5535,13 +5537,254 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
     });
   }
 
-  async function executarSanacaoEReauditoria(btnAlvo = null) {
-    const p = PROJECTS[activeProjectId];
-    if (!p || !p.isReal) {
+  // =====================================================================
+  // CENTRAL HOLOGRÁFICA DE COMUNICAÇÃO INTER-AGENTES (NEURAL AGENT FEED)
+  // =====================================================================
+  let monitorEventSource = null;
+  let monitorJobId = null;
+  let monitorSinapsesCount = 0;
+  let monitorAutoScroll = true;
+
+  function abrirMonitorAgentes(projId = null, acaoNome = 'Sinapses dos Agentes') {
+    const modal = document.getElementById('modal-raio-x');
+    const id = projId || modal?.dataset?.projectId || activeProjectId;
+    if (!id) {
+      showToast('Selecione um trabalho ativo para conectar o monitor.', 'amber');
+      return;
+    }
+    monitorJobId = id;
+    activeProjectId = id;
+
+    const win = document.getElementById('hud-agent-monitor');
+    const bubble = document.getElementById('hud-agent-bubble');
+    const badge = document.getElementById('agent-monitor-task-badge');
+    const jobIdEl = document.getElementById('agent-monitor-job-id');
+
+    if (badge) badge.textContent = acaoNome.toUpperCase();
+    if (jobIdEl) jobIdEl.textContent = id.length > 32 ? `${id.slice(0, 30)}...` : id;
+    if (bubble) bubble.style.display = 'none';
+    if (win) {
+      win.style.display = 'flex';
+      audio.playBeep(640, 'triangle', 0.08, 0.04);
+    }
+
+    conectarMonitorSSE(id);
+  }
+  window.abrirMonitorAgentes = abrirMonitorAgentes;
+
+  function fecharMonitorAgentes() {
+    const win = document.getElementById('hud-agent-monitor');
+    const bubble = document.getElementById('hud-agent-bubble');
+    if (win) win.style.display = 'none';
+    audio.click();
+
+    // Se a conexão SSE ainda estiver ativa, exibe bolha flutuante para poder reabrir
+    if (monitorEventSource && monitorJobId) {
+      if (bubble) bubble.style.display = 'flex';
+    }
+  }
+  window.fecharMonitorAgentes = fecharMonitorAgentes;
+
+  function minimizarMonitorAgentes() {
+    const win = document.getElementById('hud-agent-monitor');
+    const bubble = document.getElementById('hud-agent-bubble');
+    if (win) win.style.display = 'none';
+    if (bubble) {
+      bubble.style.display = 'flex';
+      audio.playBeep(420, 'sine', 0.08, 0.04);
+    }
+  }
+
+  function alternarExpansaoMonitor() {
+    const win = document.getElementById('hud-agent-monitor');
+    if (win) {
+      win.classList.toggle('expanded');
+      audio.click();
+    }
+  }
+
+  function limparStreamMonitor() {
+    const stream = document.getElementById('agent-monitor-stream');
+    if (stream) {
+      stream.innerHTML = `
+        <div class="stream-line system-line">
+          <span class="stream-time">[${new Date().toLocaleTimeString('pt-BR')}]</span>
+          <span class="stream-badge info">RESET</span>
+          <span class="stream-msg">Feed de comunicação inter-agentes reiniciado.</span>
+        </div>
+      `;
+      monitorSinapsesCount = 0;
+      atualizarContadorMonitor();
+    }
+  }
+
+  function atualizarContadorMonitor() {
+    const counter = document.getElementById('agent-monitor-counter');
+    const bubbleCount = document.getElementById('bubble-msg-count');
+    if (counter) counter.textContent = `${monitorSinapsesCount} sinapses registradas`;
+    if (bubbleCount) bubbleCount.textContent = monitorSinapsesCount;
+  }
+
+  function iluminarChipAgente(nomeAgente) {
+    const todosChips = document.querySelectorAll('.agent-chip');
+    todosChips.forEach(c => c.classList.remove('active'));
+
+    let seletor = null;
+    const n = (nomeAgente || '').toLowerCase();
+    if (n.includes('parecerista') || n.includes('qualis')) seletor = '#chip-agent-parecerista';
+    else if (n.includes('orientador') || n.includes('revisor')) seletor = '#chip-agent-orientador';
+    else if (n.includes('sanador') || n.includes('sanação') || n.includes('cura')) seletor = '#chip-agent-sanador';
+    else if (n.includes('estatística') || n.includes('estatistica') || n.includes('p-valor') || n.includes('biomarcador')) seletor = '#chip-agent-estatistica';
+    else if (n.includes('forense') || n.includes('autoria') || n.includes('sentinela') || n.includes('retrat')) seletor = '#chip-agent-forense';
+    else if (n.includes('diagramador') || n.includes('docx') || n.includes('abnt') || n.includes('tabela')) seletor = '#chip-agent-diagramador';
+    else if (n.includes('llm') || n.includes('deepseek') || n.includes('gemini') || n.includes('motor')) seletor = '#chip-agent-llm';
+
+    if (seletor) {
+      const chip = document.querySelector(seletor);
+      if (chip) chip.classList.add('active');
+    }
+  }
+
+  function adicionarLinhaMonitor(msg, nivel = 'info') {
+    const stream = document.getElementById('agent-monitor-stream');
+    if (!stream) return;
+
+    monitorSinapsesCount++;
+    atualizarContadorMonitor();
+
+    const time = new Date().toLocaleTimeString('pt-BR');
+    const line = document.createElement('div');
+    line.className = 'stream-line';
+
+    let badgeClass = 'info';
+    let badgeText = 'AGENT';
+
+    if (msg.includes('Parecerista') || msg.includes('Qualis')) {
+      badgeClass = 'qualis';
+      badgeText = 'PARECERISTA';
+      iluminarChipAgente('parecerista');
+    } else if (msg.includes('Sanador') || msg.includes('Sanação')) {
+      badgeClass = 'sanador';
+      badgeText = 'SANADOR';
+      iluminarChipAgente('sanador');
+    } else if (msg.includes('Orientador') || msg.includes('Revisor')) {
+      badgeClass = 'qualis';
+      badgeText = 'ORIENTADOR';
+      iluminarChipAgente('orientador');
+    } else if (msg.includes('Estatística') || msg.includes('p-valor')) {
+      badgeClass = 'info';
+      badgeText = 'ESTATÍSTICA';
+      iluminarChipAgente('estatistica');
+    } else if (msg.includes('Forense') || msg.includes('Autoria') || msg.includes('Sentinela')) {
+      badgeClass = 'sanador';
+      badgeText = 'FORENSE';
+      iluminarChipAgente('forense');
+    } else if (msg.includes('Diagramador') || msg.includes('Word') || msg.includes('DOCX')) {
+      badgeClass = 'info';
+      badgeText = 'DIAGRAMADOR';
+      iluminarChipAgente('diagramador');
+    } else if (msg.includes('Motor LLM') || msg.includes('DeepSeek') || msg.includes('Gemini')) {
+      badgeClass = 'llm';
+      badgeText = 'LLM LINK';
+      iluminarChipAgente('llm');
+    } else if (nivel === 'aviso' || msg.includes('⚠️')) {
+      badgeClass = 'aviso';
+      badgeText = 'ATENÇÃO';
+    } else if (nivel === 'erro' || msg.includes('✖')) {
+      badgeClass = 'erro';
+      badgeText = 'ALERTA';
+    }
+
+    line.innerHTML = `
+      <span class="stream-time">[${time}]</span>
+      <span class="stream-badge ${badgeClass}">${badgeText}</span>
+      <span class="stream-msg">${msg}</span>
+    `;
+
+    stream.appendChild(line);
+    if (monitorAutoScroll) {
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    const bubbleSub = document.getElementById('bubble-last-action');
+    if (bubbleSub) {
+      bubbleSub.textContent = msg.length > 32 ? `${msg.slice(0, 30)}...` : msg;
+    }
+  }
+
+  function conectarMonitorSSE(id) {
+    if (monitorEventSource && monitorEventSource._jobId === id) return;
+    if (monitorEventSource) {
+      monitorEventSource.close();
+      monitorEventSource = null;
+    }
+
+    try {
+      const es = new EventSource(`/api/trabalhos/${id}/eventos`);
+      es._jobId = id;
+      monitorEventSource = es;
+
+      adicionarLinhaMonitor(`Conexão neural ativa com trabalho [${id}]. Monitorando sinapses...`, 'info');
+
+      es.onmessage = (e) => {
+        try {
+          const dados = JSON.parse(e.data);
+          if (dados.tipo === 'log') {
+            const linha = dados.linha || {};
+            const msg = linha.msg || (typeof linha === 'string' ? linha : '');
+            if (msg) {
+              adicionarLinhaMonitor(msg, linha.nivel || 'info');
+              if (jarvis3D) jarvis3D.triggerPacketBurst();
+            }
+          } else if (dados.tipo === 'estado') {
+            if (window.workflowStepper) window.workflowStepper.update({ isReal: true, etapas: dados.etapas });
+            if (dados.llm) {
+              const modelEl = document.getElementById('agent-monitor-model');
+              if (modelEl && dados.llm.modelos?.length) {
+                modelEl.textContent = dados.llm.modelos.join(', ');
+              }
+            }
+          } else if (dados.tipo === 'fim') {
+            adicionarLinhaMonitor(`✔ Operação finalizada para o trabalho [${id}].`, 'info');
+            iluminarChipAgente('');
+            setTimeout(() => {
+              if (monitorEventSource) {
+                monitorEventSource.close();
+                monitorEventSource = null;
+              }
+              const bubble = document.getElementById('hud-agent-bubble');
+              if (bubble) bubble.style.display = 'none';
+            }, 5000);
+          }
+        } catch {}
+      };
+    } catch (err) {
+      console.warn('Erro ao conectar SSE do Monitor de Agentes:', err);
+    }
+  }
+
+  // --- Funcionalidade 1: Executar Sanação e Reauditoria ---
+  async function executarSanacaoEReauditoria(arg1 = null, arg2 = null) {
+    let projId = null;
+    let btnAlvo = null;
+    if (typeof arg1 === 'string') {
+      projId = arg1;
+      btnAlvo = (arg2 && arg2.nodeType) ? arg2 : null;
+    } else if (arg1 && arg1.nodeType) {
+      btnAlvo = arg1;
+      projId = (typeof arg2 === 'string') ? arg2 : null;
+    }
+    const modal = document.getElementById('modal-raio-x');
+    const idAlvo = projId || modal?.dataset?.projectId || activeProjectId;
+    if (!idAlvo) {
       showToast('Abra um trabalho real para sanar apontamentos.', 'amber');
       return;
     }
-    const btn = btnAlvo || document.getElementById('btn-hud-sanar-raio-x') || document.getElementById('btn-modal-sanar-raio-x');
+    activeProjectId = idAlvo;
+
+    abrirMonitorAgentes(idAlvo, 'Sanador de Apontamentos & Reauditoria');
+
+    const btn = (btnAlvo && btnAlvo.nodeType) ? btnAlvo : (document.getElementById('btn-modal-sanar-raio-x') || document.getElementById('btn-hud-sanar-raio-x'));
     const textoOrig = btn ? btn.innerHTML : '';
     if (btn) {
       btn.disabled = true;
@@ -5551,17 +5794,20 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
     audio.playBeep(520, 'triangle', 0.1, 0.05);
 
     try {
-      const res = await api(`/api/trabalhos/${activeProjectId}/sanar-raio-x`, {
+      const res = await api(`/api/trabalhos/${idAlvo}/sanar-raio-x`, {
         method: 'POST',
         body: JSON.stringify({})
       });
       audio.success();
-      showToast(`Apontamentos sanados! Novo Score: ${res.novo_score}% (Backup: ${res.backup})`, 'emerald');
+      showToast(`Apontamentos sanados! Novo Score: ${res.novo_score}% (Backup: ${res.backup || 'criado'})`, 'emerald');
 
       const iframe = document.getElementById('iframe-raio-x');
-      if (iframe) iframe.src = `/api/trabalhos/${activeProjectId}/raio-x?_t=${Date.now()}`;
+      if (iframe) iframe.src = `/api/trabalhos/${idAlvo}/raio-x?_t=${Date.now()}`;
 
-      await updateActiveProject(activeProjectId);
+      await updateActiveProject(idAlvo);
+      if (typeof carregarListaProjetos === 'function') {
+        await carregarListaProjetos();
+      }
     } catch (err) {
       audio.alert();
       showToast(`Erro na sanação: ${err.message}`, 'rose');
@@ -5572,16 +5818,23 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
       }
     }
   }
+  window.executarSanacaoEReauditoria = executarSanacaoEReauditoria;
 
   const btnModalSanar = document.getElementById('btn-modal-sanar-raio-x');
   if (btnModalSanar) {
-    btnModalSanar.addEventListener('click', () => executarSanacaoEReauditoria(btnModalSanar));
+    btnModalSanar.addEventListener('click', () => {
+      const modal = document.getElementById('modal-raio-x');
+      const idAlvo = modal?.dataset?.projectId || activeProjectId;
+      executarSanacaoEReauditoria(idAlvo, btnModalSanar);
+    });
   }
 
   const btnModalIrOrientador = document.getElementById('btn-modal-ir-orientador');
   if (btnModalIrOrientador) {
     btnModalIrOrientador.addEventListener('click', () => {
-      navegarParaOrientadorComLaudo(activeProjectId);
+      const modal = document.getElementById('modal-raio-x');
+      const idAlvo = modal?.dataset?.projectId || activeProjectId;
+      navegarParaOrientadorComLaudo(idAlvo);
     });
   }
 
@@ -5590,14 +5843,18 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
     btnHudSanar.addEventListener('click', () => executarSanacaoEReauditoria(btnHudSanar));
   }
 
-  // --- Funcionalidade 1: Executar Novo Laudo de Raio-X ---
+  // --- Funcionalidade 2: Executar Novo Laudo de Raio-X ---
   async function executarNovoLaudo(projId = null, btnAlvo = null) {
-    const idAlvo = projId || activeProjectId;
-    const p = PROJECTS[idAlvo];
-    if (!p || !p.isReal) {
+    const modal = document.getElementById('modal-raio-x');
+    const idAlvo = projId || modal?.dataset?.projectId || activeProjectId;
+    if (!idAlvo) {
       showToast('Selecione um artigo real para rodar novo laudo.', 'amber');
       return;
     }
+    activeProjectId = idAlvo;
+
+    abrirMonitorAgentes(idAlvo, 'Auditoria de Raio-X & Diagnóstico');
+
     const btn = btnAlvo || document.getElementById('btn-modal-novo-laudo') || document.getElementById('btn-audit-novo-laudo') || document.getElementById('btn-hud-novo-laudo');
     const textoOrig = btn ? btn.innerHTML : '';
     if (btn) {
@@ -5634,14 +5891,18 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
   }
   window.executarNovoLaudo = executarNovoLaudo;
 
-  // --- Funcionalidade 2: Executar Ajuste de Formatação e Páginas ---
+  // --- Funcionalidade 3: Executar Ajuste de Formatação e Páginas ---
   async function executarAjusteFormatacao(projId = null, btnAlvo = null) {
-    const idAlvo = projId || activeProjectId;
-    const p = PROJECTS[idAlvo];
-    if (!p || !p.isReal) {
+    const modal = document.getElementById('modal-raio-x');
+    const idAlvo = projId || modal?.dataset?.projectId || activeProjectId;
+    if (!idAlvo) {
       showToast('Selecione um artigo real para calibrar formatação.', 'amber');
       return;
     }
+    activeProjectId = idAlvo;
+
+    abrirMonitorAgentes(idAlvo, 'Diagramação ABNT & Formatação');
+
     const btn = btnAlvo || document.getElementById('btn-audit-ajustar-formatacao') || document.getElementById('btn-hud-ajustar-formatacao') || document.getElementById('btn-ajustar-formatacao-orientador');
     const textoOrig = btn ? btn.innerHTML : '';
     if (btn) {
@@ -5683,7 +5944,11 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
   // Listeners dos Botões de Novo Laudo
   const btnModalNovoLaudo = document.getElementById('btn-modal-novo-laudo');
   if (btnModalNovoLaudo) {
-    btnModalNovoLaudo.addEventListener('click', () => executarNovoLaudo(null, btnModalNovoLaudo));
+    btnModalNovoLaudo.addEventListener('click', () => {
+      const modal = document.getElementById('modal-raio-x');
+      const idAlvo = modal?.dataset?.projectId || activeProjectId;
+      executarNovoLaudo(idAlvo, btnModalNovoLaudo);
+    });
   }
   const btnAuditNovoLaudo = document.getElementById('btn-audit-novo-laudo');
   if (btnAuditNovoLaudo) {
@@ -5710,6 +5975,47 @@ window.inspecionarFontePorNumero = inspecionarFontePorNumero;
   const btnAjustarOrientador = document.getElementById('btn-ajustar-formatacao-orientador');
   if (btnAjustarOrientador) {
     btnAjustarOrientador.addEventListener('click', () => executarAjusteFormatacao(null, btnAjustarOrientador));
+  }
+
+  // Listeners do Monitor Inter-Agentes
+  const btnCloseMonitor = document.getElementById('btn-agent-monitor-close');
+  if (btnCloseMonitor) btnCloseMonitor.addEventListener('click', fecharMonitorAgentes);
+
+  const btnMinMonitor = document.getElementById('btn-agent-monitor-min');
+  if (btnMinMonitor) btnMinMonitor.addEventListener('click', minimizarMonitorAgentes);
+
+  const btnExpandMonitor = document.getElementById('btn-agent-monitor-expand');
+  if (btnExpandMonitor) btnExpandMonitor.addEventListener('click', alternarExpansaoMonitor);
+
+  const btnClearMonitor = document.getElementById('btn-agent-monitor-clear');
+  if (btnClearMonitor) btnClearMonitor.addEventListener('click', limparStreamMonitor);
+
+  const btnScrollMonitor = document.getElementById('btn-agent-monitor-scroll');
+  if (btnScrollMonitor) {
+    btnScrollMonitor.addEventListener('click', () => {
+      monitorAutoScroll = !monitorAutoScroll;
+      btnScrollMonitor.textContent = `Rolagem Automática: ${monitorAutoScroll ? 'ON' : 'OFF'}`;
+      audio.click();
+    });
+  }
+
+  const bubbleMonitor = document.getElementById('hud-agent-bubble');
+  if (bubbleMonitor) {
+    bubbleMonitor.addEventListener('click', () => abrirMonitorAgentes(null, 'Diálogo Ativo'));
+  }
+
+  const btnTopbarMonitor = document.getElementById('btn-topbar-agent-monitor');
+  if (btnTopbarMonitor) {
+    btnTopbarMonitor.addEventListener('click', () => abrirMonitorAgentes(activeProjectId, 'Sinapses Gerais'));
+  }
+
+  const btnModalMonitor = document.getElementById('btn-modal-monitor-agentes');
+  if (btnModalMonitor) {
+    btnModalMonitor.addEventListener('click', () => {
+      const modal = document.getElementById('modal-raio-x');
+      const idAlvo = modal?.dataset?.projectId || activeProjectId;
+      abrirMonitorAgentes(idAlvo, 'Auditoria de Raio-X');
+    });
   }
 
   // Modal: Editar Nome do Artigo

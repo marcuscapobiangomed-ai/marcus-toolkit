@@ -349,7 +349,8 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
     </div>
     <div class="header-actions">
       <a class="btn-action" href="/jarvis" title="Retornar ao Command Center">⬅ Voltar ao Painel</a>
-      <button class="btn-action" id="btn-parecer-ia-top" onclick="solicitarParecerIa()" style="background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #f3e8ff; font-weight: 700;" title="Emitir Parecer Aprofundado com IA Sênior Qualis A1">🔬 Parecer com IA A1</button>
+      <button class="btn-action" onclick="if(window.parent&&typeof window.parent.abrirMonitorAgentes==='function')window.parent.abrirMonitorAgentes('${idTrabalho}');" style="background: rgba(0, 240, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan);" title="Assistir comunicação e telemetria entre os agentes em tempo real">🤖 Monitor de Agentes</button>
+      <button class="btn-action" id="btn-parecer-ia-top" onclick="solicitarParecerIa()" style="background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #f3e8ff; font-weight: 700;" title="Emitir Parecer Aprofundado com IA Sênior Qualis A1">${parecerOrigemIa ? '🔄 Reavaliar IA A1' : '🔬 Parecer com IA A1'}</button>
       <button class="btn-action primary" id="btn-sanar-raio-x" onclick="dispararSanacaoRaioX()" title="Sanar Apontamentos, Calibrar Biomarcadores e Reauditar">⚡ Sanar Apontamentos &amp; Reauditar</button>
       <button class="btn-action" id="btn-ir-orientador-laudo" onclick="irParaOrientadorGeral()" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.45); color: #c084fc;" title="Abrir Orientador Cirúrgico para revisão aprofundada com os agentes de IA">✍️ Orientador Cirúrgico IA</button>
       <a class="btn-action" href="/api/trabalhos/${idTrabalho}/artigo.docx?baixar=1&_t=${Date.now()}" target="_blank" title="Baixar manuscrito (.docx) atualizado nas normas ABNT">📥 Baixar .DOCX</a>
@@ -509,9 +510,14 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
           <span style="font-size: 14px;">${parecerOrigemIa ? '⚡' : 'ℹ️'}</span>
           <span>${parecerOrigemIa ? 'Parecer aprofundado emitido por <strong>IA Sênior Qualis A1</strong>.' : 'Parecer preliminar gerado por motor analítico rápido de diretrizes.'}</span>
         </div>
-        <button type="button" class="btn-action" id="btn-parecer-ia" onclick="solicitarParecerIa()" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(0, 240, 255, 0.25)); border: 1px solid #a855f7; color: #fff; font-weight: 700; padding: 7px 16px; box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);">
-          🔬 Solicitar Parecer Aprofundado com IA Qualis A1
-        </button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-action ghost" onclick="if(window.parent&&typeof window.parent.abrirMonitorAgentes==='function')window.parent.abrirMonitorAgentes('${idTrabalho}');" style="border-color: rgba(0, 240, 255, 0.4); color: var(--neon-cyan); font-size: 11.5px; padding: 6px 12px;" title="Abrir telinha flutuante para assistir o diálogo e sinapses entre os agentes de IA">
+            🤖 Assistir Agentes
+          </button>
+          <button type="button" class="btn-action" id="btn-parecer-ia" onclick="solicitarParecerIa()" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(0, 240, 255, 0.25)); border: 1px solid #a855f7; color: #fff; font-weight: 700; padding: 7px 16px; box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);">
+            ${parecerOrigemIa ? '🔄 Reavaliar com IA Sênior Qualis A1' : '🔬 Solicitar Parecer Aprofundado com IA Qualis A1'}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -935,6 +941,10 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
       const textoOrig = btn.innerHTML;
       btn.style.opacity = '0.85';
 
+      if (window.parent && typeof window.parent.abrirMonitorAgentes === 'function') {
+        window.parent.abrirMonitorAgentes('${idTrabalho}', 'Sanador de Apontamentos & Reauditoria');
+      }
+
       const passos = [
         '<span>⏳</span> 1/4 Higienização forense e expurgo de IA...',
         '<span>⏳</span> 2/4 Calibração de PCR e auto-remediação estatística...',
@@ -961,6 +971,10 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
         btn.innerHTML = '<span>✔</span> Apontamentos Sanados &amp; Score 100%!';
         btn.style.background = '#10b981';
         btn.style.borderColor = '#10b981';
+        
+        if (window.parent && typeof window.parent.updateActiveProject === 'function') {
+          window.parent.updateActiveProject('${idTrabalho}');
+        }
         
         setTimeout(() => {
           window.location.reload();
@@ -994,15 +1008,27 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
       const btnTop = document.getElementById('btn-parecer-ia-top');
       const txtOrig = btn ? btn.innerHTML : '';
       const txtTopOrig = btnTop ? btnTop.innerHTML : '';
+      
+      if (window.parent && typeof window.parent.abrirMonitorAgentes === 'function') {
+        window.parent.abrirMonitorAgentes('${idTrabalho}', 'Parecerista Crítico Qualis A1');
+      }
+
+      let seg = 0;
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<span>⏳</span> Avaliando Manuscrito com IA Sênior Qualis A1...';
+        btn.innerHTML = '<span>⏳</span> Avaliando Manuscrito com IA Sênior Qualis A1 (0s)...';
         btn.style.opacity = '0.85';
       }
       if (btnTop) {
         btnTop.disabled = true;
-        btnTop.innerHTML = '<span>⏳</span> Avaliando IA...';
+        btnTop.innerHTML = '<span>⏳</span> Avaliando IA (0s)...';
       }
+
+      const timer = setInterval(() => {
+        seg++;
+        if (btn) btn.innerHTML = '<span>⏳</span> Avaliando Manuscrito com IA Sênior Qualis A1 (' + seg + 's)...';
+        if (btnTop) btnTop.innerHTML = '<span>⏳</span> Avaliando IA (' + seg + 's)...';
+      }, 1000);
 
       try {
         const resp = await fetch('/api/trabalhos/${idTrabalho}/parecer-ia', {
@@ -1011,6 +1037,7 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
           body: JSON.stringify({})
         });
         const dados = await resp.json();
+        clearInterval(timer);
         if (!resp.ok) throw new Error(dados.erro || 'Falha ao emitir parecer com IA.');
         
         if (btn) {
@@ -1022,10 +1049,15 @@ export function renderizarLaudoRaioXCompleto(estado, mdOriginal = '') {
           btnTop.innerHTML = '<span>✔</span> Parecer Concluído';
         }
         
+        if (window.parent && typeof window.parent.updateActiveProject === 'function') {
+          window.parent.updateActiveProject('${idTrabalho}');
+        }
+        
         setTimeout(() => {
           window.location.reload();
         }, 700);
       } catch (err) {
+        clearInterval(timer);
         alert('Erro ao emitir parecer com IA: ' + err.message);
         if (btn) {
           btn.disabled = false;

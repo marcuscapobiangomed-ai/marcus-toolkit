@@ -213,6 +213,11 @@
             </div>
           </div>
 
+          <!-- Monitor de Comunicação Inter-Agentes -->
+          <button class="hud-btn ghost" id="btn-topbar-agent-monitor" style="border-color: rgba(168, 85, 247, 0.45); color: #d8b4fe;" title="Assistir comunicação e sinapses em tempo real entre todos os agentes do sistema">
+            <span style="font-size: 13px;">🤖</span> Agentes Ativos
+          </button>
+
           <!-- Ação Unificada: Novo Artigo -->
           <button class="hud-btn primary" id="btn-novo-artigo-modal" title="Iniciar nova pesquisa com IA ou importar artigo (.docx / .pdf)">
             <span>+</span> Novo Artigo
@@ -1653,6 +1658,7 @@
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="hud-btn ghost" id="btn-modal-monitor-agentes" style="font-size: 11px; padding: 4px 12px; border-color: #a855f7; color: #e9d5ff;" title="Assistir comunicação e telemetria entre agentes em tempo real">🤖 Monitor Inter-Agentes</button>
             <button class="hud-btn ghost" id="btn-modal-novo-laudo" style="font-size: 11px; padding: 4px 12px; border-color: var(--neon-cyan); color: var(--neon-cyan);" title="Rodar nova auditoria completa e atualizar este laudo com o texto atual">🔄 Rodar Novo Laudo</button>
             <button class="hud-btn" id="btn-modal-ir-orientador" style="font-size: 11px; padding: 4px 12px; background: rgba(168, 85, 247, 0.18); border: 1px solid rgba(168, 85, 247, 0.45); color: #c084fc;" title="Abrir no Orientador Cirúrgico para lapidação por agentes de IA">✍️ Orientador IA</button>
             <button class="hud-btn primary" id="btn-modal-sanar-raio-x" style="font-size: 11px; padding: 4px 12px; background: linear-gradient(135deg, #10b981 0%, #0284c7 100%); border: none;">⚡ Sanar Apontamentos &amp; Reauditar</button>
@@ -1876,6 +1882,98 @@
           <button class="hud-btn ghost" id="btn-fechar-finops-footer" type="button">Fechar</button>
         </div>
       </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- JANELA FLUTUANTE: CENTRAL DE COMUNICAÇÃO INTER-AGENTES     -->
+    <!-- ========================================================= -->
+    <div id="hud-agent-monitor" class="agent-monitor-window" style="display: none;">
+      <div class="agent-monitor-header">
+        <div class="agent-monitor-title-wrap">
+          <span class="agent-monitor-pulse"></span>
+          <div class="agent-monitor-titles">
+            <div class="agent-monitor-title">CENTRAL DE COMUNICAÇÃO INTER-AGENTES</div>
+            <div class="agent-monitor-subtitle" id="agent-monitor-task-badge">SISTEMA NEURAL EM SINAPSE ATIVA</div>
+          </div>
+        </div>
+        <div class="agent-monitor-controls">
+          <button type="button" class="monitor-ctrl-btn" id="btn-agent-monitor-clear" title="Limpar Feed de Comunicação">🗑️</button>
+          <button type="button" class="monitor-ctrl-btn" id="btn-agent-monitor-min" title="Minimizar para o Canto da Tela">🗕</button>
+          <button type="button" class="monitor-ctrl-btn" id="btn-agent-monitor-expand" title="Expandir / Restaurar Tamanho">⛶</button>
+          <button type="button" class="monitor-ctrl-btn close-btn" id="btn-agent-monitor-close" title="Fechar Janela (Processamento continua em segundo plano)">✕</button>
+        </div>
+      </div>
+
+      <!-- Topologia da Rede de Agentes Especialistas -->
+      <div class="agent-matrix-bar">
+        <div class="agent-chip" data-agent="parecerista" id="chip-agent-parecerista">
+          <span class="chip-icon">🔬</span>
+          <span class="chip-name">Parecerista A1</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="orientador" id="chip-agent-orientador">
+          <span class="chip-icon">✍️</span>
+          <span class="chip-name">Orientador IA</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="sanador" id="chip-agent-sanador">
+          <span class="chip-icon">⚡</span>
+          <span class="chip-name">Sanador Raio-X</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="estatistica" id="chip-agent-estatistica">
+          <span class="chip-icon">📊</span>
+          <span class="chip-name">Auditor Estatístico</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="forense" id="chip-agent-forense">
+          <span class="chip-icon">🛡️</span>
+          <span class="chip-name">Forense &amp; Autoria</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="diagramador" id="chip-agent-diagramador">
+          <span class="chip-icon">📐</span>
+          <span class="chip-name">Diagramador ABNT</span>
+          <span class="chip-dot"></span>
+        </div>
+        <div class="agent-chip" data-agent="llm" id="chip-agent-llm">
+          <span class="chip-icon">🧠</span>
+          <span class="chip-name">Motor LLM</span>
+          <span class="chip-dot"></span>
+        </div>
+      </div>
+
+      <!-- Stream de Comunicação & Diálogo entre Agentes -->
+      <div class="agent-monitor-body" id="agent-monitor-stream">
+        <div class="stream-line system-line">
+          <span class="stream-time">[SISTEMA]</span>
+          <span class="stream-badge info">NEURAL LINK OK</span>
+          <span class="stream-msg">Canal de telemetria inter-agentes estabelecido via SSE. Aguardando sinapses...</span>
+        </div>
+      </div>
+
+      <!-- Rodapé com Metadados & Telemetria -->
+      <div class="agent-monitor-footer">
+        <div class="footer-meta">
+          <span>Trabalho: <strong id="agent-monitor-job-id" class="code-id">--</strong></span>
+          <span>Modelo: <strong id="agent-monitor-model">DeepSeek / Gemini</strong></span>
+        </div>
+        <div class="footer-stats">
+          <span id="agent-monitor-counter">0 sinapses registradas</span>
+          <button type="button" id="btn-agent-monitor-scroll" class="hud-btn ghost" style="padding: 2px 8px; font-size: 10px; height: 20px;">Rolagem Automática: ON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BADGE FLUTUANTE (QUANDO MINIMIZADO OU FECHADO) -->
+    <div id="hud-agent-bubble" class="agent-bubble-floating" style="display: none;" title="Clique para assistir a comunicação e sinapses dos agentes de IA em tempo real">
+      <div class="bubble-pulse"></div>
+      <div class="bubble-icon">🤖</div>
+      <div class="bubble-content">
+        <span class="bubble-title">Agentes em Comunicação</span>
+        <span class="bubble-sub" id="bubble-last-action">Assistir Diálogo</span>
+      </div>
+      <span class="bubble-badge" id="bubble-msg-count">0</span>
     </div>
 
     <!-- Container de Toasts Flutuantes -->

@@ -306,6 +306,11 @@ Responda SOMENTE em JSON:
   "recomendacoes_prioritarias": ["Recomendação prioritária 1", "Recomendação 2", "Recomendação 3"]
 }`;
 
+  if (trabalho.log) {
+    trabalho.log('▶ [Parecerista Sênior Qualis A1] Desmembrando manuscrito e isolando eixos metodológicos...');
+    trabalho.log(`▶ [Parecerista Sênior ➔ LLM] Submetendo 4 seções para avaliação por pares com diretriz ${diretriz}...`);
+  }
+
   try {
     const res = await trabalho.ia({
       papel: 'auditoria',
@@ -317,8 +322,13 @@ Responda SOMENTE em JSON:
 
     const dados = res.dados || {};
     if (dados.score_qualidade_real !== undefined && Array.isArray(dados.eixos) && dados.eixos.length >= 3) {
+      const scoreFinal = Math.max(30, Math.min(100, Number(dados.score_qualidade_real) || analiseBase.score_qualidade_real));
+      if (trabalho.log) {
+        trabalho.log(`✔ [Parecerista Sênior Qualis A1] Avaliação concluída com sucesso! Parecer: "${dados.status_editorial || analiseBase.status_editorial}" (Score de Rigor: ${scoreFinal}%).`);
+        trabalho.log(`📌 [Parecerista Sênior] ${dados.fragilidades_criticas?.length || 0} fragilidade(s) crítica(s) e ${dados.recomendacoes_prioritarias?.length || 0} recomendação(ões) prioritária(s) diagnosticadas.`);
+      }
       return {
-        score_qualidade_real: Math.max(30, Math.min(100, Number(dados.score_qualidade_real) || analiseBase.score_qualidade_real)),
+        score_qualidade_real: scoreFinal,
         status_editorial: dados.status_editorial || analiseBase.status_editorial,
         parecer_geral: dados.parecer_geral || analiseBase.parecer_geral,
         eixos: dados.eixos,
@@ -328,7 +338,7 @@ Responda SOMENTE em JSON:
       };
     }
   } catch (err) {
-    if (trabalho.log) trabalho.log(`Aviso no Parecerista Crítico via IA: ${err.message}. Utilizando parecer analítico aprofundado de fallback.`, 'aviso');
+    if (trabalho.log) trabalho.log(`⚠️ Aviso no Parecerista Crítico via IA: ${err.message}. Utilizando parecer analítico aprofundado de fallback.`, 'aviso');
   }
 
   return analiseBase;

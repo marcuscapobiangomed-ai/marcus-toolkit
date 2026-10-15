@@ -170,13 +170,15 @@ export class Trabalho extends EventEmitter {
 
   async ia(opcoes, json = false) {
     this.checarCancelamento();
+    const papelNome = opcoes.papel ? String(opcoes.papel).toUpperCase() : 'IA';
+    this.log(`▶ [Motor LLM ➔ Agente ${papelNome}] Enviando payload analítico para raciocínio computacional...`);
     let r;
     try {
       r = await (json ? gerarJson : gerar)({
         provedor: this.estado.params.provedor,
         aoTentar: (modelo, t) => {
           this.estado.llm.requisicoes = (this.estado.llm.requisicoes || 0) + 1;
-          if (t > 0) this.log(`Nova tentativa com ${modelo}…`, 'aviso');
+          this.log(`▶ [Motor LLM] Processando com modelo ${modelo} (tentativa ${t + 1})...`);
         },
         ...opcoes,
       });
@@ -191,6 +193,8 @@ export class Trabalho extends EventEmitter {
     const cTokens = u.completion_tokens || 0;
     const tTokens = u.total_tokens || (pTokens + cTokens);
     const custo = r.custo_usd || 0;
+
+    this.log(`✔ [Motor LLM ➔ Agente ${papelNome}] Resposta concluída com sucesso (${tTokens} tokens · ${r.provedor} / ${r.modelo}).`);
 
     this.estado.llm.chamadas++;
     this.estado.llm.provedor = r.provedor;

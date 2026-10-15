@@ -231,21 +231,28 @@ function harmonizarUnidadesBiomarcadores(texto) {
  * Re-executa o Laudo de Raio-X completo com os dados atuais do trabalho
  */
 export function executarReauditoriaRaioX(trabalho) {
+  if (trabalho.log) {
+    trabalho.log('▶ [Auditor Raio-X] Reauditando manuscrito completo frente às diretrizes e 28 dimensões...');
+  }
   const dirTrabalho = trabalho.dir;
   const arqMd = path.join(dirTrabalho, 'artigo.md');
   const md = fs.existsSync(arqMd) ? fs.readFileSync(arqMd, 'utf8') : '';
   const agora = new Date();
 
   // 1. Auditoria Forense
+  if (trabalho.log) trabalho.log('▶ [Forense] Verificando caracteres invisíveis, homóglifos e tags esteganográficas...');
   const forense = higienizarTextoForense(md);
 
   // 2. Auditoria Estatística
+  if (trabalho.log) trabalho.log('▶ [Auditoria Estatística] Checando consistência de p-valores, intervalos de confiança e unidades...');
   const auditEst = auditarEstatisticaEBiomarcadores(md);
 
   // 3. Auditoria de Estilo / Maneirismos de IA
+  if (trabalho.log) trabalho.log('▶ [Estilo Qualis A1] Rastreando clichês de IA e vícios de solenidade...');
   const cliches = maneirismos(md);
 
   // 4. Auditoria de Conformidade com Diretriz Internacional
+  if (trabalho.log) trabalho.log('▶ [Conformidade] Verificando aderência aos itens PRISMA 2020 / STROBE...');
   const auditConf = auditarConformidade(md, {
     totalEstudosIncluidos: trabalho.estado.incluidos || 25,
     fontes: trabalho.estado.referencias || [],
@@ -492,10 +499,15 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   let md = fs.readFileSync(arqMd, 'utf8');
   const alteracoes = [];
 
+  if (trabalho.log) {
+    trabalho.log('⚡ [Sanador Raio-X] Iniciando protocolo cirúrgico de auto-remediação e calibração A1...');
+  }
+
   // 1. Cria backup de segurança da versão original (se habilitado)
   let backupInfo = null;
   if (opcoes.criarBackup !== false) {
     backupInfo = criarBackupSeguranca(dirTrabalho, opcoes.rotuloBackup || 'pre-sanacao-raio-x');
+    if (trabalho.log) trabalho.log(`▶ [Segurança] Snapshot da versão anterior preservado em versoes/${backupInfo.pasta}`);
     alteracoes.push({
       tipo: 'backup_seguranca',
       descricao: `Backup de segurança da versão original criado em versoes/${backupInfo.pasta}`,
@@ -503,9 +515,11 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 2. Limpeza forense de caracteres invisíveis e marcas esteganográficas
+  if (trabalho.log) trabalho.log('▶ [Forense] Higienizando texto de caracteres invisíveis e marcas esteganográficas...');
   const resForense = higienizarTextoForense(md);
   if (resForense.estatisticas.invisiveis > 0 || resForense.estatisticas.homoglifos > 0) {
     md = resForense.texto;
+    if (trabalho.log) trabalho.log(`✔ [Forense] Removidos ${resForense.estatisticas.invisiveis} caractere(s) invisível(is) e ${resForense.estatisticas.homoglifos} homóglifo(s).`);
     alteracoes.push({
       tipo: 'higienizacao_forense',
       descricao: `Removidos ${resForense.estatisticas.invisiveis} caractere(s) invisível(is) e corrigidos ${resForense.estatisticas.homoglifos} homóglifo(s) de IA.`,
@@ -513,9 +527,11 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 2.1 Expurgar resíduos de raciocínio de IA e metalinguagem conversacional (Agente 23)
+  if (trabalho.log) trabalho.log('▶ [Sentinela de Autoria] Rastreando metalinguagem e tags de raciocínio de IA...');
   const resExpurgo = expurgarRastrosIA(md);
   if (resExpurgo.expurgos > 0) {
     md = resExpurgo.texto;
+    if (trabalho.log) trabalho.log(`✔ [Sentinela de Autoria] ${resExpurgo.expurgos} fragmento(s) de metalinguagem expurgados.`);
     alteracoes.push({
       tipo: 'blindagem_autoria',
       descricao: `Agente 23 (Sentinela de Autoria): Expurgados ${resExpurgo.expurgos} resíduo(s) de metalinguagem e tags de raciocínio (<think>) de IA.`,
@@ -523,9 +539,11 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 3. Auto-remediação estatística (p-valores, intervalos de confiança)
+  if (trabalho.log) trabalho.log('▶ [Auditoria Estatística] Aplicando auto-remediação de p-valores e intervalos de confiança (IC 95%)...');
   const resEst = autoRemediarEstatistica(md);
   if (resEst.alterado) {
     md = resEst.md;
+    if (trabalho.log) trabalho.log(`✔ [Auditoria Estatística] ${resEst.correcoes.length} inconsistência(s) estatística(s) corrigida(s) deterministicamente.`);
     for (const corr of resEst.correcoes) {
       alteracoes.push({ tipo: corr.tipo, descricao: corr.descricao });
     }
@@ -542,9 +560,11 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 5. Erradicação de maneirismos acadêmicos e clichês de IA
+  if (trabalho.log) trabalho.log('▶ [Estilo Qualis A1] Erradicando clichês de IA e construções prolixas...');
   const resCliches = erradicarClichesIA(md);
   if (resCliches.totalCliches > 0) {
     md = resCliches.texto;
+    if (trabalho.log) trabalho.log(`✔ [Estilo Qualis A1] Substituídas ${resCliches.totalCliches} expressão(ões) clichês de IA por linguagem acadêmica sóbria.`);
     alteracoes.push({
       tipo: 'estilo_qualisa1',
       descricao: `Substituídas ${resCliches.totalCliches} expressão(ões) clichês de IA por terminologia acadêmica formal e direta.`,
@@ -552,15 +572,18 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 6. Auto-cura das pendências metodológicas de diretrizes (PRISMA 2020: Título e Introdução)
+  if (trabalho.log) trabalho.log('▶ [Diretrizes Internacionais] Sanando pendências metodológicas (declaração de objetivo e desenho)...');
   const resDiretriz = sanarDiretrizesMetodologicas(md, trabalho);
   if (resDiretriz.alteracoes.length > 0) {
     md = resDiretriz.texto;
+    if (trabalho.log) trabalho.log(`✔ [Diretrizes] ${resDiretriz.alteracoes.length} adequação(ões) estrutural(is) de diretriz aplicada(s).`);
     for (const alt of resDiretriz.alteracoes) {
       alteracoes.push(alt);
     }
   }
 
   // 7. Auto-cura da densidade factual e ancoragem epistêmica da Discussão (Agente 21)
+  if (trabalho.log) trabalho.log('▶ [Agente 21 - Ancorador] Verificando densidade factual e confronto dialético na Discussão...');
   const regsRefs = Object.values(trabalho.registros ? trabalho.registros() : {} || {});
   const fontesSancao = regsRefs.length ? regsRefs : (trabalho.estado.referencias || []);
   const secoesParaAncoragem = desmembrarArtigo(md);
@@ -569,6 +592,7 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
     if (resAncoragem.alteracoes > 0) {
       secoesParaAncoragem.discussao = resAncoragem.texto;
       md = remontarArtigo(secoesParaAncoragem);
+      if (trabalho.log) trabalho.log(`✔ [Agente 21] ${resAncoragem.alteracoes} citação(ões) ancorada(s) à literatura primária.`);
       alteracoes.push({
         tipo: 'ancoragem_discussao_a1',
         descricao: `Agente 21: Ancoradas ${resAncoragem.alteracoes} afirmação(ões) dialéticas da Discussão aos estudos incluídos no corpus.`,
@@ -577,11 +601,13 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   }
 
   // 8. Agente 22: Sentinela de Referências & Numeração Vancouver
+  if (trabalho.log) trabalho.log('▶ [Agente 22 - Sentinela] Higienizando referências no padrão Vancouver...');
   const mapaFinalRefs = desmembrarArtigo(md);
   if (mapaFinalRefs.referencias) {
     const refsAntes = mapaFinalRefs.referencias;
     mapaFinalRefs.referencias = sanitizarBlocoReferencias(mapaFinalRefs.referencias);
     if (refsAntes !== mapaFinalRefs.referencias) {
+      if (trabalho.log) trabalho.log('✔ [Agente 22] Numeração sequencial normalizada de 1 a N no padrão Vancouver.');
       alteracoes.push({
         tipo: 'integridade_referencias',
         descricao: 'Agente 22 (Sentinela de Referências): Numeração sequencial normalizada estritamente de 1 a N no padrão Vancouver.',
@@ -603,9 +629,11 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
   fs.writeFileSync(arqMd, md, 'utf8');
 
   // Regenera o artigo.docx formatado para Word ABNT
+  if (trabalho.log) trabalho.log('▶ [Diagramador ABNT] Regenerando manuscrito Word (.docx) e tabelas IBGE...');
   await exportarArtigo(dirTrabalho, trabalho.estado.titulo || 'Artigo', md, {
     autores: trabalho.estado.params?.autores || trabalho.estado.autores,
   });
+  if (trabalho.log) trabalho.log('✔ [Diagramador ABNT] Manuscrito Word (.docx) atualizado com sucesso.');
   alteracoes.push({
     tipo: 'exportacao_docx',
     descricao: 'Manuscrito Word (.docx) atualizado e reformatado conforme normas científicas.',
@@ -613,6 +641,9 @@ export async function sanarApontamentosRaioX(trabalho, opcoes = {}) {
 
   // Re-executa o laudo de diagnóstico de entrada completo
   const novoRaioX = executarReauditoriaRaioX(trabalho);
+  if (trabalho.log) {
+    trabalho.log(`🎉 [Sanador Raio-X] Sanação concluída com sucesso! Novo Score: ${novoRaioX.score_inicial}% (${novoRaioX.status_inicial}).`);
+  }
 
   // Atualiza referências de arquivos no estado
   if (!trabalho.estado.arquivos) trabalho.estado.arquivos = {};
